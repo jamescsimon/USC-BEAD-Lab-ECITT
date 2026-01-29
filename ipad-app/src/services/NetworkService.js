@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { io } from 'socket.io-client'
 
-const API_URL = localStorage.getItem('apiUrl') || 'http://192.168.1.100:3000'
+const API_URL = localStorage.getItem('apiUrl') || 'http://172.20.10.4:3000'
 
 class NetworkService {
   constructor() {
