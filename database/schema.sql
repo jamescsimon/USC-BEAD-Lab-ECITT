@@ -7,7 +7,7 @@ CREATE TABLE ecitt_part (
   birthMonth int(11) DEFAULT NULL,
   birthDay int(11) DEFAULT NULL,
   gender varchar(16) DEFAULT NULL
-)
+);
 
 CREATE TABLE ecitt_perm (
   userName varchar(16) DEFAULT NULL,
@@ -15,12 +15,12 @@ CREATE TABLE ecitt_perm (
   every tinyint(1) DEFAULT NULL,
   entityNo int(11) DEFAULT NULL,
   permName varchar(16) DEFAULT NULL
-)
+);
 
 CREATE TABLE ecitt_project (
   no int(11) DEFAULT NULL,
   name varchar(32) DEFAULT NULL
-)
+);
 
 CREATE TABLE ecitt_resp (
   userName varchar(16) DEFAULT NULL,
@@ -48,22 +48,22 @@ CREATE TABLE ecitt_resp (
   trialStartDate date DEFAULT NULL,
   ageMonths int(11) DEFAULT NULL,
   partRef varchar(16) DEFAULT NULL
-)
+);
 
 CREATE TABLE ecitt_testSet (
   no int(11) DEFAULT NULL,
   projectNo int(11) DEFAULT NULL,
   name varchar(32) DEFAULT NULL
-)
+);
 
 CREATE TABLE ecitt_testSpec (
   no int(11) DEFAULT NULL,
   name varchar(16) DEFAULT NULL,
   specName varchar(16) DEFAULT NULL
-)
+);
 
 CREATE TABLE ecitt_user (
   name varchar(16) DEFAULT NULL,
   password varchar(16) DEFAULT NULL,
   userType varchar(16) DEFAULT NULL
-)
+);
