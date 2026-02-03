@@ -43,21 +43,25 @@
 
 ## Step 3: Create Service Account
 
-1. Click "Create Credentials" > "Service Account"
+**Important**: We use a **Service Account**, NOT an OAuth Client ID. Service accounts are for server-to-server communication without user interaction.
+
+1. In "APIs & Services" > "Credentials", click "Create Credentials" > "Service Account"
 2. Fill in the service account details:
    - Service account name: `ecitt-pwa` (or similar)
    - Service account ID: Will auto-populate
    - Click "CREATE AND CONTINUE"
 3. Grant roles:
-   - Click "Continue" without adding roles (we'll configure access to specific sheet)
+   - Click "Continue" (roles are configured per-sheet, not here)
 4. Click "DONE"
 
-## Step 4: Create and Download Private Key
+## Step 4: Create and Download Private Key (Service Account Only)
+
+This step is specific to service accounts - OAuth client IDs use a different flow.
 
 1. In the Service Accounts list, click on the service account you just created
 2. Go to the "KEYS" tab
 3. Click "Add Key" > "Create new key"
-4. Select "JSON" format
+4. Select "JSON" format (this is the credentials file the app uses)
 5. Click "CREATE"
 6. The JSON file will automatically download - **save this file securely**
 
