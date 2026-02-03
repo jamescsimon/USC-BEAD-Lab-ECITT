@@ -1,6 +1,14 @@
-# Google Sheets Logging Setup Guide
+# Google Sheets Logging - Complete Setup & Reference
 
-This branch of the ECITT PWA uses Google Sheets API to log all app interactions instead of a MySQL database. This makes the app easier to deploy and reduces server dependencies.
+**Branch**: `google-sheets-logging` - ECITT PWA with Google Sheets API instead of MySQL
+
+## Quick Start (5 minutes)
+
+1. **Switch to branch**: `git checkout google-sheets-logging`
+2. **Run setup**: `setup-google-sheets.bat` (Windows) or `bash setup-google-sheets.sh` (Mac/Linux)
+3. **Start server**: `start-server.bat` or `./start-server.sh`
+4. **Open**: `http://localhost:8000`
+5. **Test**: Run a trial, check Google Sheet for data
 
 ## Key Features
 
@@ -8,6 +16,7 @@ This branch of the ECITT PWA uses Google Sheets API to log all app interactions 
 - **UTC Timestamps**: All events are recorded with UTC timestamps in ISO 8601 format (e.g., `2024-02-03T15:30:45Z`)
 - **Real-Time Logging**: Data is immediately available in your Google Sheet
 - **Service Account Auth**: Uses Google service account for secure, headless authentication
+- **Switch Anytime**: Set `USE_GOOGLE_SHEETS=0` to revert to MySQL backend
 
 ## Prerequisites
 
