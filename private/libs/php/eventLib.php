@@ -317,9 +317,12 @@
 		if (ob_get_level()) {
 			ob_end_clean();
 		}
-		header("Content-Type: text/event-stream");
-		header("Cache-Control: no-cache");
-		header("Connection: keep-alive");
+		// Only send headers if they haven't been sent already
+		if (!headers_sent()) {
+			header("Content-Type: text/event-stream");
+			header("Cache-Control: no-cache");
+			header("Connection: keep-alive");
+		}
 		flush();
 	}
 	
