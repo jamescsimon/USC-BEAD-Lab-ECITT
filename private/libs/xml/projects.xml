@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projects>
+	<projectRow>
+		<project id="PublicEvents"/>
+		<project id="PilotBaby"/>
+	</projectRow>
+	<projectRow>
+		<project id="PilotToddler"/>
+		<project id="PilotAdult"/>
+	</projectRow>
+	<projectRow>
+		<project id="Testing"/>
+		<project/>
+	</projectRow>
+</projects>

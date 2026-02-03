@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../xsl/resp.xsl"?>
+<ecittApp app="resp" appName="Frog Game" appNameShort="Frog" scrolling="off" cached="yes" cacheAll="yes" preload="no" rotateSpc="no" inclGame="yes" offline="yes" offlineApp="frog">
+	<resp>
+		<gamePage id="canvas"/>
+	</resp>
+</ecittApp>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../xsl/appIndices.xsl"?>
+<ecittApp app="index">
+	<appIndex index="ecittApps" indexName="TouchTask Apps">
+		<appLink href="responder/" linkName="Responder"/>
+		<appLink href="controller/" linkName="Controller"/>
+		<appLink href="datamgr/" linkName="Data manager"/>
+		<appLink href="clock/" linkName="Clock"/>
+	</appIndex>
+</ecittApp>

@@ -1,0 +1,633 @@
+26.01.20 19:05:10 echoEvent type: hello, data: [cntr]
+26.01.20 19:06:40 echoEvent type: hello, data: [resp]
+26.01.20 19:06:41 echoEvent type: hello, data: [resp]
+26.01.20 19:06:44 echoEvent type: hello, data: [resp]
+26.01.20 19:07:04 echoEvent type: hello, data: [resp]
+26.01.20 19:07:40 echoEvent type: hello, data: [resp]
+26.01.20 19:07:41 echoEvent type: hello, data: [resp]
+26.01.20 19:14:13 echoEvent type: hello, data: [resp]
+26.01.27 17:16:22 echoEvent type: hello, data: [resp]
+26.01.27 17:16:27 echoEvent type: hello, data: [resp]
+26.01.27 17:16:28 echoEvent type: hello, data: [resp]
+26.01.27 17:16:39 echoEvent type: hello, data: [cntr]
+26.01.27 17:16:46 echoEvent type: hello, data: [cntr]
+26.01.27 17:16:50 echoEvent type: hello, data: [cntr]
+26.01.27 17:25:01 echoEvent type: hello, data: [resp]
+26.01.27 17:25:03 echoEvent type: hello, data: [resp]
+26.01.27 17:25:06 echoEvent type: hello, data: [resp]
+26.01.27 17:25:07 echoEvent type: hello, data: [resp]
+26.01.27 17:25:20 echoEvent type: hello, data: [cntr]
+26.01.27 17:25:24 echoEvent type: hello, data: [cntr]
+26.01.27 17:26:03 echoEvent type: hello, data: [cntr]
+26.01.27 17:26:12 echoEvent type: hello, data: [resp]
+26.01.27 17:26:59 echoEvent type: hello, data: [resp]
+26.01.27 17:29:47 echoEvent type: hello, data: [cntr]
+26.01.27 17:29:49 echoEvent type: hello, data: [cntr]
+26.01.27 17:29:55 echoEvent type: hello, data: [resp]
+26.01.27 17:30:15 echoEvent type: hello, data: [cntr]
+26.01.27 17:30:17 echoEvent type: hello, data: [cntr]
+26.01.27 17:30:20 echoEvent type: hello, data: [cntr]
+26.01.27 17:30:25 echoEvent type: hello, data: [cntr]
+26.01.27 17:30:58 echoEvent type: hello, data: [cntr]
+26.01.27 17:31:09 echoEvent type: hello, data: [cntr]
+26.01.27 17:31:10 echoEvent type: hello, data: [cntr]
+26.01.27 17:31:11 echoEvent type: hello, data: [cntr]
+26.01.27 17:31:14 echoEvent type: hello, data: [cntr]
+26.01.27 17:31:16 echoEvent type: hello, data: [cntr]
+26.01.27 17:31:51 echoEvent type: hello, data: [cntr]
+26.01.27 17:31:58 echoEvent type: hello, data: [cntr]
+26.01.27 17:32:09 echoEvent type: hello, data: [resp]
+26.01.27 17:32:12 echoEvent type: hello, data: [cntr]
+26.01.27 17:32:29 echoEvent type: hello, data: [cntr]
+26.01.27 17:32:30 echoEvent type: hello, data: [cntr]
+26.01.27 17:33:07 echoEvent type: hello, data: [cntr]
+26.01.27 17:33:08 echoEvent type: hello, data: [cntr]
+26.01.27 17:33:13 echoEvent type: hello, data: [resp]
+26.01.27 17:33:16 echoEvent type: hello, data: [cntr]
+26.01.27 17:33:18 echoEvent type: hello, data: [cntr]
+26.01.27 17:33:53 echoEvent type: hello, data: [cntr]
+26.01.27 17:33:53 echoEvent type: hello, data: [cntr]
+26.01.27 17:33:57 echoEvent type: hello, data: [resp]
+26.01.27 17:33:59 echoEvent type: hello, data: [cntr]
+26.01.27 17:34:01 echoEvent type: hello, data: [cntr]
+26.01.27 17:47:20 echoEvent type: hello, data: [cntr]
+26.01.27 17:47:20 echoEvent type: hello, data: [cntr]
+26.01.27 17:47:40 echoEvent type: hello, data: [cntr]
+26.01.27 17:47:46 echoEvent type: hello, data: [resp]
+26.01.27 17:47:47 echoEvent type: hello, data: [resp]
+26.01.27 17:49:09 echoEvent type: hello, data: [resp]
+26.01.27 17:49:15 echoEvent type: hello, data: [cntr]
+26.01.27 17:52:18 echoEvent type: hello, data: [cntr]
+26.01.27 17:52:19 echoEvent type: hello, data: [cntr]
+26.01.27 17:52:20 echoEvent type: hello, data: [cntr]
+26.01.27 17:52:23 echoEvent type: hello, data: [cntr]
+26.01.27 17:52:31 echoEvent type: hello, data: [resp]
+26.01.27 17:52:42 echoEvent type: hello, data: [cntr]
+26.01.27 17:54:04 echoEvent type: hello, data: [cntr]
+26.01.27 17:57:19 echoEvent type: hello, data: [cntr]
+26.01.27 17:59:51 echoEvent type: hello, data: [cntr]
+26.01.27 18:01:58 echoEvent type: hello, data: [cntr]
+26.01.27 18:02:40 echoEvent type: hello, data: [cntr]
+26.01.27 18:05:06 echoEvent type: hello, data: [cntr]
+26.01.27 18:05:47 echoEvent type: hello, data: [cntr]
+26.01.27 18:05:55 echoEvent type: hello, data: [cntr]
+26.01.27 18:06:38 echoEvent type: hello, data: [cntr]
+26.01.27 18:09:14 echoEvent type: hello, data: [cntr]
+26.01.27 18:09:54 echoEvent type: hello, data: [cntr]
+26.01.27 18:10:41 echoEvent type: hello, data: [cntr]
+26.01.27 18:12:30 echoEvent type: hello, data: [cntr]
+26.01.27 18:16:01 echoEvent type: hello, data: [cntr]
+26.01.27 18:18:39 echoEvent type: hello, data: [cntr]
+26.01.27 18:21:02 echoEvent type: hello, data: [cntr]
+26.01.27 18:22:47 echoEvent type: hello, data: [cntr]
+26.01.27 18:24:21 echoEvent type: hello, data: [cntr]
+26.01.27 18:27:01 echoEvent type: hello, data: [cntr]
+26.01.27 18:37:55 echoEvent type: hello, data: [cntr]
+26.01.27 18:40:48 echoEvent type: hello, data: [cntr]
+26.01.27 18:40:48 errorHandler [admin] [2] [stream_socket_server(): Unable to connect to unix://D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT/private/sockets/cntr_admin.sock (Unable to find the socket transport &quot;unix&quot; - did you forget to enable it when you configured PHP?)] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\sockLib.php] [4]
+26.01.27 18:40:48 eventLoop cntr admin, exception:stream_socket_server failed, errstr: Unable to find the socket transport "unix" - did you forget to enable it when you configured PHP?
+26.01.27 18:44:49 echoEvent type: hello, data: [cntr]
+26.01.27 18:44:49 errorHandler [admin] [2] [stream_socket_server(): Unable to connect to unix://D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT/private/sockets/cntr_admin.sock (Unable to find the socket transport &quot;unix&quot; - did you forget to enable it when you configured PHP?)] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\sockLib.php] [4]
+26.01.27 18:44:49 eventLoop cntr admin, exception:stream_socket_server failed, errstr: Unable to find the socket transport "unix" - did you forget to enable it when you configured PHP?
+26.01.27 18:46:48 echoEvent type: hello, data: [cntr]
+26.01.27 18:46:48 errorHandler [admin] [2] [stream_socket_server(): Unable to connect to unix://D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT/private/sockets/cntr_admin.sock (Unable to find the socket transport &quot;unix&quot; - did you forget to enable it when you configured PHP?)] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\sockLib.php] [4]
+26.01.27 18:46:48 eventLoop cntr admin, exception:stream_socket_server failed, errstr: Unable to find the socket transport "unix" - did you forget to enable it when you configured PHP?
+26.01.27 18:50:33 echoEvent type: hello, data: [cntr]
+26.01.27 18:50:33 errorHandler [admin] [2] [stream_socket_server(): Unable to connect to unix://D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT/private/sockets/cntr_admin.sock (Unable to find the socket transport &quot;unix&quot; - did you forget to enable it when you configured PHP?)] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\sockLib.php] [4]
+26.01.27 18:50:33 eventLoop cntr admin, exception:stream_socket_server failed, errstr: Unable to find the socket transport "unix" - did you forget to enable it when you configured PHP?
+26.01.27 18:50:49 echoEvent type: hello, data: [cntr]
+26.01.27 18:50:49 errorHandler [admin] [2] [stream_socket_server(): Unable to connect to unix://D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT/private/sockets/cntr_admin.sock (Unable to find the socket transport &quot;unix&quot; - did you forget to enable it when you configured PHP?)] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\sockLib.php] [4]
+26.01.27 18:50:49 eventLoop cntr admin, exception:stream_socket_server failed, errstr: Unable to find the socket transport "unix" - did you forget to enable it when you configured PHP?
+26.01.27 19:02:19 echoEvent type: hello, data: [cntr]
+26.01.27 19:02:19 errorHandler [admin] [2] [stream_socket_server(): Unable to connect to unix://D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT/private/sockets/cntr_admin.sock (Unable to find the socket transport &quot;unix&quot; - did you forget to enable it when you configured PHP?)] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\sockLib.php] [4]
+26.01.27 19:02:19 eventLoop cntr admin, exception:stream_socket_server failed, errstr: Unable to find the socket transport "unix" - did you forget to enable it when you configured PHP?
+26.01.27 19:03:53 echoEvent type: hello, data: [cntr]
+26.01.27 19:03:53 errorHandler [admin] [2] [stream_socket_server(): Unable to connect to unix://D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT/private/sockets/cntr_admin.sock (Unable to find the socket transport &quot;unix&quot; - did you forget to enable it when you configured PHP?)] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\sockLib.php] [4]
+26.01.27 19:03:53 eventLoop cntr admin, exception:stream_socket_server failed, errstr: Unable to find the socket transport "unix" - did you forget to enable it when you configured PHP?
+26.01.27 19:09:16 echoEvent type: hello, data: [cntr]
+26.01.27 19:09:16 errorHandler [admin] [2] [stream_socket_server(): Unable to connect to unix://D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT/private/sockets/cntr_admin.sock (Unable to find the socket transport &quot;unix&quot; - did you forget to enable it when you configured PHP?)] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\sockLib.php] [4]
+26.01.27 19:09:16 eventLoop cntr admin, exception:stream_socket_server failed, errstr: Unable to find the socket transport "unix" - did you forget to enable it when you configured PHP?
+26.01.27 19:10:51 echoEvent type: hello, data: [cntr]
+26.01.27 19:10:51 errorHandler [admin] [2] [stream_socket_server(): Unable to connect to unix://D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT/private/sockets/cntr_admin.sock (Unable to find the socket transport &quot;unix&quot; - did you forget to enable it when you configured PHP?)] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\sockLib.php] [4]
+26.01.27 19:10:51 eventLoop cntr admin, exception:stream_socket_server failed, errstr: Unable to find the socket transport "unix" - did you forget to enable it when you configured PHP?
+26.01.27 19:23:35 echoEvent type: hello, data: [cntr]
+26.01.27 19:23:35 errorHandler [admin] [2] [stream_socket_server(): Unable to connect to unix://D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT/private/sockets/cntr_admin.sock (Unable to find the socket transport &quot;unix&quot; - did you forget to enable it when you configured PHP?)] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\sockLib.php] [4]
+26.01.27 19:23:35 eventLoop cntr admin, exception:stream_socket_server failed, errstr: Unable to find the socket transport "unix" - did you forget to enable it when you configured PHP?
+26.01.27 19:40:21 echoEvent type: hello, data: [cntr]
+26.01.27 19:40:21 errorHandler [admin] [2] [stream_socket_server(): Unable to connect to unix://D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT/private/sockets/cntr_admin.sock (Unable to find the socket transport &quot;unix&quot; - did you forget to enable it when you configured PHP?)] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\sockLib.php] [4]
+26.01.27 19:40:21 eventLoop cntr admin, exception:stream_socket_server failed, errstr: Unable to find the socket transport "unix" - did you forget to enable it when you configured PHP?
+26.01.27 19:40:52 echoEvent type: hello, data: [resp]
+26.01.27 19:40:52 errorHandler [admin] [2] [stream_socket_server(): Unable to connect to unix://D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT/private/sockets/resp_admin.sock (Unable to find the socket transport &quot;unix&quot; - did you forget to enable it when you configured PHP?)] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\sockLib.php] [4]
+26.01.27 19:40:52 eventLoop resp admin, exception:stream_socket_server failed, errstr: Unable to find the socket transport "unix" - did you forget to enable it when you configured PHP?
+26.01.27 19:43:59 echoEvent type: hello, data: [resp]
+26.01.27 19:43:59 errorHandler [admin] [2] [stream_socket_server(): Unable to connect to unix://D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT/private/sockets/resp_admin.sock (Unable to find the socket transport &quot;unix&quot; - did you forget to enable it when you configured PHP?)] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\sockLib.php] [4]
+26.01.27 19:43:59 eventLoop resp admin, exception:stream_socket_server failed, errstr: Unable to find the socket transport "unix" - did you forget to enable it when you configured PHP?
+26.01.27 19:43:59 Windows detected: Unix sockets not available, using queue file polling
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, starting queue file polling
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, flushing event queue (32 events)
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: hideClock;
+26.01.27 19:43:59 echoEvent type: hideClock, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: hideClock;
+26.01.27 19:43:59 echoEvent type: hideClock, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: endTrials;
+26.01.27 19:43:59 echoEvent type: endTrials, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: endTrials;
+26.01.27 19:43:59 echoEvent type: endTrials, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: endTrials;
+26.01.27 19:43:59 echoEvent type: endTrials, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: cancelTrial;
+26.01.27 19:43:59 echoEvent type: cancelTrial, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: startMultiTrials;24m1,prt,trial,0,1,1,1,3
+26.01.27 19:43:59 echoEvent type: startMultiTrials, data: [24m1,prt,trial,0,1,1,1,3]
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: cancelTrial;
+26.01.27 19:43:59 echoEvent type: cancelTrial, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: cancelTrial;
+26.01.27 19:43:59 echoEvent type: cancelTrial, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: endTrials;
+26.01.27 19:43:59 echoEvent type: endTrials, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: endTrials;
+26.01.27 19:43:59 echoEvent type: endTrials, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: cancelTrial;
+26.01.27 19:43:59 echoEvent type: cancelTrial, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: cancelTrial;
+26.01.27 19:43:59 echoEvent type: cancelTrial, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: hideClock;
+26.01.27 19:43:59 echoEvent type: hideClock, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: setReadyMessage;msg_adtIntro1,msg_adtIntro2,dot,msg_adtReady,,adt
+26.01.27 19:43:59 echoEvent type: setReadyMessage, data: [msg_adtIntro1,msg_adtIntro2,dot,msg_adtReady,,adt]
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: startMultiTrials;adt,ppt,trial,0,1,1,1,4
+26.01.27 19:43:59 echoEvent type: startMultiTrials, data: [adt,ppt,trial,0,1,1,1,4]
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: cancelTrial;
+26.01.27 19:43:59 echoEvent type: cancelTrial, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: cancelTrial;
+26.01.27 19:43:59 echoEvent type: cancelTrial, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: hideClock;
+26.01.27 19:43:59 echoEvent type: hideClock, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: hideClock;
+26.01.27 19:43:59 echoEvent type: hideClock, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: hideClock;
+26.01.27 19:43:59 echoEvent type: hideClock, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: hideClock;
+26.01.27 19:43:59 echoEvent type: hideClock, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: hideClock;
+26.01.27 19:43:59 echoEvent type: hideClock, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: hideClock;
+26.01.27 19:43:59 echoEvent type: hideClock, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: setReadyMessage;msg_adtIntro1,msg_adtIntro2,dot,msg_adtReady,,adt
+26.01.27 19:43:59 echoEvent type: setReadyMessage, data: [msg_adtIntro1,msg_adtIntro2,dot,msg_adtReady,,adt]
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: endTrials;
+26.01.27 19:43:59 echoEvent type: endTrials, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: cancelTrial;
+26.01.27 19:43:59 echoEvent type: cancelTrial, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: endTrials;
+26.01.27 19:43:59 echoEvent type: endTrials, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: startMultiTrials;adt,ppt,trial,0,1,1,1,4
+26.01.27 19:43:59 echoEvent type: startMultiTrials, data: [adt,ppt,trial,0,1,1,1,4]
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: cancelTrial;
+26.01.27 19:43:59 echoEvent type: cancelTrial, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: cancelTrial;
+26.01.27 19:43:59 echoEvent type: cancelTrial, data: []
+26.01.27 19:43:59 eventLoopQueuePoll resp admin, event: cancelTrial;
+26.01.27 19:43:59 echoEvent type: cancelTrial, data: []
+26.01.27 19:44:32 echoEvent type: hello, data: [cntr]
+26.01.27 19:44:32 errorHandler [admin] [2] [stream_socket_server(): Unable to connect to unix://D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT/private/sockets/cntr_admin.sock (Unable to find the socket transport &quot;unix&quot; - did you forget to enable it when you configured PHP?)] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\sockLib.php] [4]
+26.01.27 19:44:32 eventLoop cntr admin, exception:stream_socket_server failed, errstr: Unable to find the socket transport "unix" - did you forget to enable it when you configured PHP?
+26.01.27 19:44:32 Windows detected: Unix sockets not available, using queue file polling
+26.01.27 19:44:32 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 19:45:21 echoEvent type: hello, data: [resp]
+26.01.27 19:45:21 errorHandler [admin] [2] [stream_socket_server(): Unable to connect to unix://D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT/private/sockets/resp_admin.sock (Unable to find the socket transport &quot;unix&quot; - did you forget to enable it when you configured PHP?)] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\sockLib.php] [4]
+26.01.27 19:45:21 eventLoop resp admin, exception:stream_socket_server failed, errstr: Unable to find the socket transport "unix" - did you forget to enable it when you configured PHP?
+26.01.27 19:45:21 Windows detected: Unix sockets not available, using queue file polling
+26.01.27 19:45:21 eventLoopQueuePoll resp admin, starting queue file polling
+26.01.27 19:45:21 eventLoopQueuePoll resp admin, flushing event queue (7 events)
+26.01.27 19:45:21 eventLoopQueuePoll resp admin, event: connect;
+26.01.27 19:45:21 echoEvent type: connect, data: []
+26.01.27 19:45:21 eventLoopQueuePoll resp admin, event: hideClock;
+26.01.27 19:45:21 echoEvent type: hideClock, data: []
+26.01.27 19:45:21 eventLoopQueuePoll resp admin, event: connect;
+26.01.27 19:45:21 echoEvent type: connect, data: []
+26.01.27 19:45:21 eventLoopQueuePoll resp admin, event: hideClock;
+26.01.27 19:45:21 echoEvent type: hideClock, data: []
+26.01.27 19:45:21 eventLoopQueuePoll resp admin, event: hideClock;
+26.01.27 19:45:21 echoEvent type: hideClock, data: []
+26.01.27 19:45:21 eventLoopQueuePoll resp admin, event: hideClock;
+26.01.27 19:45:21 echoEvent type: hideClock, data: []
+26.01.27 19:45:21 eventLoopQueuePoll resp admin, event: flipClock;1,Santiago_Morales,2007,1,1
+26.01.27 19:45:21 echoEvent type: flipClock, data: [1,Santiago_Morales,2007,1,1]
+26.01.27 19:47:33 echoEvent type: hello, data: [resp]
+26.01.27 19:47:33 errorHandler [admin] [2] [stream_socket_server(): Unable to connect to unix://D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT/private/sockets/resp_admin.sock (Unable to find the socket transport &quot;unix&quot; - did you forget to enable it when you configured PHP?)] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\sockLib.php] [4]
+26.01.27 19:47:33 eventLoop resp admin, exception:stream_socket_server failed, errstr: Unable to find the socket transport "unix" - did you forget to enable it when you configured PHP?
+26.01.27 19:47:33 Windows detected: Unix sockets not available, using queue file polling
+26.01.27 19:47:33 eventLoopQueuePoll resp admin, starting queue file polling
+26.01.27 19:47:33 eventLoopQueuePoll resp admin, flushing event queue (3 events)
+26.01.27 19:47:33 eventLoopQueuePoll resp admin, event: setReadyMessage;msg_adtIntro1,msg_adtIntro2,dot,msg_adtReady,,adt
+26.01.27 19:47:33 echoEvent type: setReadyMessage, data: [msg_adtIntro1,msg_adtIntro2,dot,msg_adtReady,,adt]
+26.01.27 19:47:33 eventLoopQueuePoll resp admin, event: endTrials;
+26.01.27 19:47:33 echoEvent type: endTrials, data: []
+26.01.27 19:47:33 eventLoopQueuePoll resp admin, event: cancelTrial;
+26.01.27 19:47:33 echoEvent type: cancelTrial, data: []
+26.01.27 19:48:03 echoEvent type: hello, data: [resp]
+26.01.27 19:48:03 errorHandler [admin] [2] [stream_socket_server(): Unable to connect to unix://D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT/private/sockets/resp_admin.sock (Unable to find the socket transport &quot;unix&quot; - did you forget to enable it when you configured PHP?)] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\sockLib.php] [4]
+26.01.27 19:48:03 eventLoop resp admin, exception:stream_socket_server failed, errstr: Unable to find the socket transport "unix" - did you forget to enable it when you configured PHP?
+26.01.27 19:48:03 Windows detected: Unix sockets not available, using queue file polling
+26.01.27 19:48:03 eventLoopQueuePoll resp admin, starting queue file polling
+26.01.27 19:49:47 echoEvent type: hello, data: [cntr]
+26.01.27 19:49:47 errorHandler [admin] [2] [stream_socket_server(): Unable to connect to unix://D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT/private/sockets/cntr_admin.sock (Unable to find the socket transport &quot;unix&quot; - did you forget to enable it when you configured PHP?)] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\sockLib.php] [4]
+26.01.27 19:49:47 eventLoop cntr admin, exception:stream_socket_server failed, errstr: Unable to find the socket transport "unix" - did you forget to enable it when you configured PHP?
+26.01.27 19:49:47 Windows detected: Unix sockets not available, using queue file polling
+26.01.27 19:49:47 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 19:50:18 echoEvent type: ping, data: [cntr]
+26.01.27 19:50:49 echoEvent type: ping, data: [cntr]
+26.01.27 19:51:20 echoEvent type: ping, data: [cntr]
+26.01.27 19:51:51 echoEvent type: ping, data: [cntr]
+26.01.27 19:52:54 echoEvent type: hello, data: [cntr]
+26.01.27 19:52:54 errorHandler [admin] [2] [stream_socket_server(): Unable to connect to unix://D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT/private/sockets/cntr_admin.sock (Unable to find the socket transport &quot;unix&quot; - did you forget to enable it when you configured PHP?)] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\sockLib.php] [4]
+26.01.27 19:52:54 eventLoop cntr admin, exception:stream_socket_server failed, errstr: Unable to find the socket transport "unix" - did you forget to enable it when you configured PHP?
+26.01.27 19:52:54 Windows detected: Unix sockets not available, using queue file polling
+26.01.27 19:52:54 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 19:53:25 echoEvent type: ping, data: [cntr]
+26.01.27 19:53:56 echoEvent type: ping, data: [cntr]
+26.01.27 19:54:27 echoEvent type: ping, data: [cntr]
+26.01.27 19:54:58 echoEvent type: ping, data: [cntr]
+26.01.27 19:55:31 echoEvent type: hello, data: [cntr]
+26.01.27 19:55:31 errorHandler [admin] [2] [stream_socket_server(): Unable to connect to unix://D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT/private/sockets/cntr_admin.sock (Unable to find the socket transport &quot;unix&quot; - did you forget to enable it when you configured PHP?)] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\sockLib.php] [4]
+26.01.27 19:55:31 eventLoop cntr admin, exception:stream_socket_server failed, errstr: Unable to find the socket transport "unix" - did you forget to enable it when you configured PHP?
+26.01.27 19:55:31 Windows detected: Unix sockets not available, using queue file polling
+26.01.27 19:55:31 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 19:56:02 echoEvent type: ping, data: [cntr]
+26.01.27 19:56:38 echoEvent type: hello, data: [cntr]
+26.01.27 19:56:38 Windows detected: using queue file polling for EventSource
+26.01.27 19:56:38 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 19:57:09 echoEvent type: ping, data: [cntr]
+26.01.27 19:57:40 echoEvent type: ping, data: [cntr]
+26.01.27 19:58:11 echoEvent type: ping, data: [cntr]
+26.01.27 19:58:42 echoEvent type: ping, data: [cntr]
+26.01.27 19:59:13 echoEvent type: ping, data: [cntr]
+26.01.27 19:59:55 echoEvent type: hello, data: [cntr]
+26.01.27 19:59:55 Windows detected: using queue file polling for EventSource
+26.01.27 19:59:55 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 19:59:55 echoEvent type: ping, data: [cntr]
+26.01.27 20:00:26 echoEvent type: ping, data: [cntr]
+26.01.27 20:01:04 echoEvent type: hello, data: [cntr]
+26.01.27 20:01:04 Windows detected: using queue file polling for EventSource
+26.01.27 20:01:04 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:01:04 echoEvent type: ping, data: [cntr]
+26.01.27 20:01:04 eventLoopQueuePoll cntr admin, flushing event queue (1 events)
+26.01.27 20:01:04 eventLoopQueuePoll cntr admin, event: goodbye;
+26.01.27 20:01:04 echoEvent type: goodbye, data: [cntr]
+26.01.27 20:01:04 eventLoopQueuePoll cntr admin, not connected
+26.01.27 20:02:33 echoEvent type: hello, data: [resp]
+26.01.27 20:02:33 Windows detected: using queue file polling for EventSource
+26.01.27 20:02:33 eventLoopQueuePoll resp admin, starting queue file polling
+26.01.27 20:02:33 echoEvent type: ping, data: [resp]
+26.01.27 20:02:33 eventLoopQueuePoll resp admin, flushing event queue (1 events)
+26.01.27 20:02:33 eventLoopQueuePoll resp admin, event: hideClock;
+26.01.27 20:02:33 echoEvent type: hideClock, data: []
+26.01.27 20:03:04 echoEvent type: ping, data: [resp]
+26.01.27 20:03:35 echoEvent type: ping, data: [resp]
+26.01.27 20:04:06 echoEvent type: ping, data: [resp]
+26.01.27 20:04:37 echoEvent type: ping, data: [resp]
+26.01.27 20:05:08 echoEvent type: ping, data: [resp]
+26.01.27 20:05:39 echoEvent type: ping, data: [resp]
+26.01.27 20:06:10 echoEvent type: ping, data: [resp]
+26.01.27 20:06:41 echoEvent type: ping, data: [resp]
+26.01.27 20:07:12 echoEvent type: ping, data: [resp]
+26.01.27 20:07:43 echoEvent type: ping, data: [resp]
+26.01.27 20:08:10 echoEvent type: hello, data: [cntr]
+26.01.27 20:08:10 Windows detected: using queue file polling for EventSource
+26.01.27 20:08:10 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:08:10 echoEvent type: ping, data: [cntr]
+26.01.27 20:08:41 echoEvent type: ping, data: [cntr]
+26.01.27 20:09:12 echoEvent type: ping, data: [cntr]
+26.01.27 20:09:43 echoEvent type: ping, data: [cntr]
+26.01.27 20:10:34 echoEvent type: hello, data: [cntr]
+26.01.27 20:10:34 Windows detected: using queue file polling for EventSource
+26.01.27 20:10:34 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:10:34 echoEvent type: ping, data: [cntr]
+26.01.27 20:11:05 echoEvent type: ping, data: [cntr]
+26.01.27 20:11:36 echoEvent type: ping, data: [cntr]
+26.01.27 20:12:07 echoEvent type: hello, data: [cntr]
+26.01.27 20:12:07 Windows detected: using queue file polling for EventSource
+26.01.27 20:12:07 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:12:07 echoEvent type: ping, data: [cntr]
+26.01.27 20:12:38 echoEvent type: ping, data: [cntr]
+26.01.27 20:13:09 echoEvent type: ping, data: [cntr]
+26.01.27 20:13:40 echoEvent type: ping, data: [cntr]
+26.01.27 20:14:11 echoEvent type: ping, data: [cntr]
+26.01.27 20:14:42 echoEvent type: ping, data: [cntr]
+26.01.27 20:15:13 echoEvent type: ping, data: [cntr]
+26.01.27 20:15:44 echoEvent type: ping, data: [cntr]
+26.01.27 20:16:15 echoEvent type: ping, data: [cntr]
+26.01.27 20:17:46 echoEvent type: hello, data: [cntr]
+26.01.27 20:17:46 Windows detected: using queue file polling for EventSource
+26.01.27 20:17:46 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:17:46 echoEvent type: ping, data: [cntr]
+26.01.27 20:18:17 echoEvent type: ping, data: [cntr]
+26.01.27 20:18:48 echoEvent type: ping, data: [cntr]
+26.01.27 20:19:12 echoEvent type: hello, data: [cntr]
+26.01.27 20:19:12 Windows detected: using queue file polling for EventSource
+26.01.27 20:19:12 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:19:12 echoEvent type: ping, data: [cntr]
+26.01.27 20:19:43 echoEvent type: ping, data: [cntr]
+26.01.27 20:20:14 echoEvent type: ping, data: [cntr]
+26.01.27 20:20:45 echoEvent type: ping, data: [cntr]
+26.01.27 20:21:23 echoEvent type: hello, data: [cntr]
+26.01.27 20:21:23 Windows detected: using queue file polling for EventSource
+26.01.27 20:21:23 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:21:23 echoEvent type: ping, data: [cntr]
+26.01.27 20:21:54 echoEvent type: ping, data: [cntr]
+26.01.27 20:22:25 echoEvent type: ping, data: [cntr]
+26.01.27 20:24:14 echoEvent type: hello, data: [cntr]
+26.01.27 20:24:14 Windows detected: using queue file polling for EventSource
+26.01.27 20:24:14 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:24:14 echoEvent type: ping, data: [cntr]
+26.01.27 20:24:45 echoEvent type: ping, data: [cntr]
+26.01.27 20:25:16 echoEvent type: ping, data: [cntr]
+26.01.27 20:25:47 echoEvent type: ping, data: [cntr]
+26.01.27 20:26:18 echoEvent type: ping, data: [cntr]
+26.01.27 20:26:47 echoEvent type: hello, data: [cntr]
+26.01.27 20:26:47 Windows detected: using queue file polling for EventSource
+26.01.27 20:26:47 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:26:47 echoEvent type: ping, data: [cntr]
+26.01.27 20:27:18 echoEvent type: ping, data: [cntr]
+26.01.27 20:27:49 echoEvent type: ping, data: [cntr]
+26.01.27 20:28:41 echoEvent type: hello, data: [cntr]
+26.01.27 20:28:41 Windows detected: using queue file polling for EventSource
+26.01.27 20:28:41 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:28:41 echoEvent type: ping, data: [cntr]
+26.01.27 20:29:12 echoEvent type: ping, data: [cntr]
+26.01.27 20:29:43 echoEvent type: ping, data: [cntr]
+26.01.27 20:30:14 echoEvent type: ping, data: [cntr]
+26.01.27 20:30:45 echoEvent type: ping, data: [cntr]
+26.01.27 20:31:34 echoEvent type: hello, data: [cntr]
+26.01.27 20:31:34 Windows detected: using queue file polling for EventSource
+26.01.27 20:31:34 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:31:34 echoEvent type: ping, data: [cntr]
+26.01.27 20:32:05 echoEvent type: ping, data: [cntr]
+26.01.27 20:32:36 echoEvent type: ping, data: [cntr]
+26.01.27 20:33:07 echoEvent type: ping, data: [cntr]
+26.01.27 20:33:38 echoEvent type: ping, data: [cntr]
+26.01.27 20:34:09 echoEvent type: ping, data: [cntr]
+26.01.27 20:37:09 echoEvent type: hello, data: [cntr]
+26.01.27 20:37:09 Windows detected: using queue file polling for EventSource
+26.01.27 20:37:09 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:37:09 echoEvent type: ping, data: [cntr]
+26.01.27 20:37:40 echoEvent type: ping, data: [cntr]
+26.01.27 20:38:11 echoEvent type: ping, data: [cntr]
+26.01.27 20:38:42 echoEvent type: ping, data: [cntr]
+26.01.27 20:39:13 echoEvent type: ping, data: [cntr]
+26.01.27 20:39:44 echoEvent type: ping, data: [cntr]
+26.01.27 20:40:15 echoEvent type: ping, data: [cntr]
+26.01.27 20:40:52 echoEvent type: hello, data: [cntr]
+26.01.27 20:40:52 Windows detected: using queue file polling for EventSource
+26.01.27 20:40:52 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:40:52 echoEvent type: ping, data: [cntr]
+26.01.27 20:41:23 echoEvent type: ping, data: [cntr]
+26.01.27 20:41:54 echoEvent type: ping, data: [cntr]
+26.01.27 20:42:25 echoEvent type: ping, data: [cntr]
+26.01.27 20:45:33 echoEvent type: hello, data: [cntr]
+26.01.27 20:45:33 Windows detected: using queue file polling for EventSource
+26.01.27 20:45:33 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:45:33 echoEvent type: ping, data: [cntr]
+26.01.27 20:46:04 echoEvent type: ping, data: [cntr]
+26.01.27 20:46:35 echoEvent type: ping, data: [cntr]
+26.01.27 20:47:31 echoEvent type: hello, data: [cntr]
+26.01.27 20:47:31 Windows detected: using queue file polling for EventSource
+26.01.27 20:47:31 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:47:31 echoEvent type: ping, data: [cntr]
+26.01.27 20:48:02 echoEvent type: ping, data: [cntr]
+26.01.27 20:48:54 echoEvent type: hello, data: [cntr]
+26.01.27 20:48:54 Windows detected: using queue file polling for EventSource
+26.01.27 20:48:54 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:48:54 echoEvent type: ping, data: [cntr]
+26.01.27 20:49:25 echoEvent type: ping, data: [cntr]
+26.01.27 20:49:56 echoEvent type: ping, data: [cntr]
+26.01.27 20:50:40 echoEvent type: hello, data: [cntr]
+26.01.27 20:50:40 Windows detected: using queue file polling for EventSource
+26.01.27 20:50:40 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:50:40 echoEvent type: ping, data: [cntr]
+26.01.27 20:51:11 echoEvent type: ping, data: [cntr]
+26.01.27 20:51:42 echoEvent type: ping, data: [cntr]
+26.01.27 20:52:13 echoEvent type: ping, data: [cntr]
+26.01.27 20:52:47 echoEvent type: hello, data: [cntr]
+26.01.27 20:52:47 Windows detected: using queue file polling for EventSource
+26.01.27 20:52:47 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:52:47 echoEvent type: ping, data: [cntr]
+26.01.27 20:53:18 echoEvent type: ping, data: [cntr]
+26.01.27 20:53:49 echoEvent type: ping, data: [cntr]
+26.01.27 20:54:57 echoEvent type: hello, data: [cntr]
+26.01.27 20:54:57 Windows detected: using queue file polling for EventSource
+26.01.27 20:54:57 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:54:57 echoEvent type: ping, data: [cntr]
+26.01.27 20:55:28 echoEvent type: ping, data: [cntr]
+26.01.27 20:55:59 echoEvent type: ping, data: [cntr]
+26.01.27 20:57:03 echoEvent type: hello, data: [cntr]
+26.01.27 20:57:03 Windows detected: using queue file polling for EventSource
+26.01.27 20:57:03 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:57:03 echoEvent type: ping, data: [cntr]
+26.01.27 20:57:34 echoEvent type: ping, data: [cntr]
+26.01.27 20:58:05 echoEvent type: ping, data: [cntr]
+26.01.27 20:58:49 echoEvent type: hello, data: [cntr]
+26.01.27 20:58:49 Windows detected: using queue file polling for EventSource
+26.01.27 20:58:49 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:58:49 echoEvent type: ping, data: [cntr]
+26.01.27 20:59:19 echoEvent type: hello, data: [cntr]
+26.01.27 20:59:19 Windows detected: using queue file polling for EventSource
+26.01.27 20:59:19 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 20:59:19 echoEvent type: ping, data: [cntr]
+26.01.27 20:59:50 echoEvent type: ping, data: [cntr]
+26.01.27 21:00:39 echoEvent type: hello, data: [cntr]
+26.01.27 21:00:39 Windows detected: using queue file polling for EventSource
+26.01.27 21:00:39 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 21:00:39 echoEvent type: ping, data: [cntr]
+26.01.27 21:01:10 echoEvent type: ping, data: [cntr]
+26.01.27 21:01:45 echoEvent type: hello, data: [cntr]
+26.01.27 21:01:45 Windows detected: using queue file polling for EventSource
+26.01.27 21:01:45 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 21:01:45 echoEvent type: ping, data: [cntr]
+26.01.27 21:02:16 echoEvent type: ping, data: [cntr]
+26.01.27 21:02:47 echoEvent type: ping, data: [cntr]
+26.01.27 21:03:18 echoEvent type: hello, data: [cntr]
+26.01.27 21:03:18 Windows detected: using queue file polling for EventSource
+26.01.27 21:03:18 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 21:03:18 echoEvent type: ping, data: [cntr]
+26.01.27 21:03:49 echoEvent type: ping, data: [cntr]
+26.01.27 21:04:20 echoEvent type: ping, data: [cntr]
+26.01.27 21:04:51 echoEvent type: ping, data: [cntr]
+26.01.27 21:05:22 echoEvent type: ping, data: [cntr]
+26.01.27 21:05:53 echoEvent type: ping, data: [cntr]
+26.01.27 21:06:24 echoEvent type: ping, data: [cntr]
+26.01.27 21:09:19 echoEvent type: hello, data: [cntr]
+26.01.27 21:09:19 Windows detected: using queue file polling for EventSource
+26.01.27 21:09:19 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 21:09:19 echoEvent type: ping, data: [cntr]
+26.01.27 21:09:50 echoEvent type: ping, data: [cntr]
+26.01.27 21:10:21 echoEvent type: ping, data: [cntr]
+26.01.27 21:11:36 echoEvent type: hello, data: [cntr]
+26.01.27 21:11:36 Windows detected: using queue file polling for EventSource
+26.01.27 21:11:36 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 21:11:36 echoEvent type: ping, data: [cntr]
+26.01.27 21:12:07 echoEvent type: ping, data: [cntr]
+26.01.27 21:16:02 echoEvent type: hello, data: [cntr]
+26.01.27 21:16:02 Windows detected: using queue file polling for EventSource
+26.01.27 21:16:02 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 21:16:02 echoEvent type: ping, data: [cntr]
+26.01.27 21:16:33 echoEvent type: ping, data: [cntr]
+26.01.27 21:17:04 echoEvent type: ping, data: [cntr]
+26.01.27 21:17:52 echoEvent type: hello, data: [cntr]
+26.01.27 21:17:52 Windows detected: using queue file polling for EventSource
+26.01.27 21:17:52 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 21:17:52 echoEvent type: ping, data: [cntr]
+26.01.27 21:18:20 echoEvent type: hello, data: [cntr]
+26.01.27 21:18:20 Windows detected: using queue file polling for EventSource
+26.01.27 21:18:20 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 21:18:20 echoEvent type: ping, data: [cntr]
+26.01.27 21:18:51 echoEvent type: ping, data: [cntr]
+26.01.27 21:19:30 echoEvent type: hello, data: [cntr]
+26.01.27 21:19:30 Windows detected: using queue file polling for EventSource
+26.01.27 21:19:30 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 21:19:30 echoEvent type: ping, data: [cntr]
+26.01.27 21:20:01 echoEvent type: ping, data: [cntr]
+26.01.27 21:20:32 echoEvent type: ping, data: [cntr]
+26.01.27 21:21:03 echoEvent type: ping, data: [cntr]
+26.01.27 21:23:55 echoEvent type: hello, data: [cntr]
+26.01.27 21:23:55 Windows detected: using queue file polling for EventSource
+26.01.27 21:23:55 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 21:23:55 echoEvent type: ping, data: [cntr]
+26.01.27 21:24:26 echoEvent type: ping, data: [cntr]
+26.01.27 21:26:08 echoEvent type: hello, data: [cntr]
+26.01.27 21:26:08 Windows detected: using queue file polling for EventSource
+26.01.27 21:26:08 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 21:26:08 echoEvent type: ping, data: [cntr]
+26.01.27 21:26:40 echoEvent type: hello, data: [cntr]
+26.01.27 21:26:40 Windows detected: using queue file polling for EventSource
+26.01.27 21:26:40 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 21:26:40 echoEvent type: ping, data: [cntr]
+26.01.27 21:27:11 echoEvent type: ping, data: [cntr]
+26.01.27 21:28:06 echoEvent type: hello, data: [cntr]
+26.01.27 21:28:06 Windows detected: using queue file polling for EventSource
+26.01.27 21:28:06 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 21:28:06 echoEvent type: ping, data: [cntr]
+26.01.27 21:28:37 echoEvent type: ping, data: [cntr]
+26.01.27 21:29:08 echoEvent type: ping, data: [cntr]
+26.01.27 21:29:36 echoEvent type: hello, data: [cntr]
+26.01.27 21:29:36 Windows detected: using queue file polling for EventSource
+26.01.27 21:29:36 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 21:29:36 echoEvent type: ping, data: [cntr]
+26.01.27 21:30:07 echoEvent type: ping, data: [cntr]
+26.01.27 21:30:38 echoEvent type: ping, data: [cntr]
+26.01.27 21:31:09 echoEvent type: ping, data: [cntr]
+26.01.27 21:31:51 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.01.27 21:31:51 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.01.27 21:31:51 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.01.27 21:31:51 echoEvent type: hello, data: [cntr]
+26.01.27 21:34:09 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.01.27 21:34:09 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.01.27 21:34:09 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.01.27 21:34:09 echoEvent type: hello, data: [cntr]
+26.01.27 21:34:09 Windows detected: using queue file polling for EventSource
+26.01.27 21:34:09 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 21:34:09 echoEvent type: ping, data: [cntr]
+26.01.27 21:34:20 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.01.27 21:34:20 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.01.27 21:34:20 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.01.27 21:34:20 echoEvent type: hello, data: [resp]
+26.01.27 21:34:20 Windows detected: using queue file polling for EventSource
+26.01.27 21:34:20 eventLoopQueuePoll resp admin, starting queue file polling
+26.01.27 21:34:20 echoEvent type: ping, data: [resp]
+26.01.27 21:34:20 eventLoopQueuePoll resp admin, flushing event queue (2 events)
+26.01.27 21:34:20 eventLoopQueuePoll resp admin, event: hideClock;
+26.01.27 21:34:20 echoEvent type: hideClock, data: []
+26.01.27 21:34:20 eventLoopQueuePoll resp admin, event: hideClock;
+26.01.27 21:34:20 echoEvent type: hideClock, data: []
+26.01.27 21:34:51 echoEvent type: ping, data: [resp]
+26.01.27 21:38:30 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.01.27 21:38:30 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.01.27 21:38:30 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.01.27 21:38:30 echoEvent type: hello, data: [cntr]
+26.01.27 21:40:01 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.01.27 21:40:01 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.01.27 21:40:01 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.01.27 21:40:01 echoEvent type: hello, data: [resp]
+26.01.27 21:40:01 Windows detected: using queue file polling for EventSource
+26.01.27 21:40:01 eventLoopQueuePoll resp admin, starting queue file polling
+26.01.27 21:40:01 echoEvent type: ping, data: [resp]
+26.01.27 21:40:01 eventLoopQueuePoll resp admin, flushing event queue (5 events)
+26.01.27 21:40:01 eventLoopQueuePoll resp admin, event: flipClock;1,Santiago_Morales,2007,1,1
+26.01.27 21:40:01 echoEvent type: flipClock, data: [1,Santiago_Morales,2007,1,1]
+26.01.27 21:40:01 eventLoopQueuePoll resp admin, event: hideClock;
+26.01.27 21:40:01 echoEvent type: hideClock, data: []
+26.01.27 21:40:01 eventLoopQueuePoll resp admin, event: setReadyMessage;msg_adtIntro1,msg_adtIntro2,dot,msg_adtReady,,adt
+26.01.27 21:40:01 echoEvent type: setReadyMessage, data: [msg_adtIntro1,msg_adtIntro2,dot,msg_adtReady,,adt]
+26.01.27 21:40:01 eventLoopQueuePoll resp admin, event: startMultiTrials;adt,ppt,trial,0,1,1,1,4
+26.01.27 21:40:01 echoEvent type: startMultiTrials, data: [adt,ppt,trial,0,1,1,1,4]
+26.01.27 21:40:01 eventLoopQueuePoll resp admin, event: endTrials;
+26.01.27 21:40:01 echoEvent type: endTrials, data: []
+26.01.27 21:40:32 echoEvent type: ping, data: [resp]
+26.01.27 21:41:22 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.01.27 21:41:22 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.01.27 21:41:22 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.01.27 21:41:22 echoEvent type: hello, data: [cntr]
+26.01.27 21:41:22 Windows detected: using queue file polling for EventSource
+26.01.27 21:41:22 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 21:41:22 echoEvent type: ping, data: [cntr]
+26.01.27 21:42:34 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.01.27 21:42:34 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.01.27 21:42:34 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.01.27 21:42:34 echoEvent type: hello, data: [cntr]
+26.01.27 21:42:54 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.01.27 21:42:54 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.01.27 21:42:54 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.01.27 21:42:54 echoEvent type: hello, data: [resp]
+26.01.27 21:42:54 Windows detected: using queue file polling for EventSource
+26.01.27 21:42:54 eventLoopQueuePoll resp admin, starting queue file polling
+26.01.27 21:42:54 echoEvent type: ping, data: [resp]
+26.01.27 21:42:54 eventLoopQueuePoll resp admin, flushing event queue (5 events)
+26.01.27 21:42:54 eventLoopQueuePoll resp admin, event: cancelTrial;
+26.01.27 21:42:54 echoEvent type: cancelTrial, data: []
+26.01.27 21:42:54 eventLoopQueuePoll resp admin, event: cancelTrial;
+26.01.27 21:42:54 echoEvent type: cancelTrial, data: []
+26.01.27 21:42:54 eventLoopQueuePoll resp admin, event: cancelTrial;
+26.01.27 21:42:54 echoEvent type: cancelTrial, data: []
+26.01.27 21:42:54 eventLoopQueuePoll resp admin, event: cancelTrial;
+26.01.27 21:42:54 echoEvent type: cancelTrial, data: []
+26.01.27 21:42:54 eventLoopQueuePoll resp admin, event: hideClock;
+26.01.27 21:42:54 echoEvent type: hideClock, data: []
+26.01.27 21:43:25 echoEvent type: ping, data: [resp]
+26.01.27 21:45:58 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.01.27 21:45:58 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.01.27 21:45:58 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.01.27 21:45:58 echoEvent type: hello, data: [cntr]
+26.01.27 21:46:09 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.01.27 21:46:09 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.01.27 21:46:09 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.01.27 21:46:09 echoEvent type: hello, data: [resp]
+26.01.27 21:46:09 Windows detected: using queue file polling for EventSource
+26.01.27 21:46:09 eventLoopQueuePoll resp admin, starting queue file polling
+26.01.27 21:46:09 echoEvent type: ping, data: [resp]
+26.01.27 21:46:09 eventLoopQueuePoll resp admin, flushing event queue (1 events)
+26.01.27 21:46:09 eventLoopQueuePoll resp admin, event: hideClock;
+26.01.27 21:46:09 echoEvent type: hideClock, data: []
+26.01.27 21:46:40 echoEvent type: ping, data: [resp]
+26.01.27 21:48:35 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.01.27 21:48:35 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.01.27 21:48:35 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.01.27 21:48:35 echoEvent type: hello, data: [cntr]
+26.01.27 21:48:35 Windows detected: using queue file polling for EventSource
+26.01.27 21:48:35 eventLoopQueuePoll cntr admin, starting queue file polling
+26.01.27 21:48:35 echoEvent type: ping, data: [cntr]
+26.01.27 21:48:46 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.01.27 21:48:46 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.01.27 21:48:46 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.01.27 21:48:46 echoEvent type: hello, data: [resp]
+26.01.27 21:48:46 Windows detected: using queue file polling for EventSource
+26.01.27 21:48:46 eventLoopQueuePoll resp admin, starting queue file polling
+26.01.27 21:48:46 echoEvent type: ping, data: [resp]
+26.01.27 21:48:46 eventLoopQueuePoll resp admin, flushing event queue (1 events)
+26.01.27 21:48:46 eventLoopQueuePoll resp admin, event: hideClock;
+26.01.27 21:48:46 echoEvent type: hideClock, data: []
+26.01.27 21:49:17 echoEvent type: ping, data: [resp]
+26.01.27 21:51:33 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.01.27 21:51:33 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.01.27 21:51:33 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.01.27 21:51:33 echoEvent type: hello, data: [cntr]

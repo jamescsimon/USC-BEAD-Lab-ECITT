@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<locs>
+	<loc id="adj_average"         fullValue="Average"           mediumValue="Average"       shortValue="Avg"/>
+
+	<loc id="prop_projectId"      fullValue="Project id"        mediumValue="Proj id"        shortValue="Proj"/>
+	<loc id="prop_testSetNo"      fullValue="Test set no"       mediumValue="TSet no"        shortValue="TSet"/>
+	<loc id="prop_testName"       fullValue="Task Version"      mediumValue="Task Ver"       shortValue="TskV"/>
+	<loc id="prop_partNo"         fullValue="Participant no"    mediumValue="Part no"        shortValue="Part"/>
+	<loc id="prop_ageYears"       fullValue="Age years"         mediumValue="Age years"      shortValue="AgeY"/>
+	<loc id="prop_ageMonths"      fullValue="Age months"        mediumValue="Age months"     shortValue="AgeM"/>
+	<loc id="prop_trialDelay"     fullValue="Trial Delay"       mediumValue="Trial Delay"    shortValue="TrDl"/>
+	<loc id="prop_trialStartTime" fullValue="Start Time UTC"    mediumValue="Start Time"     shortValue="StrT"/>
+	<loc id="prop_trialRegTime"   fullValue="Reg Time UTC"      mediumValue="Reg Time"       shortValue="RegT"/>
+	<loc id="prop_trialType"      fullValue="Test Type"         mediumValue="Test Type"      shortValue="Type"/>
+	<loc id="prop_trialPhase"     fullValue="Trial Phase"       mediumValue="Trial Phase"    shortValue="Phase"/>
+	<loc id="prop_trialNo"        fullValue="Trial no"          mediumValue="Trial no"       shortValue="#"/>
+	<loc id="prop_accTrialNo"     fullValue="Accum Trial no"    mediumValue="Acc Trial no"   shortValue="Acc#"/>
+	<loc id="prop_trialVariant"   fullValue="Trial Variant"     mediumValue="Trial Var"      shortValue="TrlV"/>
+	<loc id="prop_accuracy"       fullValue="Accuracy"          mediumValue="Accuracy"       shortValue="Accu"/>
+	<loc id="prop_reactionTime"   fullValue="Reaction Time"     mediumValue="React Time"     shortValue="Reac"/>
+	<loc id="prop_corrLoc"        fullValue="Correct Location"  mediumValue="Corr Loc"       shortValue="CLoc"/>
+	<loc id="prop_buttonPressed"  fullValue="Response Location" mediumValue="Resp Loc"       shortValue="RLoc"/>
+	<loc id="prop_animationShown" fullValue="Animation Shown"   mediumValue="Anim Shown"     shortValue="Anim"/>
+	<loc id="prop_dotPressed"     fullValue="Dot Pressed"       mediumValue="Dot Pressed"    shortValue="DtPr"/>
+	<loc id="prop_moveEvents"     fullValue="Move Events"       mediumValue="Move Events"    shortValue="MvEv"/>
+	<loc id="prop_hidden"         fullValue="Hidden"            mediumValue="Hidden"         shortValue="Hddn"/>
+	<loc id="prop_cntr"           fullValue="Control"           mediumValue="Control"        shortValue="Cntr"/>
+	<loc id="prop_inhb"           fullValue="Inhibitory"        mediumValue="Inhibit"        shortValue="Inhb"/>
+	<loc id="prop_congr"          fullValue="Congruent"         mediumValue="Congr"          shortValue="Cngr"/>
+	<loc id="prop_incgr"           ullValue="Incongruent"       mediumValue="Incgr"          shortValue="Incg"/>
+	<loc id="prop_resps"          fullValue="Responses"         mediumValue="Resps"          shortValue="Rsps"/>
+
+	<loc id="head_result"         singular="Result"         plural="Results"/>
+	<loc id="head_projectId"      singular="Project"        plural="Projects"/>
+	<loc id="head_testSetNo"      singular="Test set no"    plural="Test sets"/>
+	<loc id="head_testName"       singular="Task Version"   plural="Task Versions"/>
+	<loc id="head_trialType"      singular="Test Type"      plural="Test Types"/>
+	<loc id="head_trialVariant"   singular="Trial Var"      plural="Trial Vars"/>
+	<loc id="head_partNo"         singular="Participant"    plural="Participants"/>
+	<loc id="head_trialStartTime" singular="Start Time UTC" plural="Start Times UTC"/>
+	<loc id="head_response"       singular="Response"       plural="Responses"/>
+
+	<loc id="msg_adtIntro1"  text="Put your finger on the red dot. When you see the buttons, press the happy face as fast as you can."/>
+	<loc id="msg_adtIntro2"  text="Then return to the dot."/>
+	<loc id="msg_adtReady"  text="Ready?"/>
+
+	<loc id="enum_testName_9m"      fullValue="9 Months"          mediumValue="9 Mts"     shortValue="9M"/>
+	<loc id="enum_testName_24m1"    fullValue="24 Months 1"       mediumValue="24 Mts 1"  shortValue="24M1"/>
+	<loc id="enum_testName_24m2"    fullValue="24 Months 2"       mediumValue="24 Mts 2"  shortValue="24M2"/>
+	<loc id="enum_testName_nirs"    fullValue="NIRS"              mediumValue="NIRS"      shortValue="NIRS"/>
+	<loc id="enum_testName_adt"     fullValue="Adult"             mediumValue="Adult"     shortValue="Adlt"/>
+	<loc id="enum_testName_adt1"    fullValue="Adult 1"           mediumValue="Adult 1"   shortValue="Adlt1"/>
+	<loc id="enum_testName_adt2"    fullValue="Adult 2"           mediumValue="Adult 2"   shortValue="Adlt2"/>
+	<loc id="enum_testName_adt3"    fullValue="Adult 3"           mediumValue="Adult 3"   shortValue="Adlt3"/>
+	<loc id="enum_testName_adt4"    fullValue="Adult 4"           mediumValue="Adult 4"   shortValue="Adlt4"/>
+	<loc id="enum_testName_adt41"   fullValue="Adult 4-1"         mediumValue="Adult 41"  shortValue="Adlt41"/>
+	<loc id="enum_testName_adt42"   fullValue="Adult 4-2"         mediumValue="Adult 42"  shortValue="Adt42"/>
+	<loc id="enum_testName_adt43"   fullValue="Adult 4-3"         mediumValue="Adult 43"  shortValue="Adt43"/>
+	<loc id="enum_testName_adt121"  fullValue="Adult 12-1"        mediumValue="Adult 121" shortValue="Adt121"/>
+	<loc id="enum_testName_box"     fullValue="Box Test"          mediumValue="Box Test"  shortValue="Box"/>
+	<loc id="enum_testName_box31"   fullValue="Box Test 3/1"      mediumValue="Box 3/1"   shortValue="Box31"/>
+	<loc id="enum_testName_spc"     fullValue="Spatial Conflict"  mediumValue="Sp Confl"  shortValue="SpC"/>
+
+	<loc id="enum_trialType_pr"      fullValue="Practice"         mediumValue="Practice"  shortValue="Prtc"/>
+	<loc id="enum_trialType_ppb"      fullValue="Practice PR Btm" mediumValue="Practice PRB"  shortValue="PrPB"/>
+	<loc id="enum_trialType_ppt"      fullValue="Practice PR Top" mediumValue="Practice PRT"  shortValue="PrPT"/>
+
+	<loc id="enum_trialType_tptt"     fullValue="Test PR Top"    mediumValue="Test PRT"  shortValue="TPT"/>
+	<loc id="enum_trialType_tptb"     fullValue="Test PR Top"    mediumValue="Test PRT"  shortValue="TPT"/>
+
+	<loc id="enum_trialType_tpbt"     fullValue="Test PR Btm"    mediumValue="Test PRB"  shortValue="TPB"/>
+	<loc id="enum_trialType_tpbb"     fullValue="Test PR Btm"    mediumValue="Test PRB"  shortValue="TPB"/>
+
+	<loc id="enum_trialType_c1t"      fullValue="Cntrol 1 Top"   mediumValue="Cntr1 Top" shortValue="C1T"/>
+	<loc id="enum_trialType_c1b"      fullValue="Cntrol 1 Btm"   mediumValue="Cntr1 Btm" shortValue="C1B"/>
+	<loc id="enum_trialType_c2t"      fullValue="Cntrol 2 Top"   mediumValue="Cntr2 Top" shortValue="C2T"/>
+	<loc id="enum_trialType_c2b"      fullValue="Cntrol 2 Btm"   mediumValue="Cntr2 Btb" shortValue="C2B"/>
+
+	<loc id="enum_trialType_tpb"      fullValue="Test PR Btm"    mediumValue="Test PRB"  shortValue="TPB"/>
+	<loc id="enum_trialType_tpt"      fullValue="Test PR Top"    mediumValue="Test PRT"  shortValue="TPT"/>
+
+	<loc id="enum_trialType_anb"      fullValue="A-not-B"        mediumValue="A-not-B"   shortValue="AnB"/>
+	<loc id="enum_trialType_anba"     fullValue="A-not-B"        mediumValue="A-not-B"   shortValue="AnB"/>
+	<loc id="enum_trialType_anbb"     fullValue="A-not-B"        mediumValue="A-not-B"   shortValue="AnB"/>
+	<loc id="enum_trialType_bna"      fullValue="B-not-A"        mediumValue="B-not-A"   shortValue="BnA"/>
+	<loc id="enum_trialType_bnaa"     fullValue="B-not-A"        mediumValue="B-not-A"   shortValue="BnA"/>
+	<loc id="enum_trialType_bnab"     fullValue="B-not-A"        mediumValue="B-not-A"   shortValue="BnA"/>
+	
+	<loc id="enum_trialType_test"     fullValue="Test"            mediumValue="Test"      shortValue="Test"/>
+
+	<loc id="enum_trialVariant_none"   fullValue="None"           mediumValue="None"      shortValue="None"/>
+
+	<loc id="enum_trialVariant_prpt"   fullValue="Prepotent"      mediumValue="Prepot"    shortValue="Prpt"/>
+	<loc id="enum_trialVariant_inhb"   fullValue="Inhibitory"     mediumValue="Inhibit"   shortValue="Inhb"/>
+	<loc id="enum_trialVariant_cngr"   fullValue="Congruent"      mediumValue="Congr"     shortValue="Cngr"/>
+	<loc id="enum_trialVariant_incg"   fullValue="Incongruent"    mediumValue="Incongr"   shortValue="Incg"/>
+	<loc id="enum_trialVariant_centr"  fullValue="Centered"       mediumValue="Centered"   shortValue="Cetr"/>
+
+	<loc id="enum_trialVariant_scl1"    fullValue="Practice"       mediumValue="Practice"  shortValue="Prct"/>
+	<loc id="enum_trialVariant_scl2"    fullValue="Practice"       mediumValue="Practice"  shortValue="Prct"/>
+	<loc id="enum_trialVariant_scr1"    fullValue="Practice"       mediumValue="Practice"  shortValue="Prct"/>
+	<loc id="enum_trialVariant_scr2"    fullValue="Practice"       mediumValue="Practice"  shortValue="Prct"/>
+	<loc id="enum_trialVariant_dll1"   fullValue="Congruent"      mediumValue="Congr"     shortValue="Cngr"/>
+	<loc id="enum_trialVariant_dll2"   fullValue="Congruent"      mediumValue="Congr"     shortValue="Cngr"/>
+	<loc id="enum_trialVariant_dlr1"   fullValue="Incongruent"    mediumValue="Incongr"   shortValue="Incg"/>
+	<loc id="enum_trialVariant_dlr2"   fullValue="Incongruent"    mediumValue="Incongr"   shortValue="Incg"/>
+	<loc id="enum_trialVariant_drl1"   fullValue="Incongruent"    mediumValue="Incongr"   shortValue="Incg"/>
+	<loc id="enum_trialVariant_drl2"   fullValue="Incongruent"    mediumValue="Incongr"   shortValue="Incg"/>
+	<loc id="enum_trialVariant_drr1"   fullValue="Congruent"      mediumValue="Congr"     shortValue="Cngr"/>
+	<loc id="enum_trialVariant_drr2"   fullValue="Congruent"      mediumValue="Congr"     shortValue="Cngr"/>
+
+	<loc id="enum_trialPhase_trial"   fullValue="Trial"           mediumValue="Trial"     shortValue="Trl"/>
+	<loc id="enum_trialPhase_demo"    fullValue="Demo"            mediumValue="Demo"      shortValue="Demo"/>
+
+	<loc id="enum_buttonPressed_top"  fullValue="Top"    mediumValue="Top"   shortValue="Top"/>
+	<loc id="enum_buttonPressed_mdl"  fullValue="Middle" mediumValue="Mdl"   shortValue="Mdl"/>
+	<loc id="enum_buttonPressed_btm"  fullValue="Bottom" mediumValue="Btm"   shortValue="Btm"/>
+	<loc id="enum_buttonPressed_A"    fullValue="A"      mediumValue="A"     shortValue="A"/>
+	<loc id="enum_buttonPressed_B"    fullValue="B"      mediumValue="B"     shortValue="B"/>
+	<loc id="enum_buttonPressed_L"    fullValue="Left"   mediumValue="Left"  shortValue="Left"/>
+	<loc id="enum_buttonPressed_R"    fullValue="Right"  mediumValue="Right" shortValue="Rght"/>
+</locs>

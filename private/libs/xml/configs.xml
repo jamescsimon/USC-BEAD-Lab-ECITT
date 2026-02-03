@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configs>
+	<config id="9m_tpbt"    transType="tpb" layout="ecittDouble" name="Test Top" varDistr="inhb" emp="top" empType="happy" rew="top" ready="top,btm"   animDistr="apple,owl,elephant,flower,bus" animKeepSep="apple,owl,elephant,flower,bus" animMaxDups="1,1,1,1,1" animSeqMethod="random"/>
+	<config id="9m_tpbb"    transType="tpb" layout="ecittDouble" name="Test Btm" varDistr="prpt" emp="btm" empType="happy" rew="btm" ready="top,btm"   animDistr="apple,owl,elephant,flower,bus" animKeepSep="apple,owl,elephant,flower,bus" animMaxDups="1,1,1,1,1" animSeqMethod="random"/>
+	
+	<config id="9m_tptt"    transType="tpt" layout="ecittDouble" name="Test Top" varDistr="prpt" emp="top" empType="happy" rew="top" ready="top,btm"   animDistr="apple,owl,elephant,flower,bus" animKeepSep="apple,owl,elephant,flower,bus" animMaxDups="1,1,1,1,1" animSeqMethod="random"/>
+	<config id="9m_tptb"    transType="tpt" layout="ecittDouble" name="Test Btm" varDistr="inhb" emp="btm" empType="happy" rew="btm" ready="top,btm"   animDistr="apple,owl,elephant,flower,bus" animKeepSep="apple,owl,elephant,flower,bus" animMaxDups="1,1,1,1,1" animSeqMethod="random"/>
+	
+	<config id="9m_c1t"     layout="ecittDouble" name="Cntr1 Top" varDistr=""    emp="top" empType="happy" rew="top" ready="top"       animDistr="apple,owl,elephant,flower,bus" animKeepSep="apple,owl,elephant,flower,bus" animMaxDups="1,1,1,1,1" animSeqMethod="random"/>
+	<config id="9m_c1b"     layout="ecittDouble" name="Cntr1 Btm" varDistr=""    emp="btm" empType="happy" rew="btm" ready="btm"       animDistr="apple,owl,elephant,flower,bus" animKeepSep="apple,owl,elephant,flower,bus" animMaxDups="1,1,1,1,1" animSeqMethod="random"/>
+	
+	<config id="9m_c2b"     layout="ecittDouble" name="Cntr2 Btm" varDistr=""    emp="btm" empType="happy" rew="btm" ready="top,btm"   animDistr="apple,owl,elephant,flower,bus" animKeepSep="apple,owl,elephant,flower,bus" animMaxDups="1,1,1,1,1" animSeqMethod="random"/>
+	<config id="9m_c2t"     layout="ecittDouble" name="Cntr2 Top" varDistr=""    emp="top" empType="happy" rew="top" ready="top,btm"   animDistr="apple,owl,elephant,flower,bus" animKeepSep="apple,owl,elephant,flower,bus" animMaxDups="1,1,1,1,1" animSeqMethod="random"/>
+	
+	<config id="24m1_prb"      layout="ecittSingle" name="Practice" emp="mdl" empType="happy" rew="mdl" ready="mdl"   animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random"/>
+	<config id="24m1_prt"      layout="ecittSingle" name="Practice" emp="mdl" empType="happy" rew="mdl" ready="mdl"   animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random"/>
+	
+	<config id="24m1_tpb"      name="Test Btm"    animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" varDistr="prpt,prpt,prpt,inhb" varLeading="prpt,prpt,prpt" varKeepSep="prpt,inhb" varMaxDups="4,1" varSeqMethod="random" varPeriod="32"/>
+	<config id="24m1_tpb_prpt" layout="ecittDouble"  emp="btm" empType="happy" rew="btm" ready="top,btm"/>
+	<config id="24m1_tpb_inhb" layout="ecittDouble"  emp="top" empType="happy" rew="top" ready="top,btm"/>
+	
+	<config id="24m1_tpt"      name="Test Top" animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" varDistr="prpt,prpt,prpt,inhb" varLeading="prpt,prpt,prpt" varKeepSep="prpt,inhb" varMaxDups="4,1" varSeqMethod="random" varPeriod="32"/>
+	<config id="24m1_tpt_prpt" layout="ecittDouble" emp="top" empType="happy" rew="top" ready="top,btm"/>
+	<config id="24m1_tpt_inhb" layout="ecittDouble" emp="btm" empType="happy" rew="btm" ready="top,btm"/>
+	
+	<config id="24m2_prb"      layout="ecittSingle" name="Practice" emp="mdl" empType="happy" rew="mdl" ready="mdl"   animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random"/>
+	<config id="24m2_prt"      layout="ecittSingle" name="Practice" emp="mdl" empType="happy" rew="mdl" ready="mdl"   animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random"/>
+
+	<config id="24m2_tbb"      layout="ecittDouble" name="Baseline Btm" animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" emp="btm" empType="happy" rew="btm" ready="top,btm"/>
+	<config id="24m2_tbt"      layout="ecittDouble" name="Baseline Top" animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" emp="top" empType="happy" rew="top" ready="top,btm"/>
+
+	<config id="24m2_tpb"      name="Test Btm"    animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" varDistr="prpt,prpt,prpt,inhb" varLeading="prpt,prpt,prpt" varKeepSep="prpt,inhb" varMaxDups="4,1" varSeqMethod="random" varPeriod="32"/>
+	<config id="24m2_tpb_prpt" layout="ecittDouble"  emp="btm" empType="happy" rew="btm" ready="top,btm"/>
+	<config id="24m2_tpb_inhb" layout="ecittDouble"  emp="top" empType="happy" rew="top" ready="top,btm"/>
+	
+	<config id="24m2_tpt"      name="Test Top" animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" varDistr="prpt,prpt,prpt,inhb" varLeading="prpt,prpt,prpt" varKeepSep="prpt,inhb" varMaxDups="4,1" varSeqMethod="random" varPeriod="32"/>
+	<config id="24m2_tpt_prpt" layout="ecittDouble" emp="top" empType="happy" rew="top" ready="top,btm"/>
+	<config id="24m2_tpt_inhb" layout="ecittDouble" emp="btm" empType="happy" rew="btm" ready="top,btm"/>
+
+	<config id="24m2h_prl"     layout="ecittSingleHor" name="Practice" emp="ctr" empType="happy" rew="ctr" ready="ctr"   animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random"/>
+	<config id="24m2h_prr"     layout="ecittSingleHor" name="Practice" emp="ctr" empType="happy" rew="ctr" ready="ctr"   animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random"/>
+	
+	<config id="dev_bvh"     	layout="videoHor" name="Baseline Vid" videos="bl1Hor,bl2Hor,bl3Hor,bl4Hor,bl5Hor,bl6Hor,bl7Hor,bl8Hor"/>
+	<config id="dev_bvv"     	layout="videoVer" name="Baseline Vid" videos="bl1Hor,bl2Hor,bl3Hor,bl4Hor,bl5Hor,bl6Hor,bl7Hor,bl8Hor"/>
+
+	<config id="nirsh_ctr"      name="Control Right" animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" varDistr="prpt" varLeading="" varKeepSep="" varMaxDups="" varSeqMethod="random" varPeriod="8"/>
+	<config id="nirsh_ctr_prpt" layout="ecittDoubleHor"  emp="rgt" empType="happy" rew="rgt" ready="lft,rgt"/>
+
+	<config id="nirsh_exr"      name="Exper Right" animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" varDistr="prpt,prpt,prpt,inhb" varLeading="prpt,prpt" varKeepSep="prpt,inhb" varMaxDups="4,0" varSeqMethod="random" varPeriod="8"/>
+	<config id="nirsh_exr_prpt" layout="ecittDoubleHor"  emp="rgt" empType="happy" rew="rgt" ready="lft,rgt"/>
+	<config id="nirsh_exr_inhb" layout="ecittDoubleHor"  emp="lft" empType="happy" rew="lft" ready="lft,rgt"/>
+
+	<config id="nirsh_ctl2"      name="Control Left" animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" varDistr="prpt" varLeading="" varKeepSep="" varMaxDups="" varSeqMethod="random" varPeriod="6"/>
+	<config id="nirsh_ctl2_prpt" layout="ecittDoubleHor"  emp="lft" empType="happy" rew="lft" ready="lft,rgt"/>
+	
+	<config id="nirsh_exl2"      name="Exper Left" animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" varDistr="prpt,inhb" varLeading="prpt" varKeepSep="prpt,inhb" varMaxDups="1,1" varSeqMethod="random" varPeriod="6"/>
+	<config id="nirsh_exl2_prpt" layout="ecittDoubleHor"  emp="lft" empType="happy" rew="lft" ready="lft,rgt"/>
+	<config id="nirsh_exl2_inhb" layout="ecittDoubleHor"  emp="rgt" empType="happy" rew="rgt" ready="lft,rgt"/>
+
+	<config id="nirsh_ctr2"      name="Control Right" animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" varDistr="prpt" varLeading="" varKeepSep="" varMaxDups="" varSeqMethod="random" varPeriod="6"/>
+	<config id="nirsh_ctr2_prpt" layout="ecittDoubleHor"  emp="rgt" empType="happy" rew="rgt" ready="lft,rgt"/>
+	
+	<config id="nirsh_exr2"      name="Exper Right" animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" varDistr="prpt,inhb" varLeading="prpt" varKeepSep="prpt,inhb" varMaxDups="1,1" varSeqMethod="random" varPeriod="6"/>
+	<config id="nirsh_exr2_prpt" layout="ecittDoubleHor"  emp="rgt" empType="happy" rew="rgt" ready="lft,rgt"/>
+	<config id="nirsh_exr2_inhb" layout="ecittDoubleHor"  emp="lft" empType="happy" rew="lft" ready="lft,rgt"/>
+
+	
+	
+	<config id="48mn_ctl2"      name="Control Left" animDistr="appleSh,owlSh,elephantSh,elephant2Sh,elephant4Sh,flowerSh,busSh" animKeepSep="appleSh,owlSh,elephantSh,elephant2Sh,elephant4Sh,flowerSh,busSh" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" varDistr="prpt" varLeading="" varKeepSep="" varMaxDups="" varSeqMethod="random" varPeriod="8"/>
+	<config id="48mn_ctl2_prpt" layout="ecittDoubleHor"  emp="lft" empType="happy" rew="lft" ready="lft,rgt"/>
+	
+	<config id="48mn_exl2"      name="Exper Left" animDistr="appleSh,owlSh,elephantSh,elephant2Sh,elephant4Sh,flowerSh,busSh" animKeepSep="appleSh,owlSh,elephantSh,elephant2Sh,elephant4Sh,flowerSh,busSh" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" varDistr="prpt,prpt,prpt,inhb" varLeading="prpt" varKeepSep="prpt,inhb" varMaxDups="3,1" varSeqMethod="random" varPeriod="8"/>
+	<config id="48mn_exl2_prpt" layout="ecittDoubleHor"  emp="lft" empType="happy" rew="lft" ready="lft,rgt"/>
+	<config id="48mn_exl2_inhb" layout="ecittDoubleHor"  emp="rgt" empType="happy" rew="rgt" ready="lft,rgt"/>
+
+	<config id="48mn_ctr2"      name="Control Right" animDistr="appleSh,owlSh,elephantSh,elephant2Sh,elephant4Sh,flowerSh,busSh" animKeepSep="appleSh,owlSh,elephantSh,elephant2Sh,elephant4Sh,flowerSh,busSh" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" varDistr="prpt" varLeading="" varKeepSep="" varMaxDups="" varSeqMethod="random" varPeriod="8"/>
+	<config id="48mn_ctr2_prpt" layout="ecittDoubleHor"  emp="rgt" empType="happy" rew="rgt" ready="lft,rgt"/>
+	
+	<config id="48mn_exr2"      name="Exper Right" animDistr="appleSh,owlSh,elephantSh,elephant2Sh,elephant4Sh,flowerSh,busSh" animKeepSep="appleSh,owlSh,elephantSh,elephant2Sh,elephant4Sh,flowerSh,busSh" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" varDistr="prpt,prpt,prpt,inhb" varLeading="prpt" varKeepSep="prpt,inhb" varMaxDups="3,1" varSeqMethod="random" varPeriod="8"/>
+	<config id="48mn_exr2_prpt" layout="ecittDoubleHor"  emp="rgt" empType="happy" rew="rgt" ready="lft,rgt"/>
+	<config id="48mn_exr2_inhb" layout="ecittDoubleHor"  emp="lft" empType="happy" rew="lft" ready="lft,rgt"/>
+
+	
+	
+	
+	<config id="nirsh_tbgl"      layout="canvas" name="Baseline Sfl" game="snowflake"/>
+	<config id="nirsh_tbgr"      layout="canvas" name="Baseline Sfl" game="snowflake"/>
+
+	<config id="nirsv_tbgt"   	 layout="canvas" name="Baseline Sfl" game="snowflake"/>
+	<config id="nirsv_tbgb"   	 layout="canvas" name="Baseline Sfl" game="snowflake"/>
+
+	<config id="nirsh_tbgl2"     layout="canvas" name="Baseline Bbl" game="bubble"/>
+	<config id="nirsh_tbgr2"     layout="canvas" name="Baseline Bbl" game="bubble"/>
+	
+	<config id="nirsv_tbgt2"   	 layout="canvas" name="Baseline Bbl" game="bubble"/>
+	<config id="nirsv_tbgb2"     layout="canvas" name="Baseline Bbl" game="bubble"/>
+	
+	<config id="nirsh_tbvl"      layout="videoHor" name="Baseline Vid" videos="bl1Hor,bl2Hor,bl3Hor,bl4Hor,bl5Hor,bl6Hor,bl7Hor,bl8Hor" minDt="12000" maxDt="17000"/>
+	<config id="nirsh_tbvla"      layout="videoHor" name="Baseline Vid A" videos="bl1Hor,bl2Hor,bl3Hor,bl4Hor,bl5Hor,bl6Hor,bl7Hor,bl8Hor" minDt="12000" maxDt="17000"/>
+	<config id="nirsh_tbvlb"      layout="videoHor" name="Baseline Vid B" videos="bl1Hor,bl2Hor,bl3Hor,bl4Hor,bl5Hor,bl6Hor,bl7Hor,bl8Hor" minDt="12000" maxDt="17000"/>
+	
+	<config id="nirsh_tbvr"      layout="videoHor" name="Baseline Vid" videos="bl1Hor,bl2Hor,bl3Hor,bl4Hor,bl5Hor,bl6Hor,bl7Hor,bl8Hor" minDt="12000" maxDt="17000"/>
+	<config id="nirsh_tbvra"      layout="videoHor" name="Baseline Vid A" videos="bl1Hor,bl2Hor,bl3Hor,bl4Hor,bl5Hor,bl6Hor,bl7Hor,bl8Hor" minDt="12000" maxDt="17000"/>
+	<config id="nirsh_tbvrb"      layout="videoHor" name="Baseline Vid B" videos="bl1Hor,bl2Hor,bl3Hor,bl4Hor,bl5Hor,bl6Hor,bl7Hor,bl8Hor" minDt="12000" maxDt="17000"/>
+
+	<config id="nirsv_tbvt"   	 layout="videoHor" name="Baseline Vid" videos="bl1Hor,bl2Hor,bl3Hor,bl4Hor,bl5Hor,bl6Hor,bl7Hor,bl8Hor" minDt="12000" maxDt="17000"/>
+	<config id="nirsv_tbvb"   	 layout="videoHor" name="Baseline Vid" videos="bl1Hor,bl2Hor,bl3Hor,bl4Hor,bl5Hor,bl6Hor,bl7Hor,bl8Hor" minDt="12000" maxDt="17000"/>
+
+	<config id="48mn_tbvl"      layout="videoHor" name="Baseline Vid" videos="bl1Hor,bl2Hor,bl3Hor,bl4Hor,bl5Hor,bl6Hor,bl7Hor,bl8Hor" minDt="12000" maxDt="17000"/>
+	<config id="48mn_tbvla"      layout="videoHor" name="Baseline Vid A" videos="bl1Hor,bl2Hor,bl3Hor,bl4Hor,bl5Hor,bl6Hor,bl7Hor,bl8Hor" minDt="12000" maxDt="17000"/>
+	<config id="48mn_tbvlb"      layout="videoHor" name="Baseline Vid B" videos="bl1Hor,bl2Hor,bl3Hor,bl4Hor,bl5Hor,bl6Hor,bl7Hor,bl8Hor" minDt="12000" maxDt="17000"/>
+	
+	<config id="48mn_tbvr"      layout="videoHor" name="Baseline Vid" videos="bl1Hor,bl2Hor,bl3Hor,bl4Hor,bl5Hor,bl6Hor,bl7Hor,bl8Hor" minDt="12000" maxDt="17000"/>
+	<config id="48mn_tbvra"      layout="videoHor" name="Baseline Vid A" videos="bl1Hor,bl2Hor,bl3Hor,bl4Hor,bl5Hor,bl6Hor,bl7Hor,bl8Hor" minDt="12000" maxDt="17000"/>
+	<config id="48mn_tbvrb"      layout="videoHor" name="Baseline Vid B" videos="bl1Hor,bl2Hor,bl3Hor,bl4Hor,bl5Hor,bl6Hor,bl7Hor,bl8Hor" minDt="12000" maxDt="17000"/>
+
+	<config id="24m2h_tbl"     layout="ecittDoubleHor" name="Baseline Lft" animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" emp="lft" empType="happy" rew="lft" ready="lft,rgt"/>
+	<config id="24m2h_tbr"     layout="ecittDoubleHor" name="Baseline Rgt" animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" emp="rgt" empType="happy" rew="rgt" ready="lft,rgt"/>
+
+	<config id="24m2h_tpl"      name="Test Left" animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" varDistr="prpt,prpt,prpt,inhb" varLeading="prpt,prpt,prpt" varKeepSep="prpt,inhb" varMaxDups="4,1" varSeqMethod="random" varPeriod="32"/>
+	<config id="24m2h_tpl_prpt" layout="ecittDoubleHor"  emp="lft" empType="happy" rew="lft" ready="lft,rgt"/>
+	<config id="24m2h_tpl_inhb" layout="ecittDoubleHor"  emp="rgt" empType="happy" rew="rgt" ready="lft,rgt"/>
+	
+	<config id="24m2h_tpr"      name="Test Right" animDistr="apple,owl,elephant,elephant2,elephant4,flower,bus" animKeepSep="apple,owl,elephant,elephant2,elephant4,flower,bus" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" varDistr="prpt,prpt,prpt,inhb" varLeading="prpt,prpt,prpt" varKeepSep="prpt,inhb" varMaxDups="4,1" varSeqMethod="random" varPeriod="32"/>
+	<config id="24m2h_tpr_prpt" layout="ecittDoubleHor" emp="rgt" empType="happy" rew="rgt" ready="lft,rgt"/>
+	<config id="24m2h_tpr_inhb" layout="ecittDoubleHor" emp="lft" empType="happy" rew="lft" ready="lft,rgt"/>
+
+	<config id="48m_tbl"     layout="ecittDoubleHor" name="Baseline Lft" animDistr="appleSh,owlSh,elephantSh,elephant2Sh,elephant4Sh,flowerSh,busSh" animKeepSep="appleSh,owlSh,elephantSh,elephant2Sh,elephant4Sh,flowerSh,busSh" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" emp="lft" empType="happy" rew="lft" ready="lft,rgt"/>
+	<config id="48m_tbr"     layout="ecittDoubleHor" name="Baseline Rgt" animDistr="appleSh,owlSh,elephantSh,elephant2Sh,elephant4Sh,flowerSh,busSh" animKeepSep="appleSh,owlSh,elephantSh,elephant2Sh,elephant4Sh,flowerSh,busSh" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" emp="rgt" empType="happy" rew="rgt" ready="lft,rgt"/>
+
+	<config id="48m_tpl"      name="Test Left" animDistr="appleSh,owlSh,elephantSh,elephant2Sh,elephant4Sh,flowerSh,busSh" animKeepSep="appleSh,owlSh,elephantSh,elephant2Sh,elephant4Sh,flowerSh,busSh" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" varDistr="prpt,prpt,prpt,inhb" varLeading="prpt,prpt,prpt" varKeepSep="prpt,inhb" varMaxDups="4,1" varSeqMethod="random" varPeriod="32"/>
+	<config id="48m_tpl_prpt" layout="ecittDoubleHor"  emp="lft" empType="happy" rew="lft" ready="lft,rgt"/>
+	<config id="48m_tpl_inhb" layout="ecittDoubleHor"  emp="rgt" empType="happy" rew="rgt" ready="lft,rgt"/>
+	
+	<config id="48m_tpr"      name="Test Right" animDistr="appleSh,owlSh,elephantSh,elephant2Sh,elephant4Sh,flowerSh,busSh" animKeepSep="appleSh,owlSh,elephantSh,elephant2Sh,elephant4Sh,flowerSh,busSh" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random" varDistr="prpt,prpt,prpt,inhb" varLeading="prpt,prpt,prpt" varKeepSep="prpt,inhb" varMaxDups="4,1" varSeqMethod="random" varPeriod="32"/>
+	<config id="48m_tpr_prpt" layout="ecittDoubleHor" emp="rgt" empType="happy" rew="rgt" ready="lft,rgt"/>
+	<config id="48m_tpr_inhb" layout="ecittDoubleHor" emp="lft" empType="happy" rew="lft" ready="lft,rgt"/>
+
+	<config id="48m_prl"     layout="ecittSingleHor" name="Practice" emp="ctr" empType="happy" rew="ctr" ready="ctr"   animDistr="appleSh,owlSh,elephantSh,elephant2Sh,elephant4Sh,flowerSh,busSh" animKeepSep="appleSh,owlSh,elephantSh,elephant2Sh,elephant4Sh,flowerSh,busSh" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random"/>
+	<config id="48m_prr"     layout="ecittSingleHor" name="Practice" emp="ctr" empType="happy" rew="ctr" ready="ctr"   animDistr="appleSh,owlSh,elephantSh,elephant2Sh,elephant4Sh,flowerSh,busSh" animKeepSep="appleSh,owlSh,elephantSh,elephant2Sh,elephant4Sh,flowerSh,busSh" animMaxDups="1,1,1,1,1,1,1" animSeqMethod="random"/>
+
+	<config id="adt_ppb"      name="Practice Btm" layout="ecittTriple" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" emp="btm" empType="happy" rew="btm" ready="top,mdl,btm" buttonTypes="resp,dot,resp" varPeriod="4"/>
+	<config id="adt_tpb"      name="Test Btm" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" varDistr="prpt,prpt,prpt,inhb" varLeading="prpt,prpt,prpt" varKeepSep="prpt,inhb" varMaxDups="4,1" varSeqMethod="random" varPeriod="32"/>
+	<config id="adt_tpb_prpt" layout="ecittTriple"  emp="btm" empType="happy" rew="btm" ready="top,mdl,btm" buttonTypes="resp,dot,resp"/>
+	<config id="adt_tpb_inhb" layout="ecittTriple"  emp="top" empType="happy" rew="top" ready="top,mdl,btm" buttonTypes="resp,dot,resp"/>
+	
+	<config id="adt_ppt"      name="Practice Top" layout="ecittTriple" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" emp="top" empType="happy" rew="top" ready="top,mdl,btm" buttonTypes="resp,dot,resp" varPeriod="4"/>
+	<config id="adt_tpt"      name="Test Top" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" varDistr="prpt,prpt,prpt,inhb" varLeading="prpt,prpt,prpt" varKeepSep="prpt,inhb" varMaxDups="4,1" varSeqMethod="random" varPeriod="32"/>
+	<config id="adt_tpt_prpt" layout="ecittTriple" emp="top" empType="happy" rew="top" ready="top,mdl,btm" buttonTypes="resp,dot,resp"/>
+	<config id="adt_tpt_inhb" layout="ecittTriple" emp="btm" empType="happy" rew="btm" ready="top,mdl,btm" buttonTypes="resp,dot,resp"/>
+	
+	<config id="adt_cpb"      name="Control Btm" layout="ecittTriple" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" emp="btm" empType="happy" rew="btm" ready="mdl,btm" buttonTypes="dot,resp" varPeriod="4"/>
+	<config id="adt_cpm"      name="Control Mdl" layout="ecittTriple" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" emp="mdl" empType="happy" rew="mdl" ready="mdl" buttonTypes="resp" varPeriod="4"/>
+	<config id="adt_cpt"      name="Control Top" layout="ecittTriple" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" emp="top" empType="happy" rew="top" ready="top,mdl" buttonTypes="resp,dot" varPeriod="4"/>
+
+	<config id="adth_ppl"      name="Practice Lft" layout="ecittTripleHor" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" emp="lft" empType="happy" rew="lft" ready="lft,ctr,rgt" buttonTypes="resp,dot,resp" varPeriod="4"/>
+	<config id="adth_tpl"      name="Test Lft" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" varDistr="prpt,prpt,prpt,inhb" varLeading="prpt,prpt,prpt" varKeepSep="prpt,inhb" varMaxDups="4,1" varSeqMethod="random" varPeriod="32"/>
+	<config id="adth_tpl_prpt" layout="ecittTripleHor"  emp="lft" empType="happy" rew="lft" ready="lft,ctr,rgt" buttonTypes="resp,dot,resp"/>
+	<config id="adth_tpl_inhb" layout="ecittTripleHor"  emp="rgt" empType="happy" rew="rgt" ready="lft,ctr,rgt" buttonTypes="resp,dot,resp"/>
+	
+	<config id="adth_ppr"      name="Practice Rgt" layout="ecittTripleHor" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" emp="rgt" empType="happy" rew="rgt" ready="lft,ctr,rgt" buttonTypes="resp,dot,resp" varPeriod="4"/>
+	<config id="adth_tpr"      name="Test Rgt" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" varDistr="prpt,prpt,prpt,inhb" varLeading="prpt,prpt,prpt" varKeepSep="prpt,inhb" varMaxDups="4,1" varSeqMethod="random" varPeriod="32"/>
+	<config id="adth_tpr_prpt" layout="ecittTripleHor" emp="rgt" empType="happy" rew="rgt" ready="lft,ctr,rgt" buttonTypes="resp,dot,resp"/>
+	<config id="adth_tpr_inhb" layout="ecittTripleHor" emp="lft" empType="happy" rew="lft" ready="lft,ctr,rgt" buttonTypes="resp,dot,resp"/>
+
+	<config id="adt_cpl"      name="Control Btm" layout="ecittTripleHor" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" emp="lft" empType="happy" rew="lft" ready="lft,ctr" buttonTypes="resp,dot" varPeriod="4"/>
+	<config id="adt_cpc"      name="Control Ctr" layout="ecittTripleHor" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" emp="ctr" empType="happy" rew="ctr" ready="ctr" buttonTypes="resp" varPeriod="4"/>
+	<config id="adt_cpt"      name="Control Top" layout="ecittTripleHor" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" emp="rgt" empType="happy" rew="rgt" ready="ctr,rgt" buttonTypes="dot,resp" varPeriod="4"/>
+
+	<config id="adt4_ppb"      name="Practice Btm" layout="ecittTriple" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" emp="btm" empType="happy" rew="btm" ready="top,mdl,btm" buttonTypes="resp,dot,resp" varPeriod="4"/>
+	<config id="adt4_tpb"      name="Test Btm"    animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" varDistr="prpt,prpt,prpt,inhb" varLeading="prpt,prpt,prpt" varKeepSep="prpt,inhb" varMaxDups="4,1" varSeqMethod="random"/>
+	<config id="adt4_tpb_prpt" layout="ecittTriple"  emp="btm" empType="happy" rew="btm" ready="top,mdl,btm" buttonTypes="resp,dot,resp"/>
+	<config id="adt4_tpb_inhb" layout="ecittTriple"  emp="top" empType="happy" rew="top" ready="top,mdl,btm" buttonTypes="resp,dot,resp"/>
+
+	<config id="adt4_ppt"      name="Practice Top" layout="ecittTriple" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" emp="top" empType="happy" rew="top" ready="top,mdl,btm" buttonTypes="resp,dot,resp" varPeriod="4"/>
+	<config id="adt4_tpt"      name="Test Top" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" varDistr="prpt,prpt,prpt,inhb" varLeading="prpt,prpt,prpt" varKeepSep="prpt,inhb" varMaxDups="4,1" varSeqMethod="random" varPeriod="4"/>
+	<config id="adt4_tpt_prpt" layout="ecittTriple" emp="top" empType="happy" rew="top" ready="top,mdl,btm" buttonTypes="resp,dot,resp"/>
+	<config id="adt4_tpt_inhb" layout="ecittTriple" emp="btm" empType="happy" rew="btm" ready="top,mdl,btm" buttonTypes="resp,dot,resp"/>
+	
+	<config id="phb_app"   name="Prohib Appr" layout="canvas" game="bfly" timeout="65" buttonText="Approach"/>
+	<config id="phb_rst"   name="Prohib Rstr" layout="canvas" game="frog" timeout="35" buttonText="Restraint"/>
+
+
+
+	<config id="spc_init"    layout="spcInit" name="Init SPC Audio" rew="play" ready="play" animDistr="bloopOk"/>
+	
+	<config id="spc_pr"       name="Practice"   imagePairs="snail_clown,cat_baby,dog_reader"                    varSeqMethod="spcSingle" varPeriod="12"/>
+	<config id="spc_test"     name="Test"       imagePairs="mole_robot,penguin_happy,chick_ghost,whale_monster" varSeqMethod="spcDouble" varPeriod="32"/>
+	
+	<config id="spc_pr_scl1"    transVar="centr" layout="spcSingle" rew="L" ready="L,R" stim_left="0" stim_cntr="1" stim_rght="0" button_L="1" button_R="2"/>
+	<config id="spc_pr_scl2"    transVar="centr" layout="spcSingle" rew="L" ready="L,R" stim_left="0" stim_cntr="2" stim_rght="0" button_L="2" button_R="1"/>
+	<config id="spc_pr_scr1"    transVar="centr" layout="spcSingle" rew="R" ready="L,R" stim_left="0" stim_cntr="2" stim_rght="0" button_L="1" button_R="2"/>
+	<config id="spc_pr_scr2"    transVar="centr" layout="spcSingle" rew="R" ready="L,R" stim_left="0" stim_cntr="1" stim_rght="0" button_L="2" button_R="1"/>
+	
+	<config id="spc_test_dll1"  transVar="cngr" layout="spcDouble" rew="L" ready="L,R" stim_left="1" stim_cntr="0" stim_rght="0" button_L="1" button_R="2"/>
+	<config id="spc_test_dlr1"  transVar="incg" layout="spcDouble" rew="R" ready="L,R" stim_left="1" stim_cntr="0" stim_rght="0" button_L="2" button_R="1"/>
+	<config id="spc_test_drl1"  transVar="incg" layout="spcDouble" rew="L" ready="L,R" stim_left="0" stim_cntr="0" stim_rght="1" button_L="1" button_R="2"/>
+	<config id="spc_test_drr1"  transVar="cngr" layout="spcDouble" rew="R" ready="L,R" stim_left="0" stim_cntr="0" stim_rght="1" button_L="2" button_R="1"/>
+	
+	<config id="spc_test_dll2"  transVar="cngr" layout="spcDouble" rew="L" ready="L,R" stim_left="2" stim_cntr="0" stim_rght="0" button_L="2" button_R="1"/>
+	<config id="spc_test_dlr2"  transVar="incg" layout="spcDouble" rew="R" ready="L,R" stim_left="2" stim_cntr="0" stim_rght="0" button_L="1" button_R="2"/>
+	<config id="spc_test_drl2"  transVar="incg" layout="spcDouble" rew="L" ready="L,R" stim_left="0" stim_cntr="0" stim_rght="2" button_L="2" button_R="1"/>
+	<config id="spc_test_drr2"  transVar="cngr" layout="spcDouble" rew="R" ready="L,R" stim_left="0" stim_cntr="0" stim_rght="2" button_L="1" button_R="2"/>
+	
+	<config id="box_anba" transType="anb" name="A-not-B"  varDistr="prpt" emp="A" rew="A" ready="A,B"/>
+	<config id="box_anbb" transType="anb" name="A-not-B"  varDistr="inhb" emp="B" rew="B" ready="A,B"/>
+	<config id="box_bnaa" transType="bna" name="B-not-A"  varDistr="inhb" emp="A" rew="A" ready="A,B"/>
+	<config id="box_bnab" transType="bna" name="B-not-A"  varDistr="prpt" emp="B" rew="B" ready="A,B"/>
+	
+	<config id="box31_anba" transType="anb" name="A-not-B"  varDistr="prpt" emp="A" rew="A" ready="A,B"/>
+	<config id="box31_anbb" transType="anb" name="A-not-B"  varDistr="inhb" emp="B" rew="B" ready="A,B"/>
+	<config id="box31_bnaa" transType="bna" name="B-not-A"  varDistr="inhb" emp="A" rew="A" ready="A,B"/>
+	<config id="box31_bnab" transType="bna" name="B-not-A"  varDistr="prpt" emp="B" rew="B" ready="A,B"/>
+
+	
+</configs>

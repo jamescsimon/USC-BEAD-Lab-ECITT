@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../xsl/resp.xsl"?>
+<ecittApp app="resp" appName="Responder" appNameShort="Resp" scrolling="off" cached="yes" cacheAll="no" preload="no" rotateHor="yes" inclGame="yes" recLoc="yes">
+	<resp>
+		<ecittPage id="ecittTriple" layout="triple"/>
+		<ecittPage id="ecittDouble" layout="double"/>
+		<ecittPage id="ecittSingle" layout="single"/>
+		<ecittPageHor id="ecittTripleHor" layout="triple"/>
+		<ecittPageHor id="ecittDoubleHor" layout="double"/>
+		<ecittPageHor id="ecittSingleHor" layout="single"/>
+		<spcPage id="spcDouble" layout="double"/>
+		<spcPage id="spcSingle" layout="single"/>
+		<gamePage id="canvas"/>
+		<clockPage id="clock"/>
+		<videoPageHor id="videoHor"/>
+		<videoPageVer id="videoVer"/>
+	</resp>
+</ecittApp>

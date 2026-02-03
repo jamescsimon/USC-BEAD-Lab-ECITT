@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../xsl/dmgr.xsl"?>
+<ecittApp app="dmgr" appName="DataManager" appNameShort="DMgr" scrolling="on" inclDmg="yes">
+	<dmgr>
+		<entityPageSet idLc="project" idUc="Project" nameLc="project" nameUc="Project">
+			<nameFormField idLc="name" idUc="Name" nameLc="name" nameUc="Name"/>
+		</entityPageSet>
+		<entityPageSet idLc="testSet" idUc="TestSet" nameLc="test set" nameUc="Test Set">
+			<nameFormField idLc="name" idUc="Name" nameLc="name" nameUc="Name"/>
+			<downloadResultsRow/>
+		</entityPageSet>
+		<entityPageSet idLc="part" idUc="Part" nameLc="participant" nameUc="Participant">
+			<entityInfoItem idLc="no" idUc="No" nameLc="no" nameUc="No"/>
+			<entityInfoItem idLc="age" idUc="Age" nameLc="age" nameUc="Age"/>
+			<entityInfoItem idLc="gender" idUc="Gender" nameLc="gender" nameUc="Gender"/>
+			<nameFormField idLc="ref" idUc="Ref" nameLc="ref" nameUc="Ref"/>
+			<dateFormField idLc="birth" idUc="Birth" nameLc="birth" nameUc="Birth"/>
+			<genderFormField/>
+			<downloadResultsRow/>
+		</entityPageSet>
+		<selectPage idLc="test" idUc="Test" nameLc="test" nameUc="Test">
+			<downloadResultsRow/>
+		</selectPage>
+		<partInfoPage/>
+		<syncPointsPage/>
+	</dmgr>
+</ecittApp>

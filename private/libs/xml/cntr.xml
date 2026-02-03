@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../xsl/cntr.xsl"?>
+<ecittApp app="cntr" appName="Controller"  appNameShort="Cntr" scrolling="on" remote="yes" inclDmg="yes">
+	<cntr>
+		<entityPageSet idLc="project" idUc="Project" nameLc="project" nameUc="Project">
+			<nameFormField idLc="name" idUc="Name" nameLc="name" nameUc="Name"/>
+		</entityPageSet>
+		<entityPageSet idLc="testSet" idUc="TestSet" nameLc="test set" nameUc="Test Set">
+			<nameFormField idLc="name" idUc="Name" nameLc="name" nameUc="Name"/>
+		</entityPageSet>
+		<entityPageSet idLc="part" idUc="Part" nameLc="participant" nameUc="Participant">
+			<entityInfoItem idLc="no" idUc="No" nameLc="no" nameUc="No"/>
+			<entityInfoItem idLc="age" idUc="Age" nameLc="age" nameUc="Age"/>
+			<entityInfoItem idLc="gender" idUc="Gender" nameLc="gender" nameUc="Gender"/>
+			<nameFormField idLc="ref" idUc="Ref" nameLc="ref" nameUc="Ref"/>
+			<dateFormField idLc="birth" idUc="Birth" nameLc="birth" nameUc="Birth"/>
+			<genderFormField/>
+		</entityPageSet>
+		<selectPage idLc="test" idUc="Test" nameLc="test" nameUc="Test"/>
+		<gameCntrDir game="frog" gameName="Frog"/>
+		<gameCntrDir game="bfly" gameName="Bfly"/>
+		<gameCntrDir game="bubble" gameName="Bubbles"/>
+		<gameCntrDir game="snowflake" gameName="Snowflakes"/>
+		<testCntr test="phb" testName="Prohibition">
+			<gameTrialCntrDir test="phb" trialType="app" trialName="Approach"/>
+			<gameTrialCntrDir test="phb" trialType="rst" trialName="Restraint"/>
+			<gameTouch/>
+		</testCntr>
+		<testCntr test="9m" testName="9 Months">
+			<configCntr config="tspt" configName="Test PR Top">
+				<trialCntr test="9m" trialType="tptt" trialPhase="demo"  trialName="Top Demo" single="yes"/>
+				<trialCntr test="9m" trialType="tptt" trialPhase="trial" trialName="Top Trial" single="yes" repeat="3" countRscc="yes" reqRscc="3"/>
+				<trialCntr test="9m" trialType="tptb" trialPhase="demo"  trialName="Btm Demo" single="yes"/>
+				<trialCntr test="9m" trialType="tptb" trialPhase="trial" trialName="Btm Trial" single="yes" repeat="3" countRscc="yes" reqRscc="1"/>
+				<trialTypeTotalRow  test="9m" trialTypes="tptt,tptb" trialPhases="trial,trial" totalName="Total Trials" total="9mTestPRTopTotal" reflect="index"/>
+			</configCntr>
+			<configCntr config="tspb" configName="Test PR Btm">
+				<trialCntr test="9m" trialType="tpbt" trialPhase="demo"  trialName="Top Demo" single="yes"/>
+				<trialCntr test="9m" trialType="tpbt" trialPhase="trial" trialName="Top Trial" single="yes" repeat="3" countRscc="yes" reqRscc="1"/>
+				<trialCntr test="9m" trialType="tpbb" trialPhase="demo"  trialName="Btm Demo" single="yes"/>
+				<trialCntr test="9m" trialType="tpbb" trialPhase="trial" trialName="Btm Trial" single="yes" repeat="3" countRscc="yes" reqRscc="3"/>
+				<trialTypeTotalRow  test="9m" trialTypes="tpbt,tpbb" trialPhases="trial,trial" totalName="Total Trials" total="9mTestPRBtmTotal" reflect="index"/>
+			</configCntr>
+			<configCntr config="ctr1" configName="Control 1">
+				<trialCntr test="9m" trialType="c1t" trialPhase="demo"  trialName="Top Demo" single="yes"/>
+				<trialCntr test="9m" trialType="c1t" trialPhase="trial" trialName="Top Trial" single="yes" repeat="3"/>
+				<trialCntr test="9m" trialType="c1b" trialPhase="demo"  trialName="Btm Demo" single="yes"/>
+				<trialCntr test="9m" trialType="c1b" trialPhase="trial" trialName="Btm Trial" single="yes" repeat="3"/>
+				<trialTypeTotalRow  test="9m" trialTypes="c1t,c1b" trialPhases="trial,trial" totalName="Total Trials" total="9mCtr1Total" reflect="index"/>
+			</configCntr>
+			<configCntr config="ctr2" configName="Control 2">
+				<trialCntr test="9m" trialType="c2t" trialPhase="demo"  trialName="Top Demo" single="yes"/>
+				<trialCntr test="9m" trialType="c2t" trialPhase="trial" trialName="Top Trial" single="yes" repeat="3"/>
+				<trialCntr test="9m" trialType="c2b" trialPhase="demo"  trialName="Btm Demo" single="yes"/>
+				<trialCntr test="9m" trialType="c2b" trialPhase="trial" trialName="Btm Trial" single="yes" repeat="3"/>
+				<trialTypeTotalRow  test="9m" trialTypes="c2t,c2b" trialPhases="trial,trial" totalName="Total Trials" total="9mCtr2Total" reflect="index"/>
+			</configCntr>
+		</testCntr>
+		<testCntr test="box" testName="Box Test">
+			<configCntr config="anb" configName="A-not-B">
+				<trialSect test="box" trialType="anba" trialPhase="trial" trialName="A Corr (PR)">
+					<trialCounters countRscc="yes" reqRscc="2" reflect="index"/>
+					<regButtons>
+						<regButton name="A"/>
+						<regButton name="B"/>
+					</regButtons>
+				</trialSect>
+				<trialSect test="box" trialType="anbb" trialPhase="trial" trialName="B Corr (IR)">
+					<trialCounters countRscc="yes" reqRscc="1" reflect="index"/>
+					<regButtons>
+						<regButton name="A"/>
+						<regButton name="B"/>
+					</regButtons>
+				</trialSect>
+				<trialTypeTotalRow test="box" trialTypes="anba,anbb" trialPhases="trial,trial" totalName="Total Trials" total="anbTrialTotal" reflect="index"/>
+			</configCntr>
+			<configCntr config="bna" configName="B-not-A">
+				<trialSect test="box" trialType="bnaa" trialPhase="trial" trialName="A Corr (IR)">
+					<trialCounters countRscc="yes" reqRscc="1" reflect="index"/>
+					<regButtons>
+						<regButton name="A"/>
+						<regButton name="B"/>
+					</regButtons>
+				</trialSect>
+				<trialSect test="box" trialType="bnab" trialPhase="trial" trialName="B Corr (PR)">
+					<trialCounters countRscc="yes" reqRscc="2" reflect="index"/>
+					<regButtons>
+						<regButton name="A"/>
+						<regButton name="B"/>
+					</regButtons>
+				</trialSect>
+				<trialTypeTotalRow test="box" trialTypes="bnaa,bnab" trialPhases="trial,trial" totalName="Total Trials" total="bnaTrialTotal" reflect="index"/>
+			</configCntr>
+		</testCntr>
+		<testCntr test="box31" testName="Box Test 3-1">
+			<configCntr config="anb31" configName="A-not-B">
+				<trialSect test="box31" trialType="anba" trialPhase="trial" trialName="A Corr (PR)">
+					<trialCounters countRscc="yes" reqRscc="3" reflect="index"/>
+					<regButtons>
+						<regButton name="A"/>
+						<regButton name="B"/>
+					</regButtons>
+				</trialSect>
+				<trialSect test="box31" trialType="anbb" trialPhase="trial" trialName="B Corr (IR)">
+					<trialCounters countRscc="yes" reqRscc="1" reflect="index"/>
+					<regButtons>
+						<regButton name="A"/>
+						<regButton name="B"/>
+					</regButtons>
+				</trialSect>
+				<trialTypeTotalRow test="box31" trialTypes="anba,anbb" trialPhases="trial,trial" totalName="Total Trials" total="anb31TrialTotal" reflect="index"/>
+			</configCntr>
+			<configCntr config="bna31" configName="B-not-A">
+				<trialSect test="box31" trialType="bnaa" trialPhase="trial" trialName="A Corr (IR)">
+					<trialCounters countRscc="yes" reqRscc="1" reflect="index"/>
+					<regButtons>
+						<regButton name="A"/>
+						<regButton name="B"/>
+					</regButtons>
+				</trialSect>
+				<trialSect test="box31" trialType="bnab" trialPhase="trial" trialName="B Corr (PR)">
+					<trialCounters countRscc="yes" reqRscc="3" reflect="index"/>
+					<regButtons>
+						<regButton name="A"/>
+						<regButton name="B"/>
+					</regButtons>
+				</trialSect>
+				<trialTypeTotalRow test="box31" trialTypes="bnaa,bnab" trialPhases="trial,trial" totalName="Total Trials" total="bna31TrialTotal" reflect="index"/>
+			</configCntr>
+		</testCntr>
+		<testCntr test="24m1" testName="24 Months 1">
+			<configCntr config="tspt" configName="Test PR Top">
+				<trialCntr test="24m1" trialType="prt" trialPhase="demo"  trialName="Practice Demo" single="yes"/>
+				<trialCntr test="24m1" trialType="prt" trialPhase="trial" trialName="Practice Trial" single="yes" repeat="3"/>
+				<trialCntr test="24m1" trialType="tpt" trialPhase="trial" trialName="Test Trial" single="yes" repeat="32" reflect="index"/>
+			</configCntr>
+			<configCntr config="tspb" configName="Test PR Btm">
+				<trialCntr test="24m1" trialType="prb" trialPhase="demo"  trialName="Practice Demo" single="yes"/>
+				<trialCntr test="24m1" trialType="prb" trialPhase="trial" trialName="Practice Trial" single="yes" repeat="3"/>
+				<trialCntr test="24m1" trialType="tpb" trialPhase="trial" trialName="Test Trial" single="yes" repeat="32" reflect="index"/>
+			</configCntr>
+		</testCntr>
+		<testCntr test="24m2" testName="24 Months 2">
+			<configCntr config="tspt" configName="Test PR Top">
+				<trialCntr test="24m2" trialType="prt" trialPhase="demo"  trialName="Practice Demo" single="yes"/>
+				<trialCntr test="24m2" trialType="prt" trialPhase="trial" trialName="Practice Trial" single="yes" repeat="3"/>
+				<trialCntr test="24m2" trialType="tpt" trialPhase="trial" trialName="Test Trial" single="yes" repeat="32" reflect="index"/>
+				<trialCntr test="24m2" trialType="tbt" trialPhase="trial" trialName="Baseline Trial" single="yes" repeat="32" reflect="index"/>
+			</configCntr>
+			<configCntr config="tspb" configName="Test PR Btm">
+				<trialCntr test="24m2" trialType="prb" trialPhase="demo"  trialName="Practice Demo" single="yes"/>
+				<trialCntr test="24m2" trialType="prb" trialPhase="trial" trialName="Practice Trial" single="yes" repeat="3"/>
+				<trialCntr test="24m2" trialType="tpb" trialPhase="trial" trialName="Test Trial" single="yes" repeat="32" reflect="index"/>
+				<trialCntr test="24m2" trialType="tbb" trialPhase="trial" trialName="Baseline Trial" single="yes" repeat="32" reflect="index"/>
+			</configCntr>
+		</testCntr>
+		<testCntr test="24m2h" testName="24 Months 2 Hor">
+			<configCntr config="tspl" configName="Test PR Lft">
+				<trialCntr test="24m2h" trialType="prl" trialPhase="demo"  trialName="Practice Demo" single="yes"/>
+				<trialCntr test="24m2h" trialType="prl" trialPhase="trial" trialName="Practice Trial" single="yes" repeat="32"/>
+				<trialCntr test="24m2h" trialType="tpl" trialPhase="trial" trialName="Test Trial" single="yes" repeat="32" reflect="index"/>
+				<trialCntr test="24m2h" trialType="tbl" trialPhase="trial" trialName="Baseline Trial" single="yes" repeat="32" reflect="index"/>
+			</configCntr>
+			<configCntr config="tspr" configName="Test PR Rgt">
+				<trialCntr test="24m2h" trialType="prr" trialPhase="demo"  trialName="Practice Demo" single="yes"/>
+				<trialCntr test="24m2h" trialType="prr" trialPhase="trial" trialName="Practice Trial" single="yes" repeat="32"/>
+				<trialCntr test="24m2h" trialType="tpr" trialPhase="trial" trialName="Test Trial" single="yes" repeat="32" reflect="index"/>
+				<trialCntr test="24m2h" trialType="tbr" trialPhase="trial" trialName="Baseline Trial" single="yes" repeat="32" reflect="index"/>
+			</configCntr>
+		</testCntr>
+		<testCntr test="48m" testName="48 Months">
+			<configCntr config="tspl" configName="Test PR Lft">
+				<trialCntr test="48m" trialType="prl" trialPhase="demo"  trialName="Practice Demo" single="yes"/>
+				<trialCntr test="48m" trialType="prl" trialPhase="trial" trialName="Practice Trial" single="yes" repeat="32"/>
+				<trialCntr test="48m" trialType="tpl" trialPhase="trial" trialName="Test Trial" single="yes" repeat="32" reflect="index"/>
+				<trialCntr test="48m" trialType="tbl" trialPhase="trial" trialName="Baseline Trial" single="yes" repeat="32" reflect="index"/>
+			</configCntr>
+			<configCntr config="tspr" configName="Test PR Rgt">
+				<trialCntr test="48m" trialType="prr" trialPhase="demo"  trialName="Practice Demo" single="yes"/>
+				<trialCntr test="48m" trialType="prr" trialPhase="trial" trialName="Practice Trial" single="yes" repeat="32"/>
+				<trialCntr test="48m" trialType="tpr" trialPhase="trial" trialName="Test Trial" single="yes" repeat="32" reflect="index"/>
+				<trialCntr test="48m" trialType="tbr" trialPhase="trial" trialName="Baseline Trial" single="yes" repeat="32" reflect="index"/>
+			</configCntr>
+		</testCntr>
+		<testCntr test="dev" testName="Dev">
+			<configCntr config="bv" configName="Baseline Vid">
+				<trialCntr test="dev" trialType="bvh" trialPhase="trial" trialName="Baseline VidH" single="yes"/>
+				<trialCntr test="dev" trialType="bvv" trialPhase="trial" trialName="Baseline VidV" single="yes"/>
+			</configCntr>
+		</testCntr>
+		<testCntr test="nirsv" testName="NIRS Ver">
+			<configCntr config="tspt" configName="Test PR Top">
+				<trialCntr test="nirsv" trialType="tbgt" trialPhase="trial" trialName="Baseline Bbl" single="yes"/>
+			</configCntr>
+			<configCntr config="tspb" configName="Test PR Btm">
+				<trialCntr test="nirsv" trialType="tbgb" trialPhase="trial" trialName="Baseline Bbl" single="yes"/>
+			</configCntr>
+		</testCntr>
+		<testCntr test="nirsh" testName="Nirs Hor">
+			<configCntr config="tspl" configName="Test PR Lft">
+				<trialCntr test="nirsh" trialType="tbvla" trialPhase="trial" trialName="Baseline A Vid" single="yes" nextSingleTrialType="ctl2" nextSingleTrialRepeat="6"/>
+				<trialCntr test="nirsh" trialType="ctl2" trialPhase="trial" trialName="Control Lft" single="yes" repeat="6" nextMultiTrialType="tbvlb" nextMultiTrialRepeat="1"/>
+				<trialCntr test="nirsh" trialType="tbvlb" trialPhase="trial" trialName="Baseline B Vid" single="yes" nextSingleTrialType="exl2" nextSingleTrialRepeat="6"/>
+				<trialCntr test="nirsh" trialType="exl2" trialPhase="trial" trialName="Exper Lft" single="yes" repeat="6" nextMultiTrialType="tbvla" nextMultiTrialRepeat="1"/>
+			</configCntr>
+			<configCntr config="tspr" configName="Test PR Rgt">
+				<trialCntr test="nirsh" trialType="tbvra" trialPhase="trial" trialName="Baseline A Vid" single="yes" nextSingleTrialType="ctr2" nextSingleTrialRepeat="6"/>
+				<trialCntr test="nirsh" trialType="ctr2" trialPhase="trial" trialName="Control Rgt" single="yes" repeat="6" nextMultiTrialType="tbvrb" nextMultiTrialRepeat="1"/>
+				<trialCntr test="nirsh" trialType="tbvrb" trialPhase="trial" trialName="Baseline B Vid" single="yes" nextSingleTrialType="exr2" nextSingleTrialRepeat="6"/>
+				<trialCntr test="nirsh" trialType="exr2" trialPhase="trial" trialName="Exper Rgt" single="yes" repeat="6" nextMultiTrialType="tbvra" nextMultiTrialRepeat="1"/>
+			</configCntr>
+		</testCntr>
+		<testCntr test="48mn" testName="48 Months Nirs">
+			<configCntr config="tspl" configName="Test PR Lft">
+				<trialCntr test="48mn" trialType="tbvla" trialPhase="trial" trialName="Baseline A Vid" single="yes" nextSingleTrialType="ctl2" nextSingleTrialRepeat="8"/>
+				<trialCntr test="48mn" trialType="ctl2" trialPhase="trial" trialName="Control Lft" single="yes" repeat="8" nextMultiTrialType="tbvlb" nextMultiTrialRepeat="1"/>
+				<trialCntr test="48mn" trialType="tbvlb" trialPhase="trial" trialName="Baseline B Vid" single="yes" nextSingleTrialType="exl2" nextSingleTrialRepeat="8"/>
+				<trialCntr test="48mn" trialType="exl2" trialPhase="trial" trialName="Exper Lft" single="yes" repeat="8" nextMultiTrialType="tbvla" nextMultiTrialRepeat="1"/>
+			</configCntr>
+			<configCntr config="tspr" configName="Test PR Rgt">
+				<trialCntr test="48mn" trialType="tbvra" trialPhase="trial" trialName="Baseline A Vid" single="yes" nextSingleTrialType="ctr2" nextSingleTrialRepeat="8"/>
+				<trialCntr test="48mn" trialType="ctr2" trialPhase="trial" trialName="Control Rgt" single="yes" repeat="8" nextMultiTrialType="tbvrb" nextMultiTrialRepeat="1"/>
+				<trialCntr test="48mn" trialType="tbvrb" trialPhase="trial" trialName="Baseline B Vid" single="yes" nextSingleTrialType="exr2" nextSingleTrialRepeat="8"/>
+				<trialCntr test="48mn" trialType="exr2" trialPhase="trial" trialName="Exper Rgt" single="yes" repeat="8" nextMultiTrialType="tbvra" nextMultiTrialRepeat="1"/>
+			</configCntr>
+		</testCntr>
+		<testCntr test="adt" testName="Adult">
+			<configCntr config="tspt" configName="Test PR Top">
+				<trialCntr test="adt" trialType="ppt" trialPhase="trial" trialName="Prtc PR Top" repeat="4"/>
+				<trialCntr test="adt" trialType="tpt" trialPhase="trial" trialName="Test PR Top" repeat="32" reflect="index"/>
+			</configCntr>
+			<configCntr config="tspb" configName="Test PR Btm">
+				<trialCntr test="adt" trialType="ppb" trialPhase="trial" trialName="Prtc PR Btm" repeat="4"/>
+				<trialCntr test="adt" trialType="tpb" trialPhase="trial" trialName="Test PR Btm" repeat="32" reflect="index"/>
+			</configCntr>
+			<configCntr config="ctrl" configName="Control">
+				<trialCntr test="adt" trialType="cpb" trialPhase="trial" trialName="Ctrl PR Btm" repeat="4"/>
+				<trialCntr test="adt" trialType="cpt" trialPhase="trial" trialName="Ctrl PR Top" repeat="4"/>
+				<trialCntr test="adt" trialType="cpm" trialPhase="trial" trialName="Ctrl PR Mdl" repeat="4"/>
+				<trialTypeTotalRow test="adt" trialTypes="cpb,cpt,cpm" trialPhases="trial,trial,trial" totalName="Total Trials" total="adtCtrlTrialTotal" reflect="index"/>
+			</configCntr>
+		</testCntr>
+		<testCntr test="adth" testName="Adult Hor">
+			<configCntr config="tspl" configName="Test PR Lft">
+				<trialCntr test="adth" trialType="ppl" trialPhase="trial" trialName="Prtc PR Lft" repeat="4"/>
+				<trialCntr test="adth" trialType="tpl" trialPhase="trial" trialName="Test PR Lft" repeat="32" reflect="index"/>
+			</configCntr>
+			<configCntr config="tspr" configName="Test PR Rgt">
+				<trialCntr test="adth" trialType="ppr" trialPhase="trial" trialName="Prtc PR Rgt" repeat="4"/>
+				<trialCntr test="adth" trialType="tpr" trialPhase="trial" trialName="Test PR Rgt" repeat="32" reflect="index"/>
+			</configCntr>
+			<configCntr config="ctrl" configName="Control">
+				<trialCntr test="adth" trialType="cpl" trialPhase="trial" trialName="Ctrl PR Btm" repeat="4"/>
+				<trialCntr test="adth" trialType="cpr" trialPhase="trial" trialName="Ctrl PR Top" repeat="4"/>
+				<trialCntr test="adth" trialType="cpc" trialPhase="trial" trialName="Ctrl PR Ctr" repeat="4"/>
+				<trialTypeTotalRow test="adth" trialTypes="cpl,cpr,cpc" trialPhases="trial,trial,trial" totalName="Total Trials" total="adthCtrlTrialTotal" reflect="index"/>
+			</configCntr>
+		</testCntr>
+		
+		<testCntr test="spc" testName="Spatial Confl">
+			<configCntr config="test" configName="Test">
+				<trialCntr test="spc" trialType="pr"   trialPhase="demo"  trialName="Prtc Demo"  single="yes"/>
+				<trialCntr test="spc" trialType="pr"   trialPhase="trial" trialName="Prtc Trial" single="yes" repeat="12"  countRscc="yes" reqRscc="2"/>
+				<trialCntr test="spc" trialType="test" trialPhase="trial" trialName="Test Trial" single="yes" repeat="32" reflect="index"/>
+			</configCntr>
+		</testCntr>
+	</cntr>
+</ecittApp>

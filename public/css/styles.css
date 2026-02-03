@@ -1,0 +1,134 @@
+body {margin:0; padding:0; position:absolute; width:100%; height:100%; font-family:sans-serif; font-size:16px; background-color:#333; -webkit-user-select:none; -webkit-user-drag: none}
+div, table, tr, td, button, p, img {margin:0; padding:0; border:none; -webkit-user-drag:none; -webkit-user-select:none}
+img {display:block; margin:auto}
+
+div.sprite {position:absolute; width:220px; height:220px; overflow:hidden}
+img.sprite {}
+video {height: 100%; width: 100%}
+
+#frogSprite {padding:40px}
+
+div.page {position:absolute; top:0; left:0; width:100%; height:100%; background-color:#333}
+
+/* Test page layout */
+
+table.ecittLayout {width:100%; height:100%; background-color:#333; border-collapse:collapse}
+
+div.ecittButton, div.testInfo, div.dotButton {display:inline-block}
+div.ecittButton, div.testInfo {width:220px; height:220px}
+div.dotButton {width:70px; height:70px; margin-top:0; margin-bottom:0}
+
+p.respInfo {color:#fff; font-size:24px; margin:2em 1ex; text-align:center}
+p.readyMessage {color:#fff; font-size:24px; text-align:center; height:108px; margin-left:4em; margin-right:4em}
+
+div.spcButton {display:inline-block; width:220px; height:220px; background-image:url("../graphics/images/image_house.png"); padding:60px 30px 0 30px}
+
+img.spcStim, img.spcButton, img.ecittButton, img.info {display:inline}
+
+table.spcLayout {width:100%; height:100%; background-color:#333; border-collapse:collapse}
+
+td.spcStim, td.spcButton, td.ecittButton, td.readyCell {font-size:0}
+
+td.spcStim {vertical-align:top; padding:0 30px}
+
+td.spcButton {vertical-align:bottom}
+td.ecittButton, td.readyCell {vertical-align:middle; text-align:center}
+
+#canvas_page {overflow:hidden; background-color:#021}
+
+#frameImageCell, #initImageCell {height:220px; width:220px; padding:0; border:none}
+#initResourceCellImage, #initResourceCellSound, #frameCounterCell, #frameIdCell, #cacheMsgCell {height:3em; color:#fff}
+#frameCounterCell {width:3em}
+#landscape_page {background-color:#222}
+
+div.resultList {background-color:#808080; padding-top:1ex}
+
+table.respButton {border-collapse:collapse; width:100%; height:100%; border:none}
+td.respButton {text-align:center; vertical-align:middle; height:50%}
+
+h1.pageHeading {margin-top:1em; font-weight:bold; text-align:center; font-size:1.4em; color:#fff}
+h2.pageHeading {margin-top:1ex; font-weight:bold; text-align:center; font-size:1.4em; color:#fff}
+li.page {color:#fff}
+li.pageText {color:#fff; text-align:left}
+p.page {margin:1ex 0; text-align:center; color:#fff}
+p.resultInfo {margin:1em 0; text-align:center; color:#fff}
+p.subTitle {margin-top:1ex; font-weight:bold; text-align:center; font-size:1.2em; color:#a0a0a0}
+p.formHeading {margin:1ex; font-weight:bold; text-align:center; color:#fff}
+p.pageText {margin:1ex; width: 32ex; text-align:left; color:#fff}
+
+table.page {border-collapse:collapse; margin:1em auto; border:none; width: 16em}
+table.page.tight {margin-top:0; margin-bottom:0}
+
+td.page, td.startGameTrialButton {padding:1ex 0.5ex; text-align:center; vertical-align:middle}
+td.entityInfo {padding:0.5ex 0.5ex; text-align:left; vertical-align:middle; font-weight:bold; color:#fff}
+td.totalRowName {padding:1.5ex 0.5ex; text-align:left; vertical-align:middle; font-size:1.5em; font-weight:bold; color:#fff}
+
+#cacheMsgCell {width:30ex}
+table.clock {margin-top: 2em}
+td.clock {color: #fff; font-size: 1.5em; padding-top: 1em}
+
+table.resultInfo {background-color:#fff; margin:2em auto; border-collapse:collapse}
+td.resultInfo {text-align:center; vertical-align:middle; padding:1ex; border:1px solid #aaa}
+
+table.trialCntrSection {margin: 0 auto 1ex auto; border-collapse:collapse}
+td.trialCntrSection {padding:0; border:0}
+td.trialCntrSection.highlighted {border-color:#fff}
+
+table.trialCounter {border-collapse:separate}
+td.trialCounter {q:bold; font-size:2em; border:2px solid transparent}
+
+td.trialCounterName {text-align:left; padding-left:1ex; width:14ex; color:#fff; font-size:1em}
+td.trialCounterName.highlighted {color:#fff}
+
+td.testListHeading {text-align:left; padding-left:2ex; color:#fff}
+
+td.trialCounter {width:2em; text-align:center}
+td.trialCounter.highlighted {border-color:#fff}
+
+table.trialButton {border-collapse:collapse; width:100%; margin:0}
+td.startTrialButton, td.cancelTrialButton {border:none; text-align:center; vertical-align:middle}
+
+table.regButton {border-collapse:collapse; width:100%; margin:1ex 0}
+td.regButton {border:none; text-align:center; vertical-align:middle}
+
+button {border-radius:15px; -webkit-user-select:none; -moz-user-select:none; user-select:none; -webkit-appearance:none; -moz-appearance:none; -appearance:none; color:#000}
+button.wide, input.wide {width:32ex}
+button.medium, input.medium {width:16ex}
+button.small {width:10ex}
+button.tiny {width:8ex}
+button.separate {margin-top:1em; margin-bottom:1em}
+input.dateField, input.textField {padding: 0; text-align:center; font-size:1em; font-family:sans-serif; font-weight: bold; border:2px solid #aaa}
+input.textField {height: 2.5em}
+input.dateField {height:2.5em}
+
+select.page, button.nav, button.navEmp, button.select, button.action, button.actionAlert, button.infoBox, button.radioOption {height:3em; font-weight:bold; font-size:1em; border:2px solid #333; text-align:center}
+button.highlighted {border-color:#fff; color:#fff}
+
+button.select, button.select:active {background-color:#009090}
+button.nav, button.nav:active {background-color:#eabf69}
+button.navEmp, button.navEmp:active {background-color:#fff}
+button.action, button.action:active {background-color:#484}
+button.actionAlert, button.actionAlert:active {background-color:#f44}
+button.infoBox, button.infoBox:active {background-color:#fff}
+
+:disabled {color:black}
+
+button.action:disabled, button.nav:disabled {background-color:#888}
+
+input.textField:focus, button:focus, div.focus, td.focus {outline:none}
+
+button.radioOption {width:10ex; color: #aaa; background-color:#fff}
+button.radioSelected {color:#000}
+
+select.page {padding:1ex; background-color:#fff}
+option {text-align:center}
+
+.mediumWidth {width:16ex}
+.narrow {width:10ex}
+.tinyWidth {width:8ex}
+.wide {width:32ex}
+.autoWidth {width: -webkit-fill-available}
+
+a.downloadLink {color: #fff; font-weight: bold}
+a.infoLink {color: #eabf69; font-weight: bold}
+

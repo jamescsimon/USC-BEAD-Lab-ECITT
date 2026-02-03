@@ -1,0 +1,23 @@
+Header set Strict-Transport-Security "max-age=0"
+
+# BEGIN VALIDATE SSL
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule ^.well-known/pki-validation/fileauth.txt$ validate-ssl.txt [END]
+</IfModule>
+# END VALIDATE SSL
+
+SSLRequireSSL
+
+Options -Indexes
+
+AddCharset UTF-8 .js
+
+ErrorDocument 403 "Forbidden"
+ErrorDocument 404 "Not Found"
+ErrorDocument 500 "Internal Server Error"
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# This domain inherits the “PHP” package.
+# php -- END cPanel-generated handler, do not edit
