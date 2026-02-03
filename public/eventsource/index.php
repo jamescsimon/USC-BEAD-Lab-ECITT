@@ -7,6 +7,12 @@
 		ob_end_clean();
 	}
 	
+	// Set EventSource headers IMMEDIATELY before any other output
+	header("Content-Type: text/event-stream; charset=utf-8");
+	header("Cache-Control: no-cache");
+	header("Connection: keep-alive");
+	header("X-Accel-Buffering: no");
+	
 	// For PHP dev server: Register shutdown to ensure connection can be closed
 	register_shutdown_function(function() {
 		if (ob_get_level()) {
