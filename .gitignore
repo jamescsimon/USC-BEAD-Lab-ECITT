@@ -1,0 +1,29 @@
+# Credentials and sensitive files
+private/creds/
+*.json
+!package.json
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# PHP related
+*.log
+
+# Node modules (if used)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Temporary files
+tmp/
+temp/

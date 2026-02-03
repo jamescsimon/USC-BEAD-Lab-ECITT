@@ -296,7 +296,8 @@ function recordResponse(projectNo, testSetNo, testName, partNo, prevRespTime, tr
 	//console.log("recordAndReport, dataStr: "+dataStr);
 	localStorage.setItem(curUserName+"_"+trialStartTime, dataStr);
 	prevRespDataStr=dataStr;
-	var requestStr="../dbacc/?type=respInsert&data="+dataStr;
+	// Google Sheets logging endpoint - logs all trial responses with UTC timestamp
+	var requestStr="../gsheetsacc/?type=respInsert&data="+dataStr;
 	//console.log("recordResponse, requestStr:"+requestStr);
 	sendXmlOp(requestStr, responseRecorded);
 }
@@ -307,7 +308,8 @@ function recordAndReport(projectNo, testSetNo, testName, partNo, prevRespTime, t
 	localStorage.setItem(curUserName+"_"+trialStartTime, dataStr);
 	//console.log("#localStorageItems: "+localStorage.length)
 	prevRespDataStr=dataStr;
-	var requestStr="../dbacc/?av="+appVersion+"&target=cntr&pc="+curUserName+"&type=trialResult&data="+dataStr;
+	// Google Sheets logging endpoint - logs all trial responses with UTC timestamp
+	var requestStr="../gsheetsacc/?type=respInsert&data="+dataStr;
 	//console.log("recordAndReport, requestStr:"+requestStr);
 	sendXmlOp(requestStr, recordedAndReported);
 }
