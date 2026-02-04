@@ -36,6 +36,7 @@ function cntrDeclareGlobals() {
 	//console.log("allClockButtonElems: "+allClockButtonElems.length);
 	
 	counters=new Object();
+	savedCounters=new Object(); // Snapshot of counters before starting trial (for cancel restore)
 	prevTrialIdPrefix="";
 	curTrialIdPrefix="";
 	prevCscc=0;
@@ -701,6 +702,15 @@ function startTrial(testName, trialType, trialPhase, repeat, nextTrialType, next
 		startTrialPending = true;
 		prevTrialIdPrefix=curTrialIdPrefix;
 		curTrialIdPrefix=testName+"_"+trialType+"_"+trialPhase;
+		
+		// Save current counter state before starting trial (for cancel restore)
+		var idPrefix = curTrialIdPrefix;
+		savedCounters[idPrefix+"_succ"] = counters[idPrefix+"_succ"] || 0;
+		savedCounters[idPrefix+"_fail"] = counters[idPrefix+"_fail"] || 0;
+		savedCounters[idPrefix+"_sets"] = counters[idPrefix+"_sets"] || 0;
+		savedCounters[idPrefix+"_rscc"] = counters[idPrefix+"_rscc"];
+		savedCounters[idPrefix+"_cscc"] = counters[idPrefix+"_cscc"];
+		
 		configElem=getConfigElem(testName, trialType, "");
 		//curVarDistrList=getCSVAttribute(configElem, "varDistr");
 		//console.log(curVarDistrList);
@@ -873,7 +883,30 @@ function cancelTrial() {
 }
 
 function trialCancelledFromResp(event) {
-	console.log("[CONTROLLER] trialCancelledFromResp - resetting trial state");
+	console.log("[CONTROLLER] trialCancelledFromResp - resetting trial state and restoring counters");
+	
+	// Restore counters to their state before the cancelled trial started
+	if (curTestName && curTrialType && curTrialPhase) {
+		var idPrefix = curTestName+"_"+curTrialType+"_"+curTrialPhase;
+		
+		// Restore saved counter values (revert increments from cancelled trial)
+		if (savedCounters[idPrefix+"_succ"] !== undefined) {
+			counters[idPrefix+"_succ"] = savedCounters[idPrefix+"_succ"];
+		}
+		if (savedCounters[idPrefix+"_fail"] !== undefined) {
+			counters[idPrefix+"_fail"] = savedCounters[idPrefix+"_fail"];
+		}
+		if (savedCounters[idPrefix+"_sets"] !== undefined) {
+			counters[idPrefix+"_sets"] = savedCounters[idPrefix+"_sets"];
+		}
+		if (savedCounters[idPrefix+"_rscc"] !== undefined) {
+			counters[idPrefix+"_rscc"] = savedCounters[idPrefix+"_rscc"];
+		}
+		if (savedCounters[idPrefix+"_cscc"] !== undefined) {
+			counters[idPrefix+"_cscc"] = savedCounters[idPrefix+"_cscc"];
+		}
+	}
+	
 	reflectAllResCounters();
 	normalizeClassOfElemWithId(curTestName+"_"+curConfigName+"_"+curTrialType+"_"+curTrialPhase+"_cancelButt");
 	resetTrialState();

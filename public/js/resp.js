@@ -548,6 +548,12 @@ function handleRespConnectionStateChange(state) {
 		normalizeClassOfElemWithId("pairingButt");
 		replaceTextInElemWithId("pairingMsg", "Connected to Controller");
 		console.log("Responder connected - event polling active");
+		
+		// Clear any stale trial records from previous sessions
+		if (typeof clearAllRecordQueue === "function") {
+			console.log("[RESPONDER] Clearing stale localStorage records on new connection");
+			clearAllRecordQueue();
+		}
 	}
 }
 
@@ -1497,6 +1503,10 @@ function cancelTrialFromCntr(event) {
 			break;
 		default:
 			console.log("[RESPONDER] Clearing queue and resetting state");
+			// Clear all trial records from localStorage so partial test data isn't logged
+			if (typeof clearAllRecordQueue === "function") {
+				clearAllRecordQueue();
+			}
 			initTrialQueue();
 			reInitTrialState();
 			hideAllRespElems();
