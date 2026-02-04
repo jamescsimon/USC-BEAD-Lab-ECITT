@@ -1547,6 +1547,10 @@ function endTestFromCntr(event) {
 	}
 	curTestName = "";
 	reInitTrialState();
+	// Restart polling so responder can receive events for the next test
+	if (typeof startEventPolling === "function") {
+		startEventPolling("resp", curUserName);
+	}
 	showReadyPage();
 	sendEvent("cntr", "testEnded", "");
 }

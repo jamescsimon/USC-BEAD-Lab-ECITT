@@ -307,6 +307,8 @@ function recordAndReport(projectNo, testSetNo, testName, partNo, prevRespTime, t
 	console.log("[COMM] Stored trial record in localStorage:", curUserName+"_"+trialStartTime);
 	//console.log("#localStorageItems: "+localStorage.length)
 	prevRespDataStr=dataStr;
+	// Send trial result to controller so counters can be updated
+	sendEvent("cntr", "trialResult", dataStr);
 	// Records will be batch-sent to Google Sheets when trials end
 }
 

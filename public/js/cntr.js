@@ -727,8 +727,31 @@ function startTrial(testName, trialType, trialPhase, repeat, nextTrialType, next
 		//console.log(curVarSeqMethod+", "+curVarPeriod+", "+curTestName+", "+curTrialType+", "+curTrialPhase);
 		
 		// Send ready message to responder when actually starting trials
-		if (testType(testName)=="adt") {
-			sendEvent("resp", "setReadyMessage", "msg_adtIntro1,msg_adtIntro2,dot,msg_adtReady,,"+testName);
+		// Check testName directly instead of using testType() to avoid grouping issues
+		switch (testName) {
+			case "adt":
+			case "adth":
+				sendEvent("resp", "setReadyMessage", "msg_adtIntro1,msg_adtIntro2,dot,msg_adtReady,,"+testName);
+				break;
+			case "9m":
+			case "24m1":
+			case "24m2":
+			case "24m2h":
+			case "48m":
+			case "48mn":
+			case "nirsv":
+			case "nirsh":
+			case "spc":
+				// Generic ready message for automated tests
+				sendEvent("resp", "setReadyMessage", ",,dot,msg_adtReady,,"+testName);
+				break;
+			case "box":
+			case "box31":
+			case "phb":
+			case "dev":
+			default:
+				// Tests without ready screens (manual start) - don't send message
+				break;
 		}
 		
 		switch (testType(testName)) {
@@ -1146,7 +1169,7 @@ function trialResultFromResp(event) {
 			//	case "tbgb":
 			//	case "tbgl":
 			//	case "tbgr":
-			//		break;
+			//			break;
 			//	default:
 			incrResCounter(curTestName, curTrialType, curTrialPhase, result);
 			reflectAllResCounters();
@@ -1156,6 +1179,8 @@ function trialResultFromResp(event) {
 			break;
 	}
 	if (trialQueueLength == 0) {
+		// Increment sets counter when a full task set completes
+		counters[curTrialIdPrefix+"_sets"]++;
 		normalizeTrialButtonCellElems();
 		reflectAllResCounters();
 		//console.log("finalizeTrialEnded", "curNextTrialType: "+curNextTrialType, "curNextTrialRepeat:"+curNextTrialRepeat);
@@ -1284,6 +1309,7 @@ function resetResRowCounters(resRowElem) {
 	//console.log(resRowElem);
 	counters[idPrefix+"_succ"]=0;
 	counters[idPrefix+"_fail"]=0;
+	counters[idPrefix+"_sets"]=0;
 	if (countRscc=="yes") {
 		counters[idPrefix+"_rscc"]=0;
 		counters[idPrefix+"_cscc"]=0;
@@ -1380,16 +1406,17 @@ function reflectAllResCounters() {
 function reflectResRowCounters(resRowElem) {
 	//console.log("reflectResRowCounters");
 	var idPrefix;
-	var succValue, failValue, csccValue;
+	var succValue, failValue, csccValue, setsValue;
 	idPrefix=getIdPrefixPhase(resRowElem);
 	//console.log("idPrefix: "+idPrefix);
 	succValue=counters[idPrefix+"_succ"];
 	failValue=counters[idPrefix+"_fail"];
+	setsValue=counters[idPrefix+"_sets"];
 	csccValue=counters[idPrefix+"_cscc"];
-	updateResCellValues(idPrefix, succValue, failValue, csccValue);
+	updateResCellValues(idPrefix, succValue, failValue, setsValue, csccValue);
 	if (resRowElem.dataset.reflect != "") {
 		//console.log("reflecting");
-		updateResCellValues(getIdPrefixReflect(resRowElem), succValue, failValue, csccValue);
+		updateResCellValues(getIdPrefixReflect(resRowElem), succValue, failValue, setsValue, csccValue);
 	}
 }
 
@@ -1410,6 +1437,7 @@ function updateTotalRow(totalRowElem) {
 	
 	sumSucc=0;
 	sumFail=0;
+	sumTotl=0;
 	if (countRscc=="yes")
 		sumRscc=0;
 	
@@ -1417,6 +1445,7 @@ function updateTotalRow(totalRowElem) {
 		ttIdPrefix=testName+"_"+trialTypeList[i]+"_"+trialPhaseList[i];
 		sumSucc+=counters[ttIdPrefix+"_succ"];
 		sumFail+=counters[ttIdPrefix+"_fail"];
+		sumTotl+=counters[ttIdPrefix+"_sets"];
 		if (countRscc=="yes")
 			sumRscc+=counters[ttIdPrefix+"_rscc"];
 		//console.log("i: "+i, "ttIdPrefix: "+ttIdPrefix, "sumSucc: "+sumSucc, "sumFail: "+sumFail, "sumRscc: ", sumRscc, "countRscc: "+countRscc);
@@ -1424,7 +1453,7 @@ function updateTotalRow(totalRowElem) {
 	
 	replaceTextInElemWithId(idPrefix+"_succ_resCell", sumSucc);
 	replaceTextInElemWithId(idPrefix+"_fail_resCell", sumFail);
-	replaceTextInElemWithId(idPrefix+"_totl_resCell", sumSucc+sumFail);
+	replaceTextInElemWithId(idPrefix+"_totl_resCell", sumTotl);
 	if (countRscc=="yes")
 		replaceTextInElemWithId(idPrefix+"_rscc_resCell", sumRscc);
 	else
@@ -1447,11 +1476,11 @@ function getIdPrefixReflect(resRowElem) {
 	return resRowElem.dataset.testname+"_"+resRowElem.dataset.configname+"_"+resRowElem.dataset.reflect;
 }
 
-function updateResCellValues(idPrefix, succValue, failValue, rsccValue) {
-	//console.log("updateResCellValues idPrefix:"+idPrefix+" succValue:"+succValue+" failValue:"+failValue+" rsccValue:"+rsccValue);
+function updateResCellValues(idPrefix, succValue, failValue, setsValue, rsccValue) {
+	//console.log("updateResCellValues idPrefix:"+idPrefix+" succValue:"+succValue+" failValue:"+failValue+" setsValue:"+setsValue+" rsccValue:"+rsccValue);
 	replaceText(document.getElementById(idPrefix+"_succ_resCell"), succValue);
 	replaceText(document.getElementById(idPrefix+"_fail_resCell"), failValue);
-	replaceText(document.getElementById(idPrefix+"_totl_resCell"), succValue+failValue);
+	replaceText(document.getElementById(idPrefix+"_totl_resCell"), setsValue != null && setsValue !== undefined ? setsValue : "");
 	if (rsccValue!=null)
 		replaceTextInElemWithId(idPrefix+"_rscc_resCell", rsccValue);
 	else

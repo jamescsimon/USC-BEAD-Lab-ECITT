@@ -804,6 +804,10 @@ function getTrialPeriod(testName, trialType) {
 	console.log("getTrialPeriod, testName: "+testName+", trialType: "+trialType)
 	var trialPeriod;
 	configElem=getConfigElem(testName, trialType, "");
+	if (!configElem) {
+		console.warn("getTrialPeriod: config not found for testName:"+testName+" trialType:"+trialType);
+		return null;
+	}
 	trialPeriod=configElem.getAttribute("period");
 	console.log("trialPeriod:"+trialPeriod);
 	return trialPeriod;

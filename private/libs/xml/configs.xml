@@ -163,6 +163,10 @@
 	<config id="adth_tpr_prpt" layout="ecittTripleHor" emp="rgt" empType="happy" rew="rgt" ready="lft,ctr,rgt" buttonTypes="resp,dot,resp"/>
 	<config id="adth_tpr_inhb" layout="ecittTripleHor" emp="lft" empType="happy" rew="lft" ready="lft,ctr,rgt" buttonTypes="resp,dot,resp"/>
 
+	<config id="adth_cpl"      name="Control Lft" layout="ecittTripleHor" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" emp="lft" empType="happy" rew="lft" ready="lft,ctr" buttonTypes="resp,dot" varPeriod="4"/>
+	<config id="adth_cpc"      name="Control Ctr" layout="ecittTripleHor" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" emp="ctr" empType="happy" rew="ctr" ready="ctr" buttonTypes="resp" varPeriod="4"/>
+	<config id="adth_cpr"      name="Control Rgt" layout="ecittTripleHor" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" emp="rgt" empType="happy" rew="rgt" ready="ctr,rgt" buttonTypes="dot,resp" varPeriod="4"/>
+
 	<config id="adt_cpl"      name="Control Btm" layout="ecittTripleHor" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" emp="lft" empType="happy" rew="lft" ready="lft,ctr" buttonTypes="resp,dot" varPeriod="4"/>
 	<config id="adt_cpc"      name="Control Ctr" layout="ecittTripleHor" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" emp="ctr" empType="happy" rew="ctr" ready="ctr" buttonTypes="resp" varPeriod="4"/>
 	<config id="adt_cpt"      name="Control Top" layout="ecittTripleHor" animDistr="" animKeepSep="" animMaxDups="" animSeqMethod="none" emp="rgt" empType="happy" rew="rgt" ready="ctr,rgt" buttonTypes="dot,resp" varPeriod="4"/>
