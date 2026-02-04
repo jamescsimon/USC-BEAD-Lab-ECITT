@@ -631,3 +631,297 @@
 26.01.27 21:51:33 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
 26.01.27 21:51:33 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
 26.01.27 21:51:33 echoEvent type: hello, data: [cntr]
+26.02.03 17:46:33 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.02.03 17:46:33 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.02.03 17:46:33 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.02.03 17:46:33 echoEvent type: hello, data: [resp]
+26.02.03 17:47:40 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.02.03 17:47:40 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.02.03 17:47:40 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.02.03 17:47:40 echoEvent type: hello, data: [cntr]
+26.02.03 17:47:40 Windows detected: using queue file polling for EventSource
+26.02.03 17:47:40 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 17:47:40 echoEvent type: ping, data: [cntr]
+26.02.03 17:49:34 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.02.03 17:49:34 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.02.03 17:49:34 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.02.03 17:49:34 echoEvent type: hello, data: [cntr]
+26.02.03 17:49:34 Windows detected: using queue file polling for EventSource
+26.02.03 17:49:34 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 17:49:34 echoEvent type: ping, data: [cntr]
+26.02.03 17:50:05 echoEvent type: ping, data: [cntr]
+26.02.03 17:50:36 echoEvent type: ping, data: [cntr]
+26.02.03 17:50:43 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.02.03 17:50:43 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.02.03 17:50:43 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.02.03 17:50:43 echoEvent type: hello, data: [cntr]
+26.02.03 17:50:43 Windows detected: using queue file polling for EventSource
+26.02.03 17:50:43 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 17:50:43 echoEvent type: ping, data: [cntr]
+26.02.03 17:50:43 eventLoopQueuePoll cntr admin, flushing event queue (1 events)
+26.02.03 17:50:43 eventLoopQueuePoll cntr admin, event: goodbye;
+26.02.03 17:50:43 echoEvent type: goodbye, data: [cntr]
+26.02.03 17:50:44 eventLoopQueuePoll cntr admin, not connected
+26.02.03 17:51:12 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.02.03 17:51:12 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.02.03 17:51:12 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.02.03 17:51:12 echoEvent type: hello, data: [resp]
+26.02.03 17:51:12 Windows detected: using queue file polling for EventSource
+26.02.03 17:51:12 eventLoopQueuePoll resp admin, starting queue file polling
+26.02.03 17:51:12 echoEvent type: ping, data: [resp]
+26.02.03 17:51:12 eventLoopQueuePoll resp admin, flushing event queue (14 events)
+26.02.03 17:51:12 eventLoopQueuePoll resp admin, event: hideClock;
+26.02.03 17:51:12 echoEvent type: hideClock, data: []
+26.02.03 17:51:12 eventLoopQueuePoll resp admin, event: hideClock;
+26.02.03 17:51:12 echoEvent type: hideClock, data: []
+26.02.03 17:51:12 eventLoopQueuePoll resp admin, event: touchGame;
+26.02.03 17:51:12 echoEvent type: touchGame, data: []
+26.02.03 17:51:12 eventLoopQueuePoll resp admin, event: startGame;snowflake
+26.02.03 17:51:12 echoEvent type: startGame, data: [snowflake]
+26.02.03 17:51:12 eventLoopQueuePoll resp admin, event: startGame;bubble
+26.02.03 17:51:12 echoEvent type: startGame, data: [bubble]
+26.02.03 17:51:12 eventLoopQueuePoll resp admin, event: startGame;frog
+26.02.03 17:51:12 echoEvent type: startGame, data: [frog]
+26.02.03 17:51:12 eventLoopQueuePoll resp admin, event: touchGame;
+26.02.03 17:51:12 echoEvent type: touchGame, data: []
+26.02.03 17:51:12 eventLoopQueuePoll resp admin, event: touchGame;
+26.02.03 17:51:12 echoEvent type: touchGame, data: []
+26.02.03 17:51:12 eventLoopQueuePoll resp admin, event: touchGame;
+26.02.03 17:51:12 echoEvent type: touchGame, data: []
+26.02.03 17:51:12 eventLoopQueuePoll resp admin, event: touchGame;
+26.02.03 17:51:12 echoEvent type: touchGame, data: []
+26.02.03 17:51:12 eventLoopQueuePoll resp admin, event: touchGame;
+26.02.03 17:51:12 echoEvent type: touchGame, data: []
+26.02.03 17:51:12 eventLoopQueuePoll resp admin, event: startGame;bfly
+26.02.03 17:51:12 echoEvent type: startGame, data: [bfly]
+26.02.03 17:51:12 eventLoopQueuePoll resp admin, event: hideClock;
+26.02.03 17:51:12 echoEvent type: hideClock, data: []
+26.02.03 17:51:12 eventLoopQueuePoll resp admin, event: setReadyMessage;msg_adtIntro1,msg_adtIntro2,dot,msg_adtReady,,adt
+26.02.03 17:51:12 echoEvent type: setReadyMessage, data: [msg_adtIntro1,msg_adtIntro2,dot,msg_adtReady,,adt]
+26.02.03 17:51:43 echoEvent type: ping, data: [resp]
+26.02.03 17:52:14 echoEvent type: ping, data: [resp]
+26.02.03 17:52:45 echoEvent type: ping, data: [resp]
+26.02.03 17:53:17 echoEvent type: ping, data: [resp]
+26.02.03 17:53:48 echoEvent type: ping, data: [resp]
+26.02.03 17:54:19 echoEvent type: ping, data: [resp]
+26.02.03 17:54:44 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.02.03 17:54:44 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.02.03 17:54:44 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.02.03 17:54:44 echoEvent type: hello, data: [resp]
+26.02.03 17:54:44 Windows detected: using queue file polling for EventSource
+26.02.03 17:54:44 eventLoopQueuePoll resp admin, starting queue file polling
+26.02.03 17:54:44 echoEvent type: ping, data: [resp]
+26.02.03 17:55:15 echoEvent type: ping, data: [resp]
+26.02.03 17:55:47 echoEvent type: ping, data: [resp]
+26.02.03 17:55:47 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.02.03 17:55:47 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.02.03 17:55:47 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.02.03 17:55:47 echoEvent type: hello, data: [resp]
+26.02.03 17:55:51 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.02.03 17:55:51 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.02.03 17:55:51 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.02.03 17:55:51 echoEvent type: hello, data: [cntr]
+26.02.03 17:55:51 Windows detected: using queue file polling for EventSource
+26.02.03 17:55:51 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 17:55:51 echoEvent type: ping, data: [cntr]
+26.02.03 17:56:22 echoEvent type: ping, data: [cntr]
+26.02.03 17:59:07 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.02.03 17:59:07 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.02.03 17:59:07 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.02.03 17:59:07 echoEvent type: hello, data: [cntr]
+26.02.03 17:59:07 Windows detected: using queue file polling for EventSource
+26.02.03 17:59:07 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 17:59:07 echoEvent type: ping, data: [cntr]
+26.02.03 17:59:38 echoEvent type: ping, data: [cntr]
+26.02.03 18:00:09 echoEvent type: ping, data: [cntr]
+26.02.03 18:00:40 echoEvent type: ping, data: [cntr]
+26.02.03 18:01:11 echoEvent type: ping, data: [cntr]
+26.02.03 18:01:55 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [320]
+26.02.03 18:01:55 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [321]
+26.02.03 18:01:55 errorHandler [admin] [2] [Cannot modify header information - headers already sent] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [322]
+26.02.03 18:01:55 echoEvent type: hello, data: [cntr]
+26.02.03 18:01:55 Windows detected: using queue file polling for EventSource
+26.02.03 18:01:55 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 18:01:55 echoEvent type: ping, data: [cntr]
+26.02.03 18:02:26 echoEvent type: ping, data: [cntr]
+26.02.03 18:02:57 echoEvent type: ping, data: [cntr]
+26.02.03 18:03:28 echoEvent type: ping, data: [cntr]
+26.02.03 18:03:59 echoEvent type: ping, data: [cntr]
+26.02.03 18:04:30 echoEvent type: ping, data: [cntr]
+26.02.03 18:05:43 echoEvent type: hello, data: [cntr]
+26.02.03 18:05:43 Windows detected: using queue file polling for EventSource
+26.02.03 18:05:43 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 18:05:43 echoEvent type: ping, data: [cntr]
+26.02.03 18:06:14 echoEvent type: ping, data: [cntr]
+26.02.03 18:06:45 echoEvent type: ping, data: [cntr]
+26.02.03 18:07:16 echoEvent type: ping, data: [cntr]
+26.02.03 18:07:47 echoEvent type: ping, data: [cntr]
+26.02.03 18:08:18 echoEvent type: ping, data: [cntr]
+26.02.03 18:08:49 echoEvent type: ping, data: [cntr]
+26.02.03 18:09:20 echoEvent type: ping, data: [cntr]
+26.02.03 18:09:51 echoEvent type: ping, data: [cntr]
+26.02.03 18:10:22 echoEvent type: ping, data: [cntr]
+26.02.03 18:10:53 echoEvent type: ping, data: [cntr]
+26.02.03 18:11:24 echoEvent type: ping, data: [cntr]
+26.02.03 18:11:55 echoEvent type: ping, data: [cntr]
+26.02.03 18:12:26 echoEvent type: ping, data: [cntr]
+26.02.03 18:12:57 echoEvent type: ping, data: [cntr]
+26.02.03 18:13:28 echoEvent type: ping, data: [cntr]
+26.02.03 18:13:59 echoEvent type: ping, data: [cntr]
+26.02.03 18:14:30 echoEvent type: ping, data: [cntr]
+26.02.03 18:15:01 echoEvent type: ping, data: [cntr]
+26.02.03 18:15:32 echoEvent type: ping, data: [cntr]
+26.02.03 18:16:03 echoEvent type: ping, data: [cntr]
+26.02.03 18:18:21 echoEvent type: hello, data: [cntr]
+26.02.03 18:18:21 Windows detected: using queue file polling for EventSource
+26.02.03 18:18:21 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 18:18:21 echoEvent type: ping, data: [cntr]
+26.02.03 18:18:52 echoEvent type: ping, data: [cntr]
+26.02.03 18:19:23 echoEvent type: ping, data: [cntr]
+26.02.03 18:19:54 echoEvent type: ping, data: [cntr]
+26.02.03 18:20:25 echoEvent type: ping, data: [cntr]
+26.02.03 18:20:56 echoEvent type: ping, data: [cntr]
+26.02.03 18:21:27 echoEvent type: ping, data: [cntr]
+26.02.03 18:21:58 echoEvent type: ping, data: [cntr]
+26.02.03 18:27:33 echoEvent type: hello, data: [resp]
+26.02.03 18:27:33 Windows detected: using queue file polling for EventSource
+26.02.03 18:27:33 eventLoopQueuePoll resp admin, starting queue file polling
+26.02.03 18:27:33 echoEvent type: ping, data: [resp]
+26.02.03 18:27:33 eventLoopQueuePoll resp admin, flushing event queue (8 events)
+26.02.03 18:27:33 eventLoopQueuePoll resp admin, event: connect;
+26.02.03 18:27:33 echoEvent type: connect, data: []
+26.02.03 18:27:33 eventLoopQueuePoll resp admin, event: connect;
+26.02.03 18:27:33 echoEvent type: connect, data: []
+26.02.03 18:27:33 eventLoopQueuePoll resp admin, event: hideClock;
+26.02.03 18:27:33 echoEvent type: hideClock, data: []
+26.02.03 18:27:33 eventLoopQueuePoll resp admin, event: touchGame;
+26.02.03 18:27:33 echoEvent type: touchGame, data: []
+26.02.03 18:27:33 eventLoopQueuePoll resp admin, event: disconnect;
+26.02.03 18:27:33 echoEvent type: disconnect, data: []
+26.02.03 18:27:33 eventLoopQueuePoll resp admin, event: disconnect;
+26.02.03 18:27:33 echoEvent type: disconnect, data: []
+26.02.03 18:27:33 eventLoopQueuePoll resp admin, event: connect;
+26.02.03 18:27:33 echoEvent type: connect, data: []
+26.02.03 18:27:33 eventLoopQueuePoll resp admin, event: hideClock;
+26.02.03 18:27:33 echoEvent type: hideClock, data: []
+26.02.03 18:28:04 echoEvent type: ping, data: [resp]
+26.02.03 18:30:28 echoEvent type: hello, data: [cntr]
+26.02.03 18:30:28 Windows detected: using queue file polling for EventSource
+26.02.03 18:30:28 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 18:30:28 echoEvent type: ping, data: [cntr]
+26.02.03 18:30:28 eventLoopQueuePoll cntr admin, flushing event queue (3 events)
+26.02.03 18:30:28 eventLoopQueuePoll cntr admin, event: connected;0,0
+26.02.03 18:30:28 echoEvent type: connected, data: [0,0]
+26.02.03 18:30:28 eventLoopQueuePoll cntr admin, event: connected;0,0
+26.02.03 18:30:28 echoEvent type: connected, data: [0,0]
+26.02.03 18:30:28 eventLoopQueuePoll cntr admin, event: connected;0,0
+26.02.03 18:30:28 echoEvent type: connected, data: [0,0]
+26.02.03 18:30:59 echoEvent type: ping, data: [cntr]
+26.02.03 18:31:30 echoEvent type: ping, data: [cntr]
+26.02.03 18:32:01 echoEvent type: ping, data: [cntr]
+26.02.03 18:32:32 echoEvent type: ping, data: [cntr]
+26.02.03 18:33:03 echoEvent type: ping, data: [cntr]
+26.02.03 18:33:34 echoEvent type: ping, data: [cntr]
+26.02.03 18:34:05 echoEvent type: ping, data: [cntr]
+26.02.03 18:34:36 echoEvent type: ping, data: [cntr]
+26.02.03 18:35:07 echoEvent type: ping, data: [cntr]
+26.02.03 18:36:32 echoEvent type: hello, data: [cntr]
+26.02.03 18:36:32 Windows detected: using queue file polling for EventSource
+26.02.03 18:36:32 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 18:36:32 echoEvent type: ping, data: [cntr]
+26.02.03 18:37:03 echoEvent type: ping, data: [cntr]
+26.02.03 18:37:34 echoEvent type: ping, data: [cntr]
+26.02.03 18:38:05 echoEvent type: ping, data: [cntr]
+26.02.03 18:38:36 echoEvent type: ping, data: [cntr]
+26.02.03 18:39:07 echoEvent type: ping, data: [cntr]
+26.02.03 18:39:38 echoEvent type: ping, data: [cntr]
+26.02.03 18:40:09 echoEvent type: ping, data: [cntr]
+26.02.03 18:40:40 echoEvent type: ping, data: [cntr]
+26.02.03 18:41:11 echoEvent type: ping, data: [cntr]
+26.02.03 18:42:19 echoEvent type: hello, data: [cntr]
+26.02.03 18:42:19 Windows detected: using queue file polling for EventSource
+26.02.03 18:42:19 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 18:42:19 echoEvent type: ping, data: [cntr]
+26.02.03 18:42:50 echoEvent type: ping, data: [cntr]
+26.02.03 18:43:21 echoEvent type: ping, data: [cntr]
+26.02.03 18:57:35 echoEvent type: hello, data: [cntr]
+26.02.03 18:57:35 Windows detected: using queue file polling for EventSource
+26.02.03 18:57:35 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 18:57:35 echoEvent type: ping, data: [cntr]
+26.02.03 18:58:06 echoEvent type: ping, data: [cntr]
+26.02.03 18:58:37 echoEvent type: ping, data: [cntr]
+26.02.03 19:02:37 echoEvent type: hello, data: [cntr]
+26.02.03 19:02:37 Windows detected: using queue file polling for EventSource
+26.02.03 19:02:37 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 19:02:37 echoEvent type: ping, data: [cntr]
+26.02.03 19:03:08 echoEvent type: ping, data: [cntr]
+26.02.03 19:03:39 echoEvent type: ping, data: [cntr]
+26.02.03 19:04:10 echoEvent type: ping, data: [cntr]
+26.02.03 19:16:54 echoEvent type: hello, data: [cntr]
+26.02.03 19:16:54 Windows detected: using queue file polling for EventSource
+26.02.03 19:16:54 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 19:16:54 echoEvent type: ping, data: [cntr]
+26.02.03 19:17:25 echoEvent type: ping, data: [cntr]
+26.02.03 19:17:56 echoEvent type: ping, data: [cntr]
+26.02.03 19:18:27 echoEvent type: ping, data: [cntr]
+26.02.03 19:18:58 echoEvent type: ping, data: [cntr]
+26.02.03 19:19:29 echoEvent type: ping, data: [cntr]
+26.02.03 19:20:00 echoEvent type: ping, data: [cntr]
+26.02.03 19:24:00 echoEvent type: hello, data: [cntr]
+26.02.03 19:24:00 Windows detected: using queue file polling for EventSource
+26.02.03 19:24:00 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 19:24:00 echoEvent type: ping, data: [cntr]
+26.02.03 19:24:31 echoEvent type: ping, data: [cntr]
+26.02.03 19:25:02 echoEvent type: ping, data: [cntr]
+26.02.03 19:34:19 echoEvent type: hello, data: [cntr]
+26.02.03 19:34:19 Windows detected: using queue file polling for EventSource
+26.02.03 19:34:19 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 19:34:19 echoEvent type: ping, data: [cntr]
+26.02.03 19:34:50 echoEvent type: ping, data: [cntr]
+26.02.03 19:35:21 echoEvent type: ping, data: [cntr]
+26.02.03 19:35:52 echoEvent type: ping, data: [cntr]
+26.02.03 19:36:23 echoEvent type: ping, data: [cntr]
+26.02.03 19:36:54 echoEvent type: ping, data: [cntr]
+26.02.03 19:37:17 echoEvent type: hello, data: [cntr]
+26.02.03 19:37:17 Windows detected: using queue file polling for EventSource
+26.02.03 19:37:17 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 19:37:17 echoEvent type: ping, data: [cntr]
+26.02.03 19:37:48 echoEvent type: ping, data: [cntr]
+26.02.03 19:38:19 echoEvent type: ping, data: [cntr]
+26.02.03 19:38:50 echoEvent type: ping, data: [cntr]
+26.02.03 19:39:21 echoEvent type: ping, data: [cntr]
+26.02.03 19:39:52 echoEvent type: ping, data: [cntr]
+26.02.03 19:40:23 echoEvent type: ping, data: [cntr]
+26.02.03 19:40:54 echoEvent type: ping, data: [cntr]
+26.02.03 19:41:29 echoEvent type: hello, data: [cntr]
+26.02.03 19:41:29 Windows detected: using queue file polling for EventSource
+26.02.03 19:41:29 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 19:41:29 echoEvent type: ping, data: [cntr]
+26.02.03 19:42:32 echoEvent type: hello, data: [cntr]
+26.02.03 19:42:32 Windows detected: using queue file polling for EventSource
+26.02.03 19:42:32 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 19:42:32 echoEvent type: ping, data: [cntr]
+26.02.03 19:43:03 echoEvent type: ping, data: [cntr]
+26.02.03 19:43:34 echoEvent type: ping, data: [cntr]
+26.02.03 19:50:04 echoEvent type: hello, data: [cntr]
+26.02.03 19:50:04 Windows detected: using queue file polling for EventSource
+26.02.03 19:50:04 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 19:50:04 echoEvent type: ping, data: [cntr]
+26.02.03 19:50:35 echoEvent type: ping, data: [cntr]
+26.02.03 19:51:06 echoEvent type: ping, data: [cntr]
+26.02.03 19:52:49 echoEvent type: hello, data: [cntr]
+26.02.03 19:52:49 Windows detected: using queue file polling for EventSource
+26.02.03 19:52:49 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 19:52:49 echoEvent type: ping, data: [cntr]
+26.02.03 19:53:20 echoEvent type: ping, data: [cntr]
+26.02.03 19:53:51 echoEvent type: ping, data: [cntr]
+26.02.03 19:54:22 echoEvent type: ping, data: [cntr]
+26.02.03 19:54:53 echoEvent type: ping, data: [cntr]
+26.02.03 20:09:14 echoEvent type: hello, data: [cntr]
+26.02.03 20:09:14 Windows detected: using queue file polling for EventSource
+26.02.03 20:09:14 eventLoopQueuePoll cntr admin, starting queue file polling
+26.02.03 20:09:14 echoEvent type: ping, data: [cntr]
+26.02.03 20:09:45 echoEvent type: ping, data: [cntr]
+26.02.03 20:10:16 echoEvent type: ping, data: [cntr]
+26.02.03 20:10:47 echoEvent type: ping, data: [cntr]
+26.02.03 20:11:18 echoEvent type: ping, data: [cntr]

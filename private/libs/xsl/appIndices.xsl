@@ -48,7 +48,12 @@
 	<xsl:template match="appLink">
 		<tr>
 			<td class="page">
-				<button class="nav wide" data-action="window.location.href='../{@href}'"><xsl:value-of select="@linkName"/></button>
+				<button class="nav wide"
+					data-action="window.location.href='../{@href}'"
+					onclick="event.preventDefault(); window.location.href='../{@href}'"
+					ontouchstart="event.preventDefault(); window.location.href='../{@href}'">
+					<xsl:value-of select="@linkName"/>
+				</button>
 			</td>
 		</tr>
 	</xsl:template>

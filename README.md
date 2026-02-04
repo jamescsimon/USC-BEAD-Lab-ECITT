@@ -1,8 +1,10 @@
-# ECITT Web App - PWA Edition
+# ECITT Web App - Google Sheets Edition
 
 **ECITT (Early Childhood Inhibitory Touchscreen Task)** - A Progressive Web App for measuring response inhibition in infants and toddlers.
 
 This repository contains a complete, self-contained ECITT web application configured as a Progressive Web App (PWA) that can be installed on iPads without requiring the App Store.
+
+**⚠️ Important: This branch uses Google Sheets API instead of MySQL for all data storage.**
 
 ---
 
@@ -13,8 +15,9 @@ This repository contains a complete, self-contained ECITT web application config
 Before running the ECITT app, you need:
 
 1. **PHP 8.0 or newer** - [Download PHP](https://www.php.net/downloads.php)
-2. **MySQL 8.0 or newer** - [Download MySQL](https://dev.mysql.com/downloads/)
-3. **MySQL Workbench** (optional, for database management)
+2. **Google Cloud Project** with Sheets API enabled
+3. **Google Sheets** spreadsheet configured for data storage
+4. **Service Account credentials** (JSON file)
 
 ### Installation Steps
 
@@ -24,83 +27,87 @@ Before running the ECITT app, you need:
    cd USC-BEAD-Lab-ECITT
    ```
 
-2. **Set up MySQL database** (see [Database Setup](#database-setup) below)
+2. **Set up Google Sheets** - Follow the complete guide in [GOOGLE_SHEETS_SETUP.md](GOOGLE_SHEETS_SETUP.md)
 
-3. **Configure database connection** (see [Configuration](#configuration) below)
+3. **Configure credentials** - Place your service account JSON file in the project root as `usc-bead-ecitt-755207cdd9c1.json`
 
-4. **Start the server:**
+4. **Set environment variables:**
+   - Set `GOOGLE_SHEETS_SPREADSHEET_ID` to your spreadsheet ID (found in the URL)
+   - Or edit sheetsLib.php to set the values directly
+
+5. **Start the server:**
    - **Windows:** Double-click `start-server.bat`
    - **Mac/Linux:** Run `./start-server.sh` (or `bash start-server.sh`)
 
-5. **Access the app:**
+6. **Access the app:**
    - From computer: `http://localhost:8000`
    - From iPad: `http://YOUR_IP_ADDRESS:8000` (see [iPad Installation](#ipad-installation))
 
 ---
 
-## Database Setup
+## Google Sheets Setup
 
-### Step 1: Create MySQL Database
+**See [GOOGLE_SHEETS_SETUP.md](GOOGLE_SHEETS_SETUP.md) for complete setup instructions.**
 
-1. Open **MySQL Workbench** (or use command line)
-2. Create a new schema named `ecitt_db`
-3. Set collation to `utf8mb4_unicode_ci`
+### Required Sheets in Your Spreadsheet
 
-### Step 2: Import Database Schema
+Your Google Sheets spreadsheet must contain these sheets with the following headers:
 
-1. In MySQL Workbench, go to **File → Open SQL Script**
-2. Navigate to: `database/schema_workbench.sql`
-3. **Important:** Select `ecitt_db` in the database dropdown (top toolbar)
-4. Click **Execute** (lightning bolt icon)
+1. **Responses** - Trial response data
+   - Headers: Timestamp, User, ProjectNo, TestSetNo, TestName, PartNo, PrevRespTime, TrialStartTime, TrialType, TrialPhase, TrialNo, TrialVariant, Accuracy, TouchTime, ReactionTime, TrialTime, ButtonPressed, AnimationShowed, DotPressed, MoveEvents, Latitude, Longitude, TrialQueueLength
 
-### Step 3: Create Database User
+2. **Events** - Application events
+   - Headers: Timestamp, EventType, EventData, UserName, ClientIP, Source
 
-1. In MySQL Workbench, go to **Server → Users and Privileges**
-2. Click **Add Account**
-3. Create user:
-   - Login Name: `ecitt_user`
-   - Authentication Type: `Standard`
-   - Password: (choose a secure password and write it down)
-4. Click **Schema Privileges** tab
-5. Click **Add Entry...**
-6. Select `ecitt_db` schema
-7. Grant privileges: `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `CREATE`, `ALTER`, `INDEX`
-8. Click **Apply**
+3. **Users** - User authentication
+   - Headers: username, password, userType, globalPerm
+   - Add at least one user: `admin`, `admin`, `dev`, `adm`
 
-### Step 4: Create Admin User and Test Specs
+4. **Projects** - Research projects
+   - Headers: no, name, userName (owner)
 
-Run these SQL scripts in MySQL Workbench (make sure `ecitt_db` is selected):
+5. **TestSets** - Test set configurations
+   - Headers: no, projectNo, name
 
-1. **Create admin user:** Open and execute `database/create_admin_user.sql` (if exists)
-2. **Create test specs:** Open and execute `database/create_test_specs.sql` (if exists)
+6. **Participants** - Participant information
+   - Headers: userName, no, projectNo, ref, birthYear, birthMonth, birthDay, gender
 
-Or manually create admin user:
-```sql
-INSERT INTO ecitt_user (name, password, userType) VALUES ('admin', 'admin', 'dev');
-```
+7. **Tests** (optional)
+   - Headers: testName, testDescription, created, modified
+
+8. **SyncPoints** (optional)
+   - Headers: userName, projectNo, testSetNo, partNo, timestamp
 
 ---
 
 ## Configuration
 
-### Database Connection
+### Google Sheets Credentials
 
-Edit `private/libs/php/dbLib.php` (around line 51):
+The app needs:
+- **Service Account JSON file**: Place in project root
+- **Spreadsheet ID**: Set via environment variable or in `sheetsLib.php`
 
-```php
-$db=new mysqli("localhost", "ecitt_user", "your_password", "ecitt_db");
+### Environment Variables
+
+Set these environment variables (or edit `sheetsLib.php` directly):
+
+```bash
+# Windows PowerShell
+$env:GOOGLE_SHEETS_SPREADSHEET_ID="your-spreadsheet-id-here"
+
+# Mac/Linux
+export GOOGLE_SHEETS_SPREADSHEET_ID="your-spreadsheet-id-here"
 ```
 
-Replace `your_password` with the password you created in Step 3 above.
+The spreadsheet ID is found in your Google Sheets URL:
+```
+https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID_HERE/edit
+```
 
 ### Timezone
 
-Ensure timezone is set to UTC in `private/libs/php/dbLib.php` (around line 34):
-
-```php
-$tzName = getParam("tzName", "UTC");
-date_default_timezone_set("UTC");
-```
+All timestamps are stored in UTC format. The timezone is set in `lib.php`.
 
 ---
 

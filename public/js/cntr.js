@@ -47,8 +47,30 @@ function cntrDeclareGlobals() {
 	trialRunning = false;
 	clockShowing = false;
 	gameRunning = false;
+	endTrialsPending = false;
+	endTrialsTimeoutId = null;
+	endTrialsAttempt = 0;
 	
 	connectAttempts = 0;
+}
+
+function sendEndTrialsWithRetry() {
+	if (!endTrialsPending) return;
+	endTrialsAttempt += 1;
+	console.log("[CONTROLLER] Sending endTrials attempt", endTrialsAttempt);
+	var endData = (curTestName || "") + "," + (curConfigName || "");
+	sendEvent("resp", "endTrials", endData);
+	if (endTrialsTimeoutId) {
+		clearTimeout(endTrialsTimeoutId);
+	}
+	endTrialsTimeoutId = setTimeout(function() {
+		if (!endTrialsPending) return;
+		if (endTrialsAttempt >= 3) {
+			console.warn("[CONTROLLER] endTrials failed after 3 attempts - responder did not acknowledge");
+			return;
+		}
+		sendEndTrialsWithRetry();
+	}, 1000);
 }
 
 // Average responstime
@@ -112,6 +134,14 @@ function cntr_reinit() {
 	//disconnect();
 	connectState = connectStateNotConnected;
 	console.log("cntr_reinit: set connectState to NotConnected");
+	if (typeof updateConnectionState === "function") {
+		updateConnectionState({
+			connection_state: "disconnected",
+			controller_ready: "false",
+			responder_ready: "false",
+			last_event: "controller_reset"
+		});
+	}
 	replaceTextInElemWithId("connectPageTitle", "Ready to Connect");
 	normalizeClassOfElemWithId("connectButt");
 	allClockButtonElems.forEach(normalizeClass);
@@ -173,6 +203,14 @@ function initConnection() {
 	console.log("initConnection called", "connectState: "+connectState);
 	connectState = connectStateConnecting;
 	console.log("initConnection: set state to Connecting, calling initEventSourceCntr");
+	if (typeof updateConnectionState === "function") {
+		updateConnectionState({
+			connection_state: "connecting",
+			controller_ready: "true",
+			responder_ready: "false",
+			last_event: "controller_connect"
+		});
+	}
 	
 	// Clear any existing timeout
 	if (connectionTimeoutId) {
@@ -201,18 +239,17 @@ function initConnection() {
 	}
 	
 	// Windows workaround: Set a timeout to enable compatibility mode if EventSource fails
-	// This prevents the app from getting stuck in connecting state
 	// Increased timeout to 5 seconds to allow time for "hello" event to arrive
 	connectionTimeoutId = setTimeout(function() {
 		connectionTimeoutId = null;
 		if (connectState == connectStateConnecting) {
-			console.log("EventSource connection timeout after 5 seconds, enabling compatibility mode (Windows)");
+			console.log("EventSource disabled - using polling instead");
 			connectState = connectStateConnected;
 			if (typeof compatibilityMode !== 'undefined') {
 				compatibilityMode = true;
 			}
 			normalizeClassOfElemWithId("connectButt");
-			replaceTextInElemWithId("connectPageTitle", "Connected (Compatibility Mode)");
+			replaceTextInElemWithId("connectPageTitle", "Connected (Polling)");
 			if (typeof showPage !== 'undefined') {
 				var appTypePage = document.getElementById("appType_page");
 				if (appTypePage) {
@@ -321,9 +358,14 @@ function hidingClockFromResp(event) {
 }
 
 function enterTestsApp() {
+	console.log("enterTestsApp called, projectCurNo:", projectCurNo);
 	if (buttonsEnabled()) {
-		hideClock();
+		// Don't send hideClock here - it will be handled when actually needed during trials
+		console.log("enterTestsApp: about to call projectsSelect with projectCurNo:", projectCurNo);
 		projectsSelect(projectCurNo, projectsDocReceived);
+		console.log("enterTestsApp: projectsSelect called, returning");
+	} else {
+		console.warn("enterTestsApp: buttons are not enabled, aborting");
 	}
 }
 
@@ -412,6 +454,11 @@ function testExitSelect() {
 function testEnterCur() {
 	//console.log("testEnterCur");
 	if (buttonsEnabled()) {
+		if (!testCurValue) {
+			alert("Please select a Test before continuing.");
+			showPage("testSelect");
+			return;
+		}
 		resetResCounters();
 		reflectAllResCounters();
 		showPage(testCurValue+"_index");
@@ -429,32 +476,41 @@ function showConnectionFailedAlert() {
 }
 
 function initEventSourceCntr() {
-	var eventSource;
-	console.log("initEventSourceCntr - creating EventSource");
-	eventSource=initEventSource("cntr", curUserName, eventSourceCntrOpen);
-	console.log("initEventSourceCntr - EventSource created, adding listeners");
-	eventSource.addEventListener("hello", helloFromEventSource, false);
-	console.log("initEventSourceCntr - 'hello' listener added");
-	eventSource.addEventListener("connected", connectedFromResp, false);
-	eventSource.addEventListener("disconnected", disconnectedFromResp, false);
+	// Using polling instead of EventSource for local testing
+	console.log("initEventSourceCntr - starting polling");
+	startConnectionPolling("controller", handleConnectionStateChange);
 	
-	eventSource.addEventListener("gameStarted", gameStartedFromResp, false);
-	//eventSource.addEventListener("gameActive", gameActiveFromResp, false);
-	eventSource.addEventListener("gameEnded", gameEndedFromResp, false);
-	
-	eventSource.addEventListener("testStarted", testStartedFromResp, false);
-	eventSource.addEventListener("trialStarted", trialStartedFromResp, false);
-	eventSource.addEventListener("trialResult", trialResultFromResp, false);
-	eventSource.addEventListener("trialEnded", trialEndedFromResp, false);
-	
-	eventSource.addEventListener("trialCancelled", trialCancelledFromResp, false);
-	eventSource.addEventListener("trialsEnded", trialsEndedFromResp, false);
-	eventSource.addEventListener("testEnded", testEndedFromResp, false);
-	
-	eventSource.addEventListener("proceed", proceedFromResp, false);
-	
-	eventSource.addEventListener("showingClock", showingClockFromResp, false);
-	eventSource.addEventListener("hidingClock", hidingClockFromResp, false);
+	// CRITICAL: Start event polling so controller can receive events from responder
+	// This allows controller to receive trialEnded, trialResult, etc.
+	if (typeof startEventPolling === "function" && curUserName) {
+		console.log("initEventSourceCntr - starting event polling for role: cntr");
+		startEventPolling("cntr", curUserName);
+	}
+}
+
+function handleConnectionStateChange(state) {
+	// Silent state change - log removed to reduce console spam
+	// Check for responder ready event
+	if (state.responder_ready == "true" && connectState == connectStateConnecting) {
+		connectState = connectStateConnected;
+		if (typeof updateConnectionState === "function") {
+			updateConnectionState({
+				connection_state: "connected",
+				controller_ready: "true",
+				last_event: "controller_connected"
+			});
+		}
+		normalizeClassOfElemWithId("connectButt");
+		replaceTextInElemWithId("connectPageTitle", "Connected (Responder paired)");
+		if (typeof showPage !== 'undefined') {
+			var appTypePage = document.getElementById("appType_page");
+			if (appTypePage) {
+				showPage("appType");
+			}
+		}
+		// Send connect event to responder
+		setTimeout(sendConnect, 100);
+	}
 }
 
 function helloFromEventSource(event) {
@@ -620,13 +676,17 @@ function undoReg() {
 }
 
 function flipTrial(testName, trialType, trialPhase, repeat, nextTrialType, nextTrialRepeatStr) {
-	//console.log("flipTrial", "testName: "+testName, "trialType: "+trialType, "trialPhase: "+trialPhase, "repeat: "+repeat, "trialRunning: "+trialRunning, "curTestName: "+curTestName, "curTrialType: "+curTrialType, "curTrialPhase: "+curTrialPhase)
+	console.log("[CONTROLLER] flipTrial CLICKED:", testName, trialType, trialPhase, "x"+repeat, "trialRunning:", trialRunning);
+	console.log("[CONTROLLER] flipTrial call stack");
+	console.trace();
 	var nextTrialRepeat = parseInt(nextTrialRepeatStr);
 	if (!trialRunning) {
+		console.log("[CONTROLLER] Starting new trial");
 		startTrial(testName, trialType, trialPhase, repeat, nextTrialType, nextTrialRepeat);
 	}
 	else {
 		if (testName == curTestName && trialType == curTrialType && trialPhase == curTrialPhase) {
+			console.log("[CONTROLLER] Trial already running, calling cancelTrial");
 			cancelTrial();
 		}
 	}
@@ -634,10 +694,11 @@ function flipTrial(testName, trialType, trialPhase, repeat, nextTrialType, nextT
 
 function startTrial(testName, trialType, trialPhase, repeat, nextTrialType, nextTrialRepeat) {
 	var totl, configElem, varPeriodStr, imagePairsList;
-	//console.log("startTrial, startTrialPending: "+startTrialPending, "repeat: "+repeat, "clockShowing: "+clockShowing, "trialPhase: "+trialPhase);
-	if (buttonsEnabled() && !startTrialPending && !clockShowing) {
+	var buttonsOk = buttonsEnabled();
+	console.log("[CONTROLLER] startTrial called - buttonsEnabled:", buttonsOk, "startTrialPending:", startTrialPending, "clockShowing:", clockShowing);
+	if (buttonsOk && !startTrialPending && !clockShowing) {
+		console.log("[CONTROLLER] startTrial proceeding, setting trialRunning=true");
 		startTrialPending = true;
-		//console.log("startTrial");
 		prevTrialIdPrefix=curTrialIdPrefix;
 		curTrialIdPrefix=testName+"_"+trialType+"_"+trialPhase;
 		configElem=getConfigElem(testName, trialType, "");
@@ -664,6 +725,12 @@ function startTrial(testName, trialType, trialPhase, repeat, nextTrialType, next
 		curNextTrialType = nextTrialType;
 		curNextTrialRepeat = nextTrialRepeat;
 		//console.log(curVarSeqMethod+", "+curVarPeriod+", "+curTestName+", "+curTrialType+", "+curTrialPhase);
+		
+		// Send ready message to responder when actually starting trials
+		if (testType(testName)=="adt") {
+			sendEvent("resp", "setReadyMessage", "msg_adtIntro1,msg_adtIntro2,dot,msg_adtReady,,"+testName);
+		}
+		
 		switch (testType(testName)) {
 			case "phb":
 				highlightClassOfElemWithId(curTestName+"_"+curTrialType+"_"+curTrialPhase+"_startGameTrialButt");
@@ -685,7 +752,10 @@ function startTrial(testName, trialType, trialPhase, repeat, nextTrialType, next
 				//		break;
 				//}
 		}
+		console.log("[CONTROLLER] About to call nextTrial with repeat:", repeat);
 		nextTrial(repeat);
+	} else {
+		console.log("[CONTROLLER] startTrial blocked - conditions not met");
 	}
 }
 
@@ -694,7 +764,7 @@ function removePrevVar(trialVar) {
 }
 
 function nextTrial(repeat) {
-	//console.log("nextTrial");
+	console.log("[CONTROLLER] nextTrial called with repeat:", repeat, "testType:", testType(curTestName));
 	//var trialVarIndex, varIndex;
 	switch (testType(curTestName)) {
 		case "phb":
@@ -758,8 +828,10 @@ function resetTrialState() {
 }
 
 function cancelTrial() {
+	console.log("[CONTROLLER] cancelTrial CALLED - trialRunning:", trialRunning);
+	console.log("[CONTROLLER] cancelTrial call stack");
+	console.trace();
 	if (buttonsEnabled()) {
-		//console.log("cancelTrial");
 		switch (testType(curTestName)) {
 			case "box":
 				resetTrialState();
@@ -778,9 +850,11 @@ function cancelTrial() {
 }
 
 function trialCancelledFromResp(event) {
-	//console.log("trialCancelledFromResp");
+	console.log("[CONTROLLER] trialCancelledFromResp - resetting trial state");
+	reflectAllResCounters();
 	normalizeClassOfElemWithId(curTestName+"_"+curConfigName+"_"+curTrialType+"_"+curTrialPhase+"_cancelButt");
 	resetTrialState();
+	console.log("[CONTROLLER] trialCancelledFromResp complete - trialRunning:", trialRunning);
 }
 
 function gotoTrials(testName, trialType, configName) {
@@ -797,9 +871,7 @@ function gotoTrials(testName, trialType, configName) {
 				startTestGame(testName, trialType);
 				break;
 			default:
-				if (testType(testName)=="adt") {
-					sendEvent("resp", "setReadyMessage", "msg_adtIntro1,msg_adtIntro2,dot,msg_adtReady,,"+testName);
-				}
+				// Don't send setReadyMessage here - it will be sent when trial actually starts
 				normalizeClassOfElemWithId(testName+"_"+configName+"_endTrialsButt");
 				allUndoButtonElems.forEach(disableHtmlElem);
 				showPage(testName+"_"+configName+"_trials");
@@ -809,8 +881,17 @@ function gotoTrials(testName, trialType, configName) {
 }
 
 function endTrials() {
-	if (buttonsEnabled()) {
-		//console.log("endTrials");
+	var buttonsOk = buttonsEnabled();
+	console.log("[CONTROLLER] endTrials CALLED - buttonsEnabled:", buttonsOk, "testType:", testType(curTestName), "trialRunning:", trialRunning);
+	console.log("[CONTROLLER] endTrials call stack");
+	console.trace();
+	console.log("[CONTROLLER] endTrials context", "curTestName:", curTestName, "curConfigName:", curConfigName, "curUserName:", curUserName);
+	// Don't end trials if they're still running - wait for them to complete naturally
+	if (trialRunning) {
+		console.log("[CONTROLLER] endTrials blocked - trials are still running");
+		return;
+	}
+	if (buttonsOk) {
 		switch (testType(curTestName)) {
 			case "box":
 				resetTrialState();
@@ -823,26 +904,43 @@ function endTrials() {
 				break;
 			default:
 				highlightClassOfElemWithId(curTestName+"_"+curConfigName+"_endTrialsButt");
-				sendEvent("resp", "endTrials", "");
+				endTrialsPending = true;
+				endTrialsAttempt = 0;
+				console.log("[CONTROLLER] endTrials sending initial request");
+				var endData = (curTestName || "") + "," + (curConfigName || "");
+				sendEvent("resp", "endTrials", endData);
+				sendEndTrialsWithRetry();
 				break;
 		}
 	}
 }
 
 function trialsEndedFromResp(event) {
-	//console.log("trialsEndedFromResp");
-	//console.log("trialsEndedFromResp");
+	console.log("[CONTROLLER] trialsEndedFromResp - resetting and returning to index");
+	endTrialsPending = false;
+	if (endTrialsTimeoutId) {
+		clearTimeout(endTrialsTimeoutId);
+		endTrialsTimeoutId = null;
+	}
+	endTrialsAttempt = 0;
 	reflectAllResCounters();
 	normalizeClassOfElemWithId(curTestName+"_"+curConfigName+"_endTrialsButt");
 	resetTrialState();
+	// Batch send all trial records before returning to index
+	if (typeof batchSendAllRecords === "function") {
+		batchSendAllRecords();
+	}
 	showPage(curTestName+"_index");
+	console.log("[CONTROLLER] trialsEndedFromResp complete");
 }
 
 function trialEndedFromResp(event) {
-	console.log("trialEndedFromResp");
-	//normalizeTrialButtonCellElems();
-	//reflectAllResCounters();
-	//finalizeTrialEnded();
+	console.log("[CONTROLLER] trialEndedFromResp - resetting trial state");
+	reflectAllResCounters();
+	resetTrialState();
+	// NOTE: Data upload now happens in responder, not here
+	// Controller has no trial data (separate browser context/localStorage)
+	console.log("[CONTROLLER] trialEndedFromResp complete - trialRunning:", trialRunning);
 }
 
 function endTest() {

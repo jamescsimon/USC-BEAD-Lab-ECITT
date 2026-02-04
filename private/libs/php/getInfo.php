@@ -123,6 +123,36 @@
 				}
 				echo "</sounds>";
 				break;
+			case "connectionState":
+				// Read connection state JSON file for local testing
+				$stateFile = PRIVATE_ROOT . "/connection_state.json";
+				if (file_exists($stateFile)) {
+					$json = file_get_contents($stateFile);
+					$state = json_decode($json, true);
+					echo "<connectionState ";
+					foreach ($state as $key => $val) {
+						$val = htmlspecialchars($val);
+						echo "$key='$val' ";
+					}
+					echo "/>\n";
+				} else {
+					echo "<connectionState error='state file not found'/>\n";
+				}
+				break;
+			case "updateConnectionState":
+				// Update connection state JSON file
+				$stateFile = PRIVATE_ROOT . "/connection_state.json";
+				$newData = json_decode($data, true);
+				if ($newData) {
+					$current = json_decode(file_get_contents($stateFile), true);
+					$updated = array_merge($current, $newData);
+					$updated['last_update'] = time();
+					file_put_contents($stateFile, json_encode($updated, JSON_PRETTY_PRINT));
+					echo "<connectionState updated='true'/>\n";
+				} else {
+					echo "<connectionState error='invalid json data'/>\n";
+				}
+				break;
 			default:
 				echo "<error msg='ignored type:[$type] data:[$data]'/>";
 		}

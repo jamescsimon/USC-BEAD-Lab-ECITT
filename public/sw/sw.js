@@ -1,15 +1,14 @@
+// Service worker disabled - app runs without caching (Feb 2026)
+// The application now operates without service worker to eliminate cache dependency.
+// See public/js/lib.js checkCache() - immediately calls reportCacheOk() without SW.
 
-const swVersion = "60";
-const cacheName = "swtest";
+self.addEventListener('install', (event) => {
+    event.waitUntil(self.skipWaiting());
+});
 
-// install
-
-addEventListener("install", install);
-
-async function install(installEvent) {
-	console.log("install, version: "+swVersion);
-	installEvent.waitUntil(preCache());
-}
+self.addEventListener('activate', (event) => {
+    event.waitUntil(self.clients.claim());
+});
 
 async function preCache() {
 	console.log("preCache, version: "+swVersion);

@@ -184,3 +184,2622 @@
 26.01.27 21:51:40 dbOpXml: Database connection closed
 26.01.27 21:51:40 dbOpXml: Flush completed
 26.01.27 21:51:40 dbacc/index.php: dbOpXml() completed
+26.02.03 17:45:54 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:45:54 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:45:54 dbOpXml: ENTRY
+26.02.03 17:45:54 dbOpXml: About to call initDbLib()
+26.02.03 17:45:54 initDbLib: Connecting to database...
+26.02.03 17:45:54 initDbLib: Database connected successfully
+26.02.03 17:45:54 dbOpXml: initDbLib() completed successfully
+26.02.03 17:45:54 dbOpXml: Getting type and data parameters
+26.02.03 17:45:54 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:45:54 userSelect, data: [admin,admin]
+26.02.03 17:45:54 dbOpXml: About to enter switch statement
+26.02.03 17:45:54 dbOpXml: Entering userSelect case
+26.02.03 17:45:54 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:45:54 dbOpXml: userSelect completed
+26.02.03 17:45:54 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:45:54 dbOpXml: XML output length: 92
+26.02.03 17:45:54 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:45:54 dbOpXml: XML output sent, flushing
+26.02.03 17:45:54 dbOpXml: Closing database connection
+26.02.03 17:45:54 dbOpXml: Database connection closed
+26.02.03 17:45:54 dbOpXml: Flush completed
+26.02.03 17:45:54 dbacc/index.php: dbOpXml() completed
+26.02.03 17:45:59 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:45:59 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:45:59 dbOpXml: ENTRY
+26.02.03 17:45:59 dbOpXml: About to call initDbLib()
+26.02.03 17:45:59 initDbLib: Connecting to database...
+26.02.03 17:45:59 initDbLib: Database connected successfully
+26.02.03 17:45:59 dbOpXml: initDbLib() completed successfully
+26.02.03 17:45:59 dbOpXml: Getting type and data parameters
+26.02.03 17:45:59 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:45:59 userSelect, data: [admin,admin]
+26.02.03 17:45:59 dbOpXml: About to enter switch statement
+26.02.03 17:45:59 dbOpXml: Entering userSelect case
+26.02.03 17:45:59 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:45:59 dbOpXml: userSelect completed
+26.02.03 17:45:59 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:45:59 dbOpXml: XML output length: 92
+26.02.03 17:45:59 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:45:59 dbOpXml: XML output sent, flushing
+26.02.03 17:45:59 dbOpXml: Closing database connection
+26.02.03 17:45:59 dbOpXml: Database connection closed
+26.02.03 17:45:59 dbOpXml: Flush completed
+26.02.03 17:45:59 dbacc/index.php: dbOpXml() completed
+26.02.03 17:45:59 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 17:45:59 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:45:59 dbOpXml: ENTRY
+26.02.03 17:45:59 dbOpXml: About to call initDbLib()
+26.02.03 17:45:59 initDbLib: Connecting to database...
+26.02.03 17:45:59 initDbLib: Database connected successfully
+26.02.03 17:45:59 dbOpXml: initDbLib() completed successfully
+26.02.03 17:45:59 dbOpXml: Getting type and data parameters
+26.02.03 17:45:59 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 17:45:59 testsSelect, data: [admin]
+26.02.03 17:45:59 dbOpXml: About to enter switch statement
+26.02.03 17:45:59 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 17:45:59 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:45:59 dbOpXml: XML output length: 904
+26.02.03 17:45:59 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 17:45:59 dbOpXml: XML output sent, flushing
+26.02.03 17:45:59 dbOpXml: Closing database connection
+26.02.03 17:45:59 dbOpXml: Database connection closed
+26.02.03 17:45:59 dbOpXml: Flush completed
+26.02.03 17:45:59 dbacc/index.php: dbOpXml() completed
+26.02.03 17:46:08 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:46:08 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:46:08 dbOpXml: ENTRY
+26.02.03 17:46:08 dbOpXml: About to call initDbLib()
+26.02.03 17:46:08 initDbLib: Connecting to database...
+26.02.03 17:46:08 initDbLib: Database connected successfully
+26.02.03 17:46:08 dbOpXml: initDbLib() completed successfully
+26.02.03 17:46:08 dbOpXml: Getting type and data parameters
+26.02.03 17:46:08 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:46:08 userSelect, data: [admin,admin]
+26.02.03 17:46:08 dbOpXml: About to enter switch statement
+26.02.03 17:46:08 dbOpXml: Entering userSelect case
+26.02.03 17:46:08 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:46:08 dbOpXml: userSelect completed
+26.02.03 17:46:08 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:46:08 dbOpXml: XML output length: 92
+26.02.03 17:46:08 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:46:08 dbOpXml: XML output sent, flushing
+26.02.03 17:46:08 dbOpXml: Closing database connection
+26.02.03 17:46:08 dbOpXml: Database connection closed
+26.02.03 17:46:08 dbOpXml: Flush completed
+26.02.03 17:46:08 dbacc/index.php: dbOpXml() completed
+26.02.03 17:46:08 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 17:46:08 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:46:08 dbOpXml: ENTRY
+26.02.03 17:46:08 dbOpXml: About to call initDbLib()
+26.02.03 17:46:08 initDbLib: Connecting to database...
+26.02.03 17:46:08 initDbLib: Database connected successfully
+26.02.03 17:46:08 dbOpXml: initDbLib() completed successfully
+26.02.03 17:46:08 dbOpXml: Getting type and data parameters
+26.02.03 17:46:08 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 17:46:08 testsSelect, data: [admin]
+26.02.03 17:46:08 dbOpXml: About to enter switch statement
+26.02.03 17:46:08 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 17:46:08 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:46:08 dbOpXml: XML output length: 904
+26.02.03 17:46:08 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 17:46:08 dbOpXml: XML output sent, flushing
+26.02.03 17:46:08 dbOpXml: Closing database connection
+26.02.03 17:46:08 dbOpXml: Database connection closed
+26.02.03 17:46:08 dbOpXml: Flush completed
+26.02.03 17:46:08 dbacc/index.php: dbOpXml() completed
+26.02.03 17:47:10 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:47:10 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:47:10 dbOpXml: ENTRY
+26.02.03 17:47:10 dbOpXml: About to call initDbLib()
+26.02.03 17:47:10 initDbLib: Connecting to database...
+26.02.03 17:47:10 initDbLib: Database connected successfully
+26.02.03 17:47:10 dbOpXml: initDbLib() completed successfully
+26.02.03 17:47:11 dbOpXml: Getting type and data parameters
+26.02.03 17:47:11 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:47:11 userSelect, data: [admin,admin]
+26.02.03 17:47:11 dbOpXml: About to enter switch statement
+26.02.03 17:47:11 dbOpXml: Entering userSelect case
+26.02.03 17:47:11 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:47:11 dbOpXml: userSelect completed
+26.02.03 17:47:11 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:47:11 dbOpXml: XML output length: 92
+26.02.03 17:47:11 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:47:11 dbOpXml: XML output sent, flushing
+26.02.03 17:47:11 dbOpXml: Closing database connection
+26.02.03 17:47:11 dbOpXml: Database connection closed
+26.02.03 17:47:11 dbOpXml: Flush completed
+26.02.03 17:47:11 dbacc/index.php: dbOpXml() completed
+26.02.03 17:47:11 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 17:47:11 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:47:11 dbOpXml: ENTRY
+26.02.03 17:47:11 dbOpXml: About to call initDbLib()
+26.02.03 17:47:11 initDbLib: Connecting to database...
+26.02.03 17:47:11 initDbLib: Database connected successfully
+26.02.03 17:47:11 dbOpXml: initDbLib() completed successfully
+26.02.03 17:47:11 dbOpXml: Getting type and data parameters
+26.02.03 17:47:11 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 17:47:11 testsSelect, data: [admin]
+26.02.03 17:47:11 dbOpXml: About to enter switch statement
+26.02.03 17:47:11 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 17:47:11 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:47:11 dbOpXml: XML output length: 904
+26.02.03 17:47:11 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 17:47:11 dbOpXml: XML output sent, flushing
+26.02.03 17:47:11 dbOpXml: Closing database connection
+26.02.03 17:47:11 dbOpXml: Database connection closed
+26.02.03 17:47:11 dbOpXml: Flush completed
+26.02.03 17:47:11 dbacc/index.php: dbOpXml() completed
+26.02.03 17:47:37 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:47:37 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:47:37 dbOpXml: ENTRY
+26.02.03 17:47:37 dbOpXml: About to call initDbLib()
+26.02.03 17:47:37 initDbLib: Connecting to database...
+26.02.03 17:47:37 initDbLib: Database connected successfully
+26.02.03 17:47:37 dbOpXml: initDbLib() completed successfully
+26.02.03 17:47:37 dbOpXml: Getting type and data parameters
+26.02.03 17:47:37 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:47:37 userSelect, data: [admin,admin]
+26.02.03 17:47:37 dbOpXml: About to enter switch statement
+26.02.03 17:47:37 dbOpXml: Entering userSelect case
+26.02.03 17:47:37 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:47:37 dbOpXml: userSelect completed
+26.02.03 17:47:37 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:47:37 dbOpXml: XML output length: 92
+26.02.03 17:47:37 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:47:37 dbOpXml: XML output sent, flushing
+26.02.03 17:47:37 dbOpXml: Closing database connection
+26.02.03 17:47:37 dbOpXml: Database connection closed
+26.02.03 17:47:37 dbOpXml: Flush completed
+26.02.03 17:47:37 dbacc/index.php: dbOpXml() completed
+26.02.03 17:47:39 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:47:39 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:47:39 dbOpXml: ENTRY
+26.02.03 17:47:39 dbOpXml: About to call initDbLib()
+26.02.03 17:47:39 initDbLib: Connecting to database...
+26.02.03 17:47:39 initDbLib: Database connected successfully
+26.02.03 17:47:39 dbOpXml: initDbLib() completed successfully
+26.02.03 17:47:39 dbOpXml: Getting type and data parameters
+26.02.03 17:47:39 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:47:39 userSelect, data: [admin,admin]
+26.02.03 17:47:39 dbOpXml: About to enter switch statement
+26.02.03 17:47:39 dbOpXml: Entering userSelect case
+26.02.03 17:47:39 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:47:39 dbOpXml: userSelect completed
+26.02.03 17:47:39 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:47:39 dbOpXml: XML output length: 92
+26.02.03 17:47:39 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:47:39 dbOpXml: XML output sent, flushing
+26.02.03 17:47:39 dbOpXml: Closing database connection
+26.02.03 17:47:39 dbOpXml: Database connection closed
+26.02.03 17:47:39 dbOpXml: Flush completed
+26.02.03 17:47:39 dbacc/index.php: dbOpXml() completed
+26.02.03 17:49:22 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:49:22 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:49:22 dbOpXml: ENTRY
+26.02.03 17:49:22 dbOpXml: About to call initDbLib()
+26.02.03 17:49:22 initDbLib: Connecting to database...
+26.02.03 17:49:22 initDbLib: Database connected successfully
+26.02.03 17:49:22 dbOpXml: initDbLib() completed successfully
+26.02.03 17:49:22 dbOpXml: Getting type and data parameters
+26.02.03 17:49:22 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:49:22 userSelect, data: [admin,admin]
+26.02.03 17:49:22 dbOpXml: About to enter switch statement
+26.02.03 17:49:22 dbOpXml: Entering userSelect case
+26.02.03 17:49:22 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:49:22 dbOpXml: userSelect completed
+26.02.03 17:49:22 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:49:22 dbOpXml: XML output length: 92
+26.02.03 17:49:22 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:49:22 dbOpXml: XML output sent, flushing
+26.02.03 17:49:22 dbOpXml: Closing database connection
+26.02.03 17:49:22 dbOpXml: Database connection closed
+26.02.03 17:49:22 dbOpXml: Flush completed
+26.02.03 17:49:22 dbacc/index.php: dbOpXml() completed
+26.02.03 17:49:22 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 17:49:22 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:49:22 dbOpXml: ENTRY
+26.02.03 17:49:22 dbOpXml: About to call initDbLib()
+26.02.03 17:49:22 initDbLib: Connecting to database...
+26.02.03 17:49:22 initDbLib: Database connected successfully
+26.02.03 17:49:22 dbOpXml: initDbLib() completed successfully
+26.02.03 17:49:22 dbOpXml: Getting type and data parameters
+26.02.03 17:49:22 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 17:49:22 testsSelect, data: [admin]
+26.02.03 17:49:22 dbOpXml: About to enter switch statement
+26.02.03 17:49:22 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 17:49:22 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:49:22 dbOpXml: XML output length: 904
+26.02.03 17:49:22 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 17:49:22 dbOpXml: XML output sent, flushing
+26.02.03 17:49:22 dbOpXml: Closing database connection
+26.02.03 17:49:22 dbOpXml: Database connection closed
+26.02.03 17:49:22 dbOpXml: Flush completed
+26.02.03 17:49:22 dbacc/index.php: dbOpXml() completed
+26.02.03 17:49:27 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:49:27 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:49:27 dbOpXml: ENTRY
+26.02.03 17:49:27 dbOpXml: About to call initDbLib()
+26.02.03 17:49:27 initDbLib: Connecting to database...
+26.02.03 17:49:27 initDbLib: Database connected successfully
+26.02.03 17:49:27 dbOpXml: initDbLib() completed successfully
+26.02.03 17:49:27 dbOpXml: Getting type and data parameters
+26.02.03 17:49:27 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:49:27 userSelect, data: [admin,admin]
+26.02.03 17:49:27 dbOpXml: About to enter switch statement
+26.02.03 17:49:27 dbOpXml: Entering userSelect case
+26.02.03 17:49:27 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:49:27 dbOpXml: userSelect completed
+26.02.03 17:49:27 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:49:27 dbOpXml: XML output length: 92
+26.02.03 17:49:27 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:49:27 dbOpXml: XML output sent, flushing
+26.02.03 17:49:27 dbOpXml: Closing database connection
+26.02.03 17:49:27 dbOpXml: Database connection closed
+26.02.03 17:49:27 dbOpXml: Flush completed
+26.02.03 17:49:27 dbacc/index.php: dbOpXml() completed
+26.02.03 17:49:32 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:49:32 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:49:32 dbOpXml: ENTRY
+26.02.03 17:49:32 dbOpXml: About to call initDbLib()
+26.02.03 17:49:32 initDbLib: Connecting to database...
+26.02.03 17:49:32 initDbLib: Database connected successfully
+26.02.03 17:49:32 dbOpXml: initDbLib() completed successfully
+26.02.03 17:49:32 dbOpXml: Getting type and data parameters
+26.02.03 17:49:32 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:49:32 userSelect, data: [admin,admin]
+26.02.03 17:49:32 dbOpXml: About to enter switch statement
+26.02.03 17:49:32 dbOpXml: Entering userSelect case
+26.02.03 17:49:32 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:49:32 dbOpXml: userSelect completed
+26.02.03 17:49:32 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:49:32 dbOpXml: XML output length: 92
+26.02.03 17:49:32 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:49:32 dbOpXml: XML output sent, flushing
+26.02.03 17:49:32 dbOpXml: Closing database connection
+26.02.03 17:49:32 dbOpXml: Database connection closed
+26.02.03 17:49:32 dbOpXml: Flush completed
+26.02.03 17:49:32 dbacc/index.php: dbOpXml() completed
+26.02.03 17:50:37 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:50:37 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:50:37 dbOpXml: ENTRY
+26.02.03 17:50:37 dbOpXml: About to call initDbLib()
+26.02.03 17:50:37 initDbLib: Connecting to database...
+26.02.03 17:50:37 initDbLib: Database connected successfully
+26.02.03 17:50:37 dbOpXml: initDbLib() completed successfully
+26.02.03 17:50:37 dbOpXml: Getting type and data parameters
+26.02.03 17:50:37 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:50:37 userSelect, data: [admin,admin]
+26.02.03 17:50:37 dbOpXml: About to enter switch statement
+26.02.03 17:50:37 dbOpXml: Entering userSelect case
+26.02.03 17:50:37 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:50:37 dbOpXml: userSelect completed
+26.02.03 17:50:37 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:50:37 dbOpXml: XML output length: 92
+26.02.03 17:50:37 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:50:37 dbOpXml: XML output sent, flushing
+26.02.03 17:50:37 dbOpXml: Closing database connection
+26.02.03 17:50:37 dbOpXml: Database connection closed
+26.02.03 17:50:37 dbOpXml: Flush completed
+26.02.03 17:50:37 dbacc/index.php: dbOpXml() completed
+26.02.03 17:50:45 dbacc/index.php: REQUEST ARRIVED, type=[projectsSelect], data=[admin,0]
+26.02.03 17:50:45 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:50:45 dbOpXml: ENTRY
+26.02.03 17:50:45 dbOpXml: About to call initDbLib()
+26.02.03 17:50:45 initDbLib: Connecting to database...
+26.02.03 17:50:45 initDbLib: Database connected successfully
+26.02.03 17:50:45 dbOpXml: initDbLib() completed successfully
+26.02.03 17:50:45 dbOpXml: Getting type and data parameters
+26.02.03 17:50:45 dbOpXml: type=[projectsSelect], data=[admin,0]
+26.02.03 17:50:45 projectsSelect, data: [admin,0]
+26.02.03 17:50:45 dbOpXml: About to enter switch statement
+26.02.03 17:50:45 dbOpXml: Entering projectsSelect case
+26.02.03 17:50:45 select ecitt_project.no, ecitt_project.name, any_value(permName) as perm from ecitt_project, ecitt_perm where userName = 'admin' and (entityType = 'global' or (entityType = 'project' and (every = 1 or ecitt_project.no = entityNo))) group by ecitt_project.no, ecitt_project.name order by ecitt_project.name
+26.02.03 17:50:45 projectsSelect: About to execute query
+26.02.03 17:50:45 projectsSelect: Query executed in 19ms, result=SUCCESS
+26.02.03 17:50:45 projectsSelect: Generating XML
+26.02.03 17:50:45 projectsSelect: XML generated successfully
+26.02.03 17:50:45 projectsSelect: Result set freed, returning
+26.02.03 17:50:45 dbOpXml: projectsSelect completed
+26.02.03 17:50:45 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:50:45 dbOpXml: XML output length: 119
+26.02.03 17:50:45 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<projects current="0"><project no="1" name="Pilot_2026" perm="adm"/></projects>
+
+26.02.03 17:50:45 dbOpXml: XML output sent, flushing
+26.02.03 17:50:45 dbOpXml: Closing database connection
+26.02.03 17:50:45 dbOpXml: Database connection closed
+26.02.03 17:50:45 dbOpXml: Flush completed
+26.02.03 17:50:45 dbacc/index.php: dbOpXml() completed
+26.02.03 17:50:50 dbacc/index.php: REQUEST ARRIVED, type=[testSetsSelect], data=[admin,1,0]
+26.02.03 17:50:50 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:50:50 dbOpXml: ENTRY
+26.02.03 17:50:50 dbOpXml: About to call initDbLib()
+26.02.03 17:50:50 initDbLib: Connecting to database...
+26.02.03 17:50:50 initDbLib: Database connected successfully
+26.02.03 17:50:50 dbOpXml: initDbLib() completed successfully
+26.02.03 17:50:50 dbOpXml: Getting type and data parameters
+26.02.03 17:50:50 dbOpXml: type=[testSetsSelect], data=[admin,1,0]
+26.02.03 17:50:50 testSetsSelect, data: [admin,1,0]
+26.02.03 17:50:50 dbOpXml: About to enter switch statement
+26.02.03 17:50:50 select t.no, t.projectNo, t.name, any_value(perm.permName) as perm from ecitt_testSet t, ecitt_perm perm where t.projectNo = 1 and perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'project' and (perm.every = 1 or t.projectNo = perm.entityNo) and perm.permName = 'adm') or (perm.entityType = 'testSet' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.projectNo, t.name order by t.name
+26.02.03 17:50:50 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:50:50 dbOpXml: XML output length: 131
+26.02.03 17:50:50 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<testSets current="0"><testSet no="1" projectNo="1" name="Cohort_1" perm="adm"/></testSets>
+
+26.02.03 17:50:50 dbOpXml: XML output sent, flushing
+26.02.03 17:50:50 dbOpXml: Closing database connection
+26.02.03 17:50:50 dbOpXml: Database connection closed
+26.02.03 17:50:50 dbOpXml: Flush completed
+26.02.03 17:50:50 dbacc/index.php: dbOpXml() completed
+26.02.03 17:50:52 dbacc/index.php: REQUEST ARRIVED, type=[partsSelect], data=[admin,1,1,0]
+26.02.03 17:50:52 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:50:52 dbOpXml: ENTRY
+26.02.03 17:50:52 dbOpXml: About to call initDbLib()
+26.02.03 17:50:52 initDbLib: Connecting to database...
+26.02.03 17:50:52 initDbLib: Database connected successfully
+26.02.03 17:50:52 dbOpXml: initDbLib() completed successfully
+26.02.03 17:50:52 dbOpXml: Getting type and data parameters
+26.02.03 17:50:52 dbOpXml: type=[partsSelect], data=[admin,1,1,0]
+26.02.03 17:50:52 partsSelect, data: [admin,1,1,0]
+26.02.03 17:50:52 dbOpXml: About to enter switch statement
+26.02.03 17:50:52 select *, (userName = 'admin') as owner from ecitt_part where projectNo=1 order by ref
+26.02.03 17:50:52 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:50:52 dbOpXml: XML output length: 204
+26.02.03 17:50:52 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<parts current="0"><part userName="admin" no="1" projectNo="1" ref="Santiago_Morales" birthYear="2007" birthMonth="1" birthDay="1" gender="male" owner="1"/></par
+26.02.03 17:50:52 dbOpXml: XML output sent, flushing
+26.02.03 17:50:52 dbOpXml: Closing database connection
+26.02.03 17:50:52 dbOpXml: Database connection closed
+26.02.03 17:50:52 dbOpXml: Flush completed
+26.02.03 17:50:52 dbacc/index.php: dbOpXml() completed
+26.02.03 17:50:56 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin,]
+26.02.03 17:50:56 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:50:56 dbOpXml: ENTRY
+26.02.03 17:50:56 dbOpXml: About to call initDbLib()
+26.02.03 17:50:56 initDbLib: Connecting to database...
+26.02.03 17:50:56 initDbLib: Database connected successfully
+26.02.03 17:50:56 dbOpXml: initDbLib() completed successfully
+26.02.03 17:50:56 dbOpXml: Getting type and data parameters
+26.02.03 17:50:56 dbOpXml: type=[testsSelect], data=[admin,]
+26.02.03 17:50:56 testsSelect, data: [admin,]
+26.02.03 17:50:56 dbOpXml: About to enter switch statement
+26.02.03 17:50:56 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 17:50:56 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:50:56 dbOpXml: XML output length: 904
+26.02.03 17:50:56 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 17:50:56 dbOpXml: XML output sent, flushing
+26.02.03 17:50:56 dbOpXml: Closing database connection
+26.02.03 17:50:56 dbOpXml: Database connection closed
+26.02.03 17:50:56 dbOpXml: Flush completed
+26.02.03 17:50:56 dbacc/index.php: dbOpXml() completed
+26.02.03 17:51:08 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:51:08 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:51:08 dbOpXml: ENTRY
+26.02.03 17:51:08 dbOpXml: About to call initDbLib()
+26.02.03 17:51:08 initDbLib: Connecting to database...
+26.02.03 17:51:08 initDbLib: Database connected successfully
+26.02.03 17:51:08 dbOpXml: initDbLib() completed successfully
+26.02.03 17:51:08 dbOpXml: Getting type and data parameters
+26.02.03 17:51:08 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:51:08 userSelect, data: [admin,admin]
+26.02.03 17:51:08 dbOpXml: About to enter switch statement
+26.02.03 17:51:08 dbOpXml: Entering userSelect case
+26.02.03 17:51:08 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:51:08 dbOpXml: userSelect completed
+26.02.03 17:51:08 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:51:08 dbOpXml: XML output length: 92
+26.02.03 17:51:08 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:51:08 dbOpXml: XML output sent, flushing
+26.02.03 17:51:08 dbOpXml: Closing database connection
+26.02.03 17:51:08 dbOpXml: Database connection closed
+26.02.03 17:51:08 dbOpXml: Flush completed
+26.02.03 17:51:08 dbacc/index.php: dbOpXml() completed
+26.02.03 17:51:08 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 17:51:08 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:51:08 dbOpXml: ENTRY
+26.02.03 17:51:08 dbOpXml: About to call initDbLib()
+26.02.03 17:51:08 initDbLib: Connecting to database...
+26.02.03 17:51:08 initDbLib: Database connected successfully
+26.02.03 17:51:08 dbOpXml: initDbLib() completed successfully
+26.02.03 17:51:08 dbOpXml: Getting type and data parameters
+26.02.03 17:51:08 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 17:51:08 testsSelect, data: [admin]
+26.02.03 17:51:08 dbOpXml: About to enter switch statement
+26.02.03 17:51:08 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 17:51:08 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:51:08 dbOpXml: XML output length: 904
+26.02.03 17:51:08 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 17:51:08 dbOpXml: XML output sent, flushing
+26.02.03 17:51:08 dbOpXml: Closing database connection
+26.02.03 17:51:08 dbOpXml: Database connection closed
+26.02.03 17:51:08 dbOpXml: Flush completed
+26.02.03 17:51:08 dbacc/index.php: dbOpXml() completed
+26.02.03 17:54:40 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:54:40 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:54:40 dbOpXml: ENTRY
+26.02.03 17:54:40 dbOpXml: About to call initDbLib()
+26.02.03 17:54:40 initDbLib: Connecting to database...
+26.02.03 17:54:40 initDbLib: Database connected successfully
+26.02.03 17:54:40 dbOpXml: initDbLib() completed successfully
+26.02.03 17:54:40 dbOpXml: Getting type and data parameters
+26.02.03 17:54:40 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:54:40 userSelect, data: [admin,admin]
+26.02.03 17:54:40 dbOpXml: About to enter switch statement
+26.02.03 17:54:40 dbOpXml: Entering userSelect case
+26.02.03 17:54:40 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:54:40 dbOpXml: userSelect completed
+26.02.03 17:54:40 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:54:40 dbOpXml: XML output length: 92
+26.02.03 17:54:40 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:54:40 dbOpXml: XML output sent, flushing
+26.02.03 17:54:40 dbOpXml: Closing database connection
+26.02.03 17:54:40 dbOpXml: Database connection closed
+26.02.03 17:54:40 dbOpXml: Flush completed
+26.02.03 17:54:40 dbacc/index.php: dbOpXml() completed
+26.02.03 17:54:40 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 17:54:40 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:54:40 dbOpXml: ENTRY
+26.02.03 17:54:40 dbOpXml: About to call initDbLib()
+26.02.03 17:54:40 initDbLib: Connecting to database...
+26.02.03 17:54:40 initDbLib: Database connected successfully
+26.02.03 17:54:40 dbOpXml: initDbLib() completed successfully
+26.02.03 17:54:40 dbOpXml: Getting type and data parameters
+26.02.03 17:54:40 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 17:54:40 testsSelect, data: [admin]
+26.02.03 17:54:40 dbOpXml: About to enter switch statement
+26.02.03 17:54:40 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 17:54:40 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:54:40 dbOpXml: XML output length: 904
+26.02.03 17:54:40 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 17:54:40 dbOpXml: XML output sent, flushing
+26.02.03 17:54:40 dbOpXml: Closing database connection
+26.02.03 17:54:40 dbOpXml: Database connection closed
+26.02.03 17:54:40 dbOpXml: Flush completed
+26.02.03 17:54:40 dbacc/index.php: dbOpXml() completed
+26.02.03 17:55:47 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:55:47 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:55:47 dbOpXml: ENTRY
+26.02.03 17:55:47 dbOpXml: About to call initDbLib()
+26.02.03 17:55:47 initDbLib: Connecting to database...
+26.02.03 17:55:47 initDbLib: Database connected successfully
+26.02.03 17:55:47 dbOpXml: initDbLib() completed successfully
+26.02.03 17:55:47 dbOpXml: Getting type and data parameters
+26.02.03 17:55:47 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:55:47 userSelect, data: [admin,admin]
+26.02.03 17:55:47 dbOpXml: About to enter switch statement
+26.02.03 17:55:47 dbOpXml: Entering userSelect case
+26.02.03 17:55:47 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:55:47 dbOpXml: userSelect completed
+26.02.03 17:55:47 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:55:47 dbOpXml: XML output length: 92
+26.02.03 17:55:47 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:55:47 dbOpXml: XML output sent, flushing
+26.02.03 17:55:47 dbOpXml: Closing database connection
+26.02.03 17:55:47 dbOpXml: Database connection closed
+26.02.03 17:55:47 dbOpXml: Flush completed
+26.02.03 17:55:47 dbacc/index.php: dbOpXml() completed
+26.02.03 17:55:47 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:55:47 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:55:47 dbOpXml: ENTRY
+26.02.03 17:55:47 dbOpXml: About to call initDbLib()
+26.02.03 17:55:47 initDbLib: Connecting to database...
+26.02.03 17:55:47 initDbLib: Database connected successfully
+26.02.03 17:55:47 dbOpXml: initDbLib() completed successfully
+26.02.03 17:55:47 dbOpXml: Getting type and data parameters
+26.02.03 17:55:47 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:55:47 userSelect, data: [admin,admin]
+26.02.03 17:55:47 dbOpXml: About to enter switch statement
+26.02.03 17:55:47 dbOpXml: Entering userSelect case
+26.02.03 17:55:47 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:55:47 dbOpXml: userSelect completed
+26.02.03 17:55:47 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:55:47 dbOpXml: XML output length: 92
+26.02.03 17:55:47 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:55:47 dbOpXml: XML output sent, flushing
+26.02.03 17:55:47 dbOpXml: Closing database connection
+26.02.03 17:55:47 dbOpXml: Database connection closed
+26.02.03 17:55:47 dbOpXml: Flush completed
+26.02.03 17:55:47 dbacc/index.php: dbOpXml() completed
+26.02.03 17:55:47 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:55:47 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:55:47 dbOpXml: ENTRY
+26.02.03 17:55:47 dbOpXml: About to call initDbLib()
+26.02.03 17:55:47 initDbLib: Connecting to database...
+26.02.03 17:55:47 initDbLib: Database connected successfully
+26.02.03 17:55:47 dbOpXml: initDbLib() completed successfully
+26.02.03 17:55:47 dbOpXml: Getting type and data parameters
+26.02.03 17:55:47 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:55:47 userSelect, data: [admin,admin]
+26.02.03 17:55:47 dbOpXml: About to enter switch statement
+26.02.03 17:55:47 dbOpXml: Entering userSelect case
+26.02.03 17:55:47 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:55:47 dbOpXml: userSelect completed
+26.02.03 17:55:47 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:55:47 dbOpXml: XML output length: 92
+26.02.03 17:55:47 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:55:47 dbOpXml: XML output sent, flushing
+26.02.03 17:55:47 dbOpXml: Closing database connection
+26.02.03 17:55:47 dbOpXml: Database connection closed
+26.02.03 17:55:47 dbOpXml: Flush completed
+26.02.03 17:55:47 dbacc/index.php: dbOpXml() completed
+26.02.03 17:55:47 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 17:55:47 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:55:47 dbOpXml: ENTRY
+26.02.03 17:55:47 dbOpXml: About to call initDbLib()
+26.02.03 17:55:47 initDbLib: Connecting to database...
+26.02.03 17:55:47 initDbLib: Database connected successfully
+26.02.03 17:55:47 dbOpXml: initDbLib() completed successfully
+26.02.03 17:55:47 dbOpXml: Getting type and data parameters
+26.02.03 17:55:47 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 17:55:47 testsSelect, data: [admin]
+26.02.03 17:55:47 dbOpXml: About to enter switch statement
+26.02.03 17:55:47 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 17:55:47 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:55:47 dbOpXml: XML output length: 904
+26.02.03 17:55:47 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 17:55:47 dbOpXml: XML output sent, flushing
+26.02.03 17:55:47 dbOpXml: Closing database connection
+26.02.03 17:55:47 dbOpXml: Database connection closed
+26.02.03 17:55:47 dbOpXml: Flush completed
+26.02.03 17:55:47 dbacc/index.php: dbOpXml() completed
+26.02.03 17:55:47 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:55:47 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:55:47 dbOpXml: ENTRY
+26.02.03 17:55:47 dbOpXml: About to call initDbLib()
+26.02.03 17:55:47 initDbLib: Connecting to database...
+26.02.03 17:55:47 initDbLib: Database connected successfully
+26.02.03 17:55:47 dbOpXml: initDbLib() completed successfully
+26.02.03 17:55:47 dbOpXml: Getting type and data parameters
+26.02.03 17:55:47 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:55:47 userSelect, data: [admin,admin]
+26.02.03 17:55:47 dbOpXml: About to enter switch statement
+26.02.03 17:55:47 dbOpXml: Entering userSelect case
+26.02.03 17:55:47 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:55:47 dbOpXml: userSelect completed
+26.02.03 17:55:47 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:55:47 dbOpXml: XML output length: 92
+26.02.03 17:55:47 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:55:47 dbOpXml: XML output sent, flushing
+26.02.03 17:55:47 dbOpXml: Closing database connection
+26.02.03 17:55:47 dbOpXml: Database connection closed
+26.02.03 17:55:47 dbOpXml: Flush completed
+26.02.03 17:55:47 dbacc/index.php: dbOpXml() completed
+26.02.03 17:55:47 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 17:55:47 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:55:47 dbOpXml: ENTRY
+26.02.03 17:55:47 dbOpXml: About to call initDbLib()
+26.02.03 17:55:47 initDbLib: Connecting to database...
+26.02.03 17:55:47 initDbLib: Database connected successfully
+26.02.03 17:55:47 dbOpXml: initDbLib() completed successfully
+26.02.03 17:55:47 dbOpXml: Getting type and data parameters
+26.02.03 17:55:47 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 17:55:47 testsSelect, data: [admin]
+26.02.03 17:55:47 dbOpXml: About to enter switch statement
+26.02.03 17:55:47 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 17:55:47 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:55:47 dbOpXml: XML output length: 904
+26.02.03 17:55:47 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 17:55:47 dbOpXml: XML output sent, flushing
+26.02.03 17:55:47 dbOpXml: Closing database connection
+26.02.03 17:55:47 dbOpXml: Database connection closed
+26.02.03 17:55:47 dbOpXml: Flush completed
+26.02.03 17:55:47 dbacc/index.php: dbOpXml() completed
+26.02.03 17:55:48 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:55:48 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:55:48 dbOpXml: ENTRY
+26.02.03 17:55:48 dbOpXml: About to call initDbLib()
+26.02.03 17:55:48 initDbLib: Connecting to database...
+26.02.03 17:55:48 initDbLib: Database connected successfully
+26.02.03 17:55:48 dbOpXml: initDbLib() completed successfully
+26.02.03 17:55:48 dbOpXml: Getting type and data parameters
+26.02.03 17:55:48 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:55:48 userSelect, data: [admin,admin]
+26.02.03 17:55:48 dbOpXml: About to enter switch statement
+26.02.03 17:55:48 dbOpXml: Entering userSelect case
+26.02.03 17:55:48 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:55:48 dbOpXml: userSelect completed
+26.02.03 17:55:48 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:55:48 dbOpXml: XML output length: 92
+26.02.03 17:55:48 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:55:48 dbOpXml: XML output sent, flushing
+26.02.03 17:55:48 dbOpXml: Closing database connection
+26.02.03 17:55:48 dbOpXml: Database connection closed
+26.02.03 17:55:48 dbOpXml: Flush completed
+26.02.03 17:55:48 dbacc/index.php: dbOpXml() completed
+26.02.03 17:55:48 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 17:55:48 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:55:48 dbOpXml: ENTRY
+26.02.03 17:55:48 dbOpXml: About to call initDbLib()
+26.02.03 17:55:48 initDbLib: Connecting to database...
+26.02.03 17:55:48 initDbLib: Database connected successfully
+26.02.03 17:55:48 dbOpXml: initDbLib() completed successfully
+26.02.03 17:55:48 dbOpXml: Getting type and data parameters
+26.02.03 17:55:48 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 17:55:48 testsSelect, data: [admin]
+26.02.03 17:55:48 dbOpXml: About to enter switch statement
+26.02.03 17:55:48 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 17:55:48 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:55:48 dbOpXml: XML output length: 904
+26.02.03 17:55:48 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 17:55:48 dbOpXml: XML output sent, flushing
+26.02.03 17:55:48 dbOpXml: Closing database connection
+26.02.03 17:55:48 dbOpXml: Database connection closed
+26.02.03 17:55:48 dbOpXml: Flush completed
+26.02.03 17:55:48 dbacc/index.php: dbOpXml() completed
+26.02.03 17:55:48 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 17:55:48 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:55:48 dbOpXml: ENTRY
+26.02.03 17:55:48 dbOpXml: About to call initDbLib()
+26.02.03 17:55:48 initDbLib: Connecting to database...
+26.02.03 17:55:48 initDbLib: Database connected successfully
+26.02.03 17:55:48 dbOpXml: initDbLib() completed successfully
+26.02.03 17:55:48 dbOpXml: Getting type and data parameters
+26.02.03 17:55:48 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 17:55:48 testsSelect, data: [admin]
+26.02.03 17:55:48 dbOpXml: About to enter switch statement
+26.02.03 17:55:48 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 17:55:48 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:55:48 dbOpXml: XML output length: 904
+26.02.03 17:55:48 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 17:55:48 dbOpXml: XML output sent, flushing
+26.02.03 17:55:48 dbOpXml: Closing database connection
+26.02.03 17:55:48 dbOpXml: Database connection closed
+26.02.03 17:55:48 dbOpXml: Flush completed
+26.02.03 17:55:48 dbacc/index.php: dbOpXml() completed
+26.02.03 17:55:50 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:55:50 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:55:50 dbOpXml: ENTRY
+26.02.03 17:55:50 dbOpXml: About to call initDbLib()
+26.02.03 17:55:50 initDbLib: Connecting to database...
+26.02.03 17:55:50 initDbLib: Database connected successfully
+26.02.03 17:55:50 dbOpXml: initDbLib() completed successfully
+26.02.03 17:55:50 dbOpXml: Getting type and data parameters
+26.02.03 17:55:50 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:55:50 userSelect, data: [admin,admin]
+26.02.03 17:55:50 dbOpXml: About to enter switch statement
+26.02.03 17:55:50 dbOpXml: Entering userSelect case
+26.02.03 17:55:50 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:55:50 dbOpXml: userSelect completed
+26.02.03 17:55:50 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:55:50 dbOpXml: XML output length: 92
+26.02.03 17:55:50 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:55:50 dbOpXml: XML output sent, flushing
+26.02.03 17:55:50 dbOpXml: Closing database connection
+26.02.03 17:55:50 dbOpXml: Database connection closed
+26.02.03 17:55:50 dbOpXml: Flush completed
+26.02.03 17:55:50 dbacc/index.php: dbOpXml() completed
+26.02.03 17:56:22 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:56:22 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:56:22 dbOpXml: ENTRY
+26.02.03 17:56:22 dbOpXml: About to call initDbLib()
+26.02.03 17:56:22 initDbLib: Connecting to database...
+26.02.03 17:56:22 initDbLib: Database connected successfully
+26.02.03 17:56:22 dbOpXml: initDbLib() completed successfully
+26.02.03 17:56:22 dbOpXml: Getting type and data parameters
+26.02.03 17:56:22 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:56:22 userSelect, data: [admin,admin]
+26.02.03 17:56:22 dbOpXml: About to enter switch statement
+26.02.03 17:56:22 dbOpXml: Entering userSelect case
+26.02.03 17:56:22 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:56:22 dbOpXml: userSelect completed
+26.02.03 17:56:22 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:56:22 dbOpXml: XML output length: 92
+26.02.03 17:56:22 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:56:22 dbOpXml: XML output sent, flushing
+26.02.03 17:56:22 dbOpXml: Closing database connection
+26.02.03 17:56:22 dbOpXml: Database connection closed
+26.02.03 17:56:22 dbOpXml: Flush completed
+26.02.03 17:56:22 dbacc/index.php: dbOpXml() completed
+26.02.03 17:59:05 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:59:05 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:59:05 dbOpXml: ENTRY
+26.02.03 17:59:05 dbOpXml: About to call initDbLib()
+26.02.03 17:59:05 initDbLib: Connecting to database...
+26.02.03 17:59:05 initDbLib: Database connected successfully
+26.02.03 17:59:05 dbOpXml: initDbLib() completed successfully
+26.02.03 17:59:05 dbOpXml: Getting type and data parameters
+26.02.03 17:59:05 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:59:05 userSelect, data: [admin,admin]
+26.02.03 17:59:05 dbOpXml: About to enter switch statement
+26.02.03 17:59:05 dbOpXml: Entering userSelect case
+26.02.03 17:59:05 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:59:05 dbOpXml: userSelect completed
+26.02.03 17:59:05 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:59:05 dbOpXml: XML output length: 92
+26.02.03 17:59:05 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:59:05 dbOpXml: XML output sent, flushing
+26.02.03 17:59:05 dbOpXml: Closing database connection
+26.02.03 17:59:05 dbOpXml: Database connection closed
+26.02.03 17:59:05 dbOpXml: Flush completed
+26.02.03 17:59:05 dbacc/index.php: dbOpXml() completed
+26.02.03 17:59:06 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 17:59:06 dbacc/index.php: About to call dbOpXml()
+26.02.03 17:59:06 dbOpXml: ENTRY
+26.02.03 17:59:06 dbOpXml: About to call initDbLib()
+26.02.03 17:59:06 initDbLib: Connecting to database...
+26.02.03 17:59:06 initDbLib: Database connected successfully
+26.02.03 17:59:06 dbOpXml: initDbLib() completed successfully
+26.02.03 17:59:06 dbOpXml: Getting type and data parameters
+26.02.03 17:59:06 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 17:59:06 userSelect, data: [admin,admin]
+26.02.03 17:59:06 dbOpXml: About to enter switch statement
+26.02.03 17:59:06 dbOpXml: Entering userSelect case
+26.02.03 17:59:06 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 17:59:06 dbOpXml: userSelect completed
+26.02.03 17:59:06 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 17:59:06 dbOpXml: XML output length: 92
+26.02.03 17:59:06 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 17:59:06 dbOpXml: XML output sent, flushing
+26.02.03 17:59:06 dbOpXml: Closing database connection
+26.02.03 17:59:06 dbOpXml: Database connection closed
+26.02.03 17:59:06 dbOpXml: Flush completed
+26.02.03 17:59:06 dbacc/index.php: dbOpXml() completed
+26.02.03 18:01:11 dbacc/index.php: REQUEST ARRIVED, type=[projectsSelect], data=[admin,1]
+26.02.03 18:01:11 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:01:11 dbOpXml: ENTRY
+26.02.03 18:01:11 dbOpXml: About to call initDbLib()
+26.02.03 18:01:11 initDbLib: Connecting to database...
+26.02.03 18:01:11 initDbLib: Database connected successfully
+26.02.03 18:01:11 dbOpXml: initDbLib() completed successfully
+26.02.03 18:01:11 dbOpXml: Getting type and data parameters
+26.02.03 18:01:11 dbOpXml: type=[projectsSelect], data=[admin,1]
+26.02.03 18:01:11 projectsSelect, data: [admin,1]
+26.02.03 18:01:11 dbOpXml: About to enter switch statement
+26.02.03 18:01:11 dbOpXml: Entering projectsSelect case
+26.02.03 18:01:11 select ecitt_project.no, ecitt_project.name, any_value(permName) as perm from ecitt_project, ecitt_perm where userName = 'admin' and (entityType = 'global' or (entityType = 'project' and (every = 1 or ecitt_project.no = entityNo))) group by ecitt_project.no, ecitt_project.name order by ecitt_project.name
+26.02.03 18:01:11 projectsSelect: About to execute query
+26.02.03 18:01:11 projectsSelect: Query executed in 3ms, result=SUCCESS
+26.02.03 18:01:11 projectsSelect: Generating XML
+26.02.03 18:01:11 projectsSelect: XML generated successfully
+26.02.03 18:01:11 projectsSelect: Result set freed, returning
+26.02.03 18:01:11 dbOpXml: projectsSelect completed
+26.02.03 18:01:11 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:01:11 dbOpXml: XML output length: 119
+26.02.03 18:01:11 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<projects current="1"><project no="1" name="Pilot_2026" perm="adm"/></projects>
+
+26.02.03 18:01:11 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:01:11 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:01:11 dbOpXml: ENTRY
+26.02.03 18:01:11 dbOpXml: About to call initDbLib()
+26.02.03 18:01:11 initDbLib: Connecting to database...
+26.02.03 18:01:11 initDbLib: Database connected successfully
+26.02.03 18:01:11 dbOpXml: initDbLib() completed successfully
+26.02.03 18:01:11 dbOpXml: Getting type and data parameters
+26.02.03 18:01:11 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:01:11 userSelect, data: [admin,admin]
+26.02.03 18:01:11 dbOpXml: About to enter switch statement
+26.02.03 18:01:11 dbOpXml: Entering userSelect case
+26.02.03 18:01:11 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:01:11 dbOpXml: userSelect completed
+26.02.03 18:01:11 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:01:11 dbOpXml: XML output length: 92
+26.02.03 18:01:11 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:01:11 dbOpXml: XML output sent, flushing
+26.02.03 18:01:11 dbOpXml: Closing database connection
+26.02.03 18:01:11 dbOpXml: Database connection closed
+26.02.03 18:01:11 dbOpXml: Flush completed
+26.02.03 18:01:11 dbacc/index.php: dbOpXml() completed
+26.02.03 18:01:12 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:01:12 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:01:12 dbOpXml: ENTRY
+26.02.03 18:01:12 dbOpXml: About to call initDbLib()
+26.02.03 18:01:12 initDbLib: Connecting to database...
+26.02.03 18:01:12 initDbLib: Database connected successfully
+26.02.03 18:01:12 dbOpXml: initDbLib() completed successfully
+26.02.03 18:01:12 dbOpXml: Getting type and data parameters
+26.02.03 18:01:12 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:01:12 userSelect, data: [admin,admin]
+26.02.03 18:01:12 dbOpXml: About to enter switch statement
+26.02.03 18:01:12 dbOpXml: Entering userSelect case
+26.02.03 18:01:12 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:01:12 dbOpXml: userSelect completed
+26.02.03 18:01:12 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:01:12 dbOpXml: XML output length: 92
+26.02.03 18:01:12 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:01:12 dbOpXml: XML output sent, flushing
+26.02.03 18:01:12 dbOpXml: Closing database connection
+26.02.03 18:01:12 dbOpXml: Database connection closed
+26.02.03 18:01:12 dbOpXml: Flush completed
+26.02.03 18:01:12 dbacc/index.php: dbOpXml() completed
+26.02.03 18:01:16 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:01:16 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:01:16 dbOpXml: ENTRY
+26.02.03 18:01:16 dbOpXml: About to call initDbLib()
+26.02.03 18:01:16 initDbLib: Connecting to database...
+26.02.03 18:01:16 initDbLib: Database connected successfully
+26.02.03 18:01:16 dbOpXml: initDbLib() completed successfully
+26.02.03 18:01:16 dbOpXml: Getting type and data parameters
+26.02.03 18:01:16 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:01:16 userSelect, data: [admin,admin]
+26.02.03 18:01:16 dbOpXml: About to enter switch statement
+26.02.03 18:01:16 dbOpXml: Entering userSelect case
+26.02.03 18:01:16 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:01:16 dbOpXml: userSelect completed
+26.02.03 18:01:16 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:01:16 dbOpXml: XML output length: 92
+26.02.03 18:01:16 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:01:16 dbOpXml: XML output sent, flushing
+26.02.03 18:01:16 dbOpXml: Closing database connection
+26.02.03 18:01:16 dbOpXml: Database connection closed
+26.02.03 18:01:16 dbOpXml: Flush completed
+26.02.03 18:01:16 dbacc/index.php: dbOpXml() completed
+26.02.03 18:01:16 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 18:01:16 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:01:16 dbOpXml: ENTRY
+26.02.03 18:01:16 dbOpXml: About to call initDbLib()
+26.02.03 18:01:16 initDbLib: Connecting to database...
+26.02.03 18:01:16 initDbLib: Database connected successfully
+26.02.03 18:01:16 dbOpXml: initDbLib() completed successfully
+26.02.03 18:01:16 dbOpXml: Getting type and data parameters
+26.02.03 18:01:16 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 18:01:16 testsSelect, data: [admin]
+26.02.03 18:01:16 dbOpXml: About to enter switch statement
+26.02.03 18:01:16 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 18:01:16 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:01:16 dbOpXml: XML output length: 904
+26.02.03 18:01:16 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 18:01:16 dbOpXml: XML output sent, flushing
+26.02.03 18:01:16 dbOpXml: Closing database connection
+26.02.03 18:01:16 dbOpXml: Database connection closed
+26.02.03 18:01:16 dbOpXml: Flush completed
+26.02.03 18:01:16 dbacc/index.php: dbOpXml() completed
+26.02.03 18:01:18 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:01:18 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:01:18 dbOpXml: ENTRY
+26.02.03 18:01:18 dbOpXml: About to call initDbLib()
+26.02.03 18:01:18 initDbLib: Connecting to database...
+26.02.03 18:01:18 initDbLib: Database connected successfully
+26.02.03 18:01:18 dbOpXml: initDbLib() completed successfully
+26.02.03 18:01:18 dbOpXml: Getting type and data parameters
+26.02.03 18:01:18 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:01:18 userSelect, data: [admin,admin]
+26.02.03 18:01:18 dbOpXml: About to enter switch statement
+26.02.03 18:01:18 dbOpXml: Entering userSelect case
+26.02.03 18:01:18 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:01:18 dbOpXml: userSelect completed
+26.02.03 18:01:18 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:01:18 dbOpXml: XML output length: 92
+26.02.03 18:01:18 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:01:18 dbOpXml: XML output sent, flushing
+26.02.03 18:01:18 dbOpXml: Closing database connection
+26.02.03 18:01:18 dbOpXml: Database connection closed
+26.02.03 18:01:18 dbOpXml: Flush completed
+26.02.03 18:01:18 dbacc/index.php: dbOpXml() completed
+26.02.03 18:01:18 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 18:01:18 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:01:18 dbOpXml: ENTRY
+26.02.03 18:01:18 dbOpXml: About to call initDbLib()
+26.02.03 18:01:18 initDbLib: Connecting to database...
+26.02.03 18:01:18 initDbLib: Database connected successfully
+26.02.03 18:01:18 dbOpXml: initDbLib() completed successfully
+26.02.03 18:01:18 dbOpXml: Getting type and data parameters
+26.02.03 18:01:18 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 18:01:18 testsSelect, data: [admin]
+26.02.03 18:01:18 dbOpXml: About to enter switch statement
+26.02.03 18:01:18 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 18:01:18 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:01:18 dbOpXml: XML output length: 904
+26.02.03 18:01:18 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 18:01:18 dbOpXml: XML output sent, flushing
+26.02.03 18:01:18 dbOpXml: Closing database connection
+26.02.03 18:01:18 dbOpXml: Database connection closed
+26.02.03 18:01:18 dbOpXml: Flush completed
+26.02.03 18:01:18 dbacc/index.php: dbOpXml() completed
+26.02.03 18:05:21 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:05:21 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:05:21 dbOpXml: ENTRY
+26.02.03 18:05:21 dbOpXml: About to call initDbLib()
+26.02.03 18:05:21 initDbLib: Connecting to database...
+26.02.03 18:05:21 initDbLib: Database connected successfully
+26.02.03 18:05:21 dbOpXml: initDbLib() completed successfully
+26.02.03 18:05:21 dbOpXml: Getting type and data parameters
+26.02.03 18:05:21 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:05:21 userSelect, data: [admin,admin]
+26.02.03 18:05:21 dbOpXml: About to enter switch statement
+26.02.03 18:05:21 dbOpXml: Entering userSelect case
+26.02.03 18:05:21 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:05:21 dbOpXml: userSelect completed
+26.02.03 18:05:21 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:05:21 dbOpXml: XML output length: 92
+26.02.03 18:05:21 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:05:21 dbOpXml: XML output sent, flushing
+26.02.03 18:05:21 dbOpXml: Closing database connection
+26.02.03 18:05:21 dbOpXml: Database connection closed
+26.02.03 18:05:21 dbOpXml: Flush completed
+26.02.03 18:05:21 dbacc/index.php: dbOpXml() completed
+26.02.03 18:05:21 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 18:05:21 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:05:21 dbOpXml: ENTRY
+26.02.03 18:05:21 dbOpXml: About to call initDbLib()
+26.02.03 18:05:21 initDbLib: Connecting to database...
+26.02.03 18:05:21 initDbLib: Database connected successfully
+26.02.03 18:05:21 dbOpXml: initDbLib() completed successfully
+26.02.03 18:05:21 dbOpXml: Getting type and data parameters
+26.02.03 18:05:21 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 18:05:21 testsSelect, data: [admin]
+26.02.03 18:05:21 dbOpXml: About to enter switch statement
+26.02.03 18:05:21 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 18:05:21 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:05:21 dbOpXml: XML output length: 904
+26.02.03 18:05:21 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 18:05:21 dbOpXml: XML output sent, flushing
+26.02.03 18:05:21 dbOpXml: Closing database connection
+26.02.03 18:05:21 dbOpXml: Database connection closed
+26.02.03 18:05:21 dbOpXml: Flush completed
+26.02.03 18:05:21 dbacc/index.php: dbOpXml() completed
+26.02.03 18:05:36 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:05:36 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:05:36 dbOpXml: ENTRY
+26.02.03 18:05:36 dbOpXml: About to call initDbLib()
+26.02.03 18:05:36 initDbLib: Connecting to database...
+26.02.03 18:05:36 initDbLib: Database connected successfully
+26.02.03 18:05:36 dbOpXml: initDbLib() completed successfully
+26.02.03 18:05:36 dbOpXml: Getting type and data parameters
+26.02.03 18:05:36 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:05:36 userSelect, data: [admin,admin]
+26.02.03 18:05:36 dbOpXml: About to enter switch statement
+26.02.03 18:05:36 dbOpXml: Entering userSelect case
+26.02.03 18:05:36 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:05:36 dbOpXml: userSelect completed
+26.02.03 18:05:36 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:05:36 dbOpXml: XML output length: 92
+26.02.03 18:05:36 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:05:36 dbOpXml: XML output sent, flushing
+26.02.03 18:05:36 dbOpXml: Closing database connection
+26.02.03 18:05:36 dbOpXml: Database connection closed
+26.02.03 18:05:36 dbOpXml: Flush completed
+26.02.03 18:05:36 dbacc/index.php: dbOpXml() completed
+26.02.03 18:05:40 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:05:40 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:05:40 dbOpXml: ENTRY
+26.02.03 18:05:40 dbOpXml: About to call initDbLib()
+26.02.03 18:05:40 initDbLib: Connecting to database...
+26.02.03 18:05:40 initDbLib: Database connected successfully
+26.02.03 18:05:40 dbOpXml: initDbLib() completed successfully
+26.02.03 18:05:40 dbOpXml: Getting type and data parameters
+26.02.03 18:05:40 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:05:40 userSelect, data: [admin,admin]
+26.02.03 18:05:40 dbOpXml: About to enter switch statement
+26.02.03 18:05:40 dbOpXml: Entering userSelect case
+26.02.03 18:05:40 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:05:40 dbOpXml: userSelect completed
+26.02.03 18:05:40 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:05:40 dbOpXml: XML output length: 92
+26.02.03 18:05:40 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:05:40 dbOpXml: XML output sent, flushing
+26.02.03 18:05:40 dbOpXml: Closing database connection
+26.02.03 18:05:40 dbOpXml: Database connection closed
+26.02.03 18:05:40 dbOpXml: Flush completed
+26.02.03 18:05:40 dbacc/index.php: dbOpXml() completed
+26.02.03 18:05:41 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 18:05:41 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:05:41 dbOpXml: ENTRY
+26.02.03 18:05:41 dbOpXml: About to call initDbLib()
+26.02.03 18:05:41 initDbLib: Connecting to database...
+26.02.03 18:05:41 initDbLib: Database connected successfully
+26.02.03 18:05:41 dbOpXml: initDbLib() completed successfully
+26.02.03 18:05:41 dbOpXml: Getting type and data parameters
+26.02.03 18:05:41 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 18:05:41 testsSelect, data: [admin]
+26.02.03 18:05:41 dbOpXml: About to enter switch statement
+26.02.03 18:05:41 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 18:05:41 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:05:41 dbOpXml: XML output length: 904
+26.02.03 18:05:41 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 18:05:41 dbOpXml: XML output sent, flushing
+26.02.03 18:05:41 dbOpXml: Closing database connection
+26.02.03 18:05:41 dbOpXml: Database connection closed
+26.02.03 18:05:41 dbOpXml: Flush completed
+26.02.03 18:05:41 dbacc/index.php: dbOpXml() completed
+26.02.03 18:05:42 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:05:42 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:05:42 dbOpXml: ENTRY
+26.02.03 18:05:42 dbOpXml: About to call initDbLib()
+26.02.03 18:05:42 initDbLib: Connecting to database...
+26.02.03 18:05:42 initDbLib: Database connected successfully
+26.02.03 18:05:42 dbOpXml: initDbLib() completed successfully
+26.02.03 18:05:42 dbOpXml: Getting type and data parameters
+26.02.03 18:05:42 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:05:42 userSelect, data: [admin,admin]
+26.02.03 18:05:42 dbOpXml: About to enter switch statement
+26.02.03 18:05:42 dbOpXml: Entering userSelect case
+26.02.03 18:05:42 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:05:42 dbOpXml: userSelect completed
+26.02.03 18:05:42 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:05:42 dbOpXml: XML output length: 92
+26.02.03 18:05:42 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:05:42 dbOpXml: XML output sent, flushing
+26.02.03 18:05:42 dbOpXml: Closing database connection
+26.02.03 18:05:42 dbOpXml: Database connection closed
+26.02.03 18:05:42 dbOpXml: Flush completed
+26.02.03 18:05:42 dbacc/index.php: dbOpXml() completed
+26.02.03 18:18:09 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:18:09 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:18:09 dbOpXml: ENTRY
+26.02.03 18:18:09 dbOpXml: About to call initDbLib()
+26.02.03 18:18:09 initDbLib: Connecting to database...
+26.02.03 18:18:09 initDbLib: Database connected successfully
+26.02.03 18:18:09 dbOpXml: initDbLib() completed successfully
+26.02.03 18:18:09 dbOpXml: Getting type and data parameters
+26.02.03 18:18:09 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:18:09 userSelect, data: [admin,admin]
+26.02.03 18:18:09 dbOpXml: About to enter switch statement
+26.02.03 18:18:09 dbOpXml: Entering userSelect case
+26.02.03 18:18:09 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:18:09 dbOpXml: userSelect completed
+26.02.03 18:18:09 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:18:09 dbOpXml: XML output length: 92
+26.02.03 18:18:09 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:18:09 dbOpXml: XML output sent, flushing
+26.02.03 18:18:09 dbOpXml: Closing database connection
+26.02.03 18:18:09 dbOpXml: Database connection closed
+26.02.03 18:18:09 dbOpXml: Flush completed
+26.02.03 18:18:09 dbacc/index.php: dbOpXml() completed
+26.02.03 18:18:09 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 18:18:09 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:18:09 dbOpXml: ENTRY
+26.02.03 18:18:09 dbOpXml: About to call initDbLib()
+26.02.03 18:18:09 initDbLib: Connecting to database...
+26.02.03 18:18:09 initDbLib: Database connected successfully
+26.02.03 18:18:09 dbOpXml: initDbLib() completed successfully
+26.02.03 18:18:09 dbOpXml: Getting type and data parameters
+26.02.03 18:18:09 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 18:18:09 testsSelect, data: [admin]
+26.02.03 18:18:09 dbOpXml: About to enter switch statement
+26.02.03 18:18:09 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 18:18:09 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:18:09 dbOpXml: XML output length: 904
+26.02.03 18:18:09 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 18:18:09 dbOpXml: XML output sent, flushing
+26.02.03 18:18:09 dbOpXml: Closing database connection
+26.02.03 18:18:09 dbOpXml: Database connection closed
+26.02.03 18:18:09 dbOpXml: Flush completed
+26.02.03 18:18:09 dbacc/index.php: dbOpXml() completed
+26.02.03 18:18:17 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:18:17 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:18:17 dbOpXml: ENTRY
+26.02.03 18:18:17 dbOpXml: About to call initDbLib()
+26.02.03 18:18:17 initDbLib: Connecting to database...
+26.02.03 18:18:17 initDbLib: Database connected successfully
+26.02.03 18:18:17 dbOpXml: initDbLib() completed successfully
+26.02.03 18:18:17 dbOpXml: Getting type and data parameters
+26.02.03 18:18:17 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:18:17 userSelect, data: [admin,admin]
+26.02.03 18:18:17 dbOpXml: About to enter switch statement
+26.02.03 18:18:17 dbOpXml: Entering userSelect case
+26.02.03 18:18:17 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:18:17 dbOpXml: userSelect completed
+26.02.03 18:18:17 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:18:17 dbOpXml: XML output length: 92
+26.02.03 18:18:17 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:18:17 dbOpXml: XML output sent, flushing
+26.02.03 18:18:17 dbOpXml: Closing database connection
+26.02.03 18:18:17 dbOpXml: Database connection closed
+26.02.03 18:18:17 dbOpXml: Flush completed
+26.02.03 18:18:17 dbacc/index.php: dbOpXml() completed
+26.02.03 18:18:20 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:18:20 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:18:20 dbOpXml: ENTRY
+26.02.03 18:18:20 dbOpXml: About to call initDbLib()
+26.02.03 18:18:20 initDbLib: Connecting to database...
+26.02.03 18:18:20 initDbLib: Database connected successfully
+26.02.03 18:18:20 dbOpXml: initDbLib() completed successfully
+26.02.03 18:18:20 dbOpXml: Getting type and data parameters
+26.02.03 18:18:20 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:18:20 userSelect, data: [admin,admin]
+26.02.03 18:18:20 dbOpXml: About to enter switch statement
+26.02.03 18:18:20 dbOpXml: Entering userSelect case
+26.02.03 18:18:20 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:18:20 dbOpXml: userSelect completed
+26.02.03 18:18:20 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:18:20 dbOpXml: XML output length: 92
+26.02.03 18:18:20 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:18:20 dbOpXml: XML output sent, flushing
+26.02.03 18:18:20 dbOpXml: Closing database connection
+26.02.03 18:18:20 dbOpXml: Database connection closed
+26.02.03 18:18:20 dbOpXml: Flush completed
+26.02.03 18:18:20 dbacc/index.php: dbOpXml() completed
+26.02.03 18:21:58 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:21:58 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:21:58 dbOpXml: ENTRY
+26.02.03 18:21:58 dbOpXml: About to call initDbLib()
+26.02.03 18:21:58 initDbLib: Connecting to database...
+26.02.03 18:21:58 initDbLib: Database connected successfully
+26.02.03 18:21:58 dbOpXml: initDbLib() completed successfully
+26.02.03 18:21:58 dbOpXml: Getting type and data parameters
+26.02.03 18:21:58 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:21:58 userSelect, data: [admin,admin]
+26.02.03 18:21:58 dbOpXml: About to enter switch statement
+26.02.03 18:21:58 dbOpXml: Entering userSelect case
+26.02.03 18:21:58 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:21:58 dbOpXml: userSelect completed
+26.02.03 18:21:58 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:21:58 dbOpXml: XML output length: 92
+26.02.03 18:21:58 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:21:58 dbacc/index.php: REQUEST ARRIVED, type=[projectsSelect], data=[admin,1]
+26.02.03 18:21:58 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:21:58 dbOpXml: ENTRY
+26.02.03 18:21:58 dbOpXml: About to call initDbLib()
+26.02.03 18:21:58 initDbLib: Connecting to database...
+26.02.03 18:21:58 initDbLib: Database connected successfully
+26.02.03 18:21:58 dbOpXml: initDbLib() completed successfully
+26.02.03 18:21:58 dbOpXml: Getting type and data parameters
+26.02.03 18:21:58 dbOpXml: type=[projectsSelect], data=[admin,1]
+26.02.03 18:21:58 projectsSelect, data: [admin,1]
+26.02.03 18:21:58 dbOpXml: About to enter switch statement
+26.02.03 18:21:58 dbOpXml: Entering projectsSelect case
+26.02.03 18:21:58 select ecitt_project.no, ecitt_project.name, any_value(permName) as perm from ecitt_project, ecitt_perm where userName = 'admin' and (entityType = 'global' or (entityType = 'project' and (every = 1 or ecitt_project.no = entityNo))) group by ecitt_project.no, ecitt_project.name order by ecitt_project.name
+26.02.03 18:21:58 projectsSelect: About to execute query
+26.02.03 18:21:58 projectsSelect: Query executed in 2ms, result=SUCCESS
+26.02.03 18:21:58 projectsSelect: Generating XML
+26.02.03 18:21:58 projectsSelect: XML generated successfully
+26.02.03 18:21:58 projectsSelect: Result set freed, returning
+26.02.03 18:21:58 dbOpXml: projectsSelect completed
+26.02.03 18:21:58 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:21:58 dbOpXml: XML output length: 119
+26.02.03 18:21:58 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<projects current="1"><project no="1" name="Pilot_2026" perm="adm"/></projects>
+
+26.02.03 18:21:58 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:21:58 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:21:58 dbOpXml: ENTRY
+26.02.03 18:21:58 dbOpXml: About to call initDbLib()
+26.02.03 18:21:58 initDbLib: Connecting to database...
+26.02.03 18:21:58 initDbLib: Database connected successfully
+26.02.03 18:21:58 dbOpXml: initDbLib() completed successfully
+26.02.03 18:21:58 dbOpXml: Getting type and data parameters
+26.02.03 18:21:58 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:21:58 userSelect, data: [admin,admin]
+26.02.03 18:21:58 dbOpXml: About to enter switch statement
+26.02.03 18:21:58 dbOpXml: Entering userSelect case
+26.02.03 18:21:58 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:21:58 dbOpXml: userSelect completed
+26.02.03 18:21:58 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:21:58 dbOpXml: XML output length: 92
+26.02.03 18:21:58 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:21:58 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 18:21:58 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:21:58 dbOpXml: ENTRY
+26.02.03 18:21:58 dbOpXml: About to call initDbLib()
+26.02.03 18:21:58 initDbLib: Connecting to database...
+26.02.03 18:21:58 initDbLib: Database connected successfully
+26.02.03 18:21:58 dbOpXml: initDbLib() completed successfully
+26.02.03 18:21:58 dbOpXml: Getting type and data parameters
+26.02.03 18:21:58 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 18:21:58 testsSelect, data: [admin]
+26.02.03 18:21:58 dbOpXml: About to enter switch statement
+26.02.03 18:21:58 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 18:21:58 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:21:58 dbOpXml: XML output length: 904
+26.02.03 18:21:58 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 18:21:58 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 18:21:58 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:21:58 dbOpXml: ENTRY
+26.02.03 18:21:58 dbOpXml: About to call initDbLib()
+26.02.03 18:21:58 initDbLib: Connecting to database...
+26.02.03 18:21:58 initDbLib: Database connected successfully
+26.02.03 18:21:58 dbOpXml: initDbLib() completed successfully
+26.02.03 18:21:58 dbOpXml: Getting type and data parameters
+26.02.03 18:21:58 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 18:21:58 testsSelect, data: [admin]
+26.02.03 18:21:58 dbOpXml: About to enter switch statement
+26.02.03 18:21:58 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 18:21:58 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:21:58 dbOpXml: XML output length: 904
+26.02.03 18:21:58 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 18:25:12 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:25:12 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:25:12 dbOpXml: ENTRY
+26.02.03 18:25:12 dbOpXml: About to call initDbLib()
+26.02.03 18:25:12 initDbLib: Connecting to database...
+26.02.03 18:25:12 initDbLib: Database connected successfully
+26.02.03 18:25:12 dbOpXml: initDbLib() completed successfully
+26.02.03 18:25:12 dbOpXml: Getting type and data parameters
+26.02.03 18:25:12 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:25:12 userSelect, data: [admin,admin]
+26.02.03 18:25:12 dbOpXml: About to enter switch statement
+26.02.03 18:25:12 dbOpXml: Entering userSelect case
+26.02.03 18:25:12 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:25:12 dbOpXml: userSelect completed
+26.02.03 18:25:12 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:25:12 dbOpXml: XML output length: 92
+26.02.03 18:25:12 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:25:12 dbOpXml: XML output sent, flushing
+26.02.03 18:25:12 dbOpXml: Closing database connection
+26.02.03 18:25:12 dbOpXml: Database connection closed
+26.02.03 18:25:12 dbOpXml: Flush completed
+26.02.03 18:25:12 dbacc/index.php: dbOpXml() completed
+26.02.03 18:25:25 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:25:25 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:25:25 dbOpXml: ENTRY
+26.02.03 18:25:25 dbOpXml: About to call initDbLib()
+26.02.03 18:25:25 initDbLib: Connecting to database...
+26.02.03 18:25:25 initDbLib: Database connected successfully
+26.02.03 18:25:25 dbOpXml: initDbLib() completed successfully
+26.02.03 18:25:25 dbOpXml: Getting type and data parameters
+26.02.03 18:25:25 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:25:25 userSelect, data: [admin,admin]
+26.02.03 18:25:25 dbOpXml: About to enter switch statement
+26.02.03 18:25:25 dbOpXml: Entering userSelect case
+26.02.03 18:25:25 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:25:25 dbOpXml: userSelect completed
+26.02.03 18:25:25 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:25:25 dbOpXml: XML output length: 92
+26.02.03 18:25:25 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:25:25 dbOpXml: XML output sent, flushing
+26.02.03 18:25:25 dbOpXml: Closing database connection
+26.02.03 18:25:25 dbOpXml: Database connection closed
+26.02.03 18:25:25 dbOpXml: Flush completed
+26.02.03 18:25:25 dbacc/index.php: dbOpXml() completed
+26.02.03 18:25:28 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:25:28 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:25:28 dbOpXml: ENTRY
+26.02.03 18:25:28 dbOpXml: About to call initDbLib()
+26.02.03 18:25:28 initDbLib: Connecting to database...
+26.02.03 18:25:28 initDbLib: Database connected successfully
+26.02.03 18:25:28 dbOpXml: initDbLib() completed successfully
+26.02.03 18:25:28 dbOpXml: Getting type and data parameters
+26.02.03 18:25:28 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:25:28 userSelect, data: [admin,admin]
+26.02.03 18:25:28 dbOpXml: About to enter switch statement
+26.02.03 18:25:28 dbOpXml: Entering userSelect case
+26.02.03 18:25:28 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:25:28 dbOpXml: userSelect completed
+26.02.03 18:25:28 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:25:28 dbOpXml: XML output length: 92
+26.02.03 18:25:28 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:25:28 dbOpXml: XML output sent, flushing
+26.02.03 18:25:28 dbOpXml: Closing database connection
+26.02.03 18:25:28 dbOpXml: Database connection closed
+26.02.03 18:25:28 dbOpXml: Flush completed
+26.02.03 18:25:28 dbacc/index.php: dbOpXml() completed
+26.02.03 18:25:31 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:25:31 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:25:31 dbOpXml: ENTRY
+26.02.03 18:25:31 dbOpXml: About to call initDbLib()
+26.02.03 18:25:31 initDbLib: Connecting to database...
+26.02.03 18:25:31 initDbLib: Database connected successfully
+26.02.03 18:25:31 dbOpXml: initDbLib() completed successfully
+26.02.03 18:25:31 dbOpXml: Getting type and data parameters
+26.02.03 18:25:31 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:25:31 userSelect, data: [admin,admin]
+26.02.03 18:25:31 dbOpXml: About to enter switch statement
+26.02.03 18:25:31 dbOpXml: Entering userSelect case
+26.02.03 18:25:31 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:25:31 dbOpXml: userSelect completed
+26.02.03 18:25:31 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:25:31 dbOpXml: XML output length: 92
+26.02.03 18:25:31 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:25:31 dbOpXml: XML output sent, flushing
+26.02.03 18:25:31 dbOpXml: Closing database connection
+26.02.03 18:25:31 dbOpXml: Database connection closed
+26.02.03 18:25:31 dbOpXml: Flush completed
+26.02.03 18:25:31 dbacc/index.php: dbOpXml() completed
+26.02.03 18:25:31 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 18:25:31 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:25:31 dbOpXml: ENTRY
+26.02.03 18:25:31 dbOpXml: About to call initDbLib()
+26.02.03 18:25:31 initDbLib: Connecting to database...
+26.02.03 18:25:31 initDbLib: Database connected successfully
+26.02.03 18:25:31 dbOpXml: initDbLib() completed successfully
+26.02.03 18:25:31 dbOpXml: Getting type and data parameters
+26.02.03 18:25:31 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 18:25:31 testsSelect, data: [admin]
+26.02.03 18:25:31 dbOpXml: About to enter switch statement
+26.02.03 18:25:31 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 18:25:31 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:25:31 dbOpXml: XML output length: 904
+26.02.03 18:25:31 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 18:25:31 dbOpXml: XML output sent, flushing
+26.02.03 18:25:31 dbOpXml: Closing database connection
+26.02.03 18:25:31 dbOpXml: Database connection closed
+26.02.03 18:25:31 dbOpXml: Flush completed
+26.02.03 18:25:31 dbacc/index.php: dbOpXml() completed
+26.02.03 18:26:52 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:26:52 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:26:52 dbOpXml: ENTRY
+26.02.03 18:26:52 dbOpXml: About to call initDbLib()
+26.02.03 18:26:52 initDbLib: Connecting to database...
+26.02.03 18:26:52 initDbLib: Database connected successfully
+26.02.03 18:26:52 dbOpXml: initDbLib() completed successfully
+26.02.03 18:26:52 dbOpXml: Getting type and data parameters
+26.02.03 18:26:52 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:26:52 userSelect, data: [admin,admin]
+26.02.03 18:26:52 dbOpXml: About to enter switch statement
+26.02.03 18:26:52 dbOpXml: Entering userSelect case
+26.02.03 18:26:52 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:26:52 dbOpXml: userSelect completed
+26.02.03 18:26:52 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:26:52 dbOpXml: XML output length: 92
+26.02.03 18:26:52 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:26:52 dbOpXml: XML output sent, flushing
+26.02.03 18:26:52 dbOpXml: Closing database connection
+26.02.03 18:26:52 dbOpXml: Database connection closed
+26.02.03 18:26:52 dbOpXml: Flush completed
+26.02.03 18:26:52 dbacc/index.php: dbOpXml() completed
+26.02.03 18:26:52 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 18:26:52 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:26:52 dbOpXml: ENTRY
+26.02.03 18:26:52 dbOpXml: About to call initDbLib()
+26.02.03 18:26:52 initDbLib: Connecting to database...
+26.02.03 18:26:52 initDbLib: Database connected successfully
+26.02.03 18:26:52 dbOpXml: initDbLib() completed successfully
+26.02.03 18:26:52 dbOpXml: Getting type and data parameters
+26.02.03 18:26:52 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 18:26:52 testsSelect, data: [admin]
+26.02.03 18:26:52 dbOpXml: About to enter switch statement
+26.02.03 18:26:52 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 18:26:52 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:26:52 dbOpXml: XML output length: 904
+26.02.03 18:26:52 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 18:26:52 dbOpXml: XML output sent, flushing
+26.02.03 18:26:52 dbOpXml: Closing database connection
+26.02.03 18:26:52 dbOpXml: Database connection closed
+26.02.03 18:26:52 dbOpXml: Flush completed
+26.02.03 18:26:52 dbacc/index.php: dbOpXml() completed
+26.02.03 18:26:59 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:26:59 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:26:59 dbOpXml: ENTRY
+26.02.03 18:26:59 dbOpXml: About to call initDbLib()
+26.02.03 18:26:59 initDbLib: Connecting to database...
+26.02.03 18:26:59 initDbLib: Database connected successfully
+26.02.03 18:26:59 dbOpXml: initDbLib() completed successfully
+26.02.03 18:26:59 dbOpXml: Getting type and data parameters
+26.02.03 18:26:59 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:26:59 userSelect, data: [admin,admin]
+26.02.03 18:26:59 dbOpXml: About to enter switch statement
+26.02.03 18:26:59 dbOpXml: Entering userSelect case
+26.02.03 18:26:59 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:26:59 dbOpXml: userSelect completed
+26.02.03 18:26:59 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:26:59 dbOpXml: XML output length: 92
+26.02.03 18:26:59 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:26:59 dbOpXml: XML output sent, flushing
+26.02.03 18:26:59 dbOpXml: Closing database connection
+26.02.03 18:26:59 dbOpXml: Database connection closed
+26.02.03 18:26:59 dbOpXml: Flush completed
+26.02.03 18:26:59 dbacc/index.php: dbOpXml() completed
+26.02.03 18:27:04 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:27:04 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:27:04 dbOpXml: ENTRY
+26.02.03 18:27:04 dbOpXml: About to call initDbLib()
+26.02.03 18:27:04 initDbLib: Connecting to database...
+26.02.03 18:27:04 initDbLib: Database connected successfully
+26.02.03 18:27:04 dbOpXml: initDbLib() completed successfully
+26.02.03 18:27:04 dbOpXml: Getting type and data parameters
+26.02.03 18:27:04 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:27:04 userSelect, data: [admin,admin]
+26.02.03 18:27:04 dbOpXml: About to enter switch statement
+26.02.03 18:27:04 dbOpXml: Entering userSelect case
+26.02.03 18:27:04 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:27:04 dbOpXml: userSelect completed
+26.02.03 18:27:04 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:27:04 dbOpXml: XML output length: 92
+26.02.03 18:27:04 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:27:04 dbOpXml: XML output sent, flushing
+26.02.03 18:27:04 dbOpXml: Closing database connection
+26.02.03 18:27:04 dbOpXml: Database connection closed
+26.02.03 18:27:04 dbOpXml: Flush completed
+26.02.03 18:27:04 dbacc/index.php: dbOpXml() completed
+26.02.03 18:27:04 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 18:27:04 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:27:04 dbOpXml: ENTRY
+26.02.03 18:27:04 dbOpXml: About to call initDbLib()
+26.02.03 18:27:04 initDbLib: Connecting to database...
+26.02.03 18:27:04 initDbLib: Database connected successfully
+26.02.03 18:27:04 dbOpXml: initDbLib() completed successfully
+26.02.03 18:27:04 dbOpXml: Getting type and data parameters
+26.02.03 18:27:04 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 18:27:04 testsSelect, data: [admin]
+26.02.03 18:27:04 dbOpXml: About to enter switch statement
+26.02.03 18:27:04 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 18:27:04 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:27:04 dbOpXml: XML output length: 904
+26.02.03 18:27:04 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 18:27:04 dbOpXml: XML output sent, flushing
+26.02.03 18:27:04 dbOpXml: Closing database connection
+26.02.03 18:27:04 dbOpXml: Database connection closed
+26.02.03 18:27:04 dbOpXml: Flush completed
+26.02.03 18:27:04 dbacc/index.php: dbOpXml() completed
+26.02.03 18:27:24 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:27:24 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:27:24 dbOpXml: ENTRY
+26.02.03 18:27:24 dbOpXml: About to call initDbLib()
+26.02.03 18:27:24 initDbLib: Connecting to database...
+26.02.03 18:27:24 initDbLib: Database connected successfully
+26.02.03 18:27:24 dbOpXml: initDbLib() completed successfully
+26.02.03 18:27:24 dbOpXml: Getting type and data parameters
+26.02.03 18:27:24 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:27:24 userSelect, data: [admin,admin]
+26.02.03 18:27:24 dbOpXml: About to enter switch statement
+26.02.03 18:27:24 dbOpXml: Entering userSelect case
+26.02.03 18:27:24 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:27:24 dbOpXml: userSelect completed
+26.02.03 18:27:24 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:27:24 dbOpXml: XML output length: 92
+26.02.03 18:27:24 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:27:24 dbOpXml: XML output sent, flushing
+26.02.03 18:27:24 dbOpXml: Closing database connection
+26.02.03 18:27:24 dbOpXml: Database connection closed
+26.02.03 18:27:24 dbOpXml: Flush completed
+26.02.03 18:27:24 dbacc/index.php: dbOpXml() completed
+26.02.03 18:27:25 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 18:27:25 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:27:25 dbOpXml: ENTRY
+26.02.03 18:27:25 dbOpXml: About to call initDbLib()
+26.02.03 18:27:25 initDbLib: Connecting to database...
+26.02.03 18:27:25 initDbLib: Database connected successfully
+26.02.03 18:27:25 dbOpXml: initDbLib() completed successfully
+26.02.03 18:27:25 dbOpXml: Getting type and data parameters
+26.02.03 18:27:25 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 18:27:25 testsSelect, data: [admin]
+26.02.03 18:27:25 dbOpXml: About to enter switch statement
+26.02.03 18:27:25 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 18:27:25 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:27:25 dbOpXml: XML output length: 904
+26.02.03 18:27:25 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 18:27:25 dbOpXml: XML output sent, flushing
+26.02.03 18:27:25 dbOpXml: Closing database connection
+26.02.03 18:27:25 dbOpXml: Database connection closed
+26.02.03 18:27:25 dbOpXml: Flush completed
+26.02.03 18:27:25 dbacc/index.php: dbOpXml() completed
+26.02.03 18:28:47 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:28:47 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:28:47 dbOpXml: ENTRY
+26.02.03 18:28:47 dbOpXml: About to call initDbLib()
+26.02.03 18:28:47 initDbLib: Connecting to database...
+26.02.03 18:28:47 initDbLib: Database connected successfully
+26.02.03 18:28:47 dbOpXml: initDbLib() completed successfully
+26.02.03 18:28:47 dbOpXml: Getting type and data parameters
+26.02.03 18:28:47 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:28:47 userSelect, data: [admin,admin]
+26.02.03 18:28:47 dbOpXml: About to enter switch statement
+26.02.03 18:28:47 dbOpXml: Entering userSelect case
+26.02.03 18:28:47 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:28:47 dbOpXml: userSelect completed
+26.02.03 18:28:47 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:28:47 dbOpXml: XML output length: 92
+26.02.03 18:28:47 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:28:47 dbOpXml: XML output sent, flushing
+26.02.03 18:28:47 dbOpXml: Closing database connection
+26.02.03 18:28:47 dbOpXml: Database connection closed
+26.02.03 18:28:47 dbOpXml: Flush completed
+26.02.03 18:28:47 dbacc/index.php: dbOpXml() completed
+26.02.03 18:29:01 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:29:01 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:29:01 dbOpXml: ENTRY
+26.02.03 18:29:01 dbOpXml: About to call initDbLib()
+26.02.03 18:29:01 initDbLib: Connecting to database...
+26.02.03 18:29:01 initDbLib: Database connected successfully
+26.02.03 18:29:01 dbOpXml: initDbLib() completed successfully
+26.02.03 18:29:01 dbOpXml: Getting type and data parameters
+26.02.03 18:29:01 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:29:01 userSelect, data: [admin,admin]
+26.02.03 18:29:01 dbOpXml: About to enter switch statement
+26.02.03 18:29:01 dbOpXml: Entering userSelect case
+26.02.03 18:29:01 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:29:01 dbOpXml: userSelect completed
+26.02.03 18:29:01 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:29:01 dbOpXml: XML output length: 92
+26.02.03 18:29:01 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:29:01 dbOpXml: XML output sent, flushing
+26.02.03 18:29:01 dbOpXml: Closing database connection
+26.02.03 18:29:01 dbOpXml: Database connection closed
+26.02.03 18:29:01 dbOpXml: Flush completed
+26.02.03 18:29:01 dbacc/index.php: dbOpXml() completed
+26.02.03 18:30:13 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:30:13 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:30:13 dbOpXml: ENTRY
+26.02.03 18:30:13 dbOpXml: About to call initDbLib()
+26.02.03 18:30:13 initDbLib: Connecting to database...
+26.02.03 18:30:13 initDbLib: Database connected successfully
+26.02.03 18:30:13 dbOpXml: initDbLib() completed successfully
+26.02.03 18:30:13 dbOpXml: Getting type and data parameters
+26.02.03 18:30:13 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:30:13 userSelect, data: [admin,admin]
+26.02.03 18:30:13 dbOpXml: About to enter switch statement
+26.02.03 18:30:13 dbOpXml: Entering userSelect case
+26.02.03 18:30:13 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:30:13 dbOpXml: userSelect completed
+26.02.03 18:30:13 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:30:13 dbOpXml: XML output length: 92
+26.02.03 18:30:13 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:30:13 dbOpXml: XML output sent, flushing
+26.02.03 18:30:13 dbOpXml: Closing database connection
+26.02.03 18:30:13 dbOpXml: Database connection closed
+26.02.03 18:30:13 dbOpXml: Flush completed
+26.02.03 18:30:13 dbacc/index.php: dbOpXml() completed
+26.02.03 18:36:27 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:36:27 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:36:27 dbOpXml: ENTRY
+26.02.03 18:36:27 dbOpXml: About to call initDbLib()
+26.02.03 18:36:27 initDbLib: Connecting to database...
+26.02.03 18:36:27 initDbLib: Database connected successfully
+26.02.03 18:36:27 dbOpXml: initDbLib() completed successfully
+26.02.03 18:36:27 dbOpXml: Getting type and data parameters
+26.02.03 18:36:27 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:36:27 userSelect, data: [admin,admin]
+26.02.03 18:36:27 dbOpXml: About to enter switch statement
+26.02.03 18:36:27 dbOpXml: Entering userSelect case
+26.02.03 18:36:27 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:36:27 dbOpXml: userSelect completed
+26.02.03 18:36:27 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:36:27 dbOpXml: XML output length: 92
+26.02.03 18:36:27 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:36:27 dbOpXml: XML output sent, flushing
+26.02.03 18:36:27 dbOpXml: Closing database connection
+26.02.03 18:36:27 dbOpXml: Database connection closed
+26.02.03 18:36:27 dbOpXml: Flush completed
+26.02.03 18:36:27 dbacc/index.php: dbOpXml() completed
+26.02.03 18:36:31 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:36:31 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:36:31 dbOpXml: ENTRY
+26.02.03 18:36:31 dbOpXml: About to call initDbLib()
+26.02.03 18:36:31 initDbLib: Connecting to database...
+26.02.03 18:36:31 initDbLib: Database connected successfully
+26.02.03 18:36:31 dbOpXml: initDbLib() completed successfully
+26.02.03 18:36:31 dbOpXml: Getting type and data parameters
+26.02.03 18:36:31 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:36:31 userSelect, data: [admin,admin]
+26.02.03 18:36:31 dbOpXml: About to enter switch statement
+26.02.03 18:36:31 dbOpXml: Entering userSelect case
+26.02.03 18:36:31 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:36:31 dbOpXml: userSelect completed
+26.02.03 18:36:31 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:36:31 dbOpXml: XML output length: 92
+26.02.03 18:36:31 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:36:31 dbOpXml: XML output sent, flushing
+26.02.03 18:36:31 dbOpXml: Closing database connection
+26.02.03 18:36:31 dbOpXml: Database connection closed
+26.02.03 18:36:31 dbOpXml: Flush completed
+26.02.03 18:36:31 dbacc/index.php: dbOpXml() completed
+26.02.03 18:41:59 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:41:59 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:41:59 dbOpXml: ENTRY
+26.02.03 18:41:59 dbOpXml: About to call initDbLib()
+26.02.03 18:41:59 initDbLib: Connecting to database...
+26.02.03 18:41:59 initDbLib: Database connected successfully
+26.02.03 18:41:59 dbOpXml: initDbLib() completed successfully
+26.02.03 18:41:59 dbOpXml: Getting type and data parameters
+26.02.03 18:41:59 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:41:59 userSelect, data: [admin,admin]
+26.02.03 18:41:59 dbOpXml: About to enter switch statement
+26.02.03 18:41:59 dbOpXml: Entering userSelect case
+26.02.03 18:41:59 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:41:59 dbOpXml: userSelect completed
+26.02.03 18:41:59 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:41:59 dbOpXml: XML output length: 92
+26.02.03 18:41:59 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:41:59 dbOpXml: XML output sent, flushing
+26.02.03 18:41:59 dbOpXml: Closing database connection
+26.02.03 18:41:59 dbOpXml: Database connection closed
+26.02.03 18:41:59 dbOpXml: Flush completed
+26.02.03 18:41:59 dbacc/index.php: dbOpXml() completed
+26.02.03 18:42:02 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:42:02 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:42:02 dbOpXml: ENTRY
+26.02.03 18:42:02 dbOpXml: About to call initDbLib()
+26.02.03 18:42:02 initDbLib: Connecting to database...
+26.02.03 18:42:02 initDbLib: Database connected successfully
+26.02.03 18:42:02 dbOpXml: initDbLib() completed successfully
+26.02.03 18:42:02 dbOpXml: Getting type and data parameters
+26.02.03 18:42:02 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:42:02 userSelect, data: [admin,admin]
+26.02.03 18:42:02 dbOpXml: About to enter switch statement
+26.02.03 18:42:02 dbOpXml: Entering userSelect case
+26.02.03 18:42:02 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:42:02 dbOpXml: userSelect completed
+26.02.03 18:42:02 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:42:02 dbOpXml: XML output length: 92
+26.02.03 18:42:02 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:42:02 dbOpXml: XML output sent, flushing
+26.02.03 18:42:02 dbOpXml: Closing database connection
+26.02.03 18:42:02 dbOpXml: Database connection closed
+26.02.03 18:42:02 dbOpXml: Flush completed
+26.02.03 18:42:02 dbacc/index.php: dbOpXml() completed
+26.02.03 18:42:05 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:42:05 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:42:05 dbOpXml: ENTRY
+26.02.03 18:42:05 dbOpXml: About to call initDbLib()
+26.02.03 18:42:05 initDbLib: Connecting to database...
+26.02.03 18:42:05 initDbLib: Database connected successfully
+26.02.03 18:42:05 dbOpXml: initDbLib() completed successfully
+26.02.03 18:42:05 dbOpXml: Getting type and data parameters
+26.02.03 18:42:05 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:42:05 userSelect, data: [admin,admin]
+26.02.03 18:42:05 dbOpXml: About to enter switch statement
+26.02.03 18:42:05 dbOpXml: Entering userSelect case
+26.02.03 18:42:05 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:42:05 dbOpXml: userSelect completed
+26.02.03 18:42:05 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:42:05 dbOpXml: XML output length: 92
+26.02.03 18:42:05 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:42:05 dbOpXml: XML output sent, flushing
+26.02.03 18:42:05 dbOpXml: Closing database connection
+26.02.03 18:42:05 dbOpXml: Database connection closed
+26.02.03 18:42:05 dbOpXml: Flush completed
+26.02.03 18:42:05 dbacc/index.php: dbOpXml() completed
+26.02.03 18:42:06 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 18:42:06 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:42:06 dbOpXml: ENTRY
+26.02.03 18:42:06 dbOpXml: About to call initDbLib()
+26.02.03 18:42:06 initDbLib: Connecting to database...
+26.02.03 18:42:06 initDbLib: Database connected successfully
+26.02.03 18:42:06 dbOpXml: initDbLib() completed successfully
+26.02.03 18:42:06 dbOpXml: Getting type and data parameters
+26.02.03 18:42:06 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 18:42:06 testsSelect, data: [admin]
+26.02.03 18:42:06 dbOpXml: About to enter switch statement
+26.02.03 18:42:06 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 18:42:06 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:42:06 dbOpXml: XML output length: 904
+26.02.03 18:42:06 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 18:42:06 dbOpXml: XML output sent, flushing
+26.02.03 18:42:06 dbOpXml: Closing database connection
+26.02.03 18:42:06 dbOpXml: Database connection closed
+26.02.03 18:42:06 dbOpXml: Flush completed
+26.02.03 18:42:06 dbacc/index.php: dbOpXml() completed
+26.02.03 18:57:19 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:57:19 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:57:19 dbOpXml: ENTRY
+26.02.03 18:57:19 dbOpXml: About to call initDbLib()
+26.02.03 18:57:19 initDbLib: Connecting to database...
+26.02.03 18:57:19 initDbLib: Database connected successfully
+26.02.03 18:57:19 dbOpXml: initDbLib() completed successfully
+26.02.03 18:57:19 dbOpXml: Getting type and data parameters
+26.02.03 18:57:19 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:57:19 userSelect, data: [admin,admin]
+26.02.03 18:57:19 dbOpXml: About to enter switch statement
+26.02.03 18:57:19 dbOpXml: Entering userSelect case
+26.02.03 18:57:19 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:57:19 dbOpXml: userSelect completed
+26.02.03 18:57:19 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:57:19 dbOpXml: XML output length: 92
+26.02.03 18:57:19 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:57:19 dbOpXml: XML output sent, flushing
+26.02.03 18:57:19 dbOpXml: Closing database connection
+26.02.03 18:57:19 dbOpXml: Database connection closed
+26.02.03 18:57:19 dbOpXml: Flush completed
+26.02.03 18:57:19 dbacc/index.php: dbOpXml() completed
+26.02.03 18:57:34 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:57:34 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:57:34 dbOpXml: ENTRY
+26.02.03 18:57:34 dbOpXml: About to call initDbLib()
+26.02.03 18:57:34 initDbLib: Connecting to database...
+26.02.03 18:57:34 initDbLib: Database connected successfully
+26.02.03 18:57:34 dbOpXml: initDbLib() completed successfully
+26.02.03 18:57:34 dbOpXml: Getting type and data parameters
+26.02.03 18:57:34 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:57:34 userSelect, data: [admin,admin]
+26.02.03 18:57:34 dbOpXml: About to enter switch statement
+26.02.03 18:57:34 dbOpXml: Entering userSelect case
+26.02.03 18:57:34 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:57:34 dbOpXml: userSelect completed
+26.02.03 18:57:34 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:57:34 dbOpXml: XML output length: 92
+26.02.03 18:57:34 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:57:34 dbOpXml: XML output sent, flushing
+26.02.03 18:57:34 dbOpXml: Closing database connection
+26.02.03 18:57:34 dbOpXml: Database connection closed
+26.02.03 18:57:34 dbOpXml: Flush completed
+26.02.03 18:57:34 dbacc/index.php: dbOpXml() completed
+26.02.03 18:58:54 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:58:54 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:58:54 dbOpXml: ENTRY
+26.02.03 18:58:54 dbOpXml: About to call initDbLib()
+26.02.03 18:58:54 initDbLib: Connecting to database...
+26.02.03 18:58:54 initDbLib: Database connected successfully
+26.02.03 18:58:54 dbOpXml: initDbLib() completed successfully
+26.02.03 18:58:54 dbOpXml: Getting type and data parameters
+26.02.03 18:58:54 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:58:54 userSelect, data: [admin,admin]
+26.02.03 18:58:54 dbOpXml: About to enter switch statement
+26.02.03 18:58:54 dbOpXml: Entering userSelect case
+26.02.03 18:58:54 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:58:54 dbOpXml: userSelect completed
+26.02.03 18:58:54 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:58:54 dbOpXml: XML output length: 92
+26.02.03 18:58:54 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:58:54 dbOpXml: XML output sent, flushing
+26.02.03 18:58:54 dbOpXml: Closing database connection
+26.02.03 18:58:54 dbOpXml: Database connection closed
+26.02.03 18:58:54 dbOpXml: Flush completed
+26.02.03 18:58:54 dbacc/index.php: dbOpXml() completed
+26.02.03 18:58:56 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 18:58:56 dbacc/index.php: About to call dbOpXml()
+26.02.03 18:58:56 dbOpXml: ENTRY
+26.02.03 18:58:56 dbOpXml: About to call initDbLib()
+26.02.03 18:58:56 initDbLib: Connecting to database...
+26.02.03 18:58:56 initDbLib: Database connected successfully
+26.02.03 18:58:56 dbOpXml: initDbLib() completed successfully
+26.02.03 18:58:56 dbOpXml: Getting type and data parameters
+26.02.03 18:58:56 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 18:58:56 userSelect, data: [admin,admin]
+26.02.03 18:58:56 dbOpXml: About to enter switch statement
+26.02.03 18:58:56 dbOpXml: Entering userSelect case
+26.02.03 18:58:56 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 18:58:56 dbOpXml: userSelect completed
+26.02.03 18:58:56 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 18:58:56 dbOpXml: XML output length: 92
+26.02.03 18:58:56 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 18:58:56 dbOpXml: XML output sent, flushing
+26.02.03 18:58:56 dbOpXml: Closing database connection
+26.02.03 18:58:56 dbOpXml: Database connection closed
+26.02.03 18:58:56 dbOpXml: Flush completed
+26.02.03 18:58:56 dbacc/index.php: dbOpXml() completed
+26.02.03 19:02:31 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 19:02:31 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:02:31 dbOpXml: ENTRY
+26.02.03 19:02:31 dbOpXml: About to call initDbLib()
+26.02.03 19:02:31 initDbLib: Connecting to database...
+26.02.03 19:02:31 initDbLib: Database connected successfully
+26.02.03 19:02:31 dbOpXml: initDbLib() completed successfully
+26.02.03 19:02:31 dbOpXml: Getting type and data parameters
+26.02.03 19:02:31 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 19:02:31 userSelect, data: [admin,admin]
+26.02.03 19:02:31 dbOpXml: About to enter switch statement
+26.02.03 19:02:31 dbOpXml: Entering userSelect case
+26.02.03 19:02:31 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 19:02:31 dbOpXml: userSelect completed
+26.02.03 19:02:31 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:02:31 dbOpXml: XML output length: 92
+26.02.03 19:02:31 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 19:02:31 dbOpXml: XML output sent, flushing
+26.02.03 19:02:31 dbOpXml: Closing database connection
+26.02.03 19:02:31 dbOpXml: Database connection closed
+26.02.03 19:02:31 dbOpXml: Flush completed
+26.02.03 19:02:31 dbacc/index.php: dbOpXml() completed
+26.02.03 19:02:35 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 19:02:35 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:02:35 dbOpXml: ENTRY
+26.02.03 19:02:35 dbOpXml: About to call initDbLib()
+26.02.03 19:02:35 initDbLib: Connecting to database...
+26.02.03 19:02:35 initDbLib: Database connected successfully
+26.02.03 19:02:35 dbOpXml: initDbLib() completed successfully
+26.02.03 19:02:35 dbOpXml: Getting type and data parameters
+26.02.03 19:02:35 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 19:02:35 userSelect, data: [admin,admin]
+26.02.03 19:02:35 dbOpXml: About to enter switch statement
+26.02.03 19:02:35 dbOpXml: Entering userSelect case
+26.02.03 19:02:35 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 19:02:35 dbOpXml: userSelect completed
+26.02.03 19:02:35 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:02:35 dbOpXml: XML output length: 92
+26.02.03 19:02:35 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 19:02:35 dbOpXml: XML output sent, flushing
+26.02.03 19:02:35 dbOpXml: Closing database connection
+26.02.03 19:02:35 dbOpXml: Database connection closed
+26.02.03 19:02:35 dbOpXml: Flush completed
+26.02.03 19:02:35 dbacc/index.php: dbOpXml() completed
+26.02.03 19:16:38 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin]
+26.02.03 19:16:38 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:16:38 dbOpXml: ENTRY
+26.02.03 19:16:38 dbOpXml: About to call initDbLib()
+26.02.03 19:16:38 initDbLib: Connecting to database...
+26.02.03 19:16:38 initDbLib: Database connected successfully
+26.02.03 19:16:38 dbOpXml: initDbLib() completed successfully
+26.02.03 19:16:38 dbOpXml: Getting type and data parameters
+26.02.03 19:16:38 dbOpXml: type=[testsSelect], data=[admin]
+26.02.03 19:16:38 testsSelect, data: [admin]
+26.02.03 19:16:38 dbOpXml: About to enter switch statement
+26.02.03 19:16:38 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 19:16:38 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:16:38 dbOpXml: XML output length: 904
+26.02.03 19:16:38 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 19:16:38 dbOpXml: XML output sent, flushing
+26.02.03 19:16:38 dbOpXml: Closing database connection
+26.02.03 19:16:38 dbOpXml: Database connection closed
+26.02.03 19:16:38 dbOpXml: Flush completed
+26.02.03 19:16:38 dbacc/index.php: dbOpXml() completed
+26.02.03 19:16:50 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 19:16:50 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:16:50 dbOpXml: ENTRY
+26.02.03 19:16:50 dbOpXml: About to call initDbLib()
+26.02.03 19:16:50 initDbLib: Connecting to database...
+26.02.03 19:16:50 initDbLib: Database connected successfully
+26.02.03 19:16:50 dbOpXml: initDbLib() completed successfully
+26.02.03 19:16:50 dbOpXml: Getting type and data parameters
+26.02.03 19:16:50 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 19:16:50 userSelect, data: [admin,admin]
+26.02.03 19:16:50 dbOpXml: About to enter switch statement
+26.02.03 19:16:50 dbOpXml: Entering userSelect case
+26.02.03 19:16:50 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 19:16:50 dbOpXml: userSelect completed
+26.02.03 19:16:50 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:16:50 dbOpXml: XML output length: 92
+26.02.03 19:16:50 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 19:16:50 dbOpXml: XML output sent, flushing
+26.02.03 19:16:50 dbOpXml: Closing database connection
+26.02.03 19:16:50 dbOpXml: Database connection closed
+26.02.03 19:16:50 dbOpXml: Flush completed
+26.02.03 19:16:50 dbacc/index.php: dbOpXml() completed
+26.02.03 19:16:52 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 19:16:52 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:16:52 dbOpXml: ENTRY
+26.02.03 19:16:52 dbOpXml: About to call initDbLib()
+26.02.03 19:16:52 initDbLib: Connecting to database...
+26.02.03 19:16:52 initDbLib: Database connected successfully
+26.02.03 19:16:52 dbOpXml: initDbLib() completed successfully
+26.02.03 19:16:52 dbOpXml: Getting type and data parameters
+26.02.03 19:16:52 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 19:16:52 userSelect, data: [admin,admin]
+26.02.03 19:16:52 dbOpXml: About to enter switch statement
+26.02.03 19:16:52 dbOpXml: Entering userSelect case
+26.02.03 19:16:52 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 19:16:52 dbOpXml: userSelect completed
+26.02.03 19:16:52 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:16:52 dbOpXml: XML output length: 92
+26.02.03 19:16:52 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 19:16:52 dbOpXml: XML output sent, flushing
+26.02.03 19:16:52 dbOpXml: Closing database connection
+26.02.03 19:16:52 dbOpXml: Database connection closed
+26.02.03 19:16:52 dbOpXml: Flush completed
+26.02.03 19:16:52 dbacc/index.php: dbOpXml() completed
+26.02.03 19:21:21 dbacc/index.php: REQUEST ARRIVED, type=[projectsSelect], data=[admin,1]
+26.02.03 19:21:21 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:21:21 dbOpXml: ENTRY
+26.02.03 19:21:21 dbOpXml: About to call initDbLib()
+26.02.03 19:21:21 initDbLib: Connecting to database...
+26.02.03 19:21:21 initDbLib: Database connected successfully
+26.02.03 19:21:21 dbOpXml: initDbLib() completed successfully
+26.02.03 19:21:21 dbOpXml: Getting type and data parameters
+26.02.03 19:21:21 dbOpXml: type=[projectsSelect], data=[admin,1]
+26.02.03 19:21:21 projectsSelect, data: [admin,1]
+26.02.03 19:21:21 dbOpXml: About to enter switch statement
+26.02.03 19:21:21 dbOpXml: Entering projectsSelect case
+26.02.03 19:21:21 select ecitt_project.no, ecitt_project.name, any_value(permName) as perm from ecitt_project, ecitt_perm where userName = 'admin' and (entityType = 'global' or (entityType = 'project' and (every = 1 or ecitt_project.no = entityNo))) group by ecitt_project.no, ecitt_project.name order by ecitt_project.name
+26.02.03 19:21:21 projectsSelect: About to execute query
+26.02.03 19:21:21 projectsSelect: Query executed in 3ms, result=SUCCESS
+26.02.03 19:21:21 projectsSelect: Generating XML
+26.02.03 19:21:21 projectsSelect: XML generated successfully
+26.02.03 19:21:21 projectsSelect: Result set freed, returning
+26.02.03 19:21:21 dbOpXml: projectsSelect completed
+26.02.03 19:21:21 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:21:21 dbOpXml: XML output length: 119
+26.02.03 19:21:21 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<projects current="1"><project no="1" name="Pilot_2026" perm="adm"/></projects>
+
+26.02.03 19:21:21 dbOpXml: XML output sent, flushing
+26.02.03 19:21:21 dbOpXml: Closing database connection
+26.02.03 19:21:21 dbOpXml: Database connection closed
+26.02.03 19:21:21 dbOpXml: Flush completed
+26.02.03 19:21:21 dbacc/index.php: dbOpXml() completed
+26.02.03 19:21:22 dbacc/index.php: REQUEST ARRIVED, type=[testSetsSelect], data=[admin,1,1]
+26.02.03 19:21:22 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:21:22 dbOpXml: ENTRY
+26.02.03 19:21:22 dbOpXml: About to call initDbLib()
+26.02.03 19:21:22 initDbLib: Connecting to database...
+26.02.03 19:21:22 initDbLib: Database connected successfully
+26.02.03 19:21:22 dbOpXml: initDbLib() completed successfully
+26.02.03 19:21:22 dbOpXml: Getting type and data parameters
+26.02.03 19:21:22 dbOpXml: type=[testSetsSelect], data=[admin,1,1]
+26.02.03 19:21:22 testSetsSelect, data: [admin,1,1]
+26.02.03 19:21:22 dbOpXml: About to enter switch statement
+26.02.03 19:21:22 select t.no, t.projectNo, t.name, any_value(perm.permName) as perm from ecitt_testSet t, ecitt_perm perm where t.projectNo = 1 and perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'project' and (perm.every = 1 or t.projectNo = perm.entityNo) and perm.permName = 'adm') or (perm.entityType = 'testSet' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.projectNo, t.name order by t.name
+26.02.03 19:21:22 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:21:22 dbOpXml: XML output length: 131
+26.02.03 19:21:22 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<testSets current="1"><testSet no="1" projectNo="1" name="Cohort_1" perm="adm"/></testSets>
+
+26.02.03 19:21:22 dbOpXml: XML output sent, flushing
+26.02.03 19:21:22 dbOpXml: Closing database connection
+26.02.03 19:21:22 dbOpXml: Database connection closed
+26.02.03 19:21:22 dbOpXml: Flush completed
+26.02.03 19:21:22 dbacc/index.php: dbOpXml() completed
+26.02.03 19:21:23 dbacc/index.php: REQUEST ARRIVED, type=[partsSelect], data=[admin,1,1,0]
+26.02.03 19:21:23 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:21:23 dbOpXml: ENTRY
+26.02.03 19:21:23 dbOpXml: About to call initDbLib()
+26.02.03 19:21:23 initDbLib: Connecting to database...
+26.02.03 19:21:23 initDbLib: Database connected successfully
+26.02.03 19:21:23 dbOpXml: initDbLib() completed successfully
+26.02.03 19:21:23 dbOpXml: Getting type and data parameters
+26.02.03 19:21:23 dbOpXml: type=[partsSelect], data=[admin,1,1,0]
+26.02.03 19:21:23 partsSelect, data: [admin,1,1,0]
+26.02.03 19:21:23 dbOpXml: About to enter switch statement
+26.02.03 19:21:23 select *, (userName = 'admin') as owner from ecitt_part where projectNo=1 order by ref
+26.02.03 19:21:23 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:21:23 dbOpXml: XML output length: 204
+26.02.03 19:21:23 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<parts current="0"><part userName="admin" no="1" projectNo="1" ref="Santiago_Morales" birthYear="2007" birthMonth="1" birthDay="1" gender="male" owner="1"/></par
+26.02.03 19:21:23 dbOpXml: XML output sent, flushing
+26.02.03 19:21:23 dbOpXml: Closing database connection
+26.02.03 19:21:23 dbOpXml: Database connection closed
+26.02.03 19:21:23 dbOpXml: Flush completed
+26.02.03 19:21:23 dbacc/index.php: dbOpXml() completed
+26.02.03 19:21:25 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin,]
+26.02.03 19:21:25 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:21:25 dbOpXml: ENTRY
+26.02.03 19:21:25 dbOpXml: About to call initDbLib()
+26.02.03 19:21:25 initDbLib: Connecting to database...
+26.02.03 19:21:25 initDbLib: Database connected successfully
+26.02.03 19:21:25 dbOpXml: initDbLib() completed successfully
+26.02.03 19:21:25 dbOpXml: Getting type and data parameters
+26.02.03 19:21:25 dbOpXml: type=[testsSelect], data=[admin,]
+26.02.03 19:21:25 testsSelect, data: [admin,]
+26.02.03 19:21:25 dbOpXml: About to enter switch statement
+26.02.03 19:21:25 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 19:21:25 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:21:25 dbOpXml: XML output length: 904
+26.02.03 19:21:25 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 19:21:25 dbOpXml: XML output sent, flushing
+26.02.03 19:21:25 dbOpXml: Closing database connection
+26.02.03 19:21:25 dbOpXml: Database connection closed
+26.02.03 19:21:25 dbOpXml: Flush completed
+26.02.03 19:21:25 dbacc/index.php: dbOpXml() completed
+26.02.03 19:23:57 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 19:23:57 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:23:57 dbOpXml: ENTRY
+26.02.03 19:23:57 dbOpXml: About to call initDbLib()
+26.02.03 19:23:57 initDbLib: Connecting to database...
+26.02.03 19:23:57 initDbLib: Database connected successfully
+26.02.03 19:23:57 dbOpXml: initDbLib() completed successfully
+26.02.03 19:23:57 dbOpXml: Getting type and data parameters
+26.02.03 19:23:57 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 19:23:57 userSelect, data: [admin,admin]
+26.02.03 19:23:57 dbOpXml: About to enter switch statement
+26.02.03 19:23:57 dbOpXml: Entering userSelect case
+26.02.03 19:23:57 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 19:23:57 dbOpXml: userSelect completed
+26.02.03 19:23:57 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:23:57 dbOpXml: XML output length: 92
+26.02.03 19:23:57 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 19:23:57 dbOpXml: XML output sent, flushing
+26.02.03 19:23:57 dbOpXml: Closing database connection
+26.02.03 19:23:57 dbOpXml: Database connection closed
+26.02.03 19:23:57 dbOpXml: Flush completed
+26.02.03 19:23:57 dbacc/index.php: dbOpXml() completed
+26.02.03 19:23:58 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 19:23:58 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:23:58 dbOpXml: ENTRY
+26.02.03 19:23:58 dbOpXml: About to call initDbLib()
+26.02.03 19:23:58 initDbLib: Connecting to database...
+26.02.03 19:23:58 initDbLib: Database connected successfully
+26.02.03 19:23:58 dbOpXml: initDbLib() completed successfully
+26.02.03 19:23:58 dbOpXml: Getting type and data parameters
+26.02.03 19:23:58 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 19:23:58 userSelect, data: [admin,admin]
+26.02.03 19:23:58 dbOpXml: About to enter switch statement
+26.02.03 19:23:58 dbOpXml: Entering userSelect case
+26.02.03 19:23:58 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 19:23:58 dbOpXml: userSelect completed
+26.02.03 19:23:58 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:23:58 dbOpXml: XML output length: 92
+26.02.03 19:23:58 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 19:23:58 dbOpXml: XML output sent, flushing
+26.02.03 19:23:58 dbOpXml: Closing database connection
+26.02.03 19:23:58 dbOpXml: Database connection closed
+26.02.03 19:23:58 dbOpXml: Flush completed
+26.02.03 19:23:58 dbacc/index.php: dbOpXml() completed
+26.02.03 19:34:16 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 19:34:16 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:34:16 dbOpXml: ENTRY
+26.02.03 19:34:16 dbOpXml: About to call initDbLib()
+26.02.03 19:34:16 initDbLib: Connecting to database...
+26.02.03 19:34:16 initDbLib: Database connected successfully
+26.02.03 19:34:16 dbOpXml: initDbLib() completed successfully
+26.02.03 19:34:16 dbOpXml: Getting type and data parameters
+26.02.03 19:34:16 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 19:34:16 userSelect, data: [admin,admin]
+26.02.03 19:34:16 dbOpXml: About to enter switch statement
+26.02.03 19:34:16 dbOpXml: Entering userSelect case
+26.02.03 19:34:16 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 19:34:16 dbOpXml: userSelect completed
+26.02.03 19:34:16 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:34:16 dbOpXml: XML output length: 92
+26.02.03 19:34:16 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 19:34:16 dbOpXml: XML output sent, flushing
+26.02.03 19:34:16 dbOpXml: Closing database connection
+26.02.03 19:34:16 dbOpXml: Database connection closed
+26.02.03 19:34:16 dbOpXml: Flush completed
+26.02.03 19:34:16 dbacc/index.php: dbOpXml() completed
+26.02.03 19:34:17 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 19:34:17 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:34:17 dbOpXml: ENTRY
+26.02.03 19:34:17 dbOpXml: About to call initDbLib()
+26.02.03 19:34:17 initDbLib: Connecting to database...
+26.02.03 19:34:17 initDbLib: Database connected successfully
+26.02.03 19:34:17 dbOpXml: initDbLib() completed successfully
+26.02.03 19:34:17 dbOpXml: Getting type and data parameters
+26.02.03 19:34:17 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 19:34:17 userSelect, data: [admin,admin]
+26.02.03 19:34:17 dbOpXml: About to enter switch statement
+26.02.03 19:34:17 dbOpXml: Entering userSelect case
+26.02.03 19:34:17 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 19:34:17 dbOpXml: userSelect completed
+26.02.03 19:34:17 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:34:17 dbOpXml: XML output length: 92
+26.02.03 19:34:17 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 19:34:17 dbOpXml: XML output sent, flushing
+26.02.03 19:34:17 dbOpXml: Closing database connection
+26.02.03 19:34:17 dbOpXml: Database connection closed
+26.02.03 19:34:17 dbOpXml: Flush completed
+26.02.03 19:34:17 dbacc/index.php: dbOpXml() completed
+26.02.03 19:37:15 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 19:37:15 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:37:15 dbOpXml: ENTRY
+26.02.03 19:37:15 dbOpXml: About to call initDbLib()
+26.02.03 19:37:15 initDbLib: Connecting to database...
+26.02.03 19:37:15 initDbLib: Database connected successfully
+26.02.03 19:37:15 dbOpXml: initDbLib() completed successfully
+26.02.03 19:37:15 dbOpXml: Getting type and data parameters
+26.02.03 19:37:15 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 19:37:15 userSelect, data: [admin,admin]
+26.02.03 19:37:15 dbOpXml: About to enter switch statement
+26.02.03 19:37:15 dbOpXml: Entering userSelect case
+26.02.03 19:37:15 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 19:37:15 dbOpXml: userSelect completed
+26.02.03 19:37:15 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:37:15 dbOpXml: XML output length: 92
+26.02.03 19:37:15 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 19:37:15 dbOpXml: XML output sent, flushing
+26.02.03 19:37:15 dbOpXml: Closing database connection
+26.02.03 19:37:15 dbOpXml: Database connection closed
+26.02.03 19:37:15 dbOpXml: Flush completed
+26.02.03 19:37:15 dbacc/index.php: dbOpXml() completed
+26.02.03 19:37:16 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 19:37:16 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:37:16 dbOpXml: ENTRY
+26.02.03 19:37:16 dbOpXml: About to call initDbLib()
+26.02.03 19:37:16 initDbLib: Connecting to database...
+26.02.03 19:37:16 initDbLib: Database connected successfully
+26.02.03 19:37:16 dbOpXml: initDbLib() completed successfully
+26.02.03 19:37:16 dbOpXml: Getting type and data parameters
+26.02.03 19:37:16 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 19:37:16 userSelect, data: [admin,admin]
+26.02.03 19:37:16 dbOpXml: About to enter switch statement
+26.02.03 19:37:16 dbOpXml: Entering userSelect case
+26.02.03 19:37:16 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 19:37:16 dbOpXml: userSelect completed
+26.02.03 19:37:16 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:37:16 dbOpXml: XML output length: 92
+26.02.03 19:37:16 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 19:37:16 dbOpXml: XML output sent, flushing
+26.02.03 19:37:16 dbOpXml: Closing database connection
+26.02.03 19:37:16 dbOpXml: Database connection closed
+26.02.03 19:37:16 dbOpXml: Flush completed
+26.02.03 19:37:16 dbacc/index.php: dbOpXml() completed
+26.02.03 19:41:27 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 19:41:27 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:41:27 dbOpXml: ENTRY
+26.02.03 19:41:27 dbOpXml: About to call initDbLib()
+26.02.03 19:41:27 initDbLib: Connecting to database...
+26.02.03 19:41:27 initDbLib: Database connected successfully
+26.02.03 19:41:27 dbOpXml: initDbLib() completed successfully
+26.02.03 19:41:27 dbOpXml: Getting type and data parameters
+26.02.03 19:41:27 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 19:41:27 userSelect, data: [admin,admin]
+26.02.03 19:41:27 dbOpXml: About to enter switch statement
+26.02.03 19:41:27 dbOpXml: Entering userSelect case
+26.02.03 19:41:27 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 19:41:27 dbOpXml: userSelect completed
+26.02.03 19:41:27 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:41:27 dbOpXml: XML output length: 92
+26.02.03 19:41:27 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 19:41:27 dbOpXml: XML output sent, flushing
+26.02.03 19:41:27 dbOpXml: Closing database connection
+26.02.03 19:41:27 dbOpXml: Database connection closed
+26.02.03 19:41:27 dbOpXml: Flush completed
+26.02.03 19:41:27 dbacc/index.php: dbOpXml() completed
+26.02.03 19:41:28 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 19:41:28 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:41:28 dbOpXml: ENTRY
+26.02.03 19:41:28 dbOpXml: About to call initDbLib()
+26.02.03 19:41:28 initDbLib: Connecting to database...
+26.02.03 19:41:28 initDbLib: Database connected successfully
+26.02.03 19:41:28 dbOpXml: initDbLib() completed successfully
+26.02.03 19:41:28 dbOpXml: Getting type and data parameters
+26.02.03 19:41:28 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 19:41:28 userSelect, data: [admin,admin]
+26.02.03 19:41:28 dbOpXml: About to enter switch statement
+26.02.03 19:41:28 dbOpXml: Entering userSelect case
+26.02.03 19:41:28 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 19:41:28 dbOpXml: userSelect completed
+26.02.03 19:41:28 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:41:28 dbOpXml: XML output length: 92
+26.02.03 19:41:28 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 19:41:28 dbOpXml: XML output sent, flushing
+26.02.03 19:41:28 dbOpXml: Closing database connection
+26.02.03 19:41:28 dbOpXml: Database connection closed
+26.02.03 19:41:28 dbOpXml: Flush completed
+26.02.03 19:41:28 dbacc/index.php: dbOpXml() completed
+26.02.03 19:42:22 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 19:42:22 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:42:22 dbOpXml: ENTRY
+26.02.03 19:42:22 dbOpXml: About to call initDbLib()
+26.02.03 19:42:22 initDbLib: Connecting to database...
+26.02.03 19:42:22 initDbLib: Database connected successfully
+26.02.03 19:42:22 dbOpXml: initDbLib() completed successfully
+26.02.03 19:42:22 dbOpXml: Getting type and data parameters
+26.02.03 19:42:22 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 19:42:22 userSelect, data: [admin,admin]
+26.02.03 19:42:22 dbOpXml: About to enter switch statement
+26.02.03 19:42:22 dbOpXml: Entering userSelect case
+26.02.03 19:42:22 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 19:42:22 dbOpXml: userSelect completed
+26.02.03 19:42:22 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:42:22 dbOpXml: XML output length: 92
+26.02.03 19:42:22 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 19:42:22 dbOpXml: XML output sent, flushing
+26.02.03 19:42:22 dbOpXml: Closing database connection
+26.02.03 19:42:22 dbOpXml: Database connection closed
+26.02.03 19:42:22 dbOpXml: Flush completed
+26.02.03 19:42:22 dbacc/index.php: dbOpXml() completed
+26.02.03 19:42:29 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 19:42:29 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:42:29 dbOpXml: ENTRY
+26.02.03 19:42:29 dbOpXml: About to call initDbLib()
+26.02.03 19:42:29 initDbLib: Connecting to database...
+26.02.03 19:42:29 initDbLib: Database connected successfully
+26.02.03 19:42:29 dbOpXml: initDbLib() completed successfully
+26.02.03 19:42:29 dbOpXml: Getting type and data parameters
+26.02.03 19:42:29 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 19:42:29 userSelect, data: [admin,admin]
+26.02.03 19:42:29 dbOpXml: About to enter switch statement
+26.02.03 19:42:29 dbOpXml: Entering userSelect case
+26.02.03 19:42:29 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 19:42:29 dbOpXml: userSelect completed
+26.02.03 19:42:29 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:42:29 dbOpXml: XML output length: 92
+26.02.03 19:42:29 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 19:42:29 dbOpXml: XML output sent, flushing
+26.02.03 19:42:29 dbOpXml: Closing database connection
+26.02.03 19:42:29 dbOpXml: Database connection closed
+26.02.03 19:42:29 dbOpXml: Flush completed
+26.02.03 19:42:29 dbacc/index.php: dbOpXml() completed
+26.02.03 19:43:34 dbacc/index.php: REQUEST ARRIVED, type=[projectsSelect], data=[admin,1]
+26.02.03 19:43:34 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:43:34 dbOpXml: ENTRY
+26.02.03 19:43:34 dbOpXml: About to call initDbLib()
+26.02.03 19:43:34 initDbLib: Connecting to database...
+26.02.03 19:43:34 initDbLib: Database connected successfully
+26.02.03 19:43:34 dbOpXml: initDbLib() completed successfully
+26.02.03 19:43:34 dbOpXml: Getting type and data parameters
+26.02.03 19:43:34 dbOpXml: type=[projectsSelect], data=[admin,1]
+26.02.03 19:43:34 projectsSelect, data: [admin,1]
+26.02.03 19:43:34 dbOpXml: About to enter switch statement
+26.02.03 19:43:34 dbOpXml: Entering projectsSelect case
+26.02.03 19:43:34 select ecitt_project.no, ecitt_project.name, any_value(permName) as perm from ecitt_project, ecitt_perm where userName = 'admin' and (entityType = 'global' or (entityType = 'project' and (every = 1 or ecitt_project.no = entityNo))) group by ecitt_project.no, ecitt_project.name order by ecitt_project.name
+26.02.03 19:43:34 projectsSelect: About to execute query
+26.02.03 19:43:34 projectsSelect: Query executed in 2ms, result=SUCCESS
+26.02.03 19:43:34 projectsSelect: Generating XML
+26.02.03 19:43:34 projectsSelect: XML generated successfully
+26.02.03 19:43:34 projectsSelect: Result set freed, returning
+26.02.03 19:43:34 dbOpXml: projectsSelect completed
+26.02.03 19:43:34 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:43:34 dbOpXml: XML output length: 119
+26.02.03 19:43:34 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<projects current="1"><project no="1" name="Pilot_2026" perm="adm"/></projects>
+
+26.02.03 19:43:34 dbOpXml: XML output sent, flushing
+26.02.03 19:43:34 dbOpXml: Closing database connection
+26.02.03 19:43:34 dbOpXml: Database connection closed
+26.02.03 19:43:34 dbOpXml: Flush completed
+26.02.03 19:43:34 dbacc/index.php: dbOpXml() completed
+26.02.03 19:43:34 dbacc/index.php: REQUEST ARRIVED, type=[projectsSelect], data=[admin,1]
+26.02.03 19:43:34 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:43:34 dbOpXml: ENTRY
+26.02.03 19:43:34 dbOpXml: About to call initDbLib()
+26.02.03 19:43:34 initDbLib: Connecting to database...
+26.02.03 19:43:34 initDbLib: Database connected successfully
+26.02.03 19:43:34 dbOpXml: initDbLib() completed successfully
+26.02.03 19:43:34 dbOpXml: Getting type and data parameters
+26.02.03 19:43:34 dbOpXml: type=[projectsSelect], data=[admin,1]
+26.02.03 19:43:34 projectsSelect, data: [admin,1]
+26.02.03 19:43:34 dbOpXml: About to enter switch statement
+26.02.03 19:43:34 dbOpXml: Entering projectsSelect case
+26.02.03 19:43:34 select ecitt_project.no, ecitt_project.name, any_value(permName) as perm from ecitt_project, ecitt_perm where userName = 'admin' and (entityType = 'global' or (entityType = 'project' and (every = 1 or ecitt_project.no = entityNo))) group by ecitt_project.no, ecitt_project.name order by ecitt_project.name
+26.02.03 19:43:34 projectsSelect: About to execute query
+26.02.03 19:43:34 projectsSelect: Query executed in 1ms, result=SUCCESS
+26.02.03 19:43:34 projectsSelect: Generating XML
+26.02.03 19:43:34 projectsSelect: XML generated successfully
+26.02.03 19:43:34 projectsSelect: Result set freed, returning
+26.02.03 19:43:34 dbOpXml: projectsSelect completed
+26.02.03 19:43:34 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:43:34 dbOpXml: XML output length: 119
+26.02.03 19:43:34 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<projects current="1"><project no="1" name="Pilot_2026" perm="adm"/></projects>
+
+26.02.03 19:43:34 dbOpXml: XML output sent, flushing
+26.02.03 19:43:34 dbOpXml: Closing database connection
+26.02.03 19:43:34 dbOpXml: Database connection closed
+26.02.03 19:43:34 dbOpXml: Flush completed
+26.02.03 19:43:34 dbacc/index.php: dbOpXml() completed
+26.02.03 19:43:46 dbacc/index.php: REQUEST ARRIVED, type=[testSetsSelect], data=[admin,1,1]
+26.02.03 19:43:46 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:43:46 dbOpXml: ENTRY
+26.02.03 19:43:46 dbOpXml: About to call initDbLib()
+26.02.03 19:43:46 initDbLib: Connecting to database...
+26.02.03 19:43:46 initDbLib: Database connected successfully
+26.02.03 19:43:46 dbOpXml: initDbLib() completed successfully
+26.02.03 19:43:46 dbOpXml: Getting type and data parameters
+26.02.03 19:43:46 dbOpXml: type=[testSetsSelect], data=[admin,1,1]
+26.02.03 19:43:46 testSetsSelect, data: [admin,1,1]
+26.02.03 19:43:46 dbOpXml: About to enter switch statement
+26.02.03 19:43:46 select t.no, t.projectNo, t.name, any_value(perm.permName) as perm from ecitt_testSet t, ecitt_perm perm where t.projectNo = 1 and perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'project' and (perm.every = 1 or t.projectNo = perm.entityNo) and perm.permName = 'adm') or (perm.entityType = 'testSet' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.projectNo, t.name order by t.name
+26.02.03 19:43:46 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:43:46 dbOpXml: XML output length: 131
+26.02.03 19:43:46 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<testSets current="1"><testSet no="1" projectNo="1" name="Cohort_1" perm="adm"/></testSets>
+
+26.02.03 19:43:46 dbOpXml: XML output sent, flushing
+26.02.03 19:43:46 dbOpXml: Closing database connection
+26.02.03 19:43:46 dbOpXml: Database connection closed
+26.02.03 19:43:46 dbOpXml: Flush completed
+26.02.03 19:43:46 dbacc/index.php: dbOpXml() completed
+26.02.03 19:43:47 dbacc/index.php: REQUEST ARRIVED, type=[partsSelect], data=[admin,1,1,0]
+26.02.03 19:43:47 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:43:47 dbOpXml: ENTRY
+26.02.03 19:43:47 dbOpXml: About to call initDbLib()
+26.02.03 19:43:47 initDbLib: Connecting to database...
+26.02.03 19:43:47 initDbLib: Database connected successfully
+26.02.03 19:43:47 dbOpXml: initDbLib() completed successfully
+26.02.03 19:43:47 dbOpXml: Getting type and data parameters
+26.02.03 19:43:47 dbOpXml: type=[partsSelect], data=[admin,1,1,0]
+26.02.03 19:43:47 partsSelect, data: [admin,1,1,0]
+26.02.03 19:43:47 dbOpXml: About to enter switch statement
+26.02.03 19:43:47 select *, (userName = 'admin') as owner from ecitt_part where projectNo=1 order by ref
+26.02.03 19:43:47 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:43:47 dbOpXml: XML output length: 204
+26.02.03 19:43:47 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<parts current="0"><part userName="admin" no="1" projectNo="1" ref="Santiago_Morales" birthYear="2007" birthMonth="1" birthDay="1" gender="male" owner="1"/></par
+26.02.03 19:43:47 dbOpXml: XML output sent, flushing
+26.02.03 19:43:47 dbOpXml: Closing database connection
+26.02.03 19:43:47 dbOpXml: Database connection closed
+26.02.03 19:43:47 dbOpXml: Flush completed
+26.02.03 19:43:47 dbacc/index.php: dbOpXml() completed
+26.02.03 19:43:52 dbacc/index.php: REQUEST ARRIVED, type=[testsSelect], data=[admin,]
+26.02.03 19:43:52 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:43:52 dbOpXml: ENTRY
+26.02.03 19:43:52 dbOpXml: About to call initDbLib()
+26.02.03 19:43:52 initDbLib: Connecting to database...
+26.02.03 19:43:52 initDbLib: Database connected successfully
+26.02.03 19:43:52 dbOpXml: initDbLib() completed successfully
+26.02.03 19:43:52 dbOpXml: Getting type and data parameters
+26.02.03 19:43:52 dbOpXml: type=[testsSelect], data=[admin,]
+26.02.03 19:43:52 testsSelect, data: [admin,]
+26.02.03 19:43:52 dbOpXml: About to enter switch statement
+26.02.03 19:43:52 select t.no, t.name, t.specName as value, any_value(perm.permName) as perm from ecitt_testSpec t, ecitt_perm perm where perm.userName = 'admin' and (perm.entityType = 'global' or (perm.entityType = 'test' and (perm.every = 1 or t.no = perm.entityNo))) group by t.no, t.name, t.specName order by t.name
+26.02.03 19:43:52 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:43:52 dbOpXml: XML output length: 904
+26.02.03 19:43:52 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<tests current="0"><test no="5" name="24 Months 1" value="24m1" perm="adm"/><test no="6" name="24 Months 2" value="24m2" perm="adm"/><test no="7" name="24 Months
+26.02.03 19:43:52 dbOpXml: XML output sent, flushing
+26.02.03 19:43:52 dbOpXml: Closing database connection
+26.02.03 19:43:52 dbOpXml: Database connection closed
+26.02.03 19:43:52 dbOpXml: Flush completed
+26.02.03 19:43:52 dbacc/index.php: dbOpXml() completed
+26.02.03 19:49:48 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 19:49:48 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:49:48 dbOpXml: ENTRY
+26.02.03 19:49:48 dbOpXml: About to call initDbLib()
+26.02.03 19:49:48 initDbLib: Connecting to database...
+26.02.03 19:49:48 initDbLib: Database connected successfully
+26.02.03 19:49:48 dbOpXml: initDbLib() completed successfully
+26.02.03 19:49:48 dbOpXml: Getting type and data parameters
+26.02.03 19:49:48 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 19:49:48 userSelect, data: [admin,admin]
+26.02.03 19:49:48 dbOpXml: About to enter switch statement
+26.02.03 19:49:48 dbOpXml: Entering userSelect case
+26.02.03 19:49:48 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 19:49:48 dbOpXml: userSelect completed
+26.02.03 19:49:48 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:49:48 dbOpXml: XML output length: 92
+26.02.03 19:49:48 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 19:49:48 dbOpXml: XML output sent, flushing
+26.02.03 19:49:48 dbOpXml: Closing database connection
+26.02.03 19:49:48 dbOpXml: Database connection closed
+26.02.03 19:49:48 dbOpXml: Flush completed
+26.02.03 19:49:48 dbacc/index.php: dbOpXml() completed
+26.02.03 19:49:53 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 19:49:53 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:49:53 dbOpXml: ENTRY
+26.02.03 19:49:53 dbOpXml: About to call initDbLib()
+26.02.03 19:49:53 initDbLib: Connecting to database...
+26.02.03 19:49:53 initDbLib: Database connected successfully
+26.02.03 19:49:53 dbOpXml: initDbLib() completed successfully
+26.02.03 19:49:53 dbOpXml: Getting type and data parameters
+26.02.03 19:49:53 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 19:49:53 userSelect, data: [admin,admin]
+26.02.03 19:49:53 dbOpXml: About to enter switch statement
+26.02.03 19:49:53 dbOpXml: Entering userSelect case
+26.02.03 19:49:53 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 19:49:53 dbOpXml: userSelect completed
+26.02.03 19:49:53 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:49:53 dbOpXml: XML output length: 92
+26.02.03 19:49:53 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 19:49:53 dbOpXml: XML output sent, flushing
+26.02.03 19:49:53 dbOpXml: Closing database connection
+26.02.03 19:49:53 dbOpXml: Database connection closed
+26.02.03 19:49:53 dbOpXml: Flush completed
+26.02.03 19:49:53 dbacc/index.php: dbOpXml() completed
+26.02.03 19:51:55 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 19:51:55 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:51:55 dbOpXml: ENTRY
+26.02.03 19:51:55 dbOpXml: About to call initDbLib()
+26.02.03 19:51:55 initDbLib: Connecting to database...
+26.02.03 19:51:55 initDbLib: Database connected successfully
+26.02.03 19:51:55 dbOpXml: initDbLib() completed successfully
+26.02.03 19:51:55 dbOpXml: Getting type and data parameters
+26.02.03 19:51:55 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 19:51:55 userSelect, data: [admin,admin]
+26.02.03 19:51:55 dbOpXml: About to enter switch statement
+26.02.03 19:51:55 dbOpXml: Entering userSelect case
+26.02.03 19:51:55 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 19:51:55 dbOpXml: userSelect completed
+26.02.03 19:51:55 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:51:55 dbOpXml: XML output length: 92
+26.02.03 19:51:55 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 19:51:55 dbOpXml: XML output sent, flushing
+26.02.03 19:51:55 dbOpXml: Closing database connection
+26.02.03 19:51:55 dbOpXml: Database connection closed
+26.02.03 19:51:55 dbOpXml: Flush completed
+26.02.03 19:51:55 dbacc/index.php: dbOpXml() completed
+26.02.03 19:52:14 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 19:52:14 dbacc/index.php: About to call dbOpXml()
+26.02.03 19:52:14 dbOpXml: ENTRY
+26.02.03 19:52:14 dbOpXml: About to call initDbLib()
+26.02.03 19:52:14 initDbLib: Connecting to database...
+26.02.03 19:52:14 initDbLib: Database connected successfully
+26.02.03 19:52:14 dbOpXml: initDbLib() completed successfully
+26.02.03 19:52:14 dbOpXml: Getting type and data parameters
+26.02.03 19:52:14 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 19:52:14 userSelect, data: [admin,admin]
+26.02.03 19:52:14 dbOpXml: About to enter switch statement
+26.02.03 19:52:14 dbOpXml: Entering userSelect case
+26.02.03 19:52:14 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 19:52:14 dbOpXml: userSelect completed
+26.02.03 19:52:14 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 19:52:14 dbOpXml: XML output length: 92
+26.02.03 19:52:14 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 19:52:14 dbOpXml: XML output sent, flushing
+26.02.03 19:52:14 dbOpXml: Closing database connection
+26.02.03 19:52:14 dbOpXml: Database connection closed
+26.02.03 19:52:14 dbOpXml: Flush completed
+26.02.03 19:52:14 dbacc/index.php: dbOpXml() completed
+26.02.03 20:07:51 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 20:07:51 dbacc/index.php: About to call dbOpXml()
+26.02.03 20:07:51 dbOpXml: ENTRY
+26.02.03 20:07:51 dbOpXml: About to call initDbLib()
+26.02.03 20:07:51 initDbLib: Connecting to database...
+26.02.03 20:07:51 initDbLib: Database connected successfully
+26.02.03 20:07:51 dbOpXml: initDbLib() completed successfully
+26.02.03 20:07:51 dbOpXml: Getting type and data parameters
+26.02.03 20:07:51 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 20:07:51 userSelect, data: [admin,admin]
+26.02.03 20:07:51 dbOpXml: About to enter switch statement
+26.02.03 20:07:51 dbOpXml: Entering userSelect case
+26.02.03 20:07:51 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 20:07:51 dbOpXml: userSelect completed
+26.02.03 20:07:51 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 20:07:51 dbOpXml: XML output length: 92
+26.02.03 20:07:51 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 20:07:51 dbOpXml: XML output sent, flushing
+26.02.03 20:07:51 dbOpXml: Closing database connection
+26.02.03 20:07:51 dbOpXml: Database connection closed
+26.02.03 20:07:51 dbOpXml: Flush completed
+26.02.03 20:07:51 dbacc/index.php: dbOpXml() completed
+26.02.03 20:08:01 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 20:08:01 dbacc/index.php: About to call dbOpXml()
+26.02.03 20:08:01 dbOpXml: ENTRY
+26.02.03 20:08:01 dbOpXml: About to call initDbLib()
+26.02.03 20:08:01 initDbLib: Connecting to database...
+26.02.03 20:08:01 initDbLib: Database connected successfully
+26.02.03 20:08:01 dbOpXml: initDbLib() completed successfully
+26.02.03 20:08:01 dbOpXml: Getting type and data parameters
+26.02.03 20:08:01 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 20:08:01 userSelect, data: [admin,admin]
+26.02.03 20:08:01 dbOpXml: About to enter switch statement
+26.02.03 20:08:01 dbOpXml: Entering userSelect case
+26.02.03 20:08:01 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 20:08:01 dbOpXml: userSelect completed
+26.02.03 20:08:01 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 20:08:01 dbOpXml: XML output length: 92
+26.02.03 20:08:01 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 20:08:01 dbOpXml: XML output sent, flushing
+26.02.03 20:08:01 dbOpXml: Closing database connection
+26.02.03 20:08:01 dbOpXml: Database connection closed
+26.02.03 20:08:01 dbOpXml: Flush completed
+26.02.03 20:08:01 dbacc/index.php: dbOpXml() completed
+26.02.03 20:11:48 dbacc/index.php: REQUEST ARRIVED, type=[userSelect], data=[admin,admin]
+26.02.03 20:11:48 dbacc/index.php: About to call dbOpXml()
+26.02.03 20:11:48 dbOpXml: ENTRY
+26.02.03 20:11:48 dbOpXml: About to call initDbLib()
+26.02.03 20:11:48 initDbLib: Connecting to database...
+26.02.03 20:11:48 initDbLib: Database connected successfully
+26.02.03 20:11:48 dbOpXml: initDbLib() completed successfully
+26.02.03 20:11:48 dbOpXml: Getting type and data parameters
+26.02.03 20:11:48 dbOpXml: type=[userSelect], data=[admin,admin]
+26.02.03 20:11:48 userSelect, data: [admin,admin]
+26.02.03 20:11:48 dbOpXml: About to enter switch statement
+26.02.03 20:11:48 dbOpXml: Entering userSelect case
+26.02.03 20:11:48 select name, userType, (select permName from ecitt_perm where entityType = 'global' and name = userName) as globalPerm from ecitt_user where name = 'admin' and password = 'admin'
+26.02.03 20:11:48 dbOpXml: userSelect completed
+26.02.03 20:11:48 dbOpXml: About to output XML, doc type: DOMDocument
+26.02.03 20:11:48 dbOpXml: XML output length: 92
+26.02.03 20:11:48 dbOpXml: XML output preview (first 200 chars): <?xml version="1.0" encoding="utf-8"?>
+<user name="admin" userType="dev" globalPerm="adm"/>
+
+26.02.03 20:11:48 dbOpXml: XML output sent, flushing
+26.02.03 20:11:48 dbOpXml: Closing database connection
+26.02.03 20:11:48 dbOpXml: Database connection closed
+26.02.03 20:11:48 dbOpXml: Flush completed
+26.02.03 20:11:48 dbacc/index.php: dbOpXml() completed

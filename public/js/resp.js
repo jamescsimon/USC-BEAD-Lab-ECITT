@@ -69,6 +69,13 @@ function respDeclareGlobals() {
 	
 	prevRespTime=0;
 	dotPressed=0;
+	requireReadyHold=false;
+	waitingForHoldToStart=false;
+	holdToStartMs=1000;
+	holdToStartTimer=null;
+	allowReadyMessage=true;
+	pendingReadyMessageData=null;
+	readyMessageShown=false;
 	
 	trialQueue=new Array();
 	curRandomVarList=new Array();
@@ -281,7 +288,28 @@ function resp_reinit() {
 		replaceTextInElemWithId("connectPageTitle", "Ready to Connect");
 		normalizeClassOfElemWithId("startPairingButt");
 		connectState = connectStateNotConnected;
-		flushRecordQueue();
+		if (typeof updateConnectionState === "function") {
+			updateConnectionState({
+				connection_state: "disconnected",
+				controller_ready: "false",
+				responder_ready: "false",
+				last_event: "responder_reset"
+			});
+		}
+		// Clear server-side event queue FIRST to prevent stale events
+		if (typeof clearServerEventQueue === "function" && curUserName) {
+			clearServerEventQueue(curUserName);
+		}
+		// Upload any remaining trial records BEFORE clearing localStorage
+		if (typeof batchSendAllRecords === "function") {
+			batchSendAllRecords();
+		} else if (typeof flushRecordQueue === "function") {
+			flushRecordQueue();
+		}
+		// Now clear localStorage records after upload
+		if (typeof clearAllRecordQueue === "function") {
+			clearAllRecordQueue();
+		}
 		showPage("connect");
 		clearReadyMessage();
 		
@@ -337,8 +365,8 @@ function startOfflineApp() {
 }
 
 function reInitTrialState() {
-	//console.log("reInitTrialState");
-	//curTestName="";
+	console.log("[RESPONDER] reInitTrialState - clearing all trial state");
+	curTestName="";
 	curTrialType="";
 	curTrialVar="";
 	curTrialPhase="";
@@ -359,16 +387,22 @@ function reInitTrialState() {
 	prevRespTime=0;
 	dotPressed=0;
 	moveEvents=0;
+	requireReadyHold=false;
+	waitingForHoldToStart=false;
+	holdToStartTimer=null;
+	allowReadyMessage=true;
+	pendingReadyMessageData=null;
+	readyMessageShown=false;
 	
 	trialPending=false;
 	resp_stopTimers();
 	
-	
-	//console.log(trialQueue);
+	initTrialQueue();
 	
 	curTotalReactionTime=0;
 	curTrialCount=0;
 	waitForSuccess = false;
+	console.log("[RESPONDER] reInitTrialState complete - queue cleared, trialPending:", trialPending);
 }
 
 function initTrialQueue() {
@@ -382,7 +416,14 @@ function initTrialQueue() {
 // Button Responders
 
 function flipPairing() {
-	console.log("flipPairing called", "connectState: "+connectState, "buttonsEnabled:", buttonsEnabled());
+	// Check buttonsEnabled FIRST before doing anything else
+	var enabled = buttonsEnabled();
+	console.log("flipPairing called", "connectState: "+connectState, "buttonsEnabled:", enabled);
+	
+	if (!enabled) {
+		console.warn("flipPairing: buttons not enabled!");
+		return;
+	}
 	
 	// IMMEDIATE UI FEEDBACK - Update UI right away, before any async operations
 	var connectPageTitle = document.getElementById("connectPageTitle");
@@ -394,33 +435,25 @@ function flipPairing() {
 	}
 	
 	playSound("wetClick");
-	if (buttonsEnabled()) {
-		console.log("flipPairing, buttonsEnabled");
-		switch (connectState) {
-			case connectStateConnecting:
-				console.log("flipPairing, abort");
+	console.log("flipPairing, buttonsEnabled");
+	switch (connectState) {
+		case connectStateConnecting:
+			console.log("flipPairing, abort");
+			abort();
+			break;
+		case connectStateNotConnected:
+			console.log("flipPairing, startPairing");
+			if (navigator.onLine) {
+				startPairing();
+			}
+			else {
+				console.warn("flipPairing: navigator.onLine is false");
 				abort();
-				break;
-			case connectStateNotConnected:
-				console.log("flipPairing, startPairing");
-				if (navigator.onLine) {
-					startPairing();
-				}
-				else {
-					console.warn("flipPairing: navigator.onLine is false");
-					abort();
-				}
-				break;
-			default:
-				console.log("flipPairing: default case, connectState:", connectState);
-				break;
-		}
-	} else {
-		console.warn("flipPairing: buttons not enabled!");
-		// Even if buttons aren't enabled, try to update UI
-		if (connectPageTitle && typeof replaceTextInElemWithId !== 'undefined') {
-			replaceTextInElemWithId("connectPageTitle", "Available for Connection");
-		}
+			}
+			break;
+		default:
+			console.log("flipPairing: default case, connectState:", connectState);
+			break;
 	}
 }
 
@@ -435,6 +468,13 @@ function initConnection() {
 	console.log("initConnection called", "connectState: "+connectState);
 	connectState = connectStateConnecting;
 	console.log("initConnection: set connectState to Connecting");
+	if (typeof updateConnectionState === "function") {
+		updateConnectionState({
+			connection_state: "connecting",
+			responder_ready: "true",
+			last_event: "responder_available"
+		});
+	}
 	// Update UI immediately to show we're connecting
 	if (typeof replaceTextInElemWithId !== 'undefined') {
 		var connectPageTitle = document.getElementById("connectPageTitle");
@@ -485,31 +525,30 @@ function cancelPairing() {
 }
 
 function initEventSourceResp() {
-	var eventSource;
-	//console.log("initEventSourceResp");
-	eventSource=initEventSource("resp", curUserName, eventSourceRespOpen);
-	eventSource.addEventListener("connect", connectFromCntr, false);
-	eventSource.addEventListener("disconnect", disconnectFromCntr, false);
-	
-	eventSource.addEventListener("flipClock", flipClockFromCntr, false);
-	eventSource.addEventListener("hideClock", hideClockFromCntr, false);
-	
-	eventSource.addEventListener("startGame", startGameFromCntr, false);
-	eventSource.addEventListener("pressButton", pressButtonFromCntr, false);
-	//eventSource.addEventListener("gameActiveOk", gameActiveOkFromCntr, false);
-	eventSource.addEventListener("endGame", endGameFromCntr, false);
-	eventSource.addEventListener("touchGame", touchGameFromCntr, false);
-	
-	eventSource.addEventListener("startTest", startTestFromCntr, false);
-	eventSource.addEventListener("startTrial", startTrialFromCntr, false);
-	eventSource.addEventListener("startMultiTrials", startMultiTrialsFromCntr, false);
-	eventSource.addEventListener("cancelTrial", cancelTrialFromCntr, false);
-	
-	eventSource.addEventListener("endTrials", endTrialsFromCntr, false);
-	eventSource.addEventListener("endTest", endTestFromCntr, false);
-	
-	eventSource.addEventListener("setReadyMessage", setReadyMessageFromCntr, false);
-	eventSource.addEventListener("clearReadyMessage", clearReadyMessageFromCntr, false);
+	// Using polling instead of EventSource for local testing
+	console.log("initEventSourceResp - starting polling");
+	startConnectionPolling("responder", handleRespConnectionStateChange);
+	// Start event polling to receive test commands from controller
+	startEventPolling("resp", curUserName);
+}
+
+function handleRespConnectionStateChange(state) {
+	// Reduce console spam - only log state changes
+	// console.log("handleRespConnectionStateChange:", state);
+	// Check if controller sent connect event
+	if (state.connection_state == "connecting" && connectState == connectStateConnecting) {
+		connectState = connectStateConnected;
+		if (typeof updateConnectionState === "function") {
+			updateConnectionState({
+				connection_state: "connected",
+				responder_ready: "true",
+				last_event: "responder_connected"
+			});
+		}
+		normalizeClassOfElemWithId("pairingButt");
+		replaceTextInElemWithId("pairingMsg", "Connected to Controller");
+		console.log("Responder connected - event polling active");
+	}
 }
 
 /*
@@ -548,9 +587,11 @@ function dotButtonPressed(event) {
 }
 
 function trialSuccess() {
-	//console.log("trialSuccess");
+	console.log("[RESPONDER] trialSuccess called - This should only happen for certain trial types");
+	console.trace("[RESPONDER] trialSuccess call stack");
 	var trialTime;
 	trialTime = Date.now() - curTrialStartedTime;
+	console.log("[RESPONDER] trialSuccess - calling recordAndReport");
 	recordAndReport(curProjectNo, curTestSetNo, curTestName, curPartNo, 0, curTrialStartedTime, curTransTrialType, curTrialPhase, curTotalTrials+1, curTransTrialVar, 1, 0, 0, trialTime, "", "", 0, 0, trialQueue.length);
 	trialPending=false;
 	reInitTrialState();
@@ -573,7 +614,7 @@ function stopCurVideo() {
 }
 
 function buttonPressed(button, event) {
-	//console.log("buttonPressed, button: "+button);
+	console.log("[RESPONDER] buttonPressed CLICKED:", button, "curTestName:", curTestName, "curTrialType:", curTrialType);
 	if (firstTouchTime == null) {
 		firstTouchTime = Date.now();
 	}
@@ -598,6 +639,7 @@ function buttonPressed(button, event) {
 			else {
 				accuracy=0;
 			}
+			console.log("[RESPONDER] buttonPressed - calling recordAndReport, button:", button, "accuracy:", accuracy);
 			recordAndReport(curProjectNo, curTestSetNo, curTestName, curPartNo, prevRespTime, curTrialStartedTime, curTransTrialType, curTrialPhase, curTotalTrials+1, curTransTrialVar, accuracy, touchTime, reactionTime, trialTime, button, curAnim, dotPressed, moveEvents, trialQueue.length);
 			dotPressed=0;
 			moveEvents=0;
@@ -697,21 +739,50 @@ function showNextEndAnimFrame() {
 }
 
 function trialEnded() {
-	//console.log("trialEnded", "curTestName: "+curTestName, "trialQueue.length: "+trialQueue.length);
+	console.log("[RESPONDER] trialEnded - queue length:", trialQueue.length);
 	var dataItems;
-	//reflectCurTrialState();
 	if (trialQueue.length > 0) {
+		console.log("[RESPONDER] More trials in queue, starting next");
 		eventData = trialQueue.shift();
 		startTrial(eventData);
 	}
 	else {
+		console.log("[RESPONDER] All trials complete, resetting and notifying controller");
 		trialPending = false;
-		reInitTrialState();
+		
+		// Clear trial state but DON'T stop timers/polling yet
+		curTestName="";
+		curTrialType="";
+		curTrialVar="";
+		curTrialPhase="";
+		initTrialQueue();
+		
+		// Restart event polling FIRST so controller can poll and receive events
+		if (typeof startEventPolling === "function" && curUserName) {
+			console.log("[RESPONDER] Restarting polling");
+			startEventPolling("resp", curUserName);
+		}
+		
+		// CRITICAL: Upload responder's trial data, then notify controller
+		if (typeof batchSendAllRecords === "function") {
+			console.log("[RESPONDER] Uploading trial data after natural completion");
+			batchSendAllRecords(function() {
+				console.log("[RESPONDER] Upload complete, sending trialEnded event to controller");
+				sendEvent("cntr", "trialEnded", "");
+			});
+		} else {
+			// Fallback if batchSendAllRecords doesn't exist
+			console.log("[RESPONDER] Sending trialEnded event to controller");
+			sendEvent("cntr", "trialEnded", "");
+		}
+		
+		// Reset UI state
 		hideAllRespElems();
+		clearReadyMessage();
 		showReadyPage();
-		sendEvent("cntr", "trialEnded", "");
+		
+		console.log("[RESPONDER] trialEnded complete");
 	}
-	//console.log("trialEnded exit");
 }
 
 function sendTrialEnded() {
@@ -927,9 +998,18 @@ function showRespElem(pageId, name, elemType) {
 
 function setReadyMessageFromCntr(event) {
 	//console.log("setReadyMessageFromCntr", "curTestName: "+curTestName, "event.data: "+event.data);
+	if (trialPending) {
+		pendingReadyMessageData = event.data;
+		console.log("[RESPONDER] setReadyMessageFromCntr deferred until current trial completes");
+		return;
+	}
+	applyReadyMessage(event.data);
+}
+
+function applyReadyMessage(dataStr) {
 	var dataItems, i, readyMessageTop1Id, readyMessageTop2Id, readyImageMdlId, readyMessageBtm1Id, readyMessageBtm2Id;
 	var readyMessageTop1, readyMessageTop2, readyImageMdl, readyMessageBtm1, readyMessageBtm2;
-	dataItems=event.data.split(",");
+	dataItems=dataStr.split(",");
 	i=0;
 	readyMessageTop1Id=dataItems[i++];
 	readyMessageTop2Id=dataItems[i++];
@@ -937,11 +1017,9 @@ function setReadyMessageFromCntr(event) {
 	readyMessageBtm1Id=dataItems[i++];
 	readyMessageBtm2Id=dataItems[i++];
 	curTestName=dataItems[i++];
-	
-	//console.log("readyMessageBtm1Id: "+readyMessageBtm1Id, "readyMessageBtm2Id: "+readyMessageBtm2Id, "curTestName: "+curTestName);
-	
+
 	clearReadyMessage();
-	
+
 	if (readyMessageTop1Id) {
 		readyMessageTop1=locsDoc.getElementById(readyMessageTop1Id).getAttribute("text");
 		replaceTextInElemWithId("readyMessagePara1Top", readyMessageTop1);
@@ -953,6 +1031,7 @@ function setReadyMessageFromCntr(event) {
 	if (readyImageMdlId) {
 		readyImageMdl=getImageElem("buttons", "button_"+readyImageMdlId, "info");
 		replaceChildrenInElemWithId("ready_mdl_readyCell", readyImageMdl);
+		requireReadyHold = (readyImageMdlId === "dot");
 	}
 	if (readyMessageBtm1Id) {
 		readyMessageBtm1=locsDoc.getElementById(readyMessageBtm1Id).getAttribute("text");
@@ -962,7 +1041,63 @@ function setReadyMessageFromCntr(event) {
 		readyMessageBtm2=locsDoc.getElementById(readyMessageBtm2Id).getAttribute("text");
 		replaceTextInElemWithId("readyMessagePara2Btm", readyMessageBtm2);
 	}
+	readyMessageShown = true;
 	showReadyPage();
+	attachReadyHoldHandlers();
+}
+
+function attachReadyHoldHandlers() {
+	var readyCell = document.getElementById("ready_mdl_readyCell");
+	if (!readyCell || readyCell.dataset.holdHandlersAttached === "true") {
+		return;
+	}
+	readyCell.dataset.holdHandlersAttached = "true";
+	readyCell.addEventListener("touchstart", readyHoldStart, { passive: false });
+	readyCell.addEventListener("mousedown", readyHoldStart);
+	readyCell.addEventListener("touchend", readyHoldEnd, { passive: false });
+	readyCell.addEventListener("mouseup", readyHoldEnd);
+	readyCell.addEventListener("mouseleave", readyHoldEnd);
+	readyCell.addEventListener("touchcancel", readyHoldEnd);
+}
+
+function readyHoldStart(event) {
+	if (event) {
+		event.preventDefault();
+	}
+	if (!requireReadyHold || !waitingForHoldToStart) {
+		return;
+	}
+	if (holdToStartTimer) {
+		clearTimeout(holdToStartTimer);
+	}
+	holdToStartTimer = setTimeout(function() {
+		holdToStartTimer = null;
+		if (!requireReadyHold || !waitingForHoldToStart) {
+			return;
+		}
+		waitingForHoldToStart = false;
+		startQueuedTrialFromHold();
+	}, holdToStartMs);
+}
+
+function readyHoldEnd(event) {
+	if (event) {
+		event.preventDefault();
+	}
+	if (holdToStartTimer) {
+		clearTimeout(holdToStartTimer);
+		holdToStartTimer = null;
+	}
+}
+
+function startQueuedTrialFromHold() {
+	if (trialQueue.length > 0 && !trialPending) {
+		console.log("[RESPONDER] Hold complete - starting first trial");
+		trialPending = true;
+		prevRespTime = Date.now();
+		eventData = trialQueue.shift();
+		startTrial(eventData);
+	}
 }
 
 function clearReadyMessageFromCntr(event) {
@@ -1021,8 +1156,12 @@ function startTrialFromCntr(event) {
 }
 
 function startMultiTrialsFromCntr(event) {
-	//console.log("startMultiTrialsFromCntr data:"+event.data);
+	console.log("[RESPONDER] startMultiTrialsFromCntr received:", event.data);
 	var i, dataItems, testName, trialType, trialPhase, totalTrials, projectNo, testSetNo, partNo, repeat, trialVar, trialPeriod;
+	if (pendingReadyMessageData && !readyMessageShown) {
+		applyReadyMessage(pendingReadyMessageData);
+		pendingReadyMessageData = null;
+	}
 	i=0;
 	dataItems=event.data.split(",");
 	testName=dataItems[i++];
@@ -1051,17 +1190,30 @@ function startMultiTrialsFromCntr(event) {
 		trialQueue.push(testName+","+trialType+","+trialPhase+","+trialVar+","+(totalTrials + i)+","+projectNo+","+testSetNo+","+partNo+","+(repeat-i));
 	}
 	
-	//console.log("trialQueue.length: "+trialQueue.length);
+	console.log("[RESPONDER] Built trial queue with", trialQueue.length, "trials. trialPending:", trialPending);
 	if (!trialPending) {
+		if (requireReadyHold) {
+			console.log("[RESPONDER] Waiting for 1s hold on red dot to start trials");
+			waitingForHoldToStart = true;
+			showReadyPage();
+			attachReadyHoldHandlers();
+			return;
+		}
+		console.log("[RESPONDER] Starting first trial from queue");
 		trialPending = true;
-		prevRespTime = Date.now()
+		prevRespTime = Date.now();
 		eventData = trialQueue.shift();
 		startTrial(eventData);
+	} else {
+		console.log("[RESPONDER] Trial already pending, queued for later");
 	}
 }
 
 function startTrial(eventData) {
-	//console.log("startTrial data:"+eventData);
+	console.log("[RESPONDER] startTrial:", eventData);
+	
+	// Clear any lingering timers from previous trials to prevent race conditions
+	resp_stopTimers();
 	
 	var i, dataItems, imageIndex;
 	var trialVariantStr, trialVariantList, videoList;
@@ -1286,6 +1438,7 @@ function phbTrialEnd(buttonPressed = true) {
 	else {
 		reactionTime = null;
 	}
+	console.log("[RESPONDER] phbTrialEnd - calling recordAndReport");
 	recordAndReport(curProjectNo, curTestSetNo, curTestName, curPartNo, prevRespTime, curTrialStartedTime, curTransTrialType, curTrialPhase, curTotalTrials+1, curTransTrialVar, accuracy, touchTime, reactionTime, trialTime, button, curAnim, 0, moveEvents, trialQueue.length);
 	if (curGameInstance) {
 		curGameInstance.touchReporter = null;
@@ -1337,33 +1490,46 @@ function showSpcStims() {
 }
 
 function cancelTrialFromCntr(event) {
-	//console.log("cancelTrialFromCntr");
+	console.log("[RESPONDER] cancelTrialFromCntr received");
 	switch (testType(curTestName)) {
 		case "phb":
 			phbTrialEnd(false);
 			break;
 		default:
+			console.log("[RESPONDER] Clearing queue and resetting state");
+			initTrialQueue();
 			reInitTrialState();
+			hideAllRespElems();
+			clearReadyMessage();
 			showReadyPage();
 			sendEvent("cntr", "trialCancelled", "");
+			console.log("[RESPONDER] Cancel complete, notified controller");
 			break;
 	}
 }
 
 function endTrialsFromCntr(event) {
-	//console.log("endTrialsFromCntr");
+	console.log("[RESPONDER] endTrialsFromCntr received");
 	switch (testType(curTestName)) {
 		case "phb":
 			phbTrialEnd(false);
 			endGame();
 			break;
 		default:
-			clearReadyMessage();
 			break;
 	}
+	console.log("[RESPONDER] Clearing queue and resetting state");
+	initTrialQueue();
 	reInitTrialState();
+	hideAllRespElems();
+	clearReadyMessage();
 	showReadyPage();
+	// Restart event polling so responder can receive subsequent tasks
+	if (typeof startEventPolling === "function" && curUserName) {
+		startEventPolling("resp", curUserName);
+	}
 	sendEvent("cntr", "trialsEnded", "");
+	console.log("[RESPONDER] End complete, notified controller");
 }
 
 function endTestFromCntr(event) {
@@ -1402,6 +1568,10 @@ function resp_stopTimers() {
 	stopTimeoutTimer("clockTimer");
 	stopTimeoutTimer("showTrialTimer");
 	clearAnimFrameTimer();
+	// Stop event polling
+	if (typeof stopEventPolling === "function") {
+		stopEventPolling();
+	}
 }
 
 function reflectCurTrialState() {

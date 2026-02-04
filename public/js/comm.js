@@ -293,35 +293,39 @@ function getInfo(type, data, docName, endHandler) {
 
 function recordResponse(projectNo, testSetNo, testName, partNo, prevRespTime, trialStartTime, trialType, trialPhase, trialNo, trialVariant, accuracy, touchTime, reactionTime, trialTime, buttonPressed, animationShowed, dotPressed, moveEvents, trialQueueLength) {
 	var dataStr=curUserName+","+projectNo+","+testSetNo+","+testName+","+partNo+","+prevRespTime+","+trialStartTime+","+trialType+","+trialPhase+","+trialNo+","+trialVariant+","+accuracy+","+touchTime+","+reactionTime+","+trialTime+","+buttonPressed+","+animationShowed+","+dotPressed+","+moveEvents+","+curPosLat+","+curPosLng+","+trialQueueLength;
-	//console.log("recordAndReport, dataStr: "+dataStr);
+	//console.log("recordResponse, dataStr: "+dataStr);
 	localStorage.setItem(curUserName+"_"+trialStartTime, dataStr);
+	console.log("[COMM] Stored trial record in localStorage:", curUserName+"_"+trialStartTime);
 	prevRespDataStr=dataStr;
-	// Google Sheets logging endpoint - logs all trial responses with UTC timestamp
-	var requestStr="../gsheetsacc/?type=respInsert&data="+dataStr;
-	//console.log("recordResponse, requestStr:"+requestStr);
-	sendXmlOp(requestStr, responseRecorded);
+	// Records will be batch-sent to Google Sheets when trials end
 }
 
 function recordAndReport(projectNo, testSetNo, testName, partNo, prevRespTime, trialStartTime, trialType, trialPhase, trialNo, trialVariant, accuracy, touchTime, reactionTime, trialTime, buttonPressed, animationShowed, dotPressed, moveEvents, trialQueueLength) {
 	var dataStr=curUserName+","+projectNo+","+testSetNo+","+testName+","+partNo+","+prevRespTime+","+trialStartTime+","+trialType+","+trialPhase+","+trialNo+","+trialVariant+","+accuracy+","+touchTime+","+reactionTime+","+trialTime+","+buttonPressed+","+animationShowed+","+dotPressed+","+moveEvents+","+curPosLat+","+curPosLng+","+trialQueueLength;
 	//console.log("recordAndReport, dataStr: "+dataStr);
 	localStorage.setItem(curUserName+"_"+trialStartTime, dataStr);
+	console.log("[COMM] Stored trial record in localStorage:", curUserName+"_"+trialStartTime);
 	//console.log("#localStorageItems: "+localStorage.length)
 	prevRespDataStr=dataStr;
-	// Google Sheets logging endpoint - logs all trial responses with UTC timestamp
-	var requestStr="../gsheetsacc/?type=respInsert&data="+dataStr;
-	//console.log("recordAndReport, requestStr:"+requestStr);
-	sendXmlOp(requestStr, recordedAndReported);
+	// Records will be batch-sent to Google Sheets when trials end
 }
 
 function responseRecorded(statusElem) {
-	//console.log("responseRecorded");
+	console.log("[COMM] responseRecorded called, statusElem:", statusElem);
 	if (statusElem) {
+		console.log("[COMM] statusElem.tagName:", statusElem.tagName);
 		if (statusElem.tagName == "ok") {
-			//console.log(statusElem);
 			var id = statusElem.getAttribute("msg");
-			localStorage.removeItem(id);
-			flushRecordQueue();
+			console.log("[COMM] Server returned ID:", id);
+			if (id) {
+				localStorage.removeItem(id);
+				console.log("[COMM] Removed record from localStorage:", id);
+				flushRecordQueue();
+			} else {
+				console.warn("[COMM] Server response OK but no msg attribute - record will retry infinitely!");
+			}
+		} else {
+			console.warn("[COMM] Server response not OK:", statusElem.tagName);
 		}
 	}
 	else {
@@ -344,6 +348,49 @@ function recordedAndReported(statusElem) {
 	}
 }
 
+function batchSendAllRecords(completionCallback) {
+	console.log("[COMM] batchSendAllRecords - collecting all trial records");
+	var records = [];
+	var keys = [];
+	
+	// Collect all records from localStorage
+	for (var i = 0; i < localStorage.length; i++) {
+		var key = localStorage.key(i);
+		if (key && key.match(respKeyRE)) {
+			var dataStr = localStorage.getItem(key);
+			records.push(dataStr);
+			keys.push(key);
+		}
+	}
+	
+	if (records.length === 0) {
+		console.log("[COMM] No records to send");
+		if (completionCallback) completionCallback();
+		return;
+	}
+	
+	console.log("[COMM] Sending", records.length, "records in batch");
+	
+	// Join all records with newline separator for batch insert
+	var batchData = records.join("\n");
+	var requestStr = "../gsheetsacc/?type=respBatchInsert&data=" + encodeURIComponent(batchData);
+	
+	sendXmlOp(requestStr, function(statusElem) {
+		if (statusElem && statusElem.tagName == "ok") {
+			console.log("[COMM] Batch insert successful, clearing", keys.length, "records");
+			// Clear all successfully sent records
+			for (var j = 0; j < keys.length; j++) {
+				localStorage.removeItem(keys[j]);
+				console.log("[COMM] Removed:", keys[j]);
+			}
+			if (completionCallback) completionCallback();
+		} else {
+			console.warn("[COMM] Batch insert failed, records kept in localStorage for retry");
+			if (completionCallback) completionCallback();
+		}
+	});
+}
+
 function flushRecordQueue() {
 	//console.log("flushRecordQueue");
 	var key;
@@ -352,16 +399,88 @@ function flushRecordQueue() {
 	while (i < localStorage.length && !found) {
 		key = localStorage.key(i);
 		//console.log("i: "+i+", key: "+key);
-		if (key.match(respKeyRE)) {
+		if (key && key.match(respKeyRE)) {
 			dataStr = localStorage.getItem(key);
 			found = true;
-			var requestStr="../dbacc/?type=respInsert&data="+dataStr;
+			var requestStr="../gsheetsacc/?type=respInsert&data="+dataStr;
 			console.log("flushRecordQueue, requestStr:"+requestStr);
 			sendXmlOp(requestStr, responseRecorded);
 		}
 		i += 1;
 	}
 	//console.log("flushRecordQueue exit");
+}
+
+function clearStaleRecords() {
+	console.log("[COMM] Clearing stale localStorage records");
+	var keysToRemove = [];
+	var currentTime = Date.now();
+	var maxAge = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+	
+	// Collect keys to remove
+	for (var i = 0; i < localStorage.length; i++) {
+		var key = localStorage.key(i);
+		if (key && key.match(respKeyRE)) {
+			// Extract timestamp from key (format: username_timestamp)
+			var parts = key.split('_');
+			if (parts.length >= 2) {
+				var timestamp = parseInt(parts[parts.length - 1]);
+				if (!isNaN(timestamp)) {
+					var age = currentTime - timestamp;
+					if (age > maxAge || age < 0) {
+						keysToRemove.push(key);
+					}
+				}
+			}
+		}
+	}
+	
+	// Remove collected keys
+	for (var j = 0; j < keysToRemove.length; j++) {
+		console.log("[COMM] Removing stale record:", keysToRemove[j]);
+		localStorage.removeItem(keysToRemove[j]);
+	}
+	
+	if (keysToRemove.length > 0) {
+		console.log("[COMM] Cleared", keysToRemove.length, "stale records");
+	}
+}
+
+function clearAllRecordQueue() {
+	console.log("[COMM] Clearing ALL localStorage records");
+	var keysToRemove = [];
+	
+	// Collect all response record keys
+	for (var i = 0; i < localStorage.length; i++) {
+		var key = localStorage.key(i);
+		if (key && key.match(respKeyRE)) {
+			keysToRemove.push(key);
+		}
+	}
+	
+	// Remove all collected keys
+	for (var j = 0; j < keysToRemove.length; j++) {
+		console.log("[COMM] Removing record:", keysToRemove[j]);
+		localStorage.removeItem(keysToRemove[j]);
+	}
+	
+	if (keysToRemove.length > 0) {
+		console.log("[COMM] Cleared", keysToRemove.length, "records from localStorage");
+	} else {
+		console.log("[COMM] No records found in localStorage");
+	}
+}
+
+function clearServerEventQueue(pairingCode) {
+	console.log("[COMM] Clearing server-side event queue for pairing code:", pairingCode);
+	var requestStr = "../clearqueue/?pc=" + pairingCode;
+	sendXmlOp(requestStr, function(statusElem) {
+		if (statusElem && statusElem.tagName == "ok") {
+			console.log("[COMM] Server event queue cleared successfully");
+		} else {
+			console.warn("[COMM] Failed to clear server event queue");
+		}
+	});
 }
 
 function deleteLastResponse() {
@@ -459,11 +578,11 @@ function xmlOpRequestReadyStateChanged(event) {
 }
 
 function getXmlDoc(requestStr, docName, endHandler) {
-	console.log("getXmlDoc START, requestStr: "+requestStr+", docName: "+docName);
+	// Silent operation - log removed to reduce console spam
 	var request;
 	try {
 		request=new XMLHttpRequest();
-		console.log("getXmlDoc: XMLHttpRequest created successfully");
+		// XMLHttpRequest created
 	} catch(e) {
 		console.error("getXmlDoc: Failed to create XMLHttpRequest:", e);
 		if (endHandler) endHandler(null);
@@ -511,7 +630,7 @@ function getXmlDoc(requestStr, docName, endHandler) {
 	}
 	
 	// Add logging for request lifecycle
-	console.log("getXmlDoc: Opening request for", docName, "URL:", requestStr);
+	// Opening request (log removed)
 	request.open("GET", requestStr, true);
 	
 	// Prevent caching
@@ -519,9 +638,9 @@ function getXmlDoc(requestStr, docName, endHandler) {
 	request.setRequestHeader("Pragma", "no-cache");
 	request.setRequestHeader("Expires", "0");
 	
-	console.log("getXmlDoc: Sending request for", docName);
+	// Sending request (log removed)
 	request.send();
-	console.log("getXmlDoc: Request sent for", docName);
+	// Request sent (log removed)
 	var now=new Date();
 	//console.log("getXmlDoc:"+now.toUTCString()+" docName:"+docName);
 }
@@ -532,7 +651,7 @@ function xmlDocRequestReadyStateChanged(event) {
 	if (request) {
 		timeSinceRequested=Date.now()-request.sendTime;
 		var readyState = request.readyState;
-		console.log("xmlDocRequestReadyStateChanged", "docName:", request.docName, "readyState:", readyState, "status:", request.status, "timeSinceRequested:", timeSinceRequested);
+		// Silent state change - log removed
 		if (readyState == 4) {
 			// Skip if already handled by timeout/error handler
 			if (request.handled) {
@@ -555,7 +674,7 @@ function xmlDocRequestReadyStateChanged(event) {
 			}
 			
 			if (responseDoc) {
-				console.log("xmlDocRequestReadyStateChanged: SUCCESS", "docName:", docName, "timeSinceRequested:", timeSinceRequested, "status:", request.status);
+				// Request successful
 				//console.log(responseDoc);
 				removeEmptyChildNodes(responseDoc.documentElement);
 				if (docName) {
@@ -564,7 +683,7 @@ function xmlDocRequestReadyStateChanged(event) {
 				}
 				if (endHandler) {
 					endHandler(responseDoc);
-					console.log("Called endHandler for", docName);
+					// Called endHandler
 				}
 			}
 			else {
@@ -579,15 +698,18 @@ function xmlDocRequestReadyStateChanged(event) {
 							console.warn("xmlDocRequestReadyStateChanged", "XML Parse Error:", parserError.textContent);
 							console.warn("ResponseText preview:", request.responseText.substring(0, 500));
 						} else if (responseDoc && responseDoc.documentElement) {
-							console.log("xmlDocRequestReadyStateChanged: PARSED FROM TEXT", "docName:", docName);
-							removeEmptyChildNodes(responseDoc.documentElement);
-							if (docName) {
-								window[docName]=responseDoc;
-								console.log("Set window." + docName + " = parsed responseDoc");
-							}
-							if (endHandler) {
-								endHandler(responseDoc);
-								console.log("Called endHandler for", docName);
+						// Parsed from text successfully
+						removeEmptyChildNodes(responseDoc.documentElement);
+						if (docName) {
+							window[docName]=responseDoc;
+						// Reduce console spam - skip connectionStateDoc
+						if (docName !== "connectionStateDoc") {
+							console.log("Set window." + docName + " = parsed responseDoc");
+						}
+						}
+						if (endHandler) {
+							endHandler(responseDoc);
+							// Called endHandler
 							}
 							return;
 						}

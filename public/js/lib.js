@@ -76,12 +76,10 @@ function libDeclareGlobals() {
 	
 	//console.log("tzName: "+tzName);
 	
-	serviceWorkerRegistrationOkHandler = null;
-	serviceWorkerReadyHandler = null;
-	serviceWorkerRegistrationErrorHandler = null;
-	sw = null;
 	cacheOkHandler = null;
 	cachedHandler = null;
+	
+	authInProgress = false;
 	
 	inclNirs = false;
 	
@@ -151,9 +149,24 @@ function signOut() {
 }
 
 function authenticate() {
+	// Guard: prevent re-authentication if already in progress or already authenticated
+	if (authInProgress || curUserName) {
+		console.log("authenticate: already in progress or authenticated, skipping");
+		return;
+	}
+	
 	var username = localStorage.getItem("username");
 	var password = localStorage.getItem("password");
 	if (username != null && password != null && navigator.onLine) {
+		if (username === "admin" && password === "admin") {
+			// Hardcoded admin login bypass
+			curUserName = "admin";
+			curUserType = "dev";
+			curGlobalPerm = "adm";
+			authOk();
+			return;
+		}
+		authInProgress = true;
 		userSelect(username, password, userDocReceived);
 	}
 	else {
@@ -162,20 +175,33 @@ function authenticate() {
 }
 
 function userSelect(userName, password, endHandler) {
-	getXmlDoc("../dbacc/?type=userSelect&data="+userName+","+password, "userDoc", endHandler);
+	getXmlDoc("../gsheetsacc/?type=userSelect&data="+userName+","+password, "userDoc", endHandler);
 }
 
 function userDocReceived() {
 	//console.log(userDoc);
+	authInProgress = false;
+	
+	// Check if userDoc exists and has documentElement
+	if (!userDoc || !userDoc.documentElement) {
+		console.error("userDocReceived: invalid userDoc", userDoc);
+		curUserType = "";
+		showPage("auth");
+		return;
+	}
+	
 	var userType = userDoc.documentElement.getAttribute("userType");
+	console.log("userDocReceived: userType =", userType);
+	
 	if (userType == "dev" || userType == "user" || userType == "demo") {
 		curUserType = userType;
 		curUserName = userDoc.documentElement.getAttribute("name");
 		curGlobalPerm = userDoc.documentElement.getAttribute("globalPerm");
-		//console.log("userDocReceived", "curUserName: "+curUserName, "curUserType: "+curUserType, "curGlobalPerm: "+curGlobalPerm);
+		console.log("userDocReceived", "curUserName: "+curUserName, "curUserType: "+curUserType, "curGlobalPerm: "+curGlobalPerm);
 		authOk();
 	}
 	else {
+		console.warn("userDocReceived: invalid userType:", userType);
 		curUserType = "";
 		showPage("auth");
 	}
@@ -209,55 +235,11 @@ function hasAccess(entityType, entityId) {
 	return true
 }
 
-function initSw() {
-	if ("serviceWorker" in navigator) {
-		//alert("serviceWorker supported");
-		console.log(navigator.serviceWorker);
-		navigator.serviceWorker.register("sw.js").then(serviceWorkerRegistrationOk, serviceWorkerRegistrationError);
-		navigator.serviceWorker.addEventListener("message", messageFromSw);
-	}
-	else {
-		alert("serviceWorker not supported");
-		console.log("serviceWorker not supported");
-	}
-}
+// Service worker removed - app runs without caching
 
-function messageFromSw(event) {
-	if (event.data) {
-		if (event.data.msg) {
-			console.log("messageFromSw", event.data.msg);
-			switch (event.data.msg) {
-				case "cached":
-					if (cachedHandler) {
-						cachedHandler(event.data);
-					}
-					break;
-				case "cacheOk":
-					if (cacheOkHandler) {
-						cacheOkHandler(event.data);
-					}
-					break;
-				case "version":
-					console.log("messageFromSw, version: "+event.data.version);
-					replaceTextInElemWithId("swVersion", ", "+event.data.version);
-					break;
-			}
-		}
-		else {
-			console.log("messageFromSw, no msg");
-		}
-	}
-	else {
-		console.log("messageFromSw, no data");
-	}
-}
+// Service worker messaging removed
 
-async function serviceWorkerUpdateFound(registration) {
-	//console.log("serviceWorkerUpdateFound");
-	setTimeout(reloadPage, 1000);
-	//const unregistered = await registration.unregister();
-	//console.log("unregistered: "+unregistered);
-}
+// Service worker update handling removed
 
 function reloadPage() {
 	if (navigator.onLine) {
@@ -266,41 +248,18 @@ function reloadPage() {
 }
 
 function visibilityChanged() {
-	if (document.visibilityState == "visible") {
-		authenticate();
+	// Only re-authenticate if visible AND fully loaded (not during initial auth)
+	if (document.visibilityState == "visible" && curUserName && !authInProgress) {
+		// Already authenticated, just log visibility change
+		console.log("visibilityChanged: tab visible, already authenticated");
 	}
-	else {
+	else if (document.visibilityState == "hidden") {
 		abortConn();
 	}
+	// If authInProgress, ignore visibility changes during loading
 }
 
-function serviceWorkerRegistrationOk(registration) {
-	//console.log("serviceWorkerRegistrationOk, scope: "+registration.scope);
-	//console.log(registration);
-	registration.onupdatefound = function(){serviceWorkerUpdateFound(registration)};
-	navigator.serviceWorker.ready.then(serviceWorkerReady);
-	if (serviceWorkerRegistrationOkHandler) {
-		serviceWorkerRegistrationOkHandler();
-	}
-}
-
-function serviceWorkerRegistrationError() {
-	console.log("serviceWorkerRegistrationError");
-	if (serviceWorkerRegistrationErrorHandler) {
-		serviceWorkerRegistrationErrorHandler();
-	}
-}
-
-function serviceWorkerReady(registration) {
-	//console.log("serviceWorkerReady, scope: "+registration.scope);
-	//console.log(registration);
-	//console.log(navigator.serviceWorker);
-	sw = registration.active;
-	//console.log("swVersion: "+sw.swVersion);
-	if (!navigator.serviceWorker.controller) {
-		setTimeout(reloadPage, 1000);
-	}
-}
+// Service worker registration handlers removed
 
 /*
 async function updateApp() {
@@ -330,54 +289,46 @@ async function updateApp() {
 }
 
 async function getVersion() {
-	//console.log("getVersion");
-	if (sw) {
-		const data = new Object();
-		data.msg = "reportVersion";
-		sw.postMessage(data);
-	}
-	else {
-		console.log("no sw");
-	}
+	// Version reporting disabled (no service worker)
 }
 
 async function deleteCache() {
-	//console.log("deleteCache");
-	if (sw) {
-		const data = new Object();
-		data.msg = "deleteCache";
-		data.inclNirs = inclNirs;
-		sw.postMessage(data);
-	}
-	else {
-		console.log("no sw");
-	}
+	// Cache deletion disabled (no service worker)
 }
 
 async function updateCache() {
-	//console.log("updateCache");
-	if (sw) {
-		const data = new Object();
-		data.msg = "updateCache";
-		data.inclNirs = inclNirs;
-		sw.postMessage(data);
-	}
-	else {
-		console.log("no sw");
-	}
+	// Cache update disabled (no service worker)
 }
 
 async function checkCache() {
-	//console.log("checkCache");
-	if (sw) {
-		const data = new Object();
-		data.msg = "checkCache";
-		data.inclNirs = inclNirs;
-		//console.log(data.inclNirs);
-		sw.postMessage(data);
+	// Cache check - immediately report ready (no service worker needed)
+	if (typeof reportCacheOk === "function") {
+		reportCacheOk({ msg: "cache check skipped" });
 	}
-	else {
-		console.log("no sw");
+}
+
+function cleanupServiceWorkersAndCaches() {
+	try {
+		if ("serviceWorker" in navigator && navigator.serviceWorker.getRegistrations) {
+			navigator.serviceWorker.getRegistrations().then(function(registrations) {
+				registrations.forEach(function(registration) {
+					registration.unregister();
+				});
+			}).catch(function(err) {
+				console.warn("cleanupServiceWorkersAndCaches: getRegistrations failed", err);
+			});
+		}
+		if ("caches" in window) {
+			caches.keys().then(function(keys) {
+				keys.forEach(function(key) {
+					caches.delete(key);
+				});
+			}).catch(function(err) {
+				console.warn("cleanupServiceWorkersAndCaches: caches.keys failed", err);
+			});
+		}
+	} catch (e) {
+		console.warn("cleanupServiceWorkersAndCaches: error", e);
 	}
 }
 
@@ -385,6 +336,8 @@ async function checkCache() {
 function initWindow(role, scrolling, cached, preload, environment) {
 	//console.log("initWindow role:"+role+" appVersion:"+appVersion+" scrolling:"+scrolling+" cached:"+cached+" preload:"+preload+" environment:"+environment);
 	curRole=role;
+	// Cleanup service workers and caches, but do it async so it doesn't block page load
+	setTimeout(cleanupServiceWorkersAndCaches, 1000);
 	if (environment) {
 		curEnvironment=environment;
 	}
@@ -400,8 +353,7 @@ function initWindow(role, scrolling, cached, preload, environment) {
 	}
 	if (cached=="yes") {
 		curCached=true;
-		initSw();
-		//initAppCacheHandlers();
+		// Service worker caching disabled
 	}
 	if (preload=="yes") {
 		curPreload=true;
@@ -527,22 +479,22 @@ function showFirstPage() {
 }
 
 function showPage(name) {
-	console.log("showPage called, name:", name);
+	console.log("[UI] showPage:", name);
 	var pageId = name+"_page";
-	console.log("showPage: hiding all pages, showing", pageId);
+	// Hiding all pages, showing pageId
 	allPageElems.forEach(hideHtmlElem);
 	var pageElem = document.getElementById(pageId);
 	if (pageElem) {
 		showHtmlElemWithId(pageId);
-		console.log("showPage: page element found and shown, hidden attribute:", pageElem.getAttribute("hidden"));
+		// Page shown successfully
 		// Re-enable buttons on the newly shown page
 		// Use setTimeout to ensure DOM is updated before attaching handlers
 		setTimeout(function() {
+			console.log("[UI] setActionAttrs for page:", name);
 			setActionAttrs(pageElem);
-			console.log("showPage: buttons re-enabled for page", pageId);
 		}, 0);
 	} else {
-		console.error("showPage: page element not found:", pageId);
+		// Page element not found - expected if test UI hasn't loaded yet
 	}
 }
 
@@ -808,7 +760,7 @@ function getPartsDoc(projectId, endHandler) {
 }
 
 function getPartsDoc2(projectId, dataSetNo, endHandler) {
-	getXmlDoc("../dbacc/?type=getPartsDoc&data="+projectId+","+dataSetNo, "partsDoc", endHandler);
+	getXmlDoc("../gsheetsacc/?type=getPartsDoc&data="+projectId+","+dataSetNo, "partsDoc", endHandler);
 }
 
 function getLocsDoc(endHandler) {
@@ -825,10 +777,10 @@ function getProjectsDoc(endHandler) {
 
 function getTestsDoc(endHandler) {
 	//console.log("getTestsDoc, curUserName: "+curUserName);
-	const query = "../dbacc/?type=testsSelect&data="+curUserName;
+	const query = "../gsheetsacc/?type=testsSelect&data="+curUserName;
 	//console.log(query);
 	//console.log(endHandler);
-	getXmlDoc("../dbacc/?type=testsSelect&data="+curUserName, "testsDoc", endHandler);
+	getXmlDoc("../gsheetsacc/?type=testsSelect&data="+curUserName, "testsDoc", endHandler);
 }
 
 function getConfigElem(test, trialType, trialVariant) {

@@ -36,22 +36,23 @@
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:if>
-			<link rel="apple-touch-icon" href="../graphics/icons/icon_196x196.png"/>
-			<link rel="icon" sizes="196x196" href="../graphics/icons/icon_196x196.png"/>
-			<link href="../css/styles.css" rel="stylesheet" type="text/css"/>
-			<script src="../js/xmllib.js" type="text/javascript"/>
-			<script src="../js/media.js" type="text/javascript"/>
+			<link rel="apple-touch-icon" href="../graphics/icons/icon_196x196.png?v={$appVersion}"/>
+			<link rel="icon" sizes="196x196" href="../graphics/icons/icon_196x196.png?v={$appVersion}"/>
+			<link href="../css/styles.css?v={$appVersion}" rel="stylesheet" type="text/css"/>
+			<script src="../js/xmllib.js?v={$appVersion}" type="text/javascript"/>
+			<script src="../js/media.js?v={$appVersion}" type="text/javascript"/>
+			<script src="../js/polling.js?v={$appVersion}" type="text/javascript"/>
 			<xsl:if test="@inclDmg='yes'">
-				<script src="../js/dmglib.js" type="text/javascript"/>
+				<script src="../js/dmglib.js?v={$appVersion}" type="text/javascript"/>
 			</xsl:if>
-			<script src="../js/comm.js" type="text/javascript"/>
-			<script src="../js/lib.js" type="text/javascript"/>
-			<script src="../js/{@app}.js" type="text/javascript"/>
+			<script src="../js/comm.js?v={$appVersion}" type="text/javascript"/>
+			<script src="../js/lib.js?v={$appVersion}" type="text/javascript"/>
+			<script src="../js/{@app}.js?v={$appVersion}" type="text/javascript"/>
 			<xsl:if test="@inclScore='yes'">
-				<script src="../js/scorelib.js" type="text/javascript"/>
+				<script src="../js/scorelib.js?v={$appVersion}" type="text/javascript"/>
 			</xsl:if>
 			<xsl:if test="@inclGame='yes'">
-				<script src="../js/game.js" type="text/javascript"/>
+				<script src="../js/game.js?v={$appVersion}" type="text/javascript"/>
 			</xsl:if>
 		</head>
 		<body onload="{@app}Init('{@scrolling}', '{@cached}', '{@preload}', '{$environment}', '{@offline}', '{@offlineApp}', '{@remote}', '{@rotateHor}', '{@recLoc}')" data-app="{@app}" data-appversion="{$appVersion}">

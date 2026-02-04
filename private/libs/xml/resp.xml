@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../xsl/resp.xsl"?>
-<ecittApp app="resp" appName="Responder" appNameShort="Resp" scrolling="off" cached="yes" cacheAll="no" preload="no" rotateHor="yes" inclGame="yes" recLoc="yes">
+<ecittApp app="resp" appName="Responder" appNameShort="Resp" scrolling="off" cached="no" cacheAll="no" preload="no" rotateHor="yes" inclGame="yes" recLoc="yes">
 	<resp>
 		<ecittPage id="ecittTriple" layout="triple"/>
 		<ecittPage id="ecittDouble" layout="double"/>

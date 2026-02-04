@@ -1,1 +1,15 @@
-goodbye;
+trialEnded;
+trialEnded;
+trialsEnded;
+trialsEnded;
+trialEnded;
+trialEnded;
+trialsEnded;
+trialsEnded;
+trialEnded;
+trialEnded;
+trialEnded;
+trialsEnded;
+trialsEnded;
+trialsEnded;
+testEnded;

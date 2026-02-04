@@ -271,6 +271,11 @@
 		if (preg_match("/[a-z]+/", $pairingCode)) {
 			unlinkIfExists(genSocketPath("resp", $pairingCode));
 			unlinkIfExists(genSocketPath("cntr", $pairingCode));
+			// Also clear queue and error files to prevent stale events
+			unlinkIfExists(genSocketLogPath("resp", $pairingCode, "que"));
+			unlinkIfExists(genSocketLogPath("cntr", $pairingCode, "que"));
+			unlinkIfExists(genSocketLogPath("resp", $pairingCode, "err"));
+			unlinkIfExists(genSocketLogPath("cntr", $pairingCode, "err"));
 			logMsg("aborted connection, pairingCode: $pairingCode");
 			sendStatusDoc("ok", "connection aborted, pairingCode: $pairingCode");
 		}

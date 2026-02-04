@@ -63,7 +63,7 @@ function projectsSelect(projectNo, endHandler) {
 	
 	// Add timestamp to prevent caching
 	var timestamp = Date.now();
-	var requestUrl = "../dbacc/?type=projectsSelect&data="+curUserName+","+projectNo+"&_t="+timestamp;
+	var requestUrl = "../gsheetsacc/?type=projectsSelect&data="+curUserName+","+projectNo+"&_t="+timestamp;
 	console.log("projectsSelect: About to call getXmlDoc with URL:", requestUrl);
 	getXmlDoc(requestUrl, "projectsDoc", function(doc) {
 		console.log("projectsSelect: getXmlDoc callback fired, doc:", doc ? "exists" : "null");
@@ -78,15 +78,15 @@ function projectsSelect(projectNo, endHandler) {
 }
 
 function projectInsert(projectName, endHandler) {
-	getXmlDoc("../dbacc/?type=projectInsert&data="+curUserName+","+projectName, "projectsDoc", endHandler);
+	getXmlDoc("../gsheetsacc/?type=projectInsert&data="+curUserName+","+projectName, "projectsDoc", endHandler);
 }
 
 function projectUpdate(projectNo, projectName, endHandler) {
-	getXmlDoc("../dbacc/?type=projectUpdate&data="+curUserName+","+projectNo+","+projectName, "projectsDoc", endHandler);
+	getXmlDoc("../gsheetsacc/?type=projectUpdate&data="+curUserName+","+projectNo+","+projectName, "projectsDoc", endHandler);
 }
 
 function projectDelete(projectNo, endHandler) {
-	getXmlDoc("../dbacc/?type=projectDelete&data="+curUserName+","+projectNo, "projectsDoc", endHandler);
+	getXmlDoc("../gsheetsacc/?type=projectDelete&data="+curUserName+","+projectNo, "projectsDoc", endHandler);
 }
 
 // Project event handlers
@@ -118,8 +118,13 @@ function projectsDocReceived(doc) {
 	if (docToUse && docToUse.documentElement) {
 		projectsDoc = docToUse;
 		projectsSelectRetryCount = 0; // Reset retry count on success
+		console.log("projectsDocReceived: doc is valid, documentElement exists");
 	} else {
 		console.error("projectsDocReceived: invalid document, retryCount:", projectsSelectRetryCount);
+		console.error("docToUse:", docToUse);
+		if (docToUse) {
+			console.error("docToUse.documentElement:", docToUse.documentElement);
+		}
 		
 		// Check retry limit
 		if (projectsSelectRetryCount >= projectsSelectMaxRetries) {
@@ -140,10 +145,33 @@ function projectsDocReceived(doc) {
 		return;
 	}
 	
-	entityUpdateSelectElem("project", "Project", "project", "Project", "name", projectsDoc);
-	projectUpdateCurInfo();
-	projectEnterSelectPage();
-	console.log("projectsDocReceived completed");
+	console.log("projectsDocReceived: about to call entityUpdateSelectElem");
+	try {
+		entityUpdateSelectElem("project", "Project", "project", "Project", "name", projectsDoc);
+		console.log("projectsDocReceived: entityUpdateSelectElem completed successfully");
+	} catch (e) {
+		console.error("projectsDocReceived: entityUpdateSelectElem threw exception:", e);
+		return;
+	}
+	
+	console.log("projectsDocReceived: about to call projectUpdateCurInfo");
+	try {
+		projectUpdateCurInfo();
+		console.log("projectsDocReceived: projectUpdateCurInfo completed successfully");
+	} catch (e) {
+		console.error("projectsDocReceived: projectUpdateCurInfo threw exception:", e);
+		return;
+	}
+	
+	console.log("projectsDocReceived: about to call projectEnterSelectPage");
+	try {
+		projectEnterSelectPage();
+		console.log("projectsDocReceived: projectEnterSelectPage completed successfully");
+	} catch (e) {
+		console.error("projectsDocReceived: projectEnterSelectPage threw exception:", e);
+		return;
+	}
+	console.log("projectsDocReceived completed successfully");
 }
 
 function projectSelectChanged() {
@@ -209,11 +237,22 @@ function projectSaveCur() {
 // Project utilities
 
 function projectEnterSelectPage() {
+	console.log("projectEnterSelectPage called");
 	projectEditable = false;
+	console.log("projectEnterSelectPage: projectEditable set to false");
+	
 	replaceText(projectContextPara, "User: "+curUserName);
+	console.log("projectEnterSelectPage: context replaced with User:", curUserName);
+	
 	entityUpdateSelectPageButtons("project", "Project", projectCurPerm, curGlobalPerm, false);
+	console.log("projectEnterSelectPage: buttons updated");
+	
 	projectSelectChanged();
+	console.log("projectEnterSelectPage: projectSelectChanged called");
+	
+	console.log("projectEnterSelectPage: about to call showPage('projectSelect')");
 	showPage("projectSelect");
+	console.log("projectEnterSelectPage: showPage completed");
 }
 
 function projectEnterEditPage() {
@@ -248,19 +287,19 @@ function projectFormInfoValid() {
 // TestSet db access
 
 function testSetsSelect(projectNo, testSetNo, endHandler) {
-	getXmlDoc("../dbacc/?type=testSetsSelect&data="+curUserName+","+projectNo+","+testSetNo, "testSetsDoc", endHandler);
+	getXmlDoc("../gsheetsacc/?type=testSetsSelect&data="+curUserName+","+projectNo+","+testSetNo, "testSetsDoc", endHandler);
 }
 
 function testSetInsert(projectNo, testSetName, endHandler) {
-	getXmlDoc("../dbacc/?type=testSetInsert&data="+curUserName+","+projectNo+","+testSetName, "testSetsDoc", endHandler);
+	getXmlDoc("../gsheetsacc/?type=testSetInsert&data="+curUserName+","+projectNo+","+testSetName, "testSetsDoc", endHandler);
 }
 
 function testSetUpdate(projectNo, testSetNo, testSetName, endHandler) {
-	getXmlDoc("../dbacc/?type=testSetUpdate&data="+curUserName+","+projectNo+","+testSetNo+","+testSetName, "testSetsDoc", endHandler);
+	getXmlDoc("../gsheetsacc/?type=testSetUpdate&data="+curUserName+","+projectNo+","+testSetNo+","+testSetName, "testSetsDoc", endHandler);
 }
 
 function testSetDelete(projectNo, testSetNo, endHandler) {
-	getXmlDoc("../dbacc/?type=testSetDelete&data="+curUserName+","+projectNo+","+testSetNo, "testSetsDoc", endHandler);
+	getXmlDoc("../gsheetsacc/?type=testSetDelete&data="+curUserName+","+projectNo+","+testSetNo, "testSetsDoc", endHandler);
 }
 
 // TestSet event handlers
@@ -388,19 +427,19 @@ function testSetFormInfoValid() {
 // Part db access
 
 function partsSelect(projectNo, testSetNo, partNo, endHandler) {
-	getXmlDoc("../dbacc/?type=partsSelect&data="+curUserName+","+projectNo+","+testSetNo+","+partNo, "partsDoc", endHandler);
+	getXmlDoc("../gsheetsacc/?type=partsSelect&data="+curUserName+","+projectNo+","+testSetNo+","+partNo, "partsDoc", endHandler);
 }
 
 function partInsert(projectNo, testSetNo, partRef, partBirthYear, partBirthMonth, partBirthDay, partGender, endHandler) {
-	getXmlDoc("../dbacc/?type=partInsert2&data="+curUserName+","+projectNo+","+testSetNo+","+partRef+","+partBirthYear+","+partBirthMonth+","+partBirthDay+","+partGender, "partsDoc", endHandler);
+	getXmlDoc("../gsheetsacc/?type=partInsert2&data="+curUserName+","+projectNo+","+testSetNo+","+partRef+","+partBirthYear+","+partBirthMonth+","+partBirthDay+","+partGender, "partsDoc", endHandler);
 }
 
 function partUpdate(projectNo, testSetNo, partNo, partRef, partBirthYear, partBirthMonth, partBirthDay, partGender, endHandler) {
-	getXmlDoc("../dbacc/?type=partUpdate2&data="+curUserName+","+projectNo+","+testSetNo+","+partNo+","+partRef+","+partBirthYear+","+partBirthMonth+","+partBirthDay+","+partGender, "partsDoc", endHandler);
+	getXmlDoc("../gsheetsacc/?type=partUpdate2&data="+curUserName+","+projectNo+","+testSetNo+","+partNo+","+partRef+","+partBirthYear+","+partBirthMonth+","+partBirthDay+","+partGender, "partsDoc", endHandler);
 }
 
 function partDelete(projectNo, testSetNo, partNo, endHandler) {
-	getXmlDoc("../dbacc/?type=partDelete&data="+curUserName+","+projectNo+","+testSetNo+","+partNo, "partsDoc", endHandler);
+	getXmlDoc("../gsheetsacc/?type=partDelete&data="+curUserName+","+projectNo+","+testSetNo+","+partNo, "partsDoc", endHandler);
 }
 
 // Part event handlers
@@ -570,7 +609,7 @@ function partFormInfoValid() {
 // Test db access
 
 function testsSelect(curValue, endHandler) {
-	getXmlDoc("../dbacc/?type=testsSelect&data="+curUserName+","+curValue, "testsDoc", endHandler);
+	getXmlDoc("../gsheetsacc/?type=testsSelect&data="+curUserName+","+curValue, "testsDoc", endHandler);
 }
 
 function testsDocReceived() {

@@ -53,6 +53,15 @@ cd /d "%~dp0public"
 echo.
 echo Starting PHP development server...
 echo.
+if not defined GOOGLE_SHEETS_CA_BUNDLE if not defined GOOGLE_SHEETS_DISABLE_SSL_VERIFY (
+    echo NOTE: No CA bundle configured for Google Sheets.
+    echo Setting GOOGLE_SHEETS_DISABLE_SSL_VERIFY=1 for local development.
+    echo To fix properly, set GOOGLE_SHEETS_CA_BUNDLE to a valid cacert.pem path.
+    set GOOGLE_SHEETS_DISABLE_SSL_VERIFY=1
+)
+if not defined GOOGLE_SHEETS_SPREADSHEET_ID (
+    set GOOGLE_SHEETS_SPREADSHEET_ID=1uvRcSG0t_9RZyo_o2OY9cZxLj8wnVwU7zPkLjuqA_WI
+)
 echo IMPORTANT: For iPad access, use your computer's IP address instead of localhost
 echo Example: http://192.168.1.100:8000
 echo.
