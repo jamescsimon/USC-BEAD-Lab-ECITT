@@ -36,8 +36,8 @@ Before running the ECITT app, you need:
    - Or edit sheetsLib.php to set the values directly
 
 5. **Start the server:**
-   - **Windows:** Double-click `start-server.bat`
-   - **Mac/Linux:** Run `./start-server.sh` (or `bash start-server.sh`)
+   - **Windows:** Double-click `run.bat`
+   - **Mac/Linux:** Run `php -S 0.0.0.0:8000` from the `public/` directory
 
 6. **Access the app:**
    - From computer: `http://localhost:8000`
@@ -115,17 +115,16 @@ All timestamps are stored in UTC format. The timezone is set in `lib.php`.
 
 ### Windows
 
-1. Double-click `start-server.bat`
-2. The server will start on `http://0.0.0.0:8000`
-3. Note your computer's IP address (shown in the window or find it with `ipconfig`)
+1. Double-click `run.bat` in the project directory
+2. The server will start on `http://localhost:8000`
+3. Note your computer's IP address (run `ipconfig` in Command Prompt to find it)
 
 ### Mac/Linux
 
 1. Open Terminal
-2. Navigate to the repository directory
-3. Run: `./start-server.sh` (or `bash start-server.sh`)
-4. If you get a permission error, run: `chmod +x start-server.sh` first
-5. Note your computer's IP address (shown in the window or find it with `ifconfig`)
+2. Navigate to the `public/` directory: `cd public`
+3. Run: `php -S 0.0.0.0:8000`
+4. Note your computer's IP address (run `ifconfig | grep 'inet '` or `ip addr show`)
 
 ### Finding Your IP Address
 
@@ -176,16 +175,15 @@ USC-BEAD-Lab-ECITT/
 │   └── ...
 ├── private/               # Server-side files (not publicly accessible)
 │   ├── libs/
-│   │   ├── php/          # PHP libraries
+│   │   ├── php/          # PHP libraries (including sheetsLib.php)
 │   │   ├── xsl/          # XSL templates (HTML generation)
 │   │   └── xml/          # XML data files
 │   └── ...
-├── database/              # Database schema files
-│   ├── schema_workbench.sql
-│   └── schema.sql
-├── start-server.bat      # Windows startup script
-├── start-server.sh       # Mac/Linux startup script
-└── README.md             # This file
+├── run.bat               # Windows startup script
+├── setup-google-sheets.bat # Google Sheets setup (one-time)
+├── GOOGLE_SHEETS_SETUP.md # Setup instructions
+├── README.md             # This file
+└── ...
 ```
 
 ---
@@ -230,12 +228,12 @@ This app is configured as a Progressive Web App with:
 - **Check Safari:** Must use Safari (not Chrome) on iOS
 - **Already installed:** If app is already installed, option won't show
 
-### Database connection errors
+### Google Sheets API errors
 
-- **Check MySQL:** Ensure MySQL server is running
-- **Check credentials:** Verify username/password in `dbLib.php`
-- **Check database:** Ensure `ecitt_db` database exists
-- **Check user permissions:** Verify `ecitt_user` has correct privileges
+- **Check credentials:** Verify your service account JSON file is in the project root
+- **Check spreadsheet ID:** Ensure `GOOGLE_SHEETS_SPREADSHEET_ID` is set correctly
+- **Check sheet sharing:** Verify the service account email has Editor access to the spreadsheet
+- **Check API enabled:** Verify Google Sheets API is enabled in your Google Cloud project
 
 ### Icons don't appear
 

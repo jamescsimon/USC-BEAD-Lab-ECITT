@@ -442,7 +442,12 @@ function readSheetRange($range) {
 		
 		if ($http_code >= 200 && $http_code < 300) {
 			$data = json_decode($response, true);
-			return $data['values'] ?? [];
+			$values = $data['values'] ?? [];
+			logMsg("readSheetRange SUCCESS: Retrieved " . count($values) . " rows from $range");
+			if (count($values) > 0) {
+				logMsg("readSheetRange: First row: " . json_encode($values[0]));
+			}
+			return $values;
 		} else {
 			logMsg("readSheetRange ERROR: HTTP " . $http_code . ", cURL errno: " . $curl_errno . ", Response: " . substr($response, 0, 200));
 			return false;
@@ -619,8 +624,10 @@ function sheetsUserSelect($username, $password) {
 function sheetsProjectsSelect($username, $currentNo = null) {
 	logMsg("sheetsProjectsSelect: username=$username, currentNo=$currentNo");
 	$data = readSheetRange(SHEETS_PROJECTS_RANGE);
+	logMsg("sheetsProjectsSelect: readSheetRange returned " . (is_array($data) ? count($data) : "non-array") . " rows");
 	
 	if (!$data || count($data) < 2) {
+		logMsg("sheetsProjectsSelect: No data or less than 2 rows, returning empty");
 		return ['projects' => [], 'current' => 0];
 	}
 	
@@ -628,7 +635,9 @@ function sheetsProjectsSelect($username, $currentNo = null) {
 	// Skip header row
 	for ($i = 1; $i < count($data); $i++) {
 		$row = $data[$i];
+		logMsg("sheetsProjectsSelect: Row $i: " . json_encode($row) . ", checking if userName=" . (isset($row[2]) ? $row[2] : "(undefined)") . " matches $username");
 		if (count($row) >= 3 && $row[2] == $username) {
+			logMsg("sheetsProjectsSelect: Row $i MATCHED, adding project");
 			$projects[] = [
 				'no' => $row[0],
 				'name' => $row[1],
@@ -637,6 +646,7 @@ function sheetsProjectsSelect($username, $currentNo = null) {
 		}
 	}
 	
+	logMsg("sheetsProjectsSelect: Returning " . count($projects) . " projects for user $username");
 	return ['projects' => $projects, 'current' => $currentNo ?? 0];
 }
 
