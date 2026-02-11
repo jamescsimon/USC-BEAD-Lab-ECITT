@@ -175,7 +175,7 @@ function authenticate() {
 }
 
 function userSelect(userName, password, endHandler) {
-	getXmlDoc("../gsheetsacc/?type=userSelect&data="+userName+","+password, "userDoc", endHandler);
+	getXmlDoc("../csvdata/?type=userSelect&data="+userName+","+password, "userDoc", endHandler);
 }
 
 function userDocReceived() {
@@ -760,7 +760,7 @@ function getPartsDoc(projectId, endHandler) {
 }
 
 function getPartsDoc2(projectId, dataSetNo, endHandler) {
-	getXmlDoc("../gsheetsacc/?type=getPartsDoc&data="+projectId+","+dataSetNo, "partsDoc", endHandler);
+	getXmlDoc("../csvdata/?type=getPartsDoc&data="+projectId+","+dataSetNo, "partsDoc", endHandler);
 }
 
 function getLocsDoc(endHandler) {
@@ -777,10 +777,10 @@ function getProjectsDoc(endHandler) {
 
 function getTestsDoc(endHandler) {
 	//console.log("getTestsDoc, curUserName: "+curUserName);
-	const query = "../gsheetsacc/?type=testsSelect&data="+curUserName;
+	const query = "../csvdata/?type=testsSelect&data="+curUserName;
 	//console.log(query);
 	//console.log(endHandler);
-	getXmlDoc("../gsheetsacc/?type=testsSelect&data="+curUserName, "testsDoc", endHandler);
+	getXmlDoc("../csvdata/?type=testsSelect&data="+curUserName, "testsDoc", endHandler);
 }
 
 function getConfigElem(test, trialType, trialVariant) {

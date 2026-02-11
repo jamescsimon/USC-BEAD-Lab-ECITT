@@ -375,7 +375,7 @@ function batchSendAllRecords(completionCallback) {
 	
 	// Join all records with newline separator for batch insert
 	var batchData = records.join("\n");
-	var requestStr = "../gsheetsacc/?type=respBatchInsert&data=" + encodeURIComponent(batchData);
+	var requestStr = "../csvdata/?type=respBatchInsert&data=" + encodeURIComponent(batchData);
 	
 	sendXmlOp(requestStr, function(statusElem) {
 		if (statusElem && statusElem.tagName == "ok") {
@@ -404,7 +404,7 @@ function flushRecordQueue() {
 		if (key && key.match(respKeyRE)) {
 			dataStr = localStorage.getItem(key);
 			found = true;
-			var requestStr="../gsheetsacc/?type=respInsert&data="+dataStr;
+			var requestStr="../csvdata/?type=respInsert&data="+dataStr;
 			console.log("flushRecordQueue, requestStr:"+requestStr);
 			sendXmlOp(requestStr, responseRecorded);
 		}

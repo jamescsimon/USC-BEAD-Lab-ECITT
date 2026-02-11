@@ -242,7 +242,7 @@ function exitSyncPoints() {
 }
 
 function syncPointsSelect(projectNo, testSetNo, partNo, endHandler) {
-	getXmlDoc("../gsheetsacc/?type=syncPointsSelect&data="+curUserName+","+projectNo+","+testSetNo+","+partNo, "syncPointsDoc", endHandler);
+	getXmlDoc("../csvdata/?type=syncPointsSelect&data="+curUserName+","+projectNo+","+testSetNo+","+partNo, "syncPointsDoc", endHandler);
 }
 
 function syncPointsDocReceived() {

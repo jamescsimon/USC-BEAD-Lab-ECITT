@@ -63,7 +63,7 @@ function projectsSelect(projectNo, endHandler) {
 	
 	// Add timestamp to prevent caching
 	var timestamp = Date.now();
-	var requestUrl = "../gsheetsacc/?type=projectsSelect&data="+curUserName+","+projectNo+"&_t="+timestamp;
+	var requestUrl = "../csvdata/?type=projectsSelect&data="+curUserName+","+projectNo+"&_t="+timestamp;
 	console.log("projectsSelect: About to call getXmlDoc with URL:", requestUrl);
 	getXmlDoc(requestUrl, "projectsDoc", function(doc) {
 		console.log("projectsSelect: getXmlDoc callback fired, doc:", doc ? "exists" : "null");
@@ -78,15 +78,15 @@ function projectsSelect(projectNo, endHandler) {
 }
 
 function projectInsert(projectName, endHandler) {
-	getXmlDoc("../gsheetsacc/?type=projectInsert&data="+curUserName+","+projectName, "projectsDoc", endHandler);
+	getXmlDoc("../csvdata/?type=projectInsert&data="+curUserName+","+projectName, "projectsDoc", endHandler);
 }
 
 function projectUpdate(projectNo, projectName, endHandler) {
-	getXmlDoc("../gsheetsacc/?type=projectUpdate&data="+curUserName+","+projectNo+","+projectName, "projectsDoc", endHandler);
+	getXmlDoc("../csvdata/?type=projectUpdate&data="+curUserName+","+projectNo+","+projectName, "projectsDoc", endHandler);
 }
 
 function projectDelete(projectNo, endHandler) {
-	getXmlDoc("../gsheetsacc/?type=projectDelete&data="+curUserName+","+projectNo, "projectsDoc", endHandler);
+	getXmlDoc("../csvdata/?type=projectDelete&data="+curUserName+","+projectNo, "projectsDoc", endHandler);
 }
 
 // Project event handlers
@@ -287,19 +287,19 @@ function projectFormInfoValid() {
 // TestSet db access
 
 function testSetsSelect(projectNo, testSetNo, endHandler) {
-	getXmlDoc("../gsheetsacc/?type=testSetsSelect&data="+curUserName+","+projectNo+","+testSetNo, "testSetsDoc", endHandler);
+	getXmlDoc("../csvdata/?type=testSetsSelect&data="+curUserName+","+projectNo+","+testSetNo, "testSetsDoc", endHandler);
 }
 
 function testSetInsert(projectNo, testSetName, endHandler) {
-	getXmlDoc("../gsheetsacc/?type=testSetInsert&data="+curUserName+","+projectNo+","+testSetName, "testSetsDoc", endHandler);
+	getXmlDoc("../csvdata/?type=testSetInsert&data="+curUserName+","+projectNo+","+testSetName, "testSetsDoc", endHandler);
 }
 
 function testSetUpdate(projectNo, testSetNo, testSetName, endHandler) {
-	getXmlDoc("../gsheetsacc/?type=testSetUpdate&data="+curUserName+","+projectNo+","+testSetNo+","+testSetName, "testSetsDoc", endHandler);
+	getXmlDoc("../csvdata/?type=testSetUpdate&data="+curUserName+","+projectNo+","+testSetNo+","+testSetName, "testSetsDoc", endHandler);
 }
 
 function testSetDelete(projectNo, testSetNo, endHandler) {
-	getXmlDoc("../gsheetsacc/?type=testSetDelete&data="+curUserName+","+projectNo+","+testSetNo, "testSetsDoc", endHandler);
+	getXmlDoc("../csvdata/?type=testSetDelete&data="+curUserName+","+projectNo+","+testSetNo, "testSetsDoc", endHandler);
 }
 
 // TestSet event handlers
@@ -427,19 +427,19 @@ function testSetFormInfoValid() {
 // Part db access
 
 function partsSelect(projectNo, testSetNo, partNo, endHandler) {
-	getXmlDoc("../gsheetsacc/?type=partsSelect&data="+curUserName+","+projectNo+","+testSetNo+","+partNo, "partsDoc", endHandler);
+	getXmlDoc("../csvdata/?type=partsSelect&data="+curUserName+","+projectNo+","+testSetNo+","+partNo, "partsDoc", endHandler);
 }
 
 function partInsert(projectNo, testSetNo, partRef, partBirthYear, partBirthMonth, partBirthDay, partGender, endHandler) {
-	getXmlDoc("../gsheetsacc/?type=partInsert2&data="+curUserName+","+projectNo+","+testSetNo+","+partRef+","+partBirthYear+","+partBirthMonth+","+partBirthDay+","+partGender, "partsDoc", endHandler);
+	getXmlDoc("../csvdata/?type=partInsert2&data="+curUserName+","+projectNo+","+testSetNo+","+partRef+","+partBirthYear+","+partBirthMonth+","+partBirthDay+","+partGender, "partsDoc", endHandler);
 }
 
 function partUpdate(projectNo, testSetNo, partNo, partRef, partBirthYear, partBirthMonth, partBirthDay, partGender, endHandler) {
-	getXmlDoc("../gsheetsacc/?type=partUpdate2&data="+curUserName+","+projectNo+","+testSetNo+","+partNo+","+partRef+","+partBirthYear+","+partBirthMonth+","+partBirthDay+","+partGender, "partsDoc", endHandler);
+	getXmlDoc("../csvdata/?type=partUpdate2&data="+curUserName+","+projectNo+","+testSetNo+","+partNo+","+partRef+","+partBirthYear+","+partBirthMonth+","+partBirthDay+","+partGender, "partsDoc", endHandler);
 }
 
 function partDelete(projectNo, testSetNo, partNo, endHandler) {
-	getXmlDoc("../gsheetsacc/?type=partDelete&data="+curUserName+","+projectNo+","+testSetNo+","+partNo, "partsDoc", endHandler);
+	getXmlDoc("../csvdata/?type=partDelete&data="+curUserName+","+projectNo+","+testSetNo+","+partNo, "partsDoc", endHandler);
 }
 
 // Part event handlers
@@ -609,7 +609,7 @@ function partFormInfoValid() {
 // Test db access
 
 function testsSelect(curValue, endHandler) {
-	getXmlDoc("../gsheetsacc/?type=testsSelect&data="+curUserName+","+curValue, "testsDoc", endHandler);
+	getXmlDoc("../csvdata/?type=testsSelect&data="+curUserName+","+curValue, "testsDoc", endHandler);
 }
 
 function testsDocReceived() {
