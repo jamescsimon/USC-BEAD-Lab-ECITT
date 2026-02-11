@@ -802,7 +802,7 @@ function nextTrial(repeat) {
 	switch (testType(curTestName)) {
 		case "phb":
 			//curVar = "";
-			sendEvent("resp", "startMultiTrials", curTestName+","+curTrialType+","+curTrialPhase+","+curTotalTrials+","+projectCurNo+","+testSetCurNo+","+partCurNo+","+repeat);
+			sendEvent("resp", "startMultiTrials", curTestName+","+curTrialType+","+curTrialPhase+","+curTotalTrials+","+projectCurNo+","+testSetCurNo+","+partCurNo+","+repeat+","+(curUserName || ""));
 			break;
 		case "box":
 			normalizeResRowElems();
@@ -832,7 +832,7 @@ function nextTrial(repeat) {
 			}
 			//console.log("nextTrial, repeat: "+repeat, "curTotalTrials: "+curTotalTrials);
 			//if (repeat > 1) {
-			sendEvent("resp", "startMultiTrials", curTestName+","+curTrialType+","+curTrialPhase+","+curTotalTrials+","+projectCurNo+","+testSetCurNo+","+partCurNo+","+repeat);
+			sendEvent("resp", "startMultiTrials", curTestName+","+curTrialType+","+curTrialPhase+","+curTotalTrials+","+projectCurNo+","+testSetCurNo+","+partCurNo+","+repeat+","+(curUserName || ""));
 			//}
 			//else {
 			//	curVar=getTrialVar(curTestName, curTrialType, curTrialPhase, curTotalTrials);
@@ -938,35 +938,43 @@ function gotoTrials(testName, trialType, configName) {
 
 function endTrials() {
 	var buttonsOk = buttonsEnabled();
-	console.log("[CONTROLLER] endTrials CALLED - buttonsEnabled:", buttonsOk, "testType:", testType(curTestName), "trialRunning:", trialRunning);
+	console.log("[CONTROLLER] endTrials CALLED - buttonsEnabled:", buttonsOk, "testType:", testType(curTestName), "curTestName:", curTestName);
 	console.log("[CONTROLLER] endTrials call stack");
 	console.trace();
 	console.log("[CONTROLLER] endTrials context", "curTestName:", curTestName, "curConfigName:", curConfigName, "curUserName:", curUserName);
-	// Don't end trials if they're still running - wait for them to complete naturally
-	if (trialRunning) {
-		console.log("[CONTROLLER] endTrials blocked - trials are still running");
-		return;
-	}
+	
+	// Check if a test is currently active
+	var testIsActive = curTestName && curTestName.length > 0;
+	
 	if (buttonsOk) {
-		switch (testType(curTestName)) {
-			case "box":
-				resetTrialState();
-				reflectAllResCounters();
-				showPage(curTestName+"_index");
-				break;
-			case "phb":
-				sendEvent("resp", "endTrials", "");
-				finalizePhb();
-				break;
-			default:
-				highlightClassOfElemWithId(curTestName+"_"+curConfigName+"_endTrialsButt");
-				endTrialsPending = true;
-				endTrialsAttempt = 0;
-				console.log("[CONTROLLER] endTrials sending initial request");
-				var endData = (curTestName || "") + "," + (curConfigName || "");
-				sendEvent("resp", "endTrials", endData);
-				sendEndTrialsWithRetry();
-				break;
+		if (testIsActive) {
+			// Test is active - send endTrials command
+			switch (testType(curTestName)) {
+				case "box":
+					resetTrialState();
+					reflectAllResCounters();
+					showPage(curTestName+"_index");
+					break;
+				case "phb":
+					sendEvent("resp", "endTrials", "");
+					finalizePhb();
+					break;
+				default:
+					highlightClassOfElemWithId(curTestName+"_"+curConfigName+"_endTrialsButt");
+					endTrialsPending = true;
+					endTrialsAttempt = 0;
+					console.log("[CONTROLLER] endTrials sending end request (test active)");
+					var endData = (curTestName || "") + "," + (curConfigName || "");
+					sendEvent("resp", "endTrials", endData);
+					sendEndTrialsWithRetry();
+					break;
+			}
+		} else {
+			// No active test - just reset UI and return to test selection
+			console.log("[CONTROLLER] endTrials - no active test, resetting state");
+			resetTrialState();
+			reflectAllResCounters();
+			showPage("tests_index");
 		}
 	}
 }
@@ -1030,10 +1038,18 @@ function exitTests() {
 
 function disconnect() {
 	if (buttonsEnabled()) {
-		//console.log("disconnect");
+		console.log("[CONTROLLER] Disconnect clicked");
 		sendEvent("resp", "disconnect", "");
-		setTimeout(abort, 500);
-		//abort();
+		// Stop polling and reload page (similar to signOut)
+		if (typeof stopConnectionPolling === "function") {
+			stopConnectionPolling();
+		}
+		if (typeof stopEventPolling === "function") {
+			stopEventPolling();
+		}
+		setTimeout(function() {
+			window.location.reload();
+		}, 500);
 	}
 }
 

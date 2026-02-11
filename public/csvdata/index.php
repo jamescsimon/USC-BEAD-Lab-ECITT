@@ -23,7 +23,7 @@
 	}
 	
 	error_reporting(E_ALL);
-	ini_set('display_errors', 0);
+	ini_set('display_errors', 0);  // Hide errors in production
 	ini_set('log_errors', 1);
 	
 	set_time_limit(30);
@@ -104,6 +104,16 @@
 					}
 					break;
 				
+				// TELEMETRY EVENT LOGGING - CSV Storage (Task 5)
+				case "telemetryEvent":
+					$result = handleTelemetryEventCsv($data);
+					if ($result) {
+						$doc = genStatusDoc("ok", "Telemetry logged");
+					} else {
+						$doc = genStatusDoc("error", "Failed to log telemetry");
+					}
+					break;
+				
 				// METADATA OPERATIONS - Use existing database backend
 				case "userSelect":
 					global $db;
@@ -113,8 +123,15 @@
 				
 				case "projectsSelect":
 					global $db;
-					if (!$db) initDbLib();
+					logMsg("csvOpXml: projectsSelect case - checking db");
+					if (!$db) {
+						logMsg("csvOpXml: db is null, calling initDbLib");
+						initDbLib();
+						logMsg("csvOpXml: initDbLib completed, db is now: " . (isset($db) && $db ? "connected" : "null"));
+					}
+					logMsg("csvOpXml: calling projectsSelect with data: $data");
 					$doc = projectsSelect($db, $data);
+					logMsg("csvOpXml: projectsSelect returned, doc type: " . gettype($doc));
 					break;
 					
 				case "projectInsert":
@@ -310,6 +327,73 @@
 			logMsg("handleRespInsertCsv ERROR: Failed to log response to CSV");
 			return false;
 		}
+	}
+
+	/**
+	 * Log telemetry event data to CSV file (Task 5)
+	 * Telemetry events logged to main tracker file on server
+	 * 
+	 * @param string $dataStr CSV formatted telemetry data
+	 * @return bool True on success
+	 */
+	function handleTelemetryEventCsv($dataStr) {
+		logMsg("handleTelemetryEventCsv: Processing telemetry event");
+		
+		// Parse telemetry fields
+		$parts = explode(",", trim($dataStr));
+		if (count($parts) < 12) {
+			logMsg("handleTelemetryEventCsv ERROR: Invalid data format, expected 12 fields, got " . count($parts));
+			return false;
+		}
+		
+		// Ensure telemetry directory exists
+		$baseDir = defined('CSV_DATA_DIR') ? CSV_DATA_DIR : dirname(__FILE__) . "/../csv_data";
+		$telemetryDir = $baseDir . "/telemetry";
+		
+		if (!is_dir($telemetryDir)) {
+			if (!mkdir($telemetryDir, 0755, true)) {
+				logMsg("handleTelemetryEventCsv ERROR: Failed to create telemetry directory");
+				return false;
+			}
+		}
+		
+		// Main telemetry CSV file
+		$csvFile = $telemetryDir . "/ECITT_Telemetry_Tracker.csv";
+		
+		// Create file with headers if doesn't exist
+		if (!file_exists($csvFile)) {
+			$headers = "TestDate,StartTimestamp,ResponserName,ControllerName,Section,Stimuli,InvokedBy,Accuracy,ProjectName,TestSetName,TestName,TrialsRemaining\n";
+			if (file_put_contents($csvFile, $headers) === false) {
+				logMsg("handleTelemetryEventCsv ERROR: Failed to create CSV file with headers");
+				return false;
+			}
+			logMsg("handleTelemetryEventCsv: Created new telemetry CSV file");
+		}
+		
+		// Append telemetry row with file locking
+		$handle = fopen($csvFile, 'a');
+		if (!$handle) {
+			logMsg("handleTelemetryEventCsv ERROR: Failed to open CSV file for writing");
+			return false;
+		}
+		
+		if (!flock($handle, LOCK_EX)) {
+			logMsg("handleTelemetryEventCsv WARNING: Could not acquire exclusive lock");
+		}
+		
+		// Write the record
+		if (fwrite($handle, $dataStr . "\n") === false) {
+			logMsg("handleTelemetryEventCsv ERROR: Failed to write telemetry row to CSV");
+			flock($handle, LOCK_UN);
+			fclose($handle);
+			return false;
+		}
+		
+		flock($handle, LOCK_UN);
+		fclose($handle);
+		
+		logMsg("handleTelemetryEventCsv: Successfully logged telemetry event");
+		return true;
 	}
 
 	/**
@@ -535,12 +619,14 @@
 	 * @param string $msg Status message
 	 * @return DOMDocument
 	 */
-	function genStatusDoc($type, $msg) {
-		$doc = new DOMDocument("1.0", "utf-8");
-		$parentElem = $doc->createElement($type);
-		$parentElem->setAttribute("msg", $msg);
-		$doc->appendChild($parentElem);
-		return $doc;
+	if (!function_exists('genStatusDoc')) {
+		function genStatusDoc($type, $msg) {
+			$doc = new DOMDocument("1.0", "utf-8");
+			$parentElem = $doc->createElement($type);
+			$parentElem->setAttribute("msg", $msg);
+			$doc->appendChild($parentElem);
+			return $doc;
+		}
 	}
 	
 	/**
@@ -550,26 +636,28 @@
 	 * @param array $parentAttrs Attributes for parent element
 	 * @return DOMDocument
 	 */
-	function genMultiXmlElemDocFromDbResult($rows, $elemName, $parentAttrs=array()) {
-		$doc = new DOMDocument("1.0", "utf-8");
-		$parentElem = $doc->createElement($elemName."s");
-		foreach ($parentAttrs as $attr=>$value) {
-			$parentElem->setAttribute($attr, $value);
-		}
-		$doc->appendChild($parentElem);
-		
-		if (!is_array($rows)) {
-			$rows = [];
-		}
-		
-		foreach ($rows as $row) {
-			$childElem = $doc->createElement($elemName);
+	if (!function_exists('genMultiXmlElemDocFromDbResult')) {
+		function genMultiXmlElemDocFromDbResult($rows, $elemName, $parentAttrs=array()) {
+			$doc = new DOMDocument("1.0", "utf-8");
+			$parentElem = $doc->createElement($elemName."s");
+			foreach ($parentAttrs as $attr=>$value) {
+				$parentElem->setAttribute($attr, $value);
+			}
+			$doc->appendChild($parentElem);
+			
+			if (!is_array($rows)) {
+				$rows = [];
+			}
+			
+			foreach ($rows as $row) {
+				$childElem = $doc->createElement($elemName);
 			if (is_array($row)) {
 				setAttributes($childElem, $row);
 			}
 			$parentElem->appendChild($childElem);
 		}
 		return $doc;
+		}
 	}
 	
 	/**
@@ -578,13 +666,14 @@
 	 * @param string $elemName Element name
 	 * @return DOMDocument
 	 */
-	function genSingleXmlElemDoc($row, $elemName) {
-		$doc = new DOMDocument("1.0", "utf-8");
-		$elem = $doc->createElement($elemName);
+	if (!function_exists('genSingleXmlElemDoc')) {
+		function genSingleXmlElemDoc($row, $elemName) {
+			$doc = new DOMDocument("1.0", "utf-8");
+			$elem = $doc->createElement($elemName);
 		if (is_array($row)) {
 			setAttributes($elem, $row);
 		}
 		$doc->appendChild($elem);
 		return $doc;
+		}
 	}
-

@@ -1,0 +1,12 @@
+TestDate,StartTimestamp,ResponserName,ControllerName,Section,Stimuli,InvokedBy,Accuracy,ProjectName,TestSetName,TestName,TrialsRemaining
+2026-02-11,15:33:32.052,admin,unknown,ReadyScreen,,Responder_ReadyScreenShown,n/a,0,0,adt,0
+2026-02-11,15:33:32.053,admin,admin,ReadyScreen,,Responder_ReadyScreenShown,n/a,0,0,adt,4
+2026-02-11,15:33:34.562,admin,admin,PromptScreen,,Responder_TrialStarted,n/a,1,2,adt,3
+2026-02-11,15:33:36.289,admin,admin,PromptScreen,,Responder_btm,1,1,2,adt,3
+2026-02-11,15:33:37.306,admin,admin,PromptScreen,,Responder_TrialStarted,n/a,1,2,adt,2
+2026-02-11,15:33:40.191,admin,admin,PromptScreen,,Responder_btm,1,1,2,adt,2
+2026-02-11,15:33:41.197,admin,admin,PromptScreen,,Responder_TrialStarted,n/a,1,2,adt,1
+2026-02-11,15:33:42.310,admin,admin,PromptScreen,,Responder_btm,1,1,2,adt,1
+2026-02-11,15:33:43.319,admin,admin,PromptScreen,,Responder_TrialStarted,n/a,1,2,adt,0
+2026-02-11,15:33:44.230,admin,admin,PromptScreen,,Responder_btm,1,1,2,adt,0
+2026-02-11,15:33:44.231,admin,admin,EndScreen,,Responder_EndScreenShown,n/a,1,2,adt,0

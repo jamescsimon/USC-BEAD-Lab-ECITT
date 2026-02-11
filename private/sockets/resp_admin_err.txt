@@ -1,0 +1,9 @@
+setReadyMessage;msg_adtIntro1,msg_adtIntro2,dot,msg_adtReady,,adt
+startMultiTrials;adt,ppb,trial,0,1,2,1,4,admin
+endTrials;adt,tspb
+endTrials;adt,tspb
+endTrials;adt,tspb
+endTest;
+disconnect;
+disconnect;
+disconnect;

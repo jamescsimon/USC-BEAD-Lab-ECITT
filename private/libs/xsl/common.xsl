@@ -234,7 +234,7 @@
 <xsl:template  match="nameFormField" mode="form">
 	<tr>
 		<td class="page" colspan="2">
-			<input type="text" pattern="[a-zA-Z-0-9_ ]*" id="{../@idLc}{@idUc}Input" class="textField autoWidth" value="" placeholder="{../@nameUc} {@nameUc}" autocomplete="off" spellcheck="false" onfocus="" onblur="" oninput="nameInputChanged(this); {../@idLc}FormInfoChanged()"/>
+			<input type="text" pattern="[a-zA-Z0-9_\-\s]*" id="{../@idLc}{@idUc}Input" class="textField autoWidth" value="" placeholder="{../@nameUc} {@nameUc}" autocomplete="off" spellcheck="false" onfocus="" onblur="" oninput="nameInputChanged(this); {../@idLc}FormInfoChanged()"/>
 		</td>
 	</tr>
 </xsl:template>

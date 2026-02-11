@@ -85,6 +85,15 @@ function respDeclareGlobals() {
 	showingClock = false;
 	
 	prevTrialId = "";
+	// Section Tracking (for telemetry)
+	curSection = "";  // ReadyScreen, PromptScreen, FeedbackScreen, EndScreen
+	curStimuliShown = "";  // Track what stimulus/animation is currently displayed
+	curControllerName = "";  // Logged-in controller name (for telemetry)
+	
+	// Local CSV backup (Task 4)
+	localTestCSVRows = [];  // In-memory buffer for CSV rows during test
+	localTestCSVStartTime = 0;  // Timestamp when test started
+	localTestName = "";  // Name of current test for filename
 }
 
 // Initialization
@@ -245,6 +254,8 @@ function respInit4() {
 function respInit5() {
 	//console.log("respInit5");
 	resp_reinit();
+	// Initialize button indicator for visual feedback
+	initializeButtonIndicator();
 }
 
 /*
@@ -413,6 +424,207 @@ function initTrialQueue() {
 	curSpcDoubleVarList=new Array();
 }
 
+// Timestamp Formatting Functions (Task 7)
+
+function formatTimestampHHMMSSMMM() {
+	var now = new Date();
+	var h = now.getHours().toString().padStart(2, '0');
+	var m = now.getMinutes().toString().padStart(2, '0');
+	var s = now.getSeconds().toString().padStart(2, '0');
+	var ms = now.getMilliseconds().toString().padStart(3, '0');
+	return h + ":" + m + ":" + s + "." + ms;
+}
+
+function formatDateYYYYMMDD(date) {
+	if (!date) date = new Date();
+	var y = date.getFullYear();
+	var m = (date.getMonth() + 1).toString().padStart(2, '0');
+	var d = date.getDate().toString().padStart(2, '0');
+	return y + "-" + m + "-" + d;
+}
+
+// Button Indicator Flash (Task 1.6)
+
+function initializeButtonIndicator() {
+	var indicator = document.getElementById('buttonIndicator');
+	if (!indicator) {
+		indicator = document.createElement('div');
+		indicator.id = 'buttonIndicator';
+		indicator.style.position = 'fixed';
+		indicator.style.bottom = '10px';
+		indicator.style.left = '10px';
+		indicator.style.width = '2cm';
+		indicator.style.height = '2cm';
+		indicator.style.backgroundColor = 'black';
+		indicator.style.border = '1px solid #555';
+		indicator.style.zIndex = '9999';
+		document.body.appendChild(indicator);
+		console.log("[INDICATOR] Button indicator created");
+	}
+}
+
+function flashButtonIndicator() {
+	var indicator = document.getElementById('buttonIndicator');
+	if (!indicator) {
+		console.warn("[INDICATOR] Button indicator not found");
+		return;
+	}
+	// Flash white for 3ms
+	indicator.style.backgroundColor = 'white';
+	setTimeout(function() {
+		indicator.style.backgroundColor = 'black';
+	}, 3);
+}
+
+// Telemetry Event Logging (Task 3)
+
+function logTelemetryEvent(section, stimuli, invokedBy, accuracy) {
+	// Skip if not in active test
+	if (!curUserName || !curTestName) {
+		//console.log("[TELEMETRY] Skipping event - no active test");
+		return;
+	}
+	
+	var now = new Date();
+	var testDate = formatDateYYYYMMDD(now);
+	var timestamp = formatTimestampHHMMSSMMM();
+	
+	var telemetryData = {
+		testDate: testDate,
+		timestamp: timestamp,
+		responserName: curUserName,
+		controllerName: curControllerName || "unknown",
+		section: section || curSection,
+		stimuli: stimuli || curAnim,
+		invokedBy: invokedBy,
+		accuracy: accuracy || "n/a",
+		projectName: curProjectNo,
+		testSetName: curTestSetNo,
+		testName: curTestName,
+		trialsRemaining: trialQueue.length
+	};
+	
+	sendTelemetryToServer(telemetryData);
+}
+
+function sendTelemetryToServer(telemetryData) {
+	// Build CSV row in correct field order
+	var csvRow = telemetryData.testDate + "," +
+		telemetryData.timestamp + "," +
+		telemetryData.responserName + "," +
+		telemetryData.controllerName + "," +
+		telemetryData.section + "," +
+		telemetryData.stimuli + "," +
+		telemetryData.invokedBy + "," +
+		telemetryData.accuracy + "," +
+		telemetryData.projectName + "," +
+		telemetryData.testSetName + "," +
+		telemetryData.testName + "," +
+		telemetryData.trialsRemaining;
+	
+	var requestStr = "../csvdata/?type=telemetryEvent&data=" + encodeURIComponent(csvRow);
+	console.log("[TELEMETRY] Sending event:", telemetryData.invokedBy, "from", telemetryData.section);
+	
+	sendXmlOp(requestStr, function(statusElem) {
+		if (statusElem && statusElem.tagName == "ok") {
+			console.log("[TELEMETRY] Event logged successfully");
+		} else {
+			console.warn("[TELEMETRY] Event logging failed");
+		}
+	});
+}
+
+// Local CSV Backup Functions (Task 4)
+
+function initializeLocalTestCSV() {
+	console.log("[LOCAL CSV] Initializing local backup CSV for test");
+	localTestCSVRows = [];
+	localTestCSVStartTime = Date.now();
+	localTestName = curTestName;
+}
+
+function appendToLocalTestCSV(csvRow) {
+	if (!localTestCSVRows) {
+		console.warn("[LOCAL CSV] Local CSV buffer not initialized");
+		return;
+	}
+	localTestCSVRows.push(csvRow);
+	//console.log("[LOCAL CSV] Appended row, buffer size:", localTestCSVRows.length);
+}
+
+function saveLocalTestCSV() {
+	if (!localTestCSVRows || localTestCSVRows.length === 0) {
+		console.log("[LOCAL CSV] No records to save for local backup");
+		return;
+	}
+	
+	var filename = "test_" + localTestCSVStartTime + "_" + localTestName + ".csv";
+	var csvContent = localTestCSVRows.join("\n");
+	
+	// Store in localStorage as backup
+	try {
+		localStorage.setItem("localCSV_" + filename, csvContent);
+		console.log("[LOCAL CSV] Saved backup:", filename, "with", localTestCSVRows.length, "rows");
+	} catch (e) {
+		console.warn("[LOCAL CSV] Storage failed:", e.message);
+		if (e.name === 'QuotaExceededError') {
+			console.warn("[LOCAL CSV] Storage quota exceeded - local backup not saved");
+		}
+	}
+	
+	// Clear buffer
+	localTestCSVRows = [];
+}
+
+// Local CSV Download/Recovery Functions (Task 8)
+
+function getStoredLocalCSVs() {
+	var csvs = [];
+	for (var i = 0; i < localStorage.length; i++) {
+		var key = localStorage.key(i);
+		if (key && key.startsWith("localCSV_")) {
+			csvs.push({
+				key: key,
+				name: key.substring(9)  // Remove "localCSV_" prefix
+			});
+		}
+	}
+	console.log("[LOCAL CSV] Found", csvs.length, "stored CSV backups");
+	return csvs;
+}
+
+function downloadLocalCSV(storageKey) {
+	var content = localStorage.getItem(storageKey);
+	if (!content) {
+		console.warn("[LOCAL CSV] No content found for key:", storageKey);
+		return;
+	}
+	
+	var filename = storageKey.substring(9);  // Remove "localCSV_" prefix
+	var element = document.createElement('a');
+	element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(content));
+	element.setAttribute('download', filename);
+	element.style.display = 'none';
+	document.body.appendChild(element);
+	element.click();
+	document.body.removeChild(element);
+	console.log("[LOCAL CSV] Downloaded backup:", filename);
+}
+
+function listStoredLocalCSVs() {
+	var csvs = getStoredLocalCSVs();
+	if (csvs.length === 0) {
+		console.log("[LOCAL CSV] No stored CSV backups available");
+		return;
+	}
+	console.log("[LOCAL CSV] Stored backups:");
+	for (var i = 0; i < csvs.length; i++) {
+		var content = localStorage.getItem(csvs[i].key);
+		var rowCount = content ? content.split('\n').length - 1 : 0;  // Subtract 1 for last empty line
+		console.log("  [" + (i+1) + "] " + csvs[i].name + " (" + rowCount + " rows)");
+	}
+}
+
 // Button Responders
 
 function flipPairing() {
@@ -422,6 +634,13 @@ function flipPairing() {
 	
 	if (!enabled) {
 		console.warn("flipPairing: buttons not enabled!");
+		return;
+	}
+	
+	// CRITICAL FIX: Don't update UI if already connected
+	// connectState values: 0=NotConnected, 1=Connecting, 3=Connected
+	if (connectState === 3) {
+		console.log("flipPairing: already connected (connectState: 3), ignoring call");
 		return;
 	}
 	
@@ -549,6 +768,10 @@ function handleRespConnectionStateChange(state) {
 		replaceTextInElemWithId("pairingMsg", "Connected to Controller");
 		console.log("Responder connected - event polling active");
 		
+		// Show ready page after successful connection
+		clearReadyMessage();
+		showReadyPage();
+		
 		// Clear any stale trial records from previous sessions
 		if (typeof clearAllRecordQueue === "function") {
 			console.log("[RESPONDER] Clearing stale localStorage records on new connection");
@@ -589,6 +812,7 @@ function handleRespConnectionStateChange(state) {
 
 function dotButtonPressed(event) {
 	//console.log("dotButtonPressed");
+	flashButtonIndicator();  // Visual feedback (Task 1.6)
 	dotPressed=1;
 }
 
@@ -621,6 +845,7 @@ function stopCurVideo() {
 
 function buttonPressed(button, event) {
 	console.log("[RESPONDER] buttonPressed CLICKED:", button, "curTestName:", curTestName, "curTrialType:", curTrialType);
+	flashButtonIndicator();  // Visual feedback (Task 1.6)
 	if (firstTouchTime == null) {
 		firstTouchTime = Date.now();
 	}
@@ -647,6 +872,7 @@ function buttonPressed(button, event) {
 			}
 			console.log("[RESPONDER] buttonPressed - calling recordAndReport, button:", button, "accuracy:", accuracy);
 			recordAndReport(curProjectNo, curTestSetNo, curTestName, curPartNo, prevRespTime, curTrialStartedTime, curTransTrialType, curTrialPhase, curTotalTrials+1, curTransTrialVar, accuracy, touchTime, reactionTime, trialTime, button, curAnim, dotPressed, moveEvents, trialQueue.length);
+			logTelemetryEvent("PromptScreen", curAnim, "Responder_" + button, accuracy);  // Log button press (Task 3)
 			dotPressed=0;
 			moveEvents=0;
 			prevRespTime=Date.now();
@@ -806,6 +1032,8 @@ function showNextRewAnimFrame() {
 
 function showReadyPage() {
 	//console.log("showReadyPage", "curTestName: "+curTestName);
+	curSection = "ReadyScreen";  // Track section change
+	logTelemetryEvent("ReadyScreen", "", "Responder_ReadyScreenShown", "n/a");  // Log ready screen (Task 3)
 	if (curTestName == "adth" && curRotateHor) {
 		rotatePageElemWithId("ready_page");
 	}
@@ -817,6 +1045,8 @@ function showReadyPage() {
 
 function showEndPage() {
 	//console.log("showEndPage", "curTestName: "+curTestName);
+	curSection = "EndScreen";  // Track section change
+	logTelemetryEvent("EndScreen", "", "Responder_EndScreenShown", "n/a");  // Log end screen (Task 3)
 	if (curTestName == "adth" && curRotateHor) {
 		rotatePageElemWithId("end_page");
 	}
@@ -994,6 +1224,12 @@ function touchGameFromCntr(event) {
 
 function showRespElem(pageId, name, elemType) {
 	console.log("showRespElem, pageId: "+pageId+", name: "+name);
+	// Track when feedback/animation is shown
+	if (pageId === "feedback" || pageId === "feedback1" || pageId === "feedback2" || elemType === "anim") {
+		curSection = "FeedbackScreen";
+		curStimuliShown = curAnim;  // Animation is showing
+		logTelemetryEvent("FeedbackScreen", curAnim, "Responder_FeedbackShown", "n/a");  // Log feedback (Task 3)
+	}
 	var respCellId, respCell, respId, respElem;
 	respCellId=pageId+"_"+name+"_respCell";
 	respCell=allRespCellElems[respCellId];
@@ -1163,7 +1399,10 @@ function startTrialFromCntr(event) {
 
 function startMultiTrialsFromCntr(event) {
 	console.log("[RESPONDER] startMultiTrialsFromCntr received:", event.data);
-	var i, dataItems, testName, trialType, trialPhase, totalTrials, projectNo, testSetNo, partNo, repeat, trialVar, trialPeriod;
+	// Initialize local CSV backup when test starts (Task 4)
+	initializeLocalTestCSV();
+	
+	var i, dataItems, testName, trialType, trialPhase, totalTrials, projectNo, testSetNo, partNo, repeat, trialVar, trialPeriod, controllerName;
 	if (pendingReadyMessageData && !readyMessageShown) {
 		applyReadyMessage(pendingReadyMessageData);
 		pendingReadyMessageData = null;
@@ -1179,6 +1418,12 @@ function startMultiTrialsFromCntr(event) {
 	testSetNo=dataItems[i++];
 	partNo=dataItems[i++];
 	repeat=dataItems[i++];
+	// Optional: controller name (Task 6)
+	controllerName=dataItems[i++];
+	if (controllerName && controllerName.length > 0) {
+		curControllerName = controllerName;
+		console.log("[RESPONDER] Controller name set to:", curControllerName);
+	}
 	
 	var trialId = testName+"_"+trialType+"_"+trialPhase+"_"+repeat;
 	
@@ -1454,6 +1699,9 @@ function phbTrialEnd(buttonPressed = true) {
 
 function showTrial() {
 	console.log("showTrial");
+	curSection = "PromptScreen";  // Track section change
+	curStimuliShown = curAnim;  // Track stimulus being shown
+	logTelemetryEvent("PromptScreen", curAnim, "Responder_TrialStarted", "n/a");  // Log trial start (Task 3)
 	reflectCurTrialState();
 	showPage(curLayout);
 	curTrialStartedTime=Date.now();
@@ -1495,6 +1743,58 @@ function showSpcStims() {
 	//resetTimeoutTimer("showTrialTimer", showTrial, 100);
 }
 
+// DNF (Did Not Finish) Record Creation (Task 1)
+
+function createAndStoreDNFRecords() {
+	console.log("[RESPONDER] Creating DNF records for remaining", trialQueue.length, "trials");
+	var remainingCount = trialQueue.length;
+	
+	if (remainingCount === 0) {
+		console.log("[RESPONDER] No remaining trials to mark as DNF");
+		return;
+	}
+	
+	// Get the next trial number from the first remaining trial
+	var nextTrialNo = curTotalTrials + 1;
+	
+	// Create a DNF record for each remaining trial
+	for (var i = 0; i < remainingCount; i++) {
+		var trialNo = nextTrialNo + i;
+		var dnfTimestamp = Date.now() + i;  // Slightly offset timestamps to differentiate records
+		
+		// Create DNF record with same format as recordAndReport CSV
+		var dnfDataStr = curUserName + "," + 
+			curProjectNo + "," + 
+			curTestSetNo + "," + 
+			curTestName + "," + 
+			curPartNo + "," + 
+			"DNF" + "," +  // prevRespTime
+			dnfTimestamp + "," + 
+			curTransTrialType + "," + 
+			curTrialPhase + "," + 
+			trialNo + "," + 
+			"DNF" + "," +  // trialVariant
+			"DNF" + "," +  // accuracy
+			"DNF" + "," +  // touchTime
+			"DNF" + "," +  // reactionTime
+			"DNF" + "," +  // trialTime
+			"DNF" + "," +  // buttonPressed
+			"DNF" + "," +  // animationShowed
+			"DNF" + "," +  // dotPressed
+			"DNF" + "," +  // moveEvents
+			curPosLat + "," +
+			curPosLng + "," +
+			(remainingCount - i - 1);  // trialQueueLength decreasing
+		
+		// Store in localStorage with unique key
+		var storageKey = curUserName + "_" + dnfTimestamp;
+		localStorage.setItem(storageKey, dnfDataStr);
+		console.log("[DNF] Stored DNF record:", storageKey, "- Trial", trialNo, 'of', remainingCount);
+	}
+	
+	console.log("[RESPONDER] Created and stored", remainingCount, 'DNF records');
+}
+
 function cancelTrialFromCntr(event) {
 	console.log("[RESPONDER] cancelTrialFromCntr received");
 	switch (testType(curTestName)) {
@@ -1502,18 +1802,32 @@ function cancelTrialFromCntr(event) {
 			phbTrialEnd(false);
 			break;
 		default:
-			console.log("[RESPONDER] Clearing queue and resetting state");
-			// Clear all trial records from localStorage so partial test data isn't logged
-			if (typeof clearAllRecordQueue === "function") {
-				clearAllRecordQueue();
+			console.log("[RESPONDER] Cancelling test - creating DNF records for remaining trials");
+			// Create DNF records for all remaining trials BEFORE clearing queue
+			if (trialQueue.length > 0) {
+				createAndStoreDNFRecords();
 			}
-			initTrialQueue();
-			reInitTrialState();
-			hideAllRespElems();
-			clearReadyMessage();
-			showReadyPage();
-			sendEvent("cntr", "trialCancelled", "");
-			console.log("[RESPONDER] Cancel complete, notified controller");
+			// Send all records (valid + DNF) to server
+			if (typeof batchSendAllRecords === "function") {
+				batchSendAllRecords(function() {
+					console.log("[RESPONDER] Batch send complete, resetting state");
+					initTrialQueue();
+					reInitTrialState();
+					hideAllRespElems();
+					clearReadyMessage();
+					showReadyPage();
+					sendEvent("cntr", "trialCancelled", "");
+					console.log("[RESPONDER] Cancel complete, notified controller");
+				});
+			} else {
+				console.warn("[RESPONDER] batchSendAllRecords not available");
+				initTrialQueue();
+				reInitTrialState();
+				hideAllRespElems();
+				clearReadyMessage();
+				showReadyPage();
+				sendEvent("cntr", "trialCancelled", "");
+			}
 			break;
 	}
 }
@@ -1526,20 +1840,49 @@ function endTrialsFromCntr(event) {
 			endGame();
 			break;
 		default:
+			// Handle remaining trials as DNF if any exist
+			if (trialQueue.length > 0) {
+				console.log("[RESPONDER] Creating DNF records for remaining trials on test end");
+				createAndStoreDNFRecords();
+			}
 			break;
 	}
-	console.log("[RESPONDER] Clearing queue and resetting state");
-	initTrialQueue();
-	reInitTrialState();
-	hideAllRespElems();
-	clearReadyMessage();
-	showReadyPage();
-	// Restart event polling so responder can receive subsequent tasks
-	if (typeof startEventPolling === "function" && curUserName) {
-		startEventPolling("resp", curUserName);
+	console.log("[RESPONDER] Ending trials - sending batch records to server");
+	// Send all accumulated records (valid + DNF) to server before resetting
+	if (typeof batchSendAllRecords === "function") {
+		batchSendAllRecords(function() {
+			console.log("[RESPONDER] Batch send complete, saving local backup and finalizing");
+			// Save local backup after batch send completes (Task 4)
+			if (typeof saveLocalTestCSV === "function") {
+				saveLocalTestCSV();
+			}
+			initTrialQueue();
+			reInitTrialState();
+			hideAllRespElems();
+			clearReadyMessage();
+			showReadyPage();
+			// Restart event polling so responder can receive subsequent tasks
+			if (typeof startEventPolling === "function" && curUserName) {
+				startEventPolling("resp", curUserName);
+			}
+			sendEvent("cntr", "trialsEnded", "");
+			console.log("[RESPONDER] End complete, notified controller");
+		});
+	} else {
+		console.warn("[RESPONDER] batchSendAllRecords not available");
+		if (typeof saveLocalTestCSV === "function") {
+			saveLocalTestCSV();
+		}
+		initTrialQueue();
+		reInitTrialState();
+		hideAllRespElems();
+		clearReadyMessage();
+		showReadyPage();
+		if (typeof startEventPolling === "function" && curUserName) {
+			startEventPolling("resp", curUserName);
+		}
+		sendEvent("cntr", "trialsEnded", "");
 	}
-	sendEvent("cntr", "trialsEnded", "");
-	console.log("[RESPONDER] End complete, notified controller");
 }
 
 function endTestFromCntr(event) {
