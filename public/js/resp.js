@@ -71,7 +71,7 @@ function respDeclareGlobals() {
 	dotPressed=0;
 	requireReadyHold=false;
 	waitingForHoldToStart=false;
-	holdToStartMs=1000;
+	holdToStartMs=0;
 	holdToStartTimer=null;
 	allowReadyMessage=true;
 	pendingReadyMessageData=null;
