@@ -802,7 +802,7 @@ function nextTrial(repeat) {
 	switch (testType(curTestName)) {
 		case "phb":
 			//curVar = "";
-			sendEvent("resp", "startMultiTrials", curTestName+","+curTrialType+","+curTrialPhase+","+curTotalTrials+","+projectCurNo+","+testSetCurNo+","+partCurNo+","+repeat+","+(curUserName || ""));
+			sendEvent("resp", "startMultiTrials", curTestName+","+curTrialType+","+curTrialPhase+","+curTotalTrials+","+projectCurNo+","+testSetCurNo+","+partCurNo+","+repeat+","+(curUserName || "")+","+(partCurRef || ""));
 			break;
 		case "box":
 			normalizeResRowElems();
@@ -832,7 +832,7 @@ function nextTrial(repeat) {
 			}
 			//console.log("nextTrial, repeat: "+repeat, "curTotalTrials: "+curTotalTrials);
 			//if (repeat > 1) {
-			sendEvent("resp", "startMultiTrials", curTestName+","+curTrialType+","+curTrialPhase+","+curTotalTrials+","+projectCurNo+","+testSetCurNo+","+partCurNo+","+repeat+","+(curUserName || ""));
+			sendEvent("resp", "startMultiTrials", curTestName+","+curTrialType+","+curTrialPhase+","+curTotalTrials+","+projectCurNo+","+testSetCurNo+","+partCurNo+","+repeat+","+(curUserName || "")+","+(partCurRef || ""));
 			//}
 			//else {
 			//	curVar=getTrialVar(curTestName, curTrialType, curTrialPhase, curTotalTrials);

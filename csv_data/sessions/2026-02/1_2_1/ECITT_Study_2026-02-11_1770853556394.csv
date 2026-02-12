@@ -1,0 +1,2 @@
+Timestamp,User,ProjectNo,TestSetNo,TestName,PartNo,TrialStartTime,TrialType,TrialPhase,TrialNo,TrialVariant,Accuracy,TouchTime,ReactionTime,TrialTime,ButtonPressed,AnimationShowed,DotPressed,MovementCount
+2026-02-11T23:46:06+00:00,admin,1,2,adt,1,1770853556394,ppt,trial,3,,1,1052,1052,1052,top,,0,0

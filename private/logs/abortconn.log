@@ -510,3 +510,27 @@
 26.02.11 23:33:06 sendStatusDoc [ok] [connection aborted, pairingCode: admin]
 26.02.11 23:33:11 aborted connection, pairingCode: admin
 26.02.11 23:33:11 sendStatusDoc [ok] [connection aborted, pairingCode: admin]
+26.02.11 23:38:40 errorHandler [] [8192] [preg_match(): Passing null to parameter #2 ($subject) of type string is deprecated] [D:\coding\BEAD Lab\Work\USC-BEAD-Lab-ECITT\private\libs\php\eventLib.php] [271]
+26.02.11 23:38:40 illegal pairingCode: 
+26.02.11 23:41:35 aborted connection, pairingCode: admin
+26.02.11 23:41:35 sendStatusDoc [ok] [connection aborted, pairingCode: admin]
+26.02.11 23:42:48 aborted connection, pairingCode: admin
+26.02.11 23:42:48 sendStatusDoc [ok] [connection aborted, pairingCode: admin]
+26.02.11 23:52:54 aborted connection, pairingCode: admin
+26.02.11 23:52:54 sendStatusDoc [ok] [connection aborted, pairingCode: admin]
+26.02.11 23:53:05 aborted connection, pairingCode: admin
+26.02.11 23:53:05 sendStatusDoc [ok] [connection aborted, pairingCode: admin]
+26.02.11 23:56:48 aborted connection, pairingCode: admin
+26.02.11 23:56:48 sendStatusDoc [ok] [connection aborted, pairingCode: admin]
+26.02.11 23:57:02 aborted connection, pairingCode: admin
+26.02.11 23:57:02 sendStatusDoc [ok] [connection aborted, pairingCode: admin]
+26.02.11 23:57:14 aborted connection, pairingCode: admin
+26.02.11 23:57:14 sendStatusDoc [ok] [connection aborted, pairingCode: admin]
+26.02.12 00:03:53 aborted connection, pairingCode: admin
+26.02.12 00:03:53 sendStatusDoc [ok] [connection aborted, pairingCode: admin]
+26.02.12 00:04:04 aborted connection, pairingCode: admin
+26.02.12 00:04:04 sendStatusDoc [ok] [connection aborted, pairingCode: admin]
+26.02.12 00:18:04 aborted connection, pairingCode: admin
+26.02.12 00:18:04 sendStatusDoc [ok] [connection aborted, pairingCode: admin]
+26.02.12 00:18:15 aborted connection, pairingCode: admin
+26.02.12 00:18:15 sendStatusDoc [ok] [connection aborted, pairingCode: admin]

@@ -1,9 +1,5 @@
-trialResult;admin,1,2,adt,1,1770852814561,1770852814564,ppb,trial,1,,1,1725,1725,1725,btm,,0,0,0,0,3
-trialResult;admin,1,2,adt,1,1770852816289,1770852817308,ppb,trial,2,,1,2882,2883,2883,btm,,0,0,0,0,2
-trialResult;admin,1,2,adt,1,1770852820191,1770852821198,ppb,trial,3,,1,1112,1112,1112,btm,,0,0,0,0,1
-trialResult;admin,1,2,adt,1,1770852822311,1770852823320,ppb,trial,4,,1,910,910,910,btm,,0,0,0,0,0
+trialResult;admin,1,2,adt,1,1770855519994,1770855519997,ppt,trial,1,,1,2651,2651,2651,top,,0,0,0,0,3
+trialResult;admin,1,2,adt,1,1770855525783,1770855525784,ppt,trial,2,,1,1135,1135,1135,top,,0,0,0,0,2
+trialResult;admin,1,2,adt,1,1770855529775,1770855529776,ppt,trial,3,,1,1063,1063,1063,top,,0,0,0,0,1
+trialResult;admin,1,2,adt,1,1770855533031,1770855533032,ppt,trial,4,,1,887,887,887,top,,0,0,0,0,0
 trialEnded;
-trialsEnded;
-trialsEnded;
-trialsEnded;
-testEnded;

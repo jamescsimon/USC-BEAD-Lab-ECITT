@@ -71,11 +71,12 @@ function respDeclareGlobals() {
 	dotPressed=0;
 	requireReadyHold=false;
 	waitingForHoldToStart=false;
-	holdToStartMs=0;
+	holdToStartMs=100;  // Require 100ms tap on red dot to start trial
 	holdToStartTimer=null;
 	allowReadyMessage=true;
 	pendingReadyMessageData=null;
 	readyMessageShown=false;
+	readyImageMdlId="";  // Store ready image ID to restore dot between trials
 	
 	trialQueue=new Array();
 	curRandomVarList=new Array();
@@ -89,6 +90,7 @@ function respDeclareGlobals() {
 	curSection = "";  // ReadyScreen, PromptScreen, FeedbackScreen, EndScreen
 	curStimuliShown = "";  // Track what stimulus/animation is currently displayed
 	curControllerName = "";  // Logged-in controller name (for telemetry)
+	curPartRef = "";  // Participant reference/name (responder name for telemetry)
 	
 	// Local CSV backup (Task 4)
 	localTestCSVRows = [];  // In-memory buffer for CSV rows during test
@@ -469,11 +471,11 @@ function flashButtonIndicator() {
 		console.warn("[INDICATOR] Button indicator not found");
 		return;
 	}
-	// Flash white for 3ms
+	// Flash white for 10ms
 	indicator.style.backgroundColor = 'white';
 	setTimeout(function() {
 		indicator.style.backgroundColor = 'black';
-	}, 3);
+	}, 10);
 }
 
 // Telemetry Event Logging (Task 3)
@@ -492,7 +494,7 @@ function logTelemetryEvent(section, stimuli, invokedBy, accuracy) {
 	var telemetryData = {
 		testDate: testDate,
 		timestamp: timestamp,
-		responserName: curUserName,
+		responserName: curPartRef || curUserName,
 		controllerName: curControllerName || "unknown",
 		section: section || curSection,
 		stimuli: stimuli || curAnim,
@@ -826,6 +828,21 @@ function trialSuccess() {
 	trialPending=false;
 	reInitTrialState();
 	hideAllRespElems();
+	
+	// Clear prompt messages so only dot shows between trials
+	removeChildrenInElemWithId("readyMessagePara1Top");
+	removeChildrenInElemWithId("readyMessagePara2Top");
+	removeChildrenInElemWithId("readyMessagePara1Btm");
+	removeChildrenInElemWithId("readyMessagePara2Btm");
+	
+	// Restore red dot if more trials are queued
+	if (trialQueue.length > 0) {
+		requireReadyHold = true;  // Must set this for red dot tap to work
+		waitingForHoldToStart = true;
+		restoreReadyDot();
+		attachReadyHoldHandlers();
+	}
+	
 	showReadyPage();
 	resetTimeoutTimer("trialEndedTimer", sendTrialEnded, 100);
 }
@@ -973,14 +990,33 @@ function showNextEndAnimFrame() {
 function trialEnded() {
 	console.log("[RESPONDER] trialEnded - queue length:", trialQueue.length);
 	var dataItems;
+	
+	// Set trialPending to false when trial completes
+	trialPending = false;
+	
 	if (trialQueue.length > 0) {
-		console.log("[RESPONDER] More trials in queue, starting next");
-		eventData = trialQueue.shift();
-		startTrial(eventData);
+		console.log("[RESPONDER] More trials in queue:", trialQueue.length, "- showing ready screen");
+		
+		// Reset UI state
+		hideAllRespElems();
+		
+		// Clear prompt messages so only dot shows between trials
+		removeChildrenInElemWithId("readyMessagePara1Top");
+		removeChildrenInElemWithId("readyMessagePara2Top");
+		removeChildrenInElemWithId("readyMessagePara1Btm");
+		removeChildrenInElemWithId("readyMessagePara2Btm");
+		
+		// Show ready screen with dot for next trial
+		requireReadyHold = true;  // Must set this for red dot tap to work
+		waitingForHoldToStart = true;
+		restoreReadyDot();
+		showReadyPage();
+		attachReadyHoldHandlers();
+		
+		console.log("[RESPONDER] Ready screen shown - waiting for red dot tap to start next trial");
 	}
 	else {
 		console.log("[RESPONDER] All trials complete, resetting and notifying controller");
-		trialPending = false;
 		
 		// Clear trial state but DON'T stop timers/polling yet
 		curTestName="";
@@ -1010,6 +1046,9 @@ function trialEnded() {
 		
 		// Reset UI state
 		hideAllRespElems();
+		
+		// No more trials - clear ready message
+		console.log("[RESPONDER] No more trials - clearing ready message");
 		clearReadyMessage();
 		showReadyPage();
 		
@@ -1034,6 +1073,11 @@ function showReadyPage() {
 	//console.log("showReadyPage", "curTestName: "+curTestName);
 	curSection = "ReadyScreen";  // Track section change
 	logTelemetryEvent("ReadyScreen", "", "Responder_ReadyScreenShown", "n/a");  // Log ready screen (Task 3)
+	// Ensure ready page is visible (reset any manual hiding)
+	var readyPage = document.getElementById("ready_page");
+	if (readyPage) {
+		readyPage.style.display = "";
+	}
 	if (curTestName == "adth" && curRotateHor) {
 		rotatePageElemWithId("ready_page");
 	}
@@ -1274,6 +1318,8 @@ function applyReadyMessage(dataStr) {
 		readyImageMdl=getImageElem("buttons", "button_"+readyImageMdlId, "info");
 		replaceChildrenInElemWithId("ready_mdl_readyCell", readyImageMdl);
 		requireReadyHold = (readyImageMdlId === "dot");
+		// Store globally so we can restore it between trials
+		window.readyImageMdlId = readyImageMdlId;
 	}
 	if (readyMessageBtm1Id) {
 		readyMessageBtm1=locsDoc.getElementById(readyMessageBtm1Id).getAttribute("text");
@@ -1309,32 +1355,38 @@ function readyHoldStart(event) {
 	if (!requireReadyHold || !waitingForHoldToStart) {
 		return;
 	}
-	if (holdToStartTimer) {
-		clearTimeout(holdToStartTimer);
-	}
-	holdToStartTimer = setTimeout(function() {
-		holdToStartTimer = null;
-		if (!requireReadyHold || !waitingForHoldToStart) {
-			return;
-		}
-		waitingForHoldToStart = false;
-		startQueuedTrialFromHold();
-	}, holdToStartMs);
+	// Simple tap - start trial immediately when red dot is tapped
+	console.log("[RESPONDER] Red dot tapped - starting trial");
+	waitingForHoldToStart = false;
+	startQueuedTrialFromHold();
 }
 
 function readyHoldEnd(event) {
 	if (event) {
 		event.preventDefault();
 	}
-	if (holdToStartTimer) {
-		clearTimeout(holdToStartTimer);
-		holdToStartTimer = null;
-	}
+	// No longer need to cancel timer since we start on tap down
 }
 
 function startQueuedTrialFromHold() {
 	if (trialQueue.length > 0 && !trialPending) {
-		console.log("[RESPONDER] Hold complete - starting first trial");
+		console.log("[RESPONDER] Hold complete - starting next trial");
+		// Clear prompt messages after first trial so they don't reappear
+		if (curTotalTrials > 0) {
+			removeChildrenInElemWithId("readyMessagePara1Top");
+			removeChildrenInElemWithId("readyMessagePara2Top");
+			removeChildrenInElemWithId("readyMessagePara1Btm");
+			removeChildrenInElemWithId("readyMessagePara2Btm");
+		}
+		// Hide red dot during trial - make absolutely sure it's removed
+		console.log("[RESPONDER] Removing red dot before trial");
+		removeChildrenInElemWithId("ready_mdl_readyCell");
+		// Also hide the ready page immediately to ensure clean transition
+		var readyPage = document.getElementById("ready_page");
+		if (readyPage) {
+			readyPage.style.display = "none";
+			console.log("[RESPONDER] Hidden ready page");
+		}
 		trialPending = true;
 		prevRespTime = Date.now();
 		eventData = trialQueue.shift();
@@ -1354,6 +1406,21 @@ function clearReadyMessage() {
 	removeChildrenInElemWithId("ready_mdl_readyCell");
 	removeChildrenInElemWithId("readyMessagePara1Btm");
 	removeChildrenInElemWithId("readyMessagePara2Btm");
+	requireReadyHold = false;
+	readyMessageShown = false;
+	window.readyImageMdlId = "";
+}
+
+function restoreReadyDot() {
+	// Restore red dot between trials without clearing other ready message elements
+	// First ensure the cell is empty
+	removeChildrenInElemWithId("ready_mdl_readyCell");
+	// Then restore the dot
+	if (window.readyImageMdlId) {
+		var readyImageMdl = getImageElem("buttons", "button_"+window.readyImageMdlId, "info");
+		replaceChildrenInElemWithId("ready_mdl_readyCell", readyImageMdl);
+		console.log("[RESPONDER] Restored red dot for next trial");
+	}
 }
 
 function clearEndMessage() {
@@ -1424,6 +1491,11 @@ function startMultiTrialsFromCntr(event) {
 		curControllerName = controllerName;
 		console.log("[RESPONDER] Controller name set to:", curControllerName);
 	}
+	// Optional: participant reference (responder name)
+	curPartRef=dataItems[i++];
+	if (curPartRef && curPartRef.length > 0) {
+		console.log("[RESPONDER] Participant name set to:", curPartRef);
+	}
 	
 	var trialId = testName+"_"+trialType+"_"+trialPhase+"_"+repeat;
 	
@@ -1443,18 +1515,12 @@ function startMultiTrialsFromCntr(event) {
 	
 	console.log("[RESPONDER] Built trial queue with", trialQueue.length, "trials. trialPending:", trialPending);
 	if (!trialPending) {
-		if (requireReadyHold) {
-			console.log("[RESPONDER] Waiting for 1s hold on red dot to start trials");
-			waitingForHoldToStart = true;
-			showReadyPage();
-			attachReadyHoldHandlers();
-			return;
-		}
-		console.log("[RESPONDER] Starting first trial from queue");
-		trialPending = true;
-		prevRespTime = Date.now();
-		eventData = trialQueue.shift();
-		startTrial(eventData);
+		// Always require ready hold (red dot tap) for queued trials
+		console.log("[RESPONDER] Waiting for red dot tap to start trials");
+		requireReadyHold = true;
+		waitingForHoldToStart = true;
+		showReadyPage();
+		attachReadyHoldHandlers();
 	} else {
 		console.log("[RESPONDER] Trial already pending, queued for later");
 	}
@@ -1699,6 +1765,13 @@ function phbTrialEnd(buttonPressed = true) {
 
 function showTrial() {
 	console.log("showTrial");
+	// Clear ready page messages before showing trial page (ensures clean page transitions)
+	if (curTotalTrials > 0) {
+		removeChildrenInElemWithId("readyMessagePara1Top");
+		removeChildrenInElemWithId("readyMessagePara2Top");
+		removeChildrenInElemWithId("readyMessagePara1Btm");
+		removeChildrenInElemWithId("readyMessagePara2Btm");
+	}
 	curSection = "PromptScreen";  // Track section change
 	curStimuliShown = curAnim;  // Track stimulus being shown
 	logTelemetryEvent("PromptScreen", curAnim, "Responder_TrialStarted", "n/a");  // Log trial start (Task 3)
