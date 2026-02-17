@@ -1380,7 +1380,16 @@ function startQueuedTrialFromHold() {
 		}
 		// Hide red dot during trial - make absolutely sure it's removed
 		console.log("[RESPONDER] Removing red dot before trial");
-		removeChildrenInElemWithId("ready_mdl_readyCell");
+		var dotCell = document.getElementById("ready_mdl_readyCell");
+		if (dotCell) {
+			// Remove all children
+			while (dotCell.firstChild) {
+				dotCell.removeChild(dotCell.firstChild);
+			}
+			// Also hide the cell itself
+			dotCell.style.visibility = "hidden";
+			console.log("[RESPONDER] Red dot cell emptied and hidden");
+		}
 		// Also hide the ready page immediately to ensure clean transition
 		var readyPage = document.getElementById("ready_page");
 		if (readyPage) {
@@ -1413,8 +1422,15 @@ function clearReadyMessage() {
 
 function restoreReadyDot() {
 	// Restore red dot between trials without clearing other ready message elements
-	// First ensure the cell is empty
-	removeChildrenInElemWithId("ready_mdl_readyCell");
+	var dotCell = document.getElementById("ready_mdl_readyCell");
+	if (dotCell) {
+		// Clear any existing content
+		while (dotCell.firstChild) {
+			dotCell.removeChild(dotCell.firstChild);
+		}
+		// Restore visibility
+		dotCell.style.visibility = "visible";
+	}
 	// Then restore the dot
 	if (window.readyImageMdlId) {
 		var readyImageMdl = getImageElem("buttons", "button_"+window.readyImageMdlId, "info");
