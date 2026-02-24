@@ -1,11 +1,2 @@
-setReadyMessage;msg_adtIntro1,msg_adtIntro2,dot,msg_adtReady,,adth
-startMultiTrials;adth,ppl,trial,0,1,2,1,4,admin,Santiago_Morales
-cancelTrial;
-endTrials;adth,tspl
-cancelTrial;
-endTrials;adth,tspl
-cancelTrial;
-endTrials;adth,tspl
-endTrials;adth,tspl
-endTrials;adth,tspl
-endTrials;adth,tspl
+goodbye;
+startMultiTrials;dev,bvv,trial,0,1,2,1,1,admin,Santiago_Morales

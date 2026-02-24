@@ -367,18 +367,18 @@ FrogSprite.prototype.blinkDone = function(self) {
 //BflyGame
 
 function BflyGame() {
-	//console.log("BflyGame");
+	console.log("[BflyGame] Initializing butterfly game");
 	SpriteGame.call(this, "bfly");
 	var sprite = new BflySprite(this);
 	this.sprites.push(sprite);
-	//console.log("BflyGame exit");
+	console.log("[BflyGame] Exit constructor, sprites:", this.sprites);
 }
 
 BflyGame.prototype = Object.create(SpriteGame.prototype);
 BflyGame.prototype.constructor = BflyGame;
 
 function BflySprite(game) {
-	//console.log("BflySprite");
+	console.log("[BflySprite] Initializing butterfly sprite");
 	var i, frame;
 	Sprite.call(this, game, 1, 1);
 	this.frames = new Array();
@@ -388,17 +388,21 @@ function BflySprite(game) {
 	this.frameNo = 0;
 	this.step = 1;
 	for (i = 1; i <= 8; i ++ ) {
-		frame = getImageElem("sprites", this.name + "-0" + i, "sprite")
-		this.frames.push(frame);
+		frame = getImageElem("sprites", this.name + "-0" + i, "sprite");
+		if (!frame) {
+			console.error(`[BflySprite] Frame missing: ${this.name}-0${i}`);
+		} else {
+			this.frames.push(frame);
+		}
 	}
-	//console.log("BflySprite exit");
+	console.log("[BflySprite] Frames loaded:", this.frames);
 }
 
 BflySprite.prototype = Object.create(Sprite.prototype);
 BflySprite.prototype.constructor = BflySprite;
 
 BflySprite.prototype.initiate = function() {
-	//console.log("BflySprite.initiate");
+	console.log("[BflySprite] Initiate called");
 	this.posX = window.innerWidth / 2;
 	this.posY = this.height / 2;
 	this.angle = 0;
@@ -408,7 +412,7 @@ BflySprite.prototype.initiate = function() {
 	this.game.setTimeout("gotoCenterTimer", this.gotoCenter, 100, this);
 	this.game.setTimeout("setReadyTimer", this.setReady, 700, this);
 	this.game.setTimeout("randomFlapTimer", this.randomFlap, 3000, this);
-	//console.log("BflySprite.initiate exit");
+	console.log("[BflySprite] Initiate exit");
 }
 
 BflySprite.prototype.nextFrame = function(self) {
@@ -417,14 +421,20 @@ BflySprite.prototype.nextFrame = function(self) {
 		self.step = -1;
 		self.frameNo = 6;
 		self.game.setTimeout("frameTimer", self.nextFrame, 50, self);
-	}
-	else {
+	} else {
 		if (self.frameNo == 0) {
 			self.step = 1;
-		}
-		else {
+		} else {
 			self.game.setTimeout("frameTimer", self.nextFrame, 50, self);
 		}
+	}
+	if (!self.container) {
+		console.error("[BflySprite] Container missing for frame rendering");
+		return;
+	}
+	if (!self.frames[self.frameNo]) {
+		console.error(`[BflySprite] Frame ${self.frameNo} missing`);
+		return;
 	}
 	replaceChildren(self.container, self.frames[self.frameNo]);
 }

@@ -1321,6 +1321,17 @@ function applyReadyMessage(dataStr) {
 		// Store globally so we can restore it between trials
 		window.readyImageMdlId = readyImageMdlId;
 	}
+	// Force automatic trial start for all phb tasks (app, rst, and any other phb trial types)
+	if (curTestName === "phb") {
+		requireReadyHold = false;
+		waitingForHoldToStart = false;
+		setTimeout(function() {
+			if (trialQueue.length > 0 && !trialPending) {
+				console.log("[RESPONDER] Auto-starting phb trial (no red dot required)", curTransTrialType);
+				startQueuedTrialFromHold();
+			}
+		}, 500); // slight delay to allow UI to update
+	}
 	if (readyMessageBtm1Id) {
 		readyMessageBtm1=locsDoc.getElementById(readyMessageBtm1Id).getAttribute("text");
 		replaceTextInElemWithId("readyMessagePara1Btm", readyMessageBtm1);
@@ -1531,12 +1542,26 @@ function startMultiTrialsFromCntr(event) {
 	
 	console.log("[RESPONDER] Built trial queue with", trialQueue.length, "trials. trialPending:", trialPending);
 	if (!trialPending) {
-		// Always require ready hold (red dot tap) for queued trials
-		console.log("[RESPONDER] Waiting for red dot tap to start trials");
-		requireReadyHold = true;
-		waitingForHoldToStart = true;
-		showReadyPage();
-		attachReadyHoldHandlers();
+		if (
+			testName === "phb" ||
+			(testName === "dev" && (trialType === "Baseline VidH" || trialType === "Baseline VidV"))
+		) {
+			requireReadyHold = false;
+			waitingForHoldToStart = false;
+			setTimeout(function() {
+				if (trialQueue.length > 0 && !trialPending) {
+					console.log("[RESPONDER] Auto-starting trial (no red dot required)", testName, trialType);
+					startQueuedTrialFromHold();
+				}
+			}, 500); // slight delay to allow UI to update
+		} else {
+			// Always require ready hold (red dot tap) for queued trials
+			console.log("[RESPONDER] Waiting for red dot tap to start trials");
+			requireReadyHold = true;
+			waitingForHoldToStart = true;
+			showReadyPage();
+			attachReadyHoldHandlers();
+		}
 	} else {
 		console.log("[RESPONDER] Trial already pending, queued for later");
 	}
@@ -1792,6 +1817,31 @@ function showTrial() {
 	curStimuliShown = curAnim;  // Track stimulus being shown
 	logTelemetryEvent("PromptScreen", curAnim, "Responder_TrialStarted", "n/a");  // Log trial start (Task 3)
 	reflectCurTrialState();
+
+	// If this is a tbv trial (Baseline VidV/VidH), show and play the video
+	if (trialTypeCat(curTrialType) === "tbv" && curVideoName) {
+		// Remove any previous video element
+		if (curVideoElem) {
+			curVideoElem.parentNode && curVideoElem.parentNode.removeChild(curVideoElem);
+			curVideoElem = null;
+		}
+		// Create new video element
+		curVideoElem = document.createElement("video");
+		curVideoElem.setAttribute("id", "trial_video");
+		curVideoElem.setAttribute("src", curVideoName);
+		curVideoElem.setAttribute("controls", "");
+		curVideoElem.setAttribute("autoplay", "");
+		curVideoElem.style.width = "100%";
+		curVideoElem.style.maxHeight = "80vh";
+		// Insert video element into the layout page
+		var layoutElem = document.getElementById(curLayout);
+		if (layoutElem) {
+			layoutElem.insertBefore(curVideoElem, layoutElem.firstChild);
+		} else {
+			console.warn("[RESPONDER] Layout element not found for video trial: ", curLayout);
+		}
+	}
+
 	showPage(curLayout);
 	curTrialStartedTime=Date.now();
 }
@@ -2038,11 +2088,11 @@ function reflectCurTrialState() {
 						var videoUrl = "../video/nirs/"+curVideoName+".mp4";
 						//console.log("videoUrl: "+videoUrl);
 						curVideoElem.setAttribute("src", videoUrl);
+						curVideoElem.play();
 						playSound("nirs/"+curVideoName, true);
-						//videoElem.play()
 					}
 					else {
-						videoElem.setAttribute("src", "")
+						curVideoElem.setAttribute("src", "")
 					}
 					break;
 				default:

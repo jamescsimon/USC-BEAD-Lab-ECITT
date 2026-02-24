@@ -63,13 +63,13 @@
 	
 	<xsl:template match="videoPageHor">
 		<div draggable="false" ontouchstart="event.preventDefault();" id="{@id}_page" data-hor="yes" class="page" style="background-color: #000" hidden="">
-			<img id="{@id}_video" ontouchstart="event.preventDefault();" style="height: 100%"/>
+			<video id="{@id}_video" ontouchstart="event.preventDefault();" style="height: 100%; width: 100%; object-fit: contain;" autoplay="autoplay"></video>
 		</div>
 	</xsl:template>
 	
 	<xsl:template match="videoPageVer">
 		<div draggable="false" ontouchstart="event.preventDefault();" id="{@id}_page" data-hor="no" class="page" style="background-color: #000" hidden="">
-			<img id="{@id}_video" ontouchstart="event.preventDefault();" style="height: 100%"/>
+			<video id="{@id}_video" ontouchstart="event.preventDefault();" style="height: 100%; width: 100%; object-fit: contain;" autoplay="autoplay"></video>
 		</div>
 	</xsl:template>
 
