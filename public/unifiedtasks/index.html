@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-fullscreen">
+    <title>ECITT Adult Task</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Age Selection Screen -->
+    <div id="ageSelectionScreen" class="screen active">
+        <div class="centered-content">
+            <h1 class="title">ECITT Task</h1>
+            <p class="subtitle">Select Age Group</p>
+            <button id="adultBtn" class="age-button">Adult</button>
+        </div>
+    </div>
+
+    <!-- Participant ID Screen -->
+    <div id="participantScreen" class="screen">
+        <div class="centered-content">
+            <h2 class="title">Participant Information</h2>
+            <div class="input-group">
+                <label for="participantIdInput">Participant ID:</label>
+                <input type="text" id="participantIdInput" placeholder="e.g., PC001" autocomplete="off">
+            </div>
+            <button id="startBtn" class="start-button">Start Task</button>
+        </div>
+    </div>
+
+    <!-- Ready Screen -->
+    <div id="readyScreen" class="screen">
+        <div class="screen-center">
+            <div class="ready-message-top">
+                <p id="readyMsg1" class="readyMessage"></p>
+                <p id="readyMsg2" class="readyMessage"></p>
+            </div>
+            <!-- Red dot FIXED position (SAME as promptScreen) -->
+            <div id="dotButton" class="dotButton" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 50;"></div>
+            <div class="ready-message-btm">
+                <p id="readyMsg3" class="readyMessage"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prompt Screen -->
+    <div id="promptScreen" class="screen">
+        <!-- Fixed-position red dot at screen center (ALWAYS CENTERED, NEVER MOVES) -->
+        <div id="promptDot" class="dotButton" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 0;"></div>
+        
+        <!-- Buttons positioned FIXED (same as dot) so they align, ALWAYS ABOVE DOT for clicking -->
+        <div id="topButton" class="ecittButton" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); display: none; z-index: 100;"></div>
+        <div id="mdlButton" class="ecittButton" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none; z-index: 100;"></div>
+        <div id="btmButton" class="ecittButton" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: none; z-index: 100;"></div>
+    </div>
+
+    <!-- End Screen -->
+    <div id="endScreen" class="screen">
+        <div class="centered-content">
+            <h2 class="end-title">Task Complete!</h2>
+            <div id="endStats" class="end-message"></div>
+            <p class="end-message">Thank you for participating.</p>
+            <button id="downloadBtn" class="download-button">Download Results</button>
+            <button id="restartBtn" class="restart-button">Start New Session</button>
+        </div>
+    </div>
+
+    <!-- DNF Screen -->
+    <div id="dnfScreen" class="screen">
+        <div class="centered-content">
+            <h2 class="end-title">Session Incomplete</h2>
+            <p class="end-message">The session was not completed.</p>
+            <div id="dnfStats" class="end-message"></div>
+            <button id="dnfDownloadBtn" class="download-button">Download Partial Results</button>
+            <button id="dnfRestartBtn" class="restart-button">Start New Session</button>
+        </div>
+    </div>
+
+    <!-- Photocell indicator (OUTSIDE all screens so it's always visible) -->
+    <div id="buttonIndicator"></div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // Register service worker for offline support
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(registration => {
+                        console.log('[PWA] Service Worker registered:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.error('[PWA] Service Worker registration failed:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>

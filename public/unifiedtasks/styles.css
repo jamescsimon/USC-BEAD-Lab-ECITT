@@ -1,0 +1,314 @@
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    user-select: none;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: sans-serif;
+    font-size: 16px;
+    background-color: #333;
+    position: fixed;
+}
+
+/* Screen Management */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* Centered Screen Content */
+.screen-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.ready-message-top {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 150px;
+}
+
+.ready-message-btm {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 150px;
+    align-items: center;
+}
+.centered-content {
+    text-align: center;
+    padding: 2em;
+    max-width: 600px;
+    width: 100%;
+}
+
+/* Age Selection Screen */
+.title {
+    color: #fff;
+    font-size: 2.5em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.subtitle {
+    color: #aaa;
+    font-size: 1.5em;
+    margin-bottom: 2em;
+}
+
+.age-button {
+    width: 300px;
+    height: 100px;
+    font-size: 1.8em;
+    font-weight: bold;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.age-button:active {
+    background-color: #45a049;
+}
+
+/* Participant Screen */
+.input-group {
+    margin: 2em 0;
+}
+
+.input-group label {
+    display: block;
+    color: #fff;
+    font-size: 1.3em;
+    margin-bottom: 0.5em;
+}
+
+.input-group input {
+    width: 100%;
+    max-width: 400px;
+    padding: 15px;
+    font-size: 1.2em;
+    text-align: center;
+    border: 2px solid #aaa;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.start-button {
+    width: 300px;
+    height: 80px;
+    font-size: 1.5em;
+    font-weight: bold;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-top: 1em;
+    transition: background-color 0.3s;
+}
+
+.start-button:active {
+    background-color: #0b7dda;
+}
+
+/* ECITT Task Layout (from specs) */
+table.ecittLayout {
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    border-collapse: collapse;
+}
+
+td.readyCell {
+    vertical-align: middle;
+    text-align: center;
+    font-size: 0;
+}
+
+td.ecittButton {
+    vertical-align: middle;
+    text-align: center;
+    font-size: 0;
+}
+td.button-cell {
+    vertical-align: middle;
+    text-align: center;
+    font-size: 0;
+}
+/* Ready Screen Messages */
+p.readyMessage {
+    color: #fff;
+    font-size: 24px;
+    text-align: center;
+    height: 108px;
+    margin-left: 4em;
+    margin-right: 4em;
+}
+
+/* Red Dot Button (from specs) */
+div.dotButton {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto;
+    display: inline-block;
+    background-color: #d32f2f;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+div.dotButton:active {
+    transform: scale(0.95);
+}
+
+div.dotButton.hidden {
+    display: none;
+}
+
+/* Response Buttons (from specs) */
+div.ecittButton {
+    width: 220px;
+    height: 220px;
+    display: inline-block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+div.ecittButton:active {
+    transform: scale(0.95);
+}
+
+div.ecittButton.hidden {
+    display: none;
+}
+
+/* Button Images */
+div.ecittButton.button_top {
+    background-image: url('../graphics/buttons/button_top.png');
+}
+
+div.ecittButton.button_top_happy {
+    background-image: url('../graphics/buttons/button_top_happy.png');
+}
+
+div.ecittButton.button_mdl {
+    background-image: url('../graphics/buttons/button_mdl.png');
+}
+
+div.ecittButton.button_mdl_happy {
+    background-image: url('../graphics/buttons/button_mdl_happy.png');
+}
+
+div.ecittButton.button_btm {
+    background-image: url('../graphics/buttons/button_btm.png');
+}
+
+div.ecittButton.button_btm_happy {
+    background-image: url('../graphics/buttons/button_btm_happy.png');
+}
+
+/* Photocell Indicator (from specs) */
+#buttonIndicator {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    width: 2cm;
+    height: 2cm;
+    background-color: black;
+    border: 1px solid #555;
+    z-index: 9999;
+}
+
+/* End Screen */
+.end-title {
+    color: #fff;
+    font-size: 2.5em;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+
+.end-message {
+    color: #fff;
+    font-size: 1.3em;
+    margin: 1em 0;
+}
+
+.download-button {
+    width: 300px;
+    height: 70px;
+    font-size: 1.3em;
+    font-weight: bold;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    margin: 10px;
+    transition: background-color 0.3s;
+}
+
+.download-button:active {
+    background-color: #45a049;
+}
+
+.restart-button {
+    width: 300px;
+    height: 70px;
+    font-size: 1.3em;
+    font-weight: bold;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    margin: 10px;
+    transition: background-color 0.3s;
+}
+
+.restart-button:active {
+    background-color: #0b7dda;
+}
+
+/* Touch feedback */
+button:focus {
+    outline: none;
+}
+
+/* Prevent text selection during touch */
+body {
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}
