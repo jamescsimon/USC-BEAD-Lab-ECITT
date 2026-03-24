@@ -126,7 +126,8 @@ const appState = {
     totalReactionTime: 0,
     isDNF: false,
     blockReactionTime: 0,
-    blockTrials: 0
+    blockTrials: 0,
+    isTransitioning: false
 };
 
 // ===== DOM ELEMENTS =====
@@ -276,6 +277,7 @@ function restart() {
     appState.isDNF = false;
     appState.blockReactionTime = 0;
     appState.blockTrials = 0;
+    appState.isTransitioning = false;
     
     dataManager.clearSession();
     cleanupRecording();
@@ -295,6 +297,7 @@ function loadTask(taskId) {
     const config = TASK_CONFIGS[taskId];
     appState.currentTask = config;
     appState.currentTrial = 0;
+    appState.isTransitioning = false;
 
     // Reset block-level RT counters at the start of each test block
     if (config.id === 'adt_tpt' || config.id === 'adt_tpb') {
@@ -338,8 +341,12 @@ function loadTask(taskId) {
 function generateTestSequence(config) {
     const { trials, varDistr, varLeading, varMaxDups } = config;
     const sequence = [];
-    
+
     // Add leading prepotent trials
+    for (let i = 0; i < varLeading; i++) {
+        sequence.push({ type: 'prpt', ...config.variants['prpt'] });
+    }
+
     const remaining = trials - varLeading;
     const prepotentCount = Math.round(remaining * varDistr[0] / 100);
     const inhibitoryCount = remaining - prepotentCount;
@@ -443,7 +450,8 @@ function showReadyScreen() {
 
 function handleDotPress(event) {
     event.preventDefault();
-    
+    if (appState.isTransitioning) return;
+
     appState.dotPressTime = Date.now();
     appState.trialStartTime = Date.now();
     // Do not log dot press (not a screen transition)
@@ -502,6 +510,7 @@ function showPromptScreen() {
 }
 
 function handleButtonPress(button) {
+    if (appState.isTransitioning) return;
     const reactionTime = Date.now() - appState.trialStartTime;
     const accuracy = button === appState.currentRewarded ? 1 : 0;
     
@@ -591,6 +600,7 @@ function finishTask() {
     appState.currentTaskIndex++;
     
     if (appState.currentTaskIndex < TASK_SEQUENCE.length) {
+        appState.isTransitioning = true;
         // Show inter-block speed feedback after first test block
         if (appState.currentTask.id === 'adt_tpt') {
             setTimeout(() => showInterBlockFeedback(), 500);
