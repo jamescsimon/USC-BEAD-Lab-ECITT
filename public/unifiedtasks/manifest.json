@@ -1,0 +1,22 @@
+{
+  "name": "ECITT Adult Tasks",
+  "short_name": "ECITT Adult",
+  "description": "Early Childhood Inhibitory Touchscreen Task - Adult Task Battery",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "../graphics/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "../graphics/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
