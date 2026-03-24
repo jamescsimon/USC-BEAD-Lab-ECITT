@@ -510,19 +510,17 @@ function logTelemetryEvent(section, stimuli, invokedBy, accuracy) {
 }
 
 function sendTelemetryToServer(telemetryData) {
-	// Build CSV row in correct field order
-	var csvRow = telemetryData.testDate + "," +
-		telemetryData.timestamp + "," +
-		telemetryData.responserName + "," +
-		telemetryData.controllerName + "," +
-		telemetryData.section + "," +
-		telemetryData.stimuli + "," +
-		telemetryData.invokedBy + "," +
-		telemetryData.accuracy + "," +
-		telemetryData.projectName + "," +
-		telemetryData.testSetName + "," +
-		telemetryData.testName + "," +
-		telemetryData.trialsRemaining;
+	   // Build CSV row in new required field order
+	   var csvRow = telemetryData.responserName + "," + // ParticipantName
+		   telemetryData.testName + "," + // TestName
+		   telemetryData.trialName + "," + // TrialName
+		   telemetryData.section + "," + // SectionStarted
+		   telemetryData.stimuli + "," + // Stimuli
+		   telemetryData.invokedBy + "," + // InvokedBy
+		   telemetryData.accuracy + "," + // Accuracy
+		   telemetryData.trialsRemaining + "," + // TrialsRemaining
+		   telemetryData.timestamp + "," + // StartTimestamp
+		   telemetryData.duration; // Duration
 	
 	var requestStr = "../csvdata/?type=telemetryEvent&data=" + encodeURIComponent(csvRow);
 	console.log("[TELEMETRY] Sending event:", telemetryData.invokedBy, "from", telemetryData.section);
@@ -540,9 +538,12 @@ function sendTelemetryToServer(telemetryData) {
 
 function initializeLocalTestCSV() {
 	console.log("[LOCAL CSV] Initializing local backup CSV for test");
-	localTestCSVRows = [];
-	localTestCSVStartTime = Date.now();
-	localTestName = curTestName;
+	   // Set new CSV header
+	   localTestCSVRows = [
+		   "ParticipantName,TestName,TrialName,SectionStarted,Stimuli,InvokedBy,Accuracy,TrialsRemaining,StartTimestamp,Duration"
+	   ];
+	   localTestCSVStartTime = Date.now();
+	   localTestName = curTestName;
 }
 
 function appendToLocalTestCSV(csvRow) {

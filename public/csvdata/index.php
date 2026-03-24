@@ -361,14 +361,14 @@
 		$csvFile = $telemetryDir . "/ECITT_Telemetry_Tracker.csv";
 		
 		// Create file with headers if doesn't exist
-		if (!file_exists($csvFile)) {
-			$headers = "TestDate,StartTimestamp,ResponserName,ControllerName,Section,Stimuli,InvokedBy,Accuracy,ProjectName,TestSetName,TestName,TrialsRemaining\n";
-			if (file_put_contents($csvFile, $headers) === false) {
-				logMsg("handleTelemetryEventCsv ERROR: Failed to create CSV file with headers");
-				return false;
-			}
-			logMsg("handleTelemetryEventCsv: Created new telemetry CSV file");
-		}
+		   if (!file_exists($csvFile)) {
+			   $headers = "ParticipantName,TestName,TrialName,SectionStarted,Stimuli,InvokedBy,Accuracy,TrialsRemaining,StartTimestamp,Duration\n";
+			   if (file_put_contents($csvFile, $headers) === false) {
+				   logMsg("handleTelemetryEventCsv ERROR: Failed to create CSV file with headers");
+				   return false;
+			   }
+			   logMsg("handleTelemetryEventCsv: Created new telemetry CSV file");
+		   }
 		
 		// Append telemetry row with file locking
 		$handle = fopen($csvFile, 'a');
@@ -381,19 +381,42 @@
 			logMsg("handleTelemetryEventCsv WARNING: Could not acquire exclusive lock");
 		}
 		
-		// Write the record
-		if (fwrite($handle, $dataStr . "\n") === false) {
-			logMsg("handleTelemetryEventCsv ERROR: Failed to write telemetry row to CSV");
-			flock($handle, LOCK_UN);
-			fclose($handle);
-			return false;
-		}
-		
-		flock($handle, LOCK_UN);
-		fclose($handle);
-		
-		logMsg("handleTelemetryEventCsv: Successfully logged telemetry event");
-		return true;
+		   // Write the record
+		   // Parse and reformat the row to match the new header
+		   $fields = $parts;
+		   // Ensure exactly 10 fields for the new format
+		   if (count($fields) >= 10) {
+			   $row = sprintf(
+				   "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+				   $fields[0], // ParticipantName
+				   $fields[1], // TestName
+				   $fields[2], // TrialName
+				   $fields[3], // SectionStarted
+				   $fields[4], // Stimuli
+				   $fields[5], // InvokedBy
+				   $fields[6], // Accuracy
+				   $fields[7], // TrialsRemaining
+				   $fields[8], // StartTimestamp
+				   $fields[9]  // Duration
+			   );
+		   } else {
+			   logMsg("handleTelemetryEventCsv ERROR: Not enough fields for new telemetry format");
+			   flock($handle, LOCK_UN);
+			   fclose($handle);
+			   return false;
+		   }
+		   if (fwrite($handle, $row) === false) {
+			   logMsg("handleTelemetryEventCsv ERROR: Failed to write telemetry row to CSV");
+			   flock($handle, LOCK_UN);
+			   fclose($handle);
+			   return false;
+		   }
+
+		   flock($handle, LOCK_UN);
+		   fclose($handle);
+
+		   logMsg("handleTelemetryEventCsv: Successfully logged telemetry event");
+		   return true;
 	}
 
 	/**
@@ -486,32 +509,23 @@
 		$filename = 'ECITT_Study_' . $date->format('Y-m-d') . '_' . $trialStartTime . '.csv';
 		$filePath = $sessionDir . '/' . $filename;
 		
-		// CSV headers (BOM for Excel compatibility)
-		$headers = "Timestamp,User,ProjectNo,TestSetNo,TestName,PartNo,TrialStartTime,TrialType,TrialPhase,TrialNo,TrialVariant,Accuracy,TouchTime,ReactionTime,TrialTime,ButtonPressed,AnimationShowed,DotPressed,MovementCount\n";
-		
-		// Prepare CSV row
-		$row = sprintf(
-			"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
-			csvEscape($data['timestamp']),
-			csvEscape($data['curUserName']),
-			csvEscape($data['projectNo']),
-			csvEscape($data['testSetNo']),
-			csvEscape($data['testName']),
-			csvEscape($data['partNo']),
-			csvEscape($data['trialStartTime']),
-			csvEscape($data['trialType']),
-			csvEscape($data['trialPhase']),
-			csvEscape($data['trialNo']),
-			csvEscape($data['trialVariant']),
-			csvEscape($data['accuracy']),
-			csvEscape($data['touchTime']),
-			csvEscape($data['reactionTime']),
-			csvEscape($data['trialTime']),
-			csvEscape($data['buttonPressed']),
-			csvEscape($data['animationShowed']),
-			csvEscape($data['dotPressed']),
-			csvEscape($data['moveEvents'])
-		);
+		   // CSV headers (BOM for Excel compatibility)
+		   $headers = "ParticipantName,TestName,TrialName,SectionStarted,Stimuli,InvokedBy,Accuracy,TrialsRemaining,StartTimestamp,Duration\n";
+
+		   // Prepare CSV row
+		   $row = sprintf(
+			   "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+			   csvEscape($data['curUserName']), // ParticipantName
+			   csvEscape($data['testName']),    // TestName
+			   csvEscape($data['trialNo']),     // TrialName
+			   csvEscape($data['trialPhase']),  // SectionStarted
+			   csvEscape($data['stimuli'] ?? ''), // Stimuli
+			   csvEscape($data['buttonPressed']), // InvokedBy
+			   csvEscape($data['accuracy']),    // Accuracy
+			   csvEscape($data['trialQueueLength'] ?? ''), // TrialsRemaining
+			   csvEscape($data['trialStartTime']), // StartTimestamp
+			   csvEscape($data['reactionTime']) // Duration
+		   );
 		
 		// Write to file
 		try {

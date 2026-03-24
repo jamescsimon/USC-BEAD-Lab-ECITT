@@ -250,6 +250,8 @@ div.ecittButton.button_btm_happy {
     background-color: black;
     border: 1px solid #555;
     z-index: 9999;
+    will-change: background-color;
+    transform: translateZ(0);
 }
 
 /* End Screen */

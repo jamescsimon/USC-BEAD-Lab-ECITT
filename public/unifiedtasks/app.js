@@ -109,7 +109,7 @@ const TASK_CONFIGS = {
 };
 
 // Task execution order
-const TASK_SEQUENCE = ['adt_cb', 'adt_ct', 'adt_cm', 'adt_ppt', 'adt_ppb', 'adt_tpt', 'adt_tpb'];
+const TASK_SEQUENCE = ['adt_ppt'];
 
 // ===== APPLICATION STATE =====
 
@@ -165,7 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
         restartBtn: document.getElementById('restartBtn'),
         
         dnfStats: document.getElementById('dnfStats'),
-        dnfDownloadBtn: document.getElementById('dnfDownloadBtn'),
         dnfRestartBtn: document.getElementById('dnfRestartBtn')
     };
     
@@ -192,7 +191,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (elements.downloadBtn) elements.downloadBtn.addEventListener('click', () => dataManager.downloadCSV());
     if (elements.restartBtn) elements.restartBtn.addEventListener('click', restart);
-    if (elements.dnfDownloadBtn) elements.dnfDownloadBtn.addEventListener('click', () => dataManager.downloadCSV());
     if (elements.dnfRestartBtn) elements.dnfRestartBtn.addEventListener('click', restart);
     
     // DNF detection - check for inactivity
@@ -232,22 +230,25 @@ function selectAdult() {
 }
 
 function startTest() {
+    // Prevent double-start by early-returning if start is already disabled
+    if (!elements.startBtn) return;
+    if (elements.startBtn.disabled) {
+        console.warn('[APP] startTest called but startBtn already disabled; ignoring duplicate call');
+        return;
+    }
+
     const participantId = elements.participantIdInput.value.trim();
     if (!participantId) {
         alert('Please enter a Participant ID');
         return;
     }
     
+    // Disable start button to avoid double starts
+    elements.startBtn.disabled = true;
+    elements.startBtn.classList && elements.startBtn.classList.add('disabled');
+
     appState.participantId = participantId;
     dataManager.startSession(participantId);
-    
-    // Log session start
-    dataManager.logEvent({
-        section: 'SessionStart',
-        stimuli: 'TestBattery',
-        invokedBy: 'Participant',
-        testName: 'AdultUnified'
-    });
     
     // Start first task
     appState.currentTaskIndex = 0;
@@ -269,6 +270,11 @@ function restart() {
     dataManager.clearSession();
     
     elements.participantIdInput.value = '';
+    // Re-enable start button
+    if (elements.startBtn) {
+        elements.startBtn.disabled = false;
+        elements.startBtn.classList && elements.startBtn.classList.remove('disabled');
+    }
     showScreen('ageSelectionScreen');
 }
 
@@ -277,10 +283,7 @@ function restart() {
 function loadTask(taskId) {
     const config = TASK_CONFIGS[taskId];
     appState.currentTask = config;
-    appState.currentTrial = 0;
-    
-    console.log(`[APP] Loading task: ${config.name} (${config.id})`);
-    
+
     // Generate trial sequence
     if (config.variants) {
         // Test tasks with prepotent/inhibitory variants
@@ -293,12 +296,23 @@ function loadTask(taskId) {
     // Log task start
     dataManager.logEvent({
         section: 'TaskStart',
-        stimuli: config.name,
-        invokedBy: 'System',
-        testName: config.id,
-        trialsRemaining: config.trials
+        stimuli: 'blank',
+        invokedBy: 'TestSelection',
+        accuracy: 'n/a',
+        testName: 'Adult',
+        trialsRemaining: config.trials,
+        trialName: config.id || 'adt_ppt'
     });
-    
+    // Log PromptScreen intro
+    dataManager.logEvent({
+        section: 'PromptScreen',
+        stimuli: 'red dot, white text',
+        invokedBy: 'TestLoaded',
+        accuracy: 'n/a',
+        testName: 'Adult',
+        trialsRemaining: config.trials,
+        trialName: config.id || 'adt_ppt'
+    });
     // Start first trial
     showReadyScreen();
 }
@@ -308,11 +322,6 @@ function generateTestSequence(config) {
     const sequence = [];
     
     // Add leading prepotent trials
-    for (let i = 0; i < varLeading; i++) {
-        sequence.push({ type: 'prpt', ...config.variants.prpt });
-    }
-    
-    // Calculate remaining trials
     const remaining = trials - varLeading;
     const prepotentCount = Math.round(remaining * varDistr[0] / 100);
     const inhibitoryCount = remaining - prepotentCount;
@@ -400,16 +409,18 @@ function showReadyScreen() {
         elements.readyMsg3.textContent = '';
     }
     
-    // Log ready screen
+    // Log ready screen only when screen is shown
     dataManager.logEvent({
         section: 'ReadyScreen',
-        stimuli: 'RedDot',
-        invokedBy: 'System',
-        testName: config.id,
-        trialsRemaining: config.trials - appState.currentTrial
+        stimuli: 'red dot',
+        invokedBy: 'ParticipantBlueButton',
+        accuracy: 'n/a',
+        testName: 'Adult',
+        trialsRemaining: appState.currentTask.trials - appState.currentTrial,
+        trialName: appState.currentTask.id || 'adt_ppt'
     });
-    
     showScreen('readyScreen');
+    flashButtonIndicator('ReadyScreen');
 }
 
 function handleDotPress(event) {
@@ -417,19 +428,7 @@ function handleDotPress(event) {
     
     appState.dotPressTime = Date.now();
     appState.trialStartTime = Date.now();
-    
-    // Flash photocell
-    flashButtonIndicator();
-    
-    // Log dot press
-    dataManager.logEvent({
-        section: 'ReadyScreen',
-        stimuli: 'RedDot',
-        invokedBy: 'Responder_Dot',
-        testName: appState.currentTask.id,
-        trialsRemaining: appState.currentTask.trials - appState.currentTrial
-    });
-    
+    // Do not log dot press (not a screen transition)
     // Show prompt screen
     showPromptScreen();
 }
@@ -439,9 +438,9 @@ function showPromptScreen() {
     const trial = appState.trialSequence[appState.currentTrial];
     
     // Determine which button gets the happy face
-    const empPos = trial.emp || config.emp;
-    const rewPos = trial.rew || config.rew;
-    const layout = config.promptLayout;
+    const empPos = trial && trial.emp ? trial.emp : (config && config.emp ? config.emp : 'mdl');
+    const rewPos = trial && trial.rew ? trial.rew : (config && config.rew ? config.rew : 'mdl');
+    const layout = config && config.promptLayout ? config.promptLayout : { top: 'empty', mdl: 'dot', btm: 'empty' };
     
     // Hide all buttons first
     if (elements.topButton) elements.topButton.style.display = 'none';
@@ -472,16 +471,31 @@ function showPromptScreen() {
     
     // Store rewarded position for accuracy check
     appState.currentRewarded = rewPos;
-    
+    // Determine trial type for logging and photocell
+    let trialSection = 'PromptScreen';
+    if (trial && trial.type === 'prpt') {
+        trialSection = 'TopTrialScreen';
+    } else if (trial && trial.type === 'inhb') {
+        trialSection = 'BottomTrialScreen';
+    }
+    // No logging here; trial completion is logged in handleButtonPress
     showScreen('promptScreen');
+    flashButtonIndicator(trialSection);
 }
 
 function handleButtonPress(button) {
     const reactionTime = Date.now() - appState.trialStartTime;
     const accuracy = button === appState.currentRewarded ? 1 : 0;
     
-    // Flash photocell
-    flashButtonIndicator();
+    // Flash photocell for trial type
+    const trialCurrent = appState.trialSequence[appState.currentTrial];
+    let trialSectionCurrent = 'PromptScreen';
+    if (trialCurrent && trialCurrent.type === 'prpt') {
+        trialSectionCurrent = 'TopTrialScreen';
+    } else if (trialCurrent && trialCurrent.type === 'inhb') {
+        trialSectionCurrent = 'BottomTrialScreen';
+    }
+    // ...existing code...
     
     // Update stats
     appState.totalTrials++;
@@ -490,29 +504,40 @@ function handleButtonPress(button) {
     }
     appState.totalReactionTime += reactionTime;
     
-    // Log button press
+    // Log accuracy for the trial that just completed (current index)
+    const completedIndex = appState.currentTrial;
+    const completedTrial = appState.trialSequence[completedIndex];
+    let completedSection = 'PromptScreen';
+    if (completedTrial && completedTrial.type === 'prpt') {
+        completedSection = 'TopTrialScreen';
+    } else if (completedTrial && completedTrial.type === 'inhb') {
+        completedSection = 'BottomTrialScreen';
+    }
+
     dataManager.logEvent({
-        section: 'PromptScreen',
-        stimuli: appState.trialSequence[appState.currentTrial].emp || appState.currentTask.emp,
-        invokedBy: `Responder_${button}`,
+        section: completedSection,
+        stimuli: 'red dot, blue buttons',
+        invokedBy: 'ParticipantRedDot',
         accuracy: accuracy,
-        testName: appState.currentTask.id,
-        trialsRemaining: appState.currentTask.trials - appState.currentTrial - 1,
-        reactionTime: reactionTime
+        testName: 'Adult',
+        trialsRemaining: appState.currentTask.trials - (completedIndex + 1),
+        trialName: appState.currentTask.id || 'adt_ppt'
     });
-    
-    console.log(`[APP] Trial ${appState.currentTrial + 1}: button=${button}, rewarded=${appState.currentRewarded}, accuracy=${accuracy}, RT=${reactionTime}ms`);
-    
+
+    console.log(`[APP] Trial ${completedIndex + 1}: button=${button}, rewarded=${appState.currentRewarded}, accuracy=${accuracy}, RT=${reactionTime}ms`);
+
     // Move to next trial or task
     appState.currentTrial++;
     
     if (appState.currentTrial < appState.currentTask.trials) {
         // More trials in current task
-        setTimeout(() => showReadyScreen(), 500);
+        setTimeout(() => showReadyScreen(), 100);
     } else {
         // Task complete
         finishTask();
     }
+        // Removed extra logging for PromptScreen
+        // console.log(`[APP] Trial ${completedIndex + 1}: button=${button}, rewarded=${appState.currentRewarded}, accuracy=${accuracy}, RT=${reactionTime}ms`);
 }
 
 function handlePromptDotPress(event) {
@@ -525,14 +550,18 @@ function handlePromptDotPress(event) {
 function finishTask() {
     console.log(`[APP] Task complete: ${appState.currentTask.name}`);
     
-    // Log task end
-    dataManager.logEvent({
-        section: 'TaskEnd',
-        stimuli: appState.currentTask.name,
-        invokedBy: 'System',
-        testName: appState.currentTask.id,
-        trialsRemaining: 0
-    });
+    // Log task end only for last task
+    if (appState.currentTaskIndex === TASK_SEQUENCE.length - 1) {
+        dataManager.logEvent({
+            section: 'TaskEnd',
+            stimuli: 'blank',
+            invokedBy: 'ParticipantBlueButton',
+            accuracy: 'n/a',
+            testName: 'Adult',
+            trialsRemaining: 0,
+            trialName: appState.currentTask.id || 'adt_ppt'
+        });
+    }
     
     // Move to next task
     appState.currentTaskIndex++;
@@ -549,13 +578,7 @@ function finishTask() {
 function finishTest() {
     console.log('[APP] All tasks complete');
     
-    // Log session end
-    dataManager.logEvent({
-        section: 'SessionEnd',
-        stimuli: 'TestBattery',
-        invokedBy: 'System',
-        testName: 'AdultUnified'
-    });
+    // No session end event
     
     // Calculate final stats
     const avgRT = appState.totalTrials > 0 ? Math.round(appState.totalReactionTime / appState.totalTrials) : 0;
@@ -599,16 +622,43 @@ function handleDNF() {
     `;
     
     showScreen('dnfScreen');
+    dataManager.downloadCSV();
 }
 
 // ===== PHOTOCELL =====
 
-function flashButtonIndicator() {
-    console.log('[APP] Photocell flash');
-    elements.buttonIndicator.style.backgroundColor = 'white';
-    setTimeout(() => {
-        elements.buttonIndicator.style.backgroundColor = 'black';
-    }, 100);
+// Photocell code mapping for each section
+const PHOTOCELL_CODES = {
+    TaskStart: '001',
+    PromptScreen: '010',
+    TopTrialScreen: '011',
+    ReadyScreen: '100',
+    BottomTrialScreen: '101',
+    TaskEnd: '110'
+};
+
+// Simulate photocell flashing for a section
+let flashInProgress = false;
+function flashButtonIndicator(section) {
+    if (flashInProgress) return; // drop overlapping flash
+    flashInProgress = true;
+    const durations = {
+        TaskStart: 10,
+        PromptScreen: 20,
+        TopTrialScreen: 30,
+        ReadyScreen: 40,
+        BottomTrialScreen: 50,
+        TaskEnd: 60
+    };
+    const duration = durations[section] || 10;
+    // Wait for browser to paint before flashing
+    requestAnimationFrame(() => {
+        elements.buttonIndicator.style.backgroundColor = 'white';
+        setTimeout(() => {
+            elements.buttonIndicator.style.backgroundColor = 'black';
+            flashInProgress = false;
+        }, duration);
+    });
 }
 
 // ===== UTILITY =====
