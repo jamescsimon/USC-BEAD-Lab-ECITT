@@ -3,7 +3,7 @@
  * Enables offline functionality and caching
  */
 
-const CACHE_NAME = 'ecitt-adult-tasks-v1';
+const CACHE_NAME = 'ecitt-adult-tasks-v2';
 
 // Static assets that are safe to cache-first (images rarely change)
 const STATIC_ASSETS = [
