@@ -294,6 +294,7 @@ function restart() {
 function loadTask(taskId) {
     const config = TASK_CONFIGS[taskId];
     appState.currentTask = config;
+    appState.currentTrial = 0;
 
     // Reset block-level RT counters at the start of each test block
     if (config.id === 'adt_tpt' || config.id === 'adt_tpb') {
