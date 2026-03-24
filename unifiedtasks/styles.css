@@ -88,18 +88,22 @@ html, body {
     height: 60px;
     font-size: 1.4em;
     font-weight: bold;
-    background-color: #4CAF50;
     color: white;
     border: none;
     border-radius: 15px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: filter 0.2s;
     margin: 10px 0;
 }
 
 .age-button:active {
-    background-color: #45a049;
+    filter: brightness(0.85);
 }
+
+#infantBtn  { background-color: #5DADE2; }
+#toddlerBtn { background-color: #4CAF50; }
+#childBtn   { background-color: #8E44AD; }
+#adultBtn   { background-color: #E91E8C; }
 
 /* Participant Screen */
 .input-group {
