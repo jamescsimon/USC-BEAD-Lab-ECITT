@@ -669,9 +669,27 @@ let mediaRecorder = null;
 let recordedChunks = [];
 let mediaStream = null;
 
+function setRecordingIndicator(state) {
+    // state: 'recording' | 'error' | 'off'
+    const indicator = document.getElementById('recordingIndicator');
+    if (!indicator) return;
+    if (state === 'recording') {
+        indicator.style.display = 'block';
+        indicator.style.backgroundColor = 'red';
+        indicator.title = 'Recording';
+    } else if (state === 'error') {
+        indicator.style.display = 'block';
+        indicator.style.backgroundColor = 'orange';
+        indicator.title = 'Camera unavailable - CSV only';
+    } else {
+        indicator.style.display = 'none';
+    }
+}
+
 function startRecording() {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        console.warn('[REC] getUserMedia not supported');
+        console.warn('[REC] getUserMedia not supported on this device/context');
+        setRecordingIndicator('error');
         return;
     }
     navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false })
@@ -688,10 +706,12 @@ function startRecording() {
                 if (e.data && e.data.size > 0) recordedChunks.push(e.data);
             };
             mediaRecorder.start();
+            setRecordingIndicator('recording');
             console.log('[REC] Recording started, mimeType:', mimeType);
         })
         .catch(err => {
-            console.warn('[REC] Camera access denied or unavailable:', err);
+            console.warn('[REC] Camera access denied or unavailable:', err.name, err.message);
+            setRecordingIndicator('error');
         });
 }
 
@@ -727,6 +747,7 @@ function cleanupRecording() {
     }
     mediaRecorder = null;
     recordedChunks = [];
+    setRecordingIndicator('off');
 }
 
 // ===== UTILITY =====
