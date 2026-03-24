@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.btmButton.addEventListener('touchstart', () => handleButtonPress('btm'));
         elements.btmButton.addEventListener('mousedown', () => handleButtonPress('btm'));
     }
-    if (elements.downloadBtn) elements.downloadBtn.addEventListener('click', () => dataManager.downloadCSV());
+    if (elements.downloadBtn) elements.downloadBtn.addEventListener('click', stopAndDownload);
     if (elements.restartBtn) elements.restartBtn.addEventListener('click', restart);
     if (elements.dnfRestartBtn) elements.dnfRestartBtn.addEventListener('click', restart);
     
@@ -249,7 +249,8 @@ function startTest() {
 
     appState.participantId = participantId;
     dataManager.startSession(participantId);
-    
+    startRecording();
+
     // Start first task
     appState.currentTaskIndex = 0;
     loadTask(TASK_SEQUENCE[0]);
@@ -268,7 +269,8 @@ function restart() {
     appState.isDNF = false;
     
     dataManager.clearSession();
-    
+    cleanupRecording();
+
     elements.participantIdInput.value = '';
     // Re-enable start button
     if (elements.startBtn) {
@@ -622,7 +624,7 @@ function handleDNF() {
     `;
     
     showScreen('dnfScreen');
-    dataManager.downloadCSV();
+    stopAndDownload();
 }
 
 // ===== PHOTOCELL =====
@@ -659,6 +661,72 @@ function flashButtonIndicator(section) {
             flashInProgress = false;
         }, duration);
     });
+}
+
+// ===== RECORDING =====
+
+let mediaRecorder = null;
+let recordedChunks = [];
+let mediaStream = null;
+
+function startRecording() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        console.warn('[REC] getUserMedia not supported');
+        return;
+    }
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false })
+        .then(stream => {
+            mediaStream = stream;
+            const mimeType = MediaRecorder.isTypeSupported('video/mp4;codecs=avc1')
+                ? 'video/mp4;codecs=avc1'
+                : MediaRecorder.isTypeSupported('video/mp4')
+                    ? 'video/mp4'
+                    : 'video/webm';
+            mediaRecorder = new MediaRecorder(stream, { mimeType });
+            recordedChunks = [];
+            mediaRecorder.ondataavailable = e => {
+                if (e.data && e.data.size > 0) recordedChunks.push(e.data);
+            };
+            mediaRecorder.start();
+            console.log('[REC] Recording started, mimeType:', mimeType);
+        })
+        .catch(err => {
+            console.warn('[REC] Camera access denied or unavailable:', err);
+        });
+}
+
+function stopAndDownload() {
+    // Always download CSV
+    dataManager.downloadCSV();
+
+    if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+        cleanupRecording();
+        return;
+    }
+    mediaRecorder.onstop = () => {
+        const ext = mediaRecorder.mimeType.includes('mp4') ? 'mp4' : 'webm';
+        const blob = new Blob(recordedChunks, { type: mediaRecorder.mimeType });
+        const filename = `ECITT_${dataManager.participantId}_${dataManager.formatFilestamp(dataManager.sessionStart)}.${ext}`;
+        const link = document.createElement('a');
+        link.setAttribute('href', URL.createObjectURL(blob));
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        console.log('[REC] Video downloaded:', filename);
+        cleanupRecording();
+    };
+    mediaRecorder.stop();
+}
+
+function cleanupRecording() {
+    if (mediaStream) {
+        mediaStream.getTracks().forEach(t => t.stop());
+        mediaStream = null;
+    }
+    mediaRecorder = null;
+    recordedChunks = [];
 }
 
 // ===== UTILITY =====
