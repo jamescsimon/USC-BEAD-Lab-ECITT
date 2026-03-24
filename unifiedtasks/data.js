@@ -44,6 +44,7 @@ class DataManager {
             'PromptScreen',
             'TopTrialScreen',
             'BottomTrialScreen',
+            'ControlTrialScreen',
             'ReadyScreen',
             'TaskEnd',
             'DNF'
@@ -54,7 +55,7 @@ class DataManager {
             const record = {
                 ParticipantName: this.participantId,
                 TestName: eventData.testName || this.testName,
-                TrialName: eventData.trialName || (this.currentTrialName || 'adt_ppt'),
+                TrialName: eventData.trialName || this.currentTrialName || '',
                 SectionStarted: sectionStarted,
                 Stimuli: eventData.stimuli || '',
                 InvokedBy: eventData.invokedBy || '',
@@ -126,6 +127,7 @@ class DataManager {
             'PromptScreen',
             'TopTrialScreen',
             'BottomTrialScreen',
+            'ControlTrialScreen',
             'ReadyScreen',
             'TaskEnd',
             'DNF'

@@ -108,8 +108,8 @@ const TASK_CONFIGS = {
     }
 };
 
-// Task execution order
-const TASK_SEQUENCE = ['adt_ppt'];
+// Task execution order — full 18+ adult protocol
+const TASK_SEQUENCE = ['adt_ct', 'adt_cb', 'adt_cm', 'adt_ppt', 'adt_tpt', 'adt_ppb', 'adt_tpb'];
 
 // ===== APPLICATION STATE =====
 
@@ -124,7 +124,9 @@ const appState = {
     totalCorrect: 0,
     totalTrials: 0,
     totalReactionTime: 0,
-    isDNF: false
+    isDNF: false,
+    blockReactionTime: 0,
+    blockTrials: 0
 };
 
 // ===== DOM ELEMENTS =====
@@ -165,7 +167,11 @@ document.addEventListener('DOMContentLoaded', () => {
         restartBtn: document.getElementById('restartBtn'),
         
         dnfStats: document.getElementById('dnfStats'),
-        dnfRestartBtn: document.getElementById('dnfRestartBtn')
+        dnfRestartBtn: document.getElementById('dnfRestartBtn'),
+
+        interBlockScreen: document.getElementById('interBlockScreen'),
+        interBlockStats: document.getElementById('interBlockStats'),
+        interBlockContinueBtn: document.getElementById('interBlockContinueBtn')
     };
     
     // Event listeners
@@ -192,6 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (elements.downloadBtn) elements.downloadBtn.addEventListener('click', stopAndDownload);
     if (elements.restartBtn) elements.restartBtn.addEventListener('click', restart);
     if (elements.dnfRestartBtn) elements.dnfRestartBtn.addEventListener('click', restart);
+    if (elements.interBlockContinueBtn) elements.interBlockContinueBtn.addEventListener('click', continueAfterInterBlock);
     
     // DNF detection - check for inactivity
     let inactivityTimer;
@@ -267,6 +274,8 @@ function restart() {
     appState.totalTrials = 0;
     appState.totalReactionTime = 0;
     appState.isDNF = false;
+    appState.blockReactionTime = 0;
+    appState.blockTrials = 0;
     
     dataManager.clearSession();
     cleanupRecording();
@@ -285,6 +294,12 @@ function restart() {
 function loadTask(taskId) {
     const config = TASK_CONFIGS[taskId];
     appState.currentTask = config;
+
+    // Reset block-level RT counters at the start of each test block
+    if (config.id === 'adt_tpt' || config.id === 'adt_tpb') {
+        appState.blockReactionTime = 0;
+        appState.blockTrials = 0;
+    }
 
     // Generate trial sequence
     if (config.variants) {
@@ -505,6 +520,10 @@ function handleButtonPress(button) {
         appState.totalCorrect++;
     }
     appState.totalReactionTime += reactionTime;
+    if (appState.currentTask.id === 'adt_tpt' || appState.currentTask.id === 'adt_tpb') {
+        appState.blockReactionTime += reactionTime;
+        appState.blockTrials++;
+    }
     
     // Log accuracy for the trial that just completed (current index)
     const completedIndex = appState.currentTrial;
@@ -514,6 +533,8 @@ function handleButtonPress(button) {
         completedSection = 'TopTrialScreen';
     } else if (completedTrial && completedTrial.type === 'inhb') {
         completedSection = 'BottomTrialScreen';
+    } else if (completedTrial && completedTrial.type === 'standard') {
+        completedSection = 'ControlTrialScreen';
     }
 
     dataManager.logEvent({
@@ -569,8 +590,12 @@ function finishTask() {
     appState.currentTaskIndex++;
     
     if (appState.currentTaskIndex < TASK_SEQUENCE.length) {
-        // Load next task
-        setTimeout(() => loadTask(TASK_SEQUENCE[appState.currentTaskIndex]), 1000);
+        // Show inter-block speed feedback after first test block
+        if (appState.currentTask.id === 'adt_tpt') {
+            setTimeout(() => showInterBlockFeedback(), 500);
+        } else {
+            setTimeout(() => loadTask(TASK_SEQUENCE[appState.currentTaskIndex]), 1000);
+        }
     } else {
         // All tasks complete
         finishTest();
@@ -625,6 +650,21 @@ function handleDNF() {
     
     showScreen('dnfScreen');
     stopAndDownload();
+}
+
+// ===== INTER-BLOCK FEEDBACK =====
+
+function showInterBlockFeedback() {
+    const avgRT = appState.blockTrials > 0 ? Math.round(appState.blockReactionTime / appState.blockTrials) : 0;
+    elements.interBlockStats.innerHTML = `
+        <p>Average Response Time: ${avgRT} ms</p>
+        <p>Try to respond as fast as you can in the next block.</p>
+    `;
+    showScreen('interBlockScreen');
+}
+
+function continueAfterInterBlock() {
+    loadTask(TASK_SEQUENCE[appState.currentTaskIndex]);
 }
 
 // ===== PHOTOCELL =====
