@@ -105,16 +105,301 @@ const TASK_CONFIGS = {
             prpt: { emp: 'btm', empType: 'happy', rew: 'btm' },
             inhb: { emp: 'top', empType: 'happy', rew: 'top' }
         }
+    },
+
+    // ===== CHILD (2-17) ECITT-A TASK CONFIGURATIONS =====
+
+    // Child Practice: Top (4 trials) - both buttons, happy face always top
+    cha_ppt: {
+        id: 'cha_ppt',
+        name: 'Child Practice Top',
+        emp: 'top',
+        empType: 'happy',
+        rew: 'top',
+        trials: 4,
+        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        readyMsg1: 'Put your finger on the red dot. When you see the buttons, press the happy face as fast as you can.',
+        readyMsg2: 'Then return to the dot.',
+        readyMsg3: 'Ready?'
+    },
+    // Child Baseline: Top (32 trials) - both buttons, happy face always top
+    cha_blt: {
+        id: 'cha_blt',
+        name: 'Child Baseline Top',
+        emp: 'top',
+        empType: 'happy',
+        rew: 'top',
+        trials: 32,
+        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        readyMsg1: 'Great! Keep pressing the happy face as fast as you can.',
+        readyMsg2: 'Then return to the dot.',
+        readyMsg3: 'Ready?'
+    },
+    // Child Test: Top (32 trials - 75% top, 25% bottom)
+    cha_tpt: {
+        id: 'cha_tpt',
+        name: 'Child Test Top',
+        varDistr: [75, 25],
+        varLeading: 3,
+        varMaxDups: 4,
+        trials: 32,
+        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        readyMsg1: 'Excellent! Now for the real test. Keep pressing the happy face as fast as you can.',
+        readyMsg2: 'Then return to the dot.',
+        readyMsg3: 'Ready?',
+        variants: {
+            prpt: { emp: 'top', empType: 'happy', rew: 'top' },
+            inhb: { emp: 'btm', empType: 'happy', rew: 'btm' }
+        }
+    },
+    // Child Practice: Bottom (4 trials) - both buttons, happy face always bottom
+    cha_ppb: {
+        id: 'cha_ppb',
+        name: 'Child Practice Bottom',
+        emp: 'btm',
+        empType: 'happy',
+        rew: 'btm',
+        trials: 4,
+        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        readyMsg1: 'Great! Now we will do some practice. Press the happy face as fast as you can.',
+        readyMsg2: 'Then return to the dot.',
+        readyMsg3: 'Ready?'
+    },
+    // Child Baseline: Bottom (32 trials) - both buttons, happy face always bottom
+    cha_blb: {
+        id: 'cha_blb',
+        name: 'Child Baseline Bottom',
+        emp: 'btm',
+        empType: 'happy',
+        rew: 'btm',
+        trials: 32,
+        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        readyMsg1: 'Great! Keep pressing the happy face as fast as you can.',
+        readyMsg2: 'Then return to the dot.',
+        readyMsg3: 'Ready?'
+    },
+    // Child Test: Bottom (32 trials - 75% bottom, 25% top)
+    cha_tpb: {
+        id: 'cha_tpb',
+        name: 'Child Test Bottom',
+        varDistr: [75, 25],
+        varLeading: 3,
+        varMaxDups: 4,
+        trials: 32,
+        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        readyMsg1: 'Excellent! Now for the real test. Keep pressing the happy face as fast as you can.',
+        readyMsg2: 'Then return to the dot.',
+        readyMsg3: 'Ready?',
+        variants: {
+            prpt: { emp: 'btm', empType: 'happy', rew: 'btm' },
+            inhb: { emp: 'top', empType: 'happy', rew: 'top' }
+        }
+    },
+
+    // ===== TODDLER (17-23 months) ECITT TASK CONFIGURATIONS =====
+
+    // Toddler Practice: Top (4 trials) - both buttons, happy face always top
+    tod_ppt: {
+        id: 'tod_ppt',
+        name: 'Toddler Practice Top',
+        emp: 'top',
+        empType: 'happy',
+        rew: 'top',
+        trials: 4,
+        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        readyMsg1: 'Watch the happy face and press it as fast as you can!',
+        readyMsg2: 'Then come back to the dot.',
+        readyMsg3: 'Ready?'
+    },
+    // Toddler Test: Top (32 trials - 75% top, 25% bottom)
+    tod_tpt: {
+        id: 'tod_tpt',
+        name: 'Toddler Test Top',
+        varDistr: [75, 25],
+        varLeading: 3,
+        varMaxDups: 4,
+        trials: 32,
+        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        readyMsg1: 'Great job! Keep pressing the happy face as fast as you can!',
+        readyMsg2: 'Then come back to the dot.',
+        readyMsg3: 'Ready?',
+        variants: {
+            prpt: { emp: 'top', empType: 'happy', rew: 'top' },
+            inhb: { emp: 'btm', empType: 'happy', rew: 'btm' }
+        }
+    },
+    // Toddler Practice: Bottom (4 trials) - both buttons, happy face always bottom
+    tod_ppb: {
+        id: 'tod_ppb',
+        name: 'Toddler Practice Bottom',
+        emp: 'btm',
+        empType: 'happy',
+        rew: 'btm',
+        trials: 4,
+        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        readyMsg1: 'Watch the happy face and press it as fast as you can!',
+        readyMsg2: 'Then come back to the dot.',
+        readyMsg3: 'Ready?'
+    },
+    // Toddler Test: Bottom (32 trials - 75% bottom, 25% top)
+    tod_tpb: {
+        id: 'tod_tpb',
+        name: 'Toddler Test Bottom',
+        varDistr: [75, 25],
+        varLeading: 3,
+        varMaxDups: 4,
+        trials: 32,
+        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        readyMsg1: 'Great job! Keep pressing the happy face as fast as you can!',
+        readyMsg2: 'Then come back to the dot.',
+        readyMsg3: 'Ready?',
+        variants: {
+            prpt: { emp: 'btm', empType: 'happy', rew: 'btm' },
+            inhb: { emp: 'top', empType: 'happy', rew: 'top' }
+        }
+    },
+
+    // ===== INFANT (10-16 months) ECITT TASK CONFIGURATIONS =====
+    // Single button per phase. Control = baseline. Test = prepotent phase then inhibitory phase.
+    // Sequence: Control1 Top → Control1 Bottom →
+    //           Test PR Top (prepotent) → Test PR Top (inhibitory) →
+    //           Control2 Top → Control2 Bottom →
+    //           Test PR Bottom (prepotent) → Test PR Bottom (inhibitory)
+
+    // Control 1: Top (4 trials — 1 demo + 3 trials, single top button)
+    inf_c1t: {
+        id: 'inf_c1t',
+        name: 'Infant Control 1 Top',
+        emp: 'top',
+        empType: 'happy',
+        rew: 'top',
+        trials: 4,
+        promptLayout: { top: 'button', mdl: 'dot', btm: 'empty' },
+        readyMsg1: 'Watch the happy face and help baby press it!',
+        readyMsg2: '',
+        readyMsg3: 'Ready?'
+    },
+    // Control 1: Bottom (4 trials — 1 demo + 3 trials, single bottom button)
+    inf_c1b: {
+        id: 'inf_c1b',
+        name: 'Infant Control 1 Bottom',
+        emp: 'btm',
+        empType: 'happy',
+        rew: 'btm',
+        trials: 4,
+        promptLayout: { top: 'empty', mdl: 'dot', btm: 'button' },
+        readyMsg1: 'Watch the happy face and help baby press it!',
+        readyMsg2: '',
+        readyMsg3: 'Ready?'
+    },
+    // Test PR Top — prepotent phase: top (4 trials, single top button — builds habit)
+    inf_tptt: {
+        id: 'inf_tptt',
+        name: 'Infant Test PR Top (Prepotent)',
+        emp: 'top',
+        empType: 'happy',
+        rew: 'top',
+        trials: 4,
+        promptLayout: { top: 'button', mdl: 'dot', btm: 'empty' },
+        readyMsg1: 'Watch the happy face and help baby press it!',
+        readyMsg2: '',
+        readyMsg3: 'Ready?'
+    },
+    // Test PR Top — inhibitory phase: bottom (4 trials, single bottom button — requires switching)
+    inf_tptb: {
+        id: 'inf_tptb',
+        name: 'Infant Test PR Top (Inhibitory)',
+        emp: 'btm',
+        empType: 'happy',
+        rew: 'btm',
+        trials: 4,
+        promptLayout: { top: 'empty', mdl: 'dot', btm: 'button' },
+        readyMsg1: '',
+        readyMsg2: '',
+        readyMsg3: 'Ready?'
+    },
+    // Control 2: Top (4 trials, single top button)
+    inf_c2t: {
+        id: 'inf_c2t',
+        name: 'Infant Control 2 Top',
+        emp: 'top',
+        empType: 'happy',
+        rew: 'top',
+        trials: 4,
+        promptLayout: { top: 'button', mdl: 'dot', btm: 'empty' },
+        readyMsg1: 'Watch the happy face and help baby press it!',
+        readyMsg2: '',
+        readyMsg3: 'Ready?'
+    },
+    // Control 2: Bottom (4 trials, single bottom button)
+    inf_c2b: {
+        id: 'inf_c2b',
+        name: 'Infant Control 2 Bottom',
+        emp: 'btm',
+        empType: 'happy',
+        rew: 'btm',
+        trials: 4,
+        promptLayout: { top: 'empty', mdl: 'dot', btm: 'button' },
+        readyMsg1: 'Watch the happy face and help baby press it!',
+        readyMsg2: '',
+        readyMsg3: 'Ready?'
+    },
+    // Test PR Bottom — prepotent phase: bottom (4 trials, single bottom button — builds habit)
+    inf_tpbt: {
+        id: 'inf_tpbt',
+        name: 'Infant Test PR Bottom (Prepotent)',
+        emp: 'btm',
+        empType: 'happy',
+        rew: 'btm',
+        trials: 4,
+        promptLayout: { top: 'empty', mdl: 'dot', btm: 'button' },
+        readyMsg1: 'Watch the happy face and help baby press it!',
+        readyMsg2: '',
+        readyMsg3: 'Ready?'
+    },
+    // Test PR Bottom — inhibitory phase: top (4 trials, single top button — requires switching)
+    inf_tpbb: {
+        id: 'inf_tpbb',
+        name: 'Infant Test PR Bottom (Inhibitory)',
+        emp: 'top',
+        empType: 'happy',
+        rew: 'top',
+        trials: 4,
+        promptLayout: { top: 'button', mdl: 'dot', btm: 'empty' },
+        readyMsg1: '',
+        readyMsg2: '',
+        readyMsg3: 'Ready?'
     }
 };
 
-// Task execution order — full 18+ adult protocol
+// Task execution order — full 18+ adult protocol (legacy study version)
 const TASK_SEQUENCE = ['adt_ct', 'adt_cb', 'adt_cm', 'adt_ppt', 'adt_tpt', 'adt_ppb', 'adt_tpb'];
+
+// Task execution order — full 18+ adult protocol (james' version)
+// const TASK_SEQUENCE = ['adt_cm', 'adt_ct', 'adt_ppt', 'adt_tpt', 'adt_cb', 'adt_ppb', 'adt_tpb'];
+
+// Task execution order — 2-17 year ECITT-A protocol
+// Sequence: Practice Top → Baseline Top → Test Top → Practice Bottom → Baseline Bottom → Test Bottom
+const CHILD_TASK_SEQUENCE = ['cha_ppt', 'cha_blt', 'cha_tpt', 'cha_ppb', 'cha_blb', 'cha_tpb'];
+
+// Task execution order — 17-23 month toddler ECITT protocol
+// Sequence: Practice Top → Test Top → Practice Bottom → Test Bottom
+const TODDLER_TASK_SEQUENCE = ['tod_ppt', 'tod_tpt', 'tod_ppb', 'tod_tpb'];
+
+// Task execution order — 10-16 month infant ECITT protocol
+// Sequence: Ctrl1 Top → Ctrl1 Bottom → Test PR Top (prpt) → Test PR Top (inhb) →
+//           Ctrl2 Top → Ctrl2 Bottom → Test PR Bottom (prpt) → Test PR Bottom (inhb)
+const INFANT_TASK_SEQUENCE = ['inf_c1t', 'inf_c1b', 'inf_tptt', 'inf_tptb', 'inf_c2t', 'inf_c2b', 'inf_tpbt', 'inf_tpbb'];
+
+// Active sequence — set on age group selection
+let activeTaskSequence = null;
+
 
 // ===== APPLICATION STATE =====
 
 const appState = {
     participantId: '',
+    ageGroup: 'Adult',
     currentTaskIndex: 0,
     currentTask: null,
     currentTrial: 0,
@@ -164,10 +449,13 @@ document.addEventListener('DOMContentLoaded', () => {
         buttonIndicator: document.getElementById('buttonIndicator'),
         
         endStats: document.getElementById('endStats'),
-        downloadBtn: document.getElementById('downloadBtn'),
+        downloadCsvBtn: document.getElementById('downloadCsvBtn'),
+        downloadVideoBtn: document.getElementById('downloadVideoBtn'),
         restartBtn: document.getElementById('restartBtn'),
-        
+
         dnfStats: document.getElementById('dnfStats'),
+        dnfDownloadCsvBtn: document.getElementById('dnfDownloadCsvBtn'),
+        dnfDownloadVideoBtn: document.getElementById('dnfDownloadVideoBtn'),
         dnfRestartBtn: document.getElementById('dnfRestartBtn'),
 
         interBlockScreen: document.getElementById('interBlockScreen'),
@@ -178,6 +466,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listeners
     const adultBtn = document.getElementById('adultBtn');
     if (adultBtn) adultBtn.addEventListener('click', selectAdult);
+    const childBtn = document.getElementById('childBtn');
+    if (childBtn) childBtn.addEventListener('click', selectChild);
+    const toddlerBtn = document.getElementById('toddlerBtn');
+    if (toddlerBtn) toddlerBtn.addEventListener('click', selectToddler);
+    const infantBtn = document.getElementById('infantBtn');
+    if (infantBtn) infantBtn.addEventListener('click', selectInfant);
     
     if (elements.startBtn) elements.startBtn.addEventListener('click', startTest);
     if (elements.dotButton) {
@@ -196,8 +490,11 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.btmButton.addEventListener('touchstart', () => handleButtonPress('btm'));
         elements.btmButton.addEventListener('mousedown', () => handleButtonPress('btm'));
     }
-    if (elements.downloadBtn) elements.downloadBtn.addEventListener('click', stopAndDownload);
+    if (elements.downloadCsvBtn) elements.downloadCsvBtn.addEventListener('click', downloadCSVOnly);
+    if (elements.downloadVideoBtn) elements.downloadVideoBtn.addEventListener('click', downloadVideoOnly);
     if (elements.restartBtn) elements.restartBtn.addEventListener('click', restart);
+    if (elements.dnfDownloadCsvBtn) elements.dnfDownloadCsvBtn.addEventListener('click', downloadCSVOnly);
+    if (elements.dnfDownloadVideoBtn) elements.dnfDownloadVideoBtn.addEventListener('click', downloadVideoOnly);
     if (elements.dnfRestartBtn) elements.dnfRestartBtn.addEventListener('click', restart);
     if (elements.interBlockContinueBtn) elements.interBlockContinueBtn.addEventListener('click', continueAfterInterBlock);
     
@@ -234,6 +531,26 @@ function showScreen(screenName) {
 }
 
 function selectAdult() {
+    appState.ageGroup = 'Adult';
+    activeTaskSequence = TASK_SEQUENCE;
+    showScreen('participantScreen');
+}
+
+function selectChild() {
+    appState.ageGroup = 'Child';
+    activeTaskSequence = CHILD_TASK_SEQUENCE;
+    showScreen('participantScreen');
+}
+
+function selectToddler() {
+    appState.ageGroup = 'Toddler';
+    activeTaskSequence = TODDLER_TASK_SEQUENCE;
+    showScreen('participantScreen');
+}
+
+function selectInfant() {
+    appState.ageGroup = 'Infant';
+    activeTaskSequence = INFANT_TASK_SEQUENCE;
     showScreen('participantScreen');
 }
 
@@ -261,7 +578,7 @@ function startTest() {
 
     // Start first task
     appState.currentTaskIndex = 0;
-    loadTask(TASK_SEQUENCE[0]);
+    loadTask(activeTaskSequence[0]);
 }
 
 function restart() {
@@ -275,9 +592,11 @@ function restart() {
     appState.totalTrials = 0;
     appState.totalReactionTime = 0;
     appState.isDNF = false;
+    appState.ageGroup = 'Adult';
     appState.blockReactionTime = 0;
     appState.blockTrials = 0;
     appState.isTransitioning = false;
+    activeTaskSequence = null;
     
     dataManager.clearSession();
     cleanupRecording();
@@ -300,7 +619,9 @@ function loadTask(taskId) {
     appState.isTransitioning = false;
 
     // Reset block-level RT counters at the start of each test block
-    if (config.id === 'adt_tpt' || config.id === 'adt_tpb') {
+    if (config.id === 'adt_tpt' || config.id === 'adt_tpb' ||
+        config.id === 'cha_tpt' || config.id === 'cha_tpb' ||
+        config.id === 'tod_tpt' || config.id === 'tod_tpb') {
         appState.blockReactionTime = 0;
         appState.blockTrials = 0;
     }
@@ -320,7 +641,7 @@ function loadTask(taskId) {
         stimuli: 'blank',
         invokedBy: 'TestSelection',
         accuracy: 'n/a',
-        testName: 'Adult',
+        testName: appState.ageGroup,
         trialsRemaining: config.trials,
         trialName: config.id || 'adt_ppt'
     });
@@ -330,7 +651,7 @@ function loadTask(taskId) {
         stimuli: 'red dot, white text',
         invokedBy: 'TestLoaded',
         accuracy: 'n/a',
-        testName: 'Adult',
+        testName: appState.ageGroup,
         trialsRemaining: config.trials,
         trialName: config.id || 'adt_ppt'
     });
@@ -440,7 +761,7 @@ function showReadyScreen() {
         stimuli: 'red dot',
         invokedBy: 'ParticipantBlueButton',
         accuracy: 'n/a',
-        testName: 'Adult',
+        testName: appState.ageGroup,
         trialsRemaining: appState.currentTask.trials - appState.currentTrial,
         trialName: appState.currentTask.id || 'adt_ppt'
     });
@@ -530,7 +851,9 @@ function handleButtonPress(button) {
         appState.totalCorrect++;
     }
     appState.totalReactionTime += reactionTime;
-    if (appState.currentTask.id === 'adt_tpt' || appState.currentTask.id === 'adt_tpb') {
+    if (appState.currentTask.id === 'adt_tpt' || appState.currentTask.id === 'adt_tpb' ||
+        appState.currentTask.id === 'cha_tpt' || appState.currentTask.id === 'cha_tpb' ||
+        appState.currentTask.id === 'tod_tpt' || appState.currentTask.id === 'tod_tpb') {
         appState.blockReactionTime += reactionTime;
         appState.blockTrials++;
     }
@@ -552,7 +875,7 @@ function handleButtonPress(button) {
         stimuli: 'red dot, blue buttons',
         invokedBy: 'ParticipantRedDot',
         accuracy: accuracy,
-        testName: 'Adult',
+        testName: appState.ageGroup,
         trialsRemaining: appState.currentTask.trials - (completedIndex + 1),
         trialName: appState.currentTask.id || 'adt_ppt'
     });
@@ -584,13 +907,13 @@ function finishTask() {
     console.log(`[APP] Task complete: ${appState.currentTask.name}`);
     
     // Log task end only for last task
-    if (appState.currentTaskIndex === TASK_SEQUENCE.length - 1) {
+    if (appState.currentTaskIndex === activeTaskSequence.length - 1) {
         dataManager.logEvent({
             section: 'TaskEnd',
             stimuli: 'blank',
             invokedBy: 'ParticipantBlueButton',
             accuracy: 'n/a',
-            testName: 'Adult',
+            testName: appState.ageGroup,
             trialsRemaining: 0,
             trialName: appState.currentTask.id || 'adt_ppt'
         });
@@ -599,13 +922,14 @@ function finishTask() {
     // Move to next task
     appState.currentTaskIndex++;
     
-    if (appState.currentTaskIndex < TASK_SEQUENCE.length) {
+    if (appState.currentTaskIndex < activeTaskSequence.length) {
         appState.isTransitioning = true;
-        // Show inter-block speed feedback after first test block
-        if (appState.currentTask.id === 'adt_tpt') {
+        // Show inter-block speed feedback after first test block (not for infant — no RT measure)
+        if (appState.currentTask.id === 'adt_tpt' || appState.currentTask.id === 'cha_tpt' ||
+            appState.currentTask.id === 'tod_tpt') {
             setTimeout(() => showInterBlockFeedback(), 500);
         } else {
-            setTimeout(() => loadTask(TASK_SEQUENCE[appState.currentTaskIndex]), 1000);
+            setTimeout(() => loadTask(activeTaskSequence[appState.currentTaskIndex]), 1000);
         }
     } else {
         // All tasks complete
@@ -630,7 +954,8 @@ function finishTest() {
         <p>Accuracy: ${accuracy}%</p>
         <p>Average Reaction Time: ${avgRT} ms</p>
     `;
-    
+
+    stopRecording();
     showScreen('endScreen');
 }
 
@@ -640,8 +965,8 @@ function handleDNF() {
     appState.isDNF = true;
     console.log('[APP] Handling DNF');
     
-    // Calculate completed trials (total expected)
-    const totalExpected = 4 + 4 + 4 + 4 + 4 + 32 + 32; // = 84 trials total
+    // Calculate total expected trials from the active sequence
+    const totalExpected = activeTaskSequence.reduce((sum, id) => sum + TASK_CONFIGS[id].trials, 0);
     
     // Mark as DNF
     dataManager.markDNF(appState.totalTrials + 1, totalExpected);
@@ -660,7 +985,7 @@ function handleDNF() {
     `;
     
     showScreen('dnfScreen');
-    stopAndDownload();
+    stopAndAutoDownload();
 }
 
 // ===== INTER-BLOCK FEEDBACK =====
@@ -675,7 +1000,7 @@ function showInterBlockFeedback() {
 }
 
 function continueAfterInterBlock() {
-    loadTask(TASK_SEQUENCE[appState.currentTaskIndex]);
+    loadTask(activeTaskSequence[appState.currentTaskIndex]);
 }
 
 // ===== PHOTOCELL =====
@@ -719,28 +1044,11 @@ function flashButtonIndicator(section) {
 let mediaRecorder = null;
 let recordedChunks = [];
 let mediaStream = null;
-
-function setRecordingIndicator(state) {
-    // state: 'recording' | 'error' | 'off'
-    const indicator = document.getElementById('recordingIndicator');
-    if (!indicator) return;
-    if (state === 'recording') {
-        indicator.style.display = 'block';
-        indicator.style.backgroundColor = 'red';
-        indicator.title = 'Recording';
-    } else if (state === 'error') {
-        indicator.style.display = 'block';
-        indicator.style.backgroundColor = 'orange';
-        indicator.title = 'Camera unavailable - CSV only';
-    } else {
-        indicator.style.display = 'none';
-    }
-}
+let recordedMimeType = '';
 
 function startRecording() {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         console.warn('[REC] getUserMedia not supported on this device/context');
-        setRecordingIndicator('error');
         return;
     }
     navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false })
@@ -751,43 +1059,65 @@ function startRecording() {
                 : MediaRecorder.isTypeSupported('video/mp4')
                     ? 'video/mp4'
                     : 'video/webm';
+            recordedMimeType = mimeType;
             mediaRecorder = new MediaRecorder(stream, { mimeType });
             recordedChunks = [];
             mediaRecorder.ondataavailable = e => {
                 if (e.data && e.data.size > 0) recordedChunks.push(e.data);
             };
             mediaRecorder.start();
-            setRecordingIndicator('recording');
             console.log('[REC] Recording started, mimeType:', mimeType);
         })
         .catch(err => {
             console.warn('[REC] Camera access denied or unavailable:', err.name, err.message);
-            setRecordingIndicator('error');
         });
 }
 
-function stopAndDownload() {
-    // Always download CSV
+function downloadCSVOnly() {
     dataManager.downloadCSV();
+}
 
-    if (!mediaRecorder || mediaRecorder.state === 'inactive') {
-        cleanupRecording();
+function downloadVideoOnly() {
+    if (!recordedChunks || recordedChunks.length === 0) {
+        console.warn('[REC] No video data available');
         return;
     }
-    mediaRecorder.onstop = () => {
-        const ext = mediaRecorder.mimeType.includes('mp4') ? 'mp4' : 'webm';
-        const blob = new Blob(recordedChunks, { type: mediaRecorder.mimeType });
-        const filename = `ECITT_${dataManager.participantId}_${dataManager.formatFilestamp(dataManager.sessionStart)}.${ext}`;
-        const link = document.createElement('a');
-        link.setAttribute('href', URL.createObjectURL(blob));
-        link.setAttribute('download', filename);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        console.log('[REC] Video downloaded:', filename);
-        cleanupRecording();
-    };
+    const mimeType = recordedMimeType || 'video/webm';
+    const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
+    const blob = new Blob(recordedChunks, { type: mimeType });
+    const filename = `ECITT_${dataManager.participantId}_${dataManager.formatFilestamp(dataManager.sessionStart)}.${ext}`;
+    const link = document.createElement('a');
+    link.setAttribute('href', URL.createObjectURL(blob));
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    console.log('[REC] Video downloaded:', filename);
+}
+
+// Stops the recorder and auto-downloads both files (used on DNF)
+function stopAndAutoDownload() {
+    downloadCSVOnly();
+    if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+        downloadVideoOnly();
+        return;
+    }
+    mediaRecorder.addEventListener('stop', () => {
+        if (mediaStream) { mediaStream.getTracks().forEach(t => t.stop()); mediaStream = null; }
+        mediaRecorder = null;
+        downloadVideoOnly();
+    }, { once: true });
+    mediaRecorder.stop();
+}
+
+// Stops the recorder without downloading (used on normal end — user presses buttons)
+function stopRecording() {
+    if (!mediaRecorder || mediaRecorder.state === 'inactive') return;
+    mediaRecorder.addEventListener('stop', () => {
+        if (mediaStream) { mediaStream.getTracks().forEach(t => t.stop()); mediaStream = null; }
+        mediaRecorder = null;
+    }, { once: true });
     mediaRecorder.stop();
 }
 
@@ -798,7 +1128,7 @@ function cleanupRecording() {
     }
     mediaRecorder = null;
     recordedChunks = [];
-    setRecordingIndicator('off');
+    recordedMimeType = '';
 }
 
 // ===== UTILITY =====

@@ -16,7 +16,10 @@
         <div class="centered-content">
             <h1 class="title">ECITT Task</h1>
             <p class="subtitle">Select Age Group</p>
-            <button id="adultBtn" class="age-button">Adult</button>
+            <button id="infantBtn" class="age-button">Infant (10-16 mo)</button>
+            <button id="toddlerBtn" class="age-button">Toddler (17-23 mo)</button>
+            <button id="childBtn" class="age-button">Child (2-17)</button>
+            <button id="adultBtn" class="age-button">Adult (18+)</button>
         </div>
     </div>
 
@@ -63,7 +66,8 @@
             <h2 class="end-title">Task Complete!</h2>
             <div id="endStats" class="end-message"></div>
             <p class="end-message">Thank you for participating.</p>
-            <button id="downloadBtn" class="download-button">Download Results</button>
+            <button id="downloadCsvBtn" class="download-button">Download CSV</button>
+            <button id="downloadVideoBtn" class="download-button">Download Video</button>
             <button id="restartBtn" class="restart-button">Start New Session</button>
         </div>
     </div>
@@ -83,14 +87,14 @@
             <h2 class="end-title">Session Incomplete</h2>
             <p class="end-message">The session was not completed.</p>
             <div id="dnfStats" class="end-message"></div>
+            <button id="dnfDownloadCsvBtn" class="download-button">Download CSV</button>
+            <button id="dnfDownloadVideoBtn" class="download-button">Download Video</button>
             <button id="dnfRestartBtn" class="restart-button">Start New Session</button>
         </div>
     </div>
 
     <!-- Photocell indicator (OUTSIDE all screens so it's always visible) -->
     <div id="buttonIndicator"></div>
-    <!-- Recording status dot: red=recording, orange=camera error -->
-    <div id="recordingIndicator" style="display:none; position:fixed; top:12px; right:12px; width:14px; height:14px; border-radius:50%; z-index:9999;"></div>
 
     <script src="data.js"></script>
     <script src="app.js"></script>
