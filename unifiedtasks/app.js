@@ -645,6 +645,7 @@ function loadTask(taskId) {
         trialsRemaining: config.trials,
         trialName: config.id || 'adt_ppt'
     });
+    flashButtonIndicator('TaskStart');
     // Log PromptScreen intro
     dataManager.logEvent({
         section: 'PromptScreen',
@@ -835,15 +836,6 @@ function handleButtonPress(button) {
     const reactionTime = Date.now() - appState.trialStartTime;
     const accuracy = button === appState.currentRewarded ? 1 : 0;
     
-    // Flash photocell for trial type
-    const trialCurrent = appState.trialSequence[appState.currentTrial];
-    let trialSectionCurrent = 'PromptScreen';
-    if (trialCurrent && trialCurrent.type === 'prpt') {
-        trialSectionCurrent = 'TopTrialScreen';
-    } else if (trialCurrent && trialCurrent.type === 'inhb') {
-        trialSectionCurrent = 'BottomTrialScreen';
-    }
-    // ...existing code...
     
     // Update stats
     appState.totalTrials++;
@@ -917,6 +909,7 @@ function finishTask() {
             trialsRemaining: 0,
             trialName: appState.currentTask.id || 'adt_ppt'
         });
+        flashButtonIndicator('TaskEnd');
     }
     
     // Move to next task
@@ -1012,31 +1005,51 @@ const PHOTOCELL_CODES = {
     TopTrialScreen: '011',
     ReadyScreen: '100',
     BottomTrialScreen: '101',
-    TaskEnd: '110'
+    RewardAnimation: '110',
+    TaskEnd: '111'
 };
 
-// Simulate photocell flashing for a section
+// Pulse durations in ms: each cell (⬜ or ⬛) is 16ms
+// bit 0 = ⬜⬛ = 16ms on + 16ms off (32ms total)
+// bit 1 = ⬜⬛⬛⬛ = 16ms on + 48ms off (64ms total)
+const PHOTOCELL_ON_MS = 16;
+const duration_codes = {
+    0: 32,
+    1: 64
+};
+
+// Flash the photocell indicator with the binary-coded pulse sequence for a section.
+// Each bit: 16ms on, then 16ms off (bit=0) or 48ms off (bit=1).
+// Ends with a trailing 16ms on pulse.
 let flashInProgress = false;
 function flashButtonIndicator(section) {
-    if (flashInProgress) return; // drop overlapping flash
+    if (flashInProgress) return;
+    const code = PHOTOCELL_CODES[section];
+    if (!code) return;
+
     flashInProgress = true;
-    const durations = {
-        TaskStart: 10,
-        PromptScreen: 20,
-        TopTrialScreen: 30,
-        ReadyScreen: 40,
-        BottomTrialScreen: 50,
-        TaskEnd: 60
-    };
-    const duration = durations[section] || 10;
-    // Wait for browser to paint before flashing
-    requestAnimationFrame(() => {
-        elements.buttonIndicator.style.backgroundColor = 'white';
-        setTimeout(() => {
-            elements.buttonIndicator.style.backgroundColor = 'black';
+    const indicator = elements.buttonIndicator;
+
+    const steps = [];
+    for (const bit of code) {
+        steps.push([true,  PHOTOCELL_ON_MS]);
+        steps.push([false, bit === '1' ? 48 : 16]);
+    }
+    steps.push([true, PHOTOCELL_ON_MS]); // trailing on pulse
+
+    let i = 0;
+    function runStep() {
+        if (i >= steps.length) {
+            indicator.style.backgroundColor = 'black';
             flashInProgress = false;
-        }, duration);
-    });
+            return;
+        }
+        const [on, duration] = steps[i++];
+        indicator.style.backgroundColor = on ? 'white' : 'black';
+        setTimeout(runStep, duration);
+    }
+
+    requestAnimationFrame(runStep);
 }
 
 // ===== RECORDING =====
