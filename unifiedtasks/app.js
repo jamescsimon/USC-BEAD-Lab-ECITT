@@ -373,7 +373,7 @@ const TASK_CONFIGS = {
 };
 
 // Task execution order — full 18+ adult protocol (legacy study version)
-const TASK_SEQUENCE = ['adt_ct', 'adt_cb', 'adt_cm', 'adt_ppt', 'adt_tpt', 'adt_ppb', 'adt_tpb'];
+const TASK_SEQUENCE = ['adt_ct', 'adt_cb', 'adt_ppt', 'adt_tpt', 'adt_ppb', 'adt_tpb'];
 
 // Task execution order — full 18+ adult protocol (james' version)
 // const TASK_SEQUENCE = ['adt_cm', 'adt_ct', 'adt_ppt', 'adt_tpt', 'adt_cb', 'adt_ppb', 'adt_tpb'];
