@@ -645,17 +645,7 @@ function loadTask(taskId) {
         trialsRemaining: config.trials,
         trialName: config.id || 'adt_ppt'
     });
-    flashButtonIndicator('TaskStart');
-    // Log PromptScreen intro
-    dataManager.logEvent({
-        section: 'PromptScreen',
-        stimuli: 'red dot, white text',
-        invokedBy: 'TestLoaded',
-        accuracy: 'n/a',
-        testName: appState.ageGroup,
-        trialsRemaining: config.trials,
-        trialName: config.id || 'adt_ppt'
-    });
+    flashButtonIndicator();
     // Start first trial
     showReadyScreen();
 }
@@ -767,7 +757,7 @@ function showReadyScreen() {
         trialName: appState.currentTask.id || 'adt_ppt'
     });
     showScreen('readyScreen');
-    flashButtonIndicator('ReadyScreen');
+    flashButtonIndicator();
 }
 
 function handleDotPress(event) {
@@ -819,16 +809,10 @@ function showPromptScreen() {
     
     // Store rewarded position for accuracy check
     appState.currentRewarded = rewPos;
-    // Determine trial type for logging and photocell
-    let trialSection = 'PromptScreen';
-    if (trial && trial.type === 'prpt') {
-        trialSection = 'TopTrialScreen';
-    } else if (trial && trial.type === 'inhb') {
-        trialSection = 'BottomTrialScreen';
-    }
-    // No logging here; trial completion is logged in handleButtonPress
+    // Flash fires at screen onset; section type and accuracy are logged at
+    // button press in handleButtonPress (~100ms later, within MATLAB alignment tolerance)
     showScreen('promptScreen');
-    flashButtonIndicator(trialSection);
+    flashButtonIndicator();
 }
 
 function handleButtonPress(button) {
@@ -909,7 +893,7 @@ function finishTask() {
             trialsRemaining: 0,
             trialName: appState.currentTask.id || 'adt_ppt'
         });
-        flashButtonIndicator('TaskEnd');
+        flashButtonIndicator();
     }
     
     // Move to next task
@@ -998,58 +982,24 @@ function continueAfterInterBlock() {
 
 // ===== PHOTOCELL =====
 
-// Photocell code mapping for each section
-const PHOTOCELL_CODES = {
-    TaskStart: '001',
-    PromptScreen: '010',
-    TopTrialScreen: '011',
-    ReadyScreen: '100',
-    BottomTrialScreen: '101',
-    RewardAnimation: '110',
-    TaskEnd: '111'
-};
-
-// Pulse durations in ms: each cell (⬜ or ⬛) is 16ms
-// bit 0 = ⬜⬛ = 16ms on + 16ms off (32ms total)
-// bit 1 = ⬜⬛⬛⬛ = 16ms on + 48ms off (64ms total)
-const PHOTOCELL_ON_MS = 16;
-const duration_codes = {
-    0: 32,
-    1: 64
-};
-
-// Flash the photocell indicator with the binary-coded pulse sequence for a section.
-// Each bit: 16ms on, then 16ms off (bit=0) or 48ms off (bit=1).
-// Ends with a trailing 16ms on pulse.
+// Single-frame photocell flash. Fires one DIN8 event per section start.
+// Section identity is resolved in post-processing by aligning the CSV telemetry
+// timestamps against DIN8 timestamps in the EEG recording.
+// Uses requestAnimationFrame so the flash aligns to a monitor vsync boundary
+// (~16ms at 60Hz) rather than the unreliable JS event-loop timer.
 let flashInProgress = false;
-function flashButtonIndicator(section) {
+function flashButtonIndicator() {
     if (flashInProgress) return;
-    const code = PHOTOCELL_CODES[section];
-    if (!code) return;
-
     flashInProgress = true;
     const indicator = elements.buttonIndicator;
 
-    const steps = [];
-    for (const bit of code) {
-        steps.push([true,  PHOTOCELL_ON_MS]);
-        steps.push([false, bit === '1' ? 48 : 16]);
-    }
-    steps.push([true, PHOTOCELL_ON_MS]); // trailing on pulse
-
-    let i = 0;
-    function runStep() {
-        if (i >= steps.length) {
+    requestAnimationFrame(() => {         // frame N: ON  → triggers DIN8
+        indicator.style.backgroundColor = 'white';
+        requestAnimationFrame(() => {     // frame N+1: OFF
             indicator.style.backgroundColor = 'black';
             flashInProgress = false;
-            return;
-        }
-        const [on, duration] = steps[i++];
-        indicator.style.backgroundColor = on ? 'white' : 'black';
-        setTimeout(runStep, duration);
-    }
-
-    requestAnimationFrame(runStep);
+        });
+    });
 }
 
 // ===== RECORDING =====
