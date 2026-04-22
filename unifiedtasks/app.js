@@ -809,8 +809,28 @@ function showPromptScreen() {
     
     // Store rewarded position for accuracy check
     appState.currentRewarded = rewPos;
-    // Flash fires at screen onset; section type and accuracy are logged at
-    // button press in handleButtonPress (~100ms later, within MATLAB alignment tolerance)
+
+    // Determine section label for this trial
+    let trialSection = 'PromptScreen';
+    if (trial && trial.type === 'prpt') {
+        trialSection = 'TopTrialScreen';
+    } else if (trial && trial.type === 'inhb') {
+        trialSection = 'BottomTrialScreen';
+    } else if (trial && trial.type === 'standard') {
+        trialSection = 'ControlTrialScreen';
+    }
+
+    // Log at screen onset — timestamp matches flash, accuracy not yet known
+    dataManager.logEvent({
+        section: trialSection,
+        stimuli: 'red dot, blue buttons',
+        invokedBy: 'ParticipantRedDot',
+        accuracy: 'n/a',
+        testName: appState.ageGroup,
+        trialsRemaining: appState.currentTask.trials - appState.currentTrial,
+        trialName: appState.currentTask.id || 'adt_ppt'
+    });
+
     showScreen('promptScreen');
     flashButtonIndicator();
 }
@@ -834,20 +854,20 @@ function handleButtonPress(button) {
         appState.blockTrials++;
     }
     
-    // Log accuracy for the trial that just completed (current index)
+    // Log response — timestamp is button press, accuracy now known
     const completedIndex = appState.currentTrial;
     const completedTrial = appState.trialSequence[completedIndex];
-    let completedSection = 'PromptScreen';
+    let responseSection = 'PromptResponse';
     if (completedTrial && completedTrial.type === 'prpt') {
-        completedSection = 'TopTrialScreen';
+        responseSection = 'TopTrialResponse';
     } else if (completedTrial && completedTrial.type === 'inhb') {
-        completedSection = 'BottomTrialScreen';
+        responseSection = 'BottomTrialResponse';
     } else if (completedTrial && completedTrial.type === 'standard') {
-        completedSection = 'ControlTrialScreen';
+        responseSection = 'ControlTrialResponse';
     }
 
     dataManager.logEvent({
-        section: completedSection,
+        section: responseSection,
         stimuli: 'red dot, blue buttons',
         invokedBy: 'ParticipantRedDot',
         accuracy: accuracy,
