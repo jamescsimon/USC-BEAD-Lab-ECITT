@@ -645,8 +645,7 @@ function loadTask(taskId) {
         trialsRemaining: config.trials,
         trialName: config.id || 'adt_ppt'
     });
-    flashButtonIndicator();
-    // Start first trial
+    // Start first trial — ReadyScreen fires the flash, no separate TaskStart flash
     showReadyScreen();
 }
 
