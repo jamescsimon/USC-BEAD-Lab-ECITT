@@ -533,24 +533,28 @@ function showScreen(screenName) {
 function selectAdult() {
     appState.ageGroup = 'Adult';
     activeTaskSequence = TASK_SEQUENCE;
+    startRecording();
     showScreen('participantScreen');
 }
 
 function selectChild() {
     appState.ageGroup = 'Child';
     activeTaskSequence = CHILD_TASK_SEQUENCE;
+    startRecording();
     showScreen('participantScreen');
 }
 
 function selectToddler() {
     appState.ageGroup = 'Toddler';
     activeTaskSequence = TODDLER_TASK_SEQUENCE;
+    startRecording();
     showScreen('participantScreen');
 }
 
 function selectInfant() {
     appState.ageGroup = 'Infant';
     activeTaskSequence = INFANT_TASK_SEQUENCE;
+    startRecording();
     showScreen('participantScreen');
 }
 
@@ -574,7 +578,6 @@ function startTest() {
 
     appState.participantId = participantId;
     dataManager.startSession(participantId);
-    startRecording();
 
     // Start first task
     appState.currentTaskIndex = 0;
