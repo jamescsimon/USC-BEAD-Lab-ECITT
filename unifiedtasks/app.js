@@ -748,8 +748,8 @@ function showReadyScreen() {
         elements.readyMsg3.textContent = '';
     }
     
-    // Log ready screen only when screen is shown
-    dataManager.logEvent({
+    showScreen('readyScreen');
+    flashButtonIndicator({
         section: 'ReadyScreen',
         stimuli: 'red dot',
         invokedBy: 'ParticipantBlueButton',
@@ -758,8 +758,6 @@ function showReadyScreen() {
         trialsRemaining: appState.currentTask.trials - appState.currentTrial,
         trialName: appState.currentTask.id || 'adt_ppt'
     });
-    showScreen('readyScreen');
-    flashButtonIndicator();
 }
 
 function handleDotPress(event) {
@@ -822,8 +820,8 @@ function showPromptScreen() {
         trialSection = 'ControlTrialScreen';
     }
 
-    // Log at screen onset — timestamp matches flash, accuracy not yet known
-    dataManager.logEvent({
+    showScreen('promptScreen');
+    flashButtonIndicator({
         section: trialSection,
         stimuli: 'red dot, blue buttons',
         invokedBy: 'ParticipantRedDot',
@@ -832,9 +830,6 @@ function showPromptScreen() {
         trialsRemaining: appState.currentTask.trials - appState.currentTrial,
         trialName: appState.currentTask.id || 'adt_ppt'
     });
-
-    showScreen('promptScreen');
-    flashButtonIndicator();
 }
 
 function handleButtonPress(button) {
@@ -906,7 +901,7 @@ function finishTask() {
     
     // Log task end only for last task
     if (appState.currentTaskIndex === activeTaskSequence.length - 1) {
-        dataManager.logEvent({
+        flashButtonIndicator({
             section: 'TaskEnd',
             stimuli: 'blank',
             invokedBy: 'ParticipantBlueButton',
@@ -915,7 +910,6 @@ function finishTask() {
             trialsRemaining: 0,
             trialName: appState.currentTask.id || 'adt_ppt'
         });
-        flashButtonIndicator();
     }
     
     // Move to next task
@@ -1010,13 +1004,28 @@ function continueAfterInterBlock() {
 // Uses requestAnimationFrame so the flash aligns to a monitor vsync boundary
 // (~16ms at 60Hz) rather than the unreliable JS event-loop timer.
 let flashInProgress = false;
-function flashButtonIndicator() {
-    if (flashInProgress) return;
+function flashButtonIndicator(pendingEvent) {
+    if (flashInProgress) {
+        // Shouldn't happen in normal flow. Log a FlashConflict row so the CSV flags
+        // this trial, then log the event immediately (timestamp will not be vsync-aligned).
+        dataManager.logEvent({
+            section: 'FlashConflict',
+            stimuli: pendingEvent ? pendingEvent.section : 'unknown',
+            invokedBy: 'System',
+            accuracy: 'n/a',
+            testName: pendingEvent ? pendingEvent.testName : '',
+            trialsRemaining: pendingEvent ? pendingEvent.trialsRemaining : 'n/a',
+            trialName: pendingEvent ? pendingEvent.trialName : ''
+        });
+        if (pendingEvent) dataManager.logEvent(pendingEvent);
+        return;
+    }
     flashInProgress = true;
     const indicator = elements.buttonIndicator;
 
     requestAnimationFrame(() => {         // frame N: ON  → triggers DIN8
         indicator.style.backgroundColor = 'white';
+        if (pendingEvent) dataManager.logEvent(pendingEvent);  // timestamp = flash moment
         requestAnimationFrame(() => {     // frame N+1: OFF
             indicator.style.backgroundColor = 'black';
             flashInProgress = false;

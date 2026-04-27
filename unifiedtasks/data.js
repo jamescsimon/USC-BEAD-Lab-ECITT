@@ -39,6 +39,8 @@ class DataManager {
         }
 
         // Main screens we care about in the CSV. Include DNF so it can appear in exports.
+        // FlashConflict is a data-quality flag: logged when flashButtonIndicator was called
+        // while a flash was already in progress, meaning the timestamp was NOT vsync-aligned.
         const mainScreens = [
             'TaskStart',
             'PromptScreen',
@@ -47,7 +49,8 @@ class DataManager {
             'ControlTrialScreen',
             'ReadyScreen',
             'TaskEnd',
-            'DNF'
+            'DNF',
+            'FlashConflict'
         ];
 
         // Only log main screen transitions (caller should provide the correct section)
@@ -121,7 +124,7 @@ class DataManager {
             // Parse as local time (do NOT append 'Z')
             return new Date(`${date}T${h}:${m}:${s}.${ms}`);
         }
-        // Only include main screen transitions + DNF for CSV rows
+        // Only include main screen transitions + DNF + FlashConflict for CSV rows
         const mainScreens = [
             'TaskStart',
             'PromptScreen',
@@ -130,7 +133,8 @@ class DataManager {
             'ControlTrialScreen',
             'ReadyScreen',
             'TaskEnd',
-            'DNF'
+            'DNF',
+            'FlashConflict'
         ];
         const filtered = this.sessionData.filter(r => mainScreens.includes(r.SectionStarted));
         const rows = filtered.map((record, idx) => {
