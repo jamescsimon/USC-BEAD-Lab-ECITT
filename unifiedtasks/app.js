@@ -410,6 +410,7 @@ const appState = {
     totalTrials: 0,
     totalReactionTime: 0,
     isDNF: false,
+    isComplete: false,
     blockReactionTime: 0,
     blockTrials: 0,
     isTransitioning: false
@@ -504,7 +505,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const resetInactivityTimer = () => {
         clearTimeout(inactivityTimer);
-        if (appState.currentTask && !appState.isDNF) {
+        if (appState.currentTask && !appState.isDNF && !appState.isComplete) {
             inactivityTimer = setTimeout(() => {
                 console.log('[APP] Inactivity detected - marking as DNF');
                 handleDNF();
@@ -932,7 +933,8 @@ function finishTask() {
 
 function finishTest() {
     console.log('[APP] All tasks complete');
-    
+    appState.isComplete = true;
+
     // No session end event
     
     // Calculate final stats
@@ -953,7 +955,7 @@ function finishTest() {
 }
 
 function handleDNF() {
-    if (appState.isDNF) return;
+    if (appState.isDNF || appState.isComplete) return;
     
     appState.isDNF = true;
     console.log('[APP] Handling DNF');
