@@ -461,7 +461,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         interBlockScreen: document.getElementById('interBlockScreen'),
         interBlockStats: document.getElementById('interBlockStats'),
-        interBlockContinueBtn: document.getElementById('interBlockContinueBtn')
+        interBlockContinueBtn: document.getElementById('interBlockContinueBtn'),
+
+        recordingReminderScreen: document.getElementById('recordingReminderScreen'),
+        recordingReminderContinueBtn: document.getElementById('recordingReminderContinueBtn')
     };
     
     // Event listeners
@@ -498,6 +501,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (elements.dnfDownloadVideoBtn) elements.dnfDownloadVideoBtn.addEventListener('click', downloadVideoOnly);
     if (elements.dnfRestartBtn) elements.dnfRestartBtn.addEventListener('click', restart);
     if (elements.interBlockContinueBtn) elements.interBlockContinueBtn.addEventListener('click', continueAfterInterBlock);
+    if (elements.recordingReminderContinueBtn) elements.recordingReminderContinueBtn.addEventListener('click', continueAfterRecordingReminder);
     
     // DNF detection - check for inactivity
     let inactivityTimer;
@@ -580,9 +584,8 @@ function startTest() {
     appState.participantId = participantId;
     dataManager.startSession(participantId);
 
-    // Start first task
     appState.currentTaskIndex = 0;
-    loadTask(activeTaskSequence[0]);
+    showScreen('recordingReminderScreen');
 }
 
 function restart() {
@@ -596,6 +599,7 @@ function restart() {
     appState.totalTrials = 0;
     appState.totalReactionTime = 0;
     appState.isDNF = false;
+    appState.isComplete = false;
     appState.ageGroup = 'Adult';
     appState.blockReactionTime = 0;
     appState.blockTrials = 0;
@@ -606,10 +610,13 @@ function restart() {
     cleanupRecording();
 
     elements.participantIdInput.value = '';
-    // Re-enable start button
+    // Re-enable start button and reminder button
     if (elements.startBtn) {
         elements.startBtn.disabled = false;
         elements.startBtn.classList && elements.startBtn.classList.remove('disabled');
+    }
+    if (elements.recordingReminderContinueBtn) {
+        elements.recordingReminderContinueBtn.disabled = false;
     }
     showScreen('ageSelectionScreen');
 }
@@ -996,6 +1003,13 @@ function showInterBlockFeedback() {
 
 function continueAfterInterBlock() {
     loadTask(activeTaskSequence[appState.currentTaskIndex]);
+}
+
+function continueAfterRecordingReminder() {
+    if (elements.recordingReminderContinueBtn) {
+        elements.recordingReminderContinueBtn.disabled = true;
+    }
+    setTimeout(() => loadTask(activeTaskSequence[0]), 1000);
 }
 
 // ===== PHOTOCELL =====

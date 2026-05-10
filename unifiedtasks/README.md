@@ -33,6 +33,39 @@ Each task has a specific button/dot layout for the PromptScreen:
 - **Control & Practice**: 2 buttons + 1 red dot (always middle)
 - **Test**: 2 buttons + 1 red dot (varies by trial variant)
 
+## Trial Name Acronyms
+
+Task IDs follow the pattern `[age]_[phase][position]`. For variant-level suffixes inside test tasks, `prpt` = prepotent trial and `inhb` = inhibitory trial.
+
+### Age group prefixes
+
+| Prefix | Age group |
+|--------|-----------|
+| `adt`  | Adult (18+) |
+| `cha`  | Child ECITT-A (2–17 yr) |
+| `tod`  | Toddler (17–23 mo) |
+| `inf`  | Infant (10–16 mo) |
+
+### Phase/position suffixes
+
+| Suffix | Meaning |
+|--------|---------|
+| `_cb` | Control Bottom — baseline, single bottom button |
+| `_ct` | Control Top — baseline, single top button |
+| `_cm` | Control Middle — baseline, single middle button (adult only) |
+| `_ppt` | Practice Prepotent Top — 4-trial practice, happy face always top |
+| `_ppb` | Practice Prepotent Bottom — 4-trial practice, happy face always bottom |
+| `_blt` | Baseline Top — 32-trial baseline, happy face always top (child only) |
+| `_blb` | Baseline Bottom — 32-trial baseline, happy face always bottom (child only) |
+| `_tpt` | Test Prepotent Top — 32 trials, 75% top / 25% bottom |
+| `_tpb` | Test Prepotent Bottom — 32 trials, 75% bottom / 25% top |
+| `_c1t` / `_c1b` | Infant Control 1 Top / Bottom — single-button baseline before test (infant only) |
+| `_c2t` / `_c2b` | Infant Control 2 Top / Bottom — single-button baseline after test (infant only) |
+| `_tptt` | Infant Test PR Top — prepotent phase (top button, builds habit) |
+| `_tptb` | Infant Test PR Top — inhibitory phase (bottom button, requires switch) |
+| `_tpbt` | Infant Test PR Bottom — prepotent phase (bottom button, builds habit) |
+| `_tpbb` | Infant Test PR Bottom — inhibitory phase (top button, requires switch) |
+
 ## Usage
 
 ### Starting the App
@@ -100,6 +133,50 @@ ECITT_{ParticipantID}_{Timestamp}.csv
 ```
 
 Example: `ECITT_PC001_2026-03-04_14-32-15-123.csv`
+
+## Changing Task Setup and Timing
+
+All task configuration lives in **`app.js`**.
+
+### Modifying a task (trials, button layout, instructions)
+
+Each task is defined in `TASK_CONFIGS` (top of `app.js`). Find the task by its ID and edit directly:
+
+```js
+adt_tpt: {
+    trials: 32,              // number of trials
+    varDistr: [75, 25],      // [prepotent %, inhibitory %]
+    varLeading: 3,           // leading prepotent trials (always first)
+    varMaxDups: 4,           // max consecutive prepotent trials
+    promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+    readyMsg1: '...',        // instruction line 1
+    readyMsg2: '...',        // instruction line 2
+    readyMsg3: 'Ready?'      // instruction line 3
+}
+```
+
+### Changing the active task sequence
+
+Four sequence arrays control which tasks run and in what order:
+
+| Variable | Age group |
+|---|---|
+| `TASK_SEQUENCE` | Adult (18+) |
+| `CHILD_TASK_SEQUENCE` | Child (2–17 yr) |
+| `TODDLER_TASK_SEQUENCE` | Toddler (17–23 mo) |
+| `INFANT_TASK_SEQUENCE` | Infant (10–16 mo) |
+
+Edit these arrays to add, remove, or reorder tasks.
+
+### Timing constants
+
+| Constant / location | Default | What it controls |
+|---|---|---|
+| `INACTIVITY_TIMEOUT` (~line 504) | `60000` ms | Seconds of no input before auto-DNF |
+| `setTimeout(..., 100)` in `handleButtonPress` (~line 884) | `100` ms | Delay from button press to next ready screen |
+| `setTimeout(..., 500)` in `finishTask` (~line 927) | `500` ms | Delay before inter-block feedback screen |
+| `setTimeout(..., 1000)` in `finishTask` (~line 927) | `1000` ms | Delay before loading next task block |
+| `setTimeout(..., 1000)` in `continueAfterRecordingReminder` | `1000` ms | Delay after researcher presses Continue on the EEG reminder screen |
 
 ## Installation Options
 
