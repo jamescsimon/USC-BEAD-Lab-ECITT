@@ -406,7 +406,16 @@ let activeTaskSequence = null;
 // ===== JITTER CONFIGURATION =====
 // Durations (in milliseconds) randomly selected per adult trial between dot press and prompt.
 // Edit this list to control possible wait times (valid range: 500–5000 ms).
-const JITTER_DURATIONS = [500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 1500, 2000, 2500, 3000, 3500, 4000, 1500, 2000, 2500, 3000, 3500, 4000];
+const JITTER_DURATIONS = [
+  500, 500,
+  1000, 1000, 1000,
+  1500, 1500, 1500, 1500, 1500,
+  2000, 2000, 2000, 2000, 2000, 2000,
+  2500, 2500, 2500, 2500, 2500, 2500,
+  3000, 3000, 3000, 3000, 3000,
+  3500, 3500, 3500,
+  4000, 4000
+];
 
 // ===== APPLICATION STATE =====
 const appState = {
