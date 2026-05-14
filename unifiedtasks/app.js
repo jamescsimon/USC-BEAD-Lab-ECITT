@@ -996,7 +996,7 @@ function finishTask() {
             appState.currentTask.id === 'tod_tpt') {
             setTimeout(() => showInterBlockFeedback(), 500);
         } else {
-            setTimeout(() => loadTask(activeTaskSequence[appState.currentTaskIndex]), 1000);
+            setTimeout(() => loadTask(activeTaskSequence[appState.currentTaskIndex]), 100);
         }
     } else {
         // All tasks complete
