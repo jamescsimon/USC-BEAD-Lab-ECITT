@@ -17,7 +17,7 @@ const TASK_CONFIGS = {
         promptLayout: { top: 'empty', mdl: 'dot', btm: 'button' },
         readyMsg1: 'When you see the blue buttons, press the one with the happy face as fast as you can when they appear.',
         readyMsg2: 'When ready, press the red dot.',
-        readyMsg3: 'Ready? Let\'s practice'
+        readyMsg3: 'Ready? Let\'s practice!'
     },
     // Control: Top (4 trials)
     adt_ct: {
@@ -28,9 +28,9 @@ const TASK_CONFIGS = {
         rew: 'top',
         trials: 4,
         promptLayout: { top: 'button', mdl: 'dot', btm: 'empty' },
-        readyMsg1: 'When you see the blue buttons, press the one with the happy face as fast as you can when they appear.',
-        readyMsg2: 'When ready, press the red dot.',
-        readyMsg3: 'Ready? Let\'s practice'
+        readyMsg1: 'Great job!',
+        readyMsg2: 'When ready to start the next practice, press the red dot.',
+        readyMsg3: 'Ready? Let\'s practice the other side!'
     },
     // Control: Middle (4 trials)
     adt_cm: {
@@ -43,7 +43,7 @@ const TASK_CONFIGS = {
         promptLayout: { top: 'empty', mdl: 'button', btm: 'empty' },
         readyMsg1: 'When you see the blue buttons, press the one with the happy face as fast as you can when they appear.',
         readyMsg2: 'When ready, press the red dot.',
-        readyMsg3: 'Ready? Let\'s practice'
+        readyMsg3: 'Ready? Let\'s practice!'
     }, 
     // Practice: Top (4 trials)
     adt_ppt: {
@@ -54,9 +54,9 @@ const TASK_CONFIGS = {
         rew: 'top',
         trials: 4,
         promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
-        readyMsg1: 'Great! Now we will do some practice. Press the happy face as fast as you can.',
+        readyMsg1: 'Great! Now we will do some practice with both sides. Press the happy face one as fast as you can.',
         readyMsg2: 'Then return to the dot.',
-        readyMsg3: 'Ready?'
+        readyMsg3: 'Ready to practice?'
     },
     // Practice: Bottom (4 trials)
     adt_ppb: {
@@ -67,9 +67,9 @@ const TASK_CONFIGS = {
         rew: 'btm',
         trials: 4,
         promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
-        readyMsg1: 'Great! Now we will do some practice. Press the happy face as fast as you can.',
+        readyMsg1: 'Great! Now we will do some practice with both sides. Press the happy face one as fast as you can.',
         readyMsg2: 'Then return to the dot.',
-        readyMsg3: 'Ready?'
+        readyMsg3: 'Ready to practice?'
     },
     // Test: Top (32 trials - 75% top, 25% bottom)
     adt_tpt: {
@@ -100,7 +100,7 @@ const TASK_CONFIGS = {
         promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
         readyMsg1: 'Excellent! Now for the real test. Keep pressing the happy face as fast as you can.',
         readyMsg2: 'Then return to the dot.',
-        readyMsg3: 'Ready?',
+        readyMsg3: 'Ready? Let\'s start the real test!',
         variants: {
             prpt: { emp: 'btm', empType: 'happy', rew: 'btm' },
             inhb: { emp: 'top', empType: 'happy', rew: 'top' }
