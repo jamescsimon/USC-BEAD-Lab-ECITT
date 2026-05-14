@@ -15,9 +15,9 @@ const TASK_CONFIGS = {
         rew: 'btm',
         trials: 4,
         promptLayout: { top: 'empty', mdl: 'dot', btm: 'button' },
-        readyMsg1: 'Put your finger on the red dot. When you see the buttons, press the happy face as fast as you can.',
-        readyMsg2: 'Then return to the dot.',
-        readyMsg3: 'Ready?'
+        readyMsg1: 'When you see the blue buttons, press the one with the happy face as fast as you can when they appear.',
+        readyMsg2: 'When ready, press the red dot.',
+        readyMsg3: 'Ready? Let\'s practice'
     },
     // Control: Top (4 trials)
     adt_ct: {
@@ -28,9 +28,9 @@ const TASK_CONFIGS = {
         rew: 'top',
         trials: 4,
         promptLayout: { top: 'button', mdl: 'dot', btm: 'empty' },
-        readyMsg1: 'Put your finger on the red dot. When you see the buttons, press the happy face as fast as you can.',
-        readyMsg2: 'Then return to the dot.',
-        readyMsg3: 'Ready?'
+        readyMsg1: 'When you see the blue buttons, press the one with the happy face as fast as you can when they appear.',
+        readyMsg2: 'When ready, press the red dot.',
+        readyMsg3: 'Ready? Let\'s practice'
     },
     // Control: Middle (4 trials)
     adt_cm: {
@@ -41,10 +41,10 @@ const TASK_CONFIGS = {
         rew: 'mdl',
         trials: 4,
         promptLayout: { top: 'empty', mdl: 'button', btm: 'empty' },
-        readyMsg1: 'Put your finger on the red dot. When you see the buttons, press the happy face as fast as you can.',
-        readyMsg2: 'Then return to the dot.',
-        readyMsg3: 'Ready?'
-    },
+        readyMsg1: 'When you see the blue buttons, press the one with the happy face as fast as you can when they appear.',
+        readyMsg2: 'When ready, press the red dot.',
+        readyMsg3: 'Ready? Let\'s practice'
+    }, 
     // Practice: Top (4 trials)
     adt_ppt: {
         id: 'adt_ppt',
@@ -74,7 +74,7 @@ const TASK_CONFIGS = {
     // Test: Top (32 trials - 75% top, 25% bottom)
     adt_tpt: {
         id: 'adt_tpt',
-        name: 'Test Top',
+        name: 'Test Top', 
         varDistr: [75, 25], // [prepotent %, inhibitory %]
         varLeading: 3, // First 3 trials are prepotent
         varMaxDups: 4, // Max 4 prepotent consecutive
@@ -82,7 +82,7 @@ const TASK_CONFIGS = {
         promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
         readyMsg1: 'Excellent! Now for the real test. Keep pressing the happy face as fast as you can.',
         readyMsg2: 'Then return to the dot.',
-        readyMsg3: 'Ready?',
+        readyMsg3: 'Ready? Let\'s start the real test!',
         // Trial variant configs
         variants: {
             prpt: { emp: 'top', empType: 'happy', rew: 'top' },
@@ -146,7 +146,7 @@ const TASK_CONFIGS = {
         promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
         readyMsg1: 'Excellent! Now for the real test. Keep pressing the happy face as fast as you can.',
         readyMsg2: 'Then return to the dot.',
-        readyMsg3: 'Ready?',
+        readyMsg3: 'Ready? Let\'s start the real test!',
         variants: {
             prpt: { emp: 'top', empType: 'happy', rew: 'top' },
             inhb: { emp: 'btm', empType: 'happy', rew: 'btm' }
@@ -189,7 +189,7 @@ const TASK_CONFIGS = {
         promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
         readyMsg1: 'Excellent! Now for the real test. Keep pressing the happy face as fast as you can.',
         readyMsg2: 'Then return to the dot.',
-        readyMsg3: 'Ready?',
+        readyMsg3: 'Ready? Let\'s start the real test!',
         variants: {
             prpt: { emp: 'btm', empType: 'happy', rew: 'btm' },
             inhb: { emp: 'top', empType: 'happy', rew: 'top' }
@@ -381,7 +381,8 @@ const TASK_CONFIGS = {
 };
 
 // Task execution order — full 18+ adult protocol (legacy study version)
-const TASK_SEQUENCE = ['adt_ct', 'adt_cb', 'adt_ppt', 'adt_tpt', 'adt_ppb', 'adt_tpb'];
+//const TASK_SEQUENCE = ['adt_ct', 'adt_cb', 'adt_ppt', 'adt_tpt', 'adt_ppb', 'adt_tpb'];
+const TASK_SEQUENCE = ['adt_ct', 'adt_cb', 'adt_ppt', 'adt_tpt', 'adt_tpb'];
 
 // Task execution order — full 18+ adult protocol (james' version)
 // const TASK_SEQUENCE = ['adt_cm', 'adt_ct', 'adt_ppt', 'adt_tpt', 'adt_cb', 'adt_ppb', 'adt_tpb'];
@@ -518,6 +519,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (elements.interBlockContinueBtn) elements.interBlockContinueBtn.addEventListener('click', continueAfterInterBlock);
     if (elements.recordingReminderContinueBtn) elements.recordingReminderContinueBtn.addEventListener('click', continueAfterRecordingReminder);
     
+    // Orientation-aware button positioning
+    applyOrientationLayout();
+    window.matchMedia('(orientation: landscape)').addEventListener('change', applyOrientationLayout);
+
     // DNF detection - check for inactivity
     let inactivityTimer;
     const INACTIVITY_TIMEOUT = 60000; // 60 seconds
@@ -829,6 +834,7 @@ function showWaitScreen() {
 }
 
 function showPromptScreen() {
+    stopRewardAnimation();
     appState.trialStartTime = Date.now();
     const config = appState.currentTask;
     const trial = appState.trialSequence[appState.currentTrial];
@@ -843,13 +849,9 @@ function showPromptScreen() {
     if (elements.mdlButton) elements.mdlButton.style.display = 'none';
     if (elements.btmButton) elements.btmButton.style.display = 'none';
     
-    // Show/hide dot based on layout
+    // Dot stays hidden until participant presses a button
     if (elements.promptDot) {
-        if (layout.mdl === 'dot') {
-            elements.promptDot.style.display = 'inline-block';
-        } else {
-            elements.promptDot.style.display = 'none';
-        }
+        elements.promptDot.style.display = 'none';
     }
     
     // Show and configure buttons based on layout
@@ -932,6 +934,17 @@ function handleButtonPress(button) {
     });
 
     console.log(`[APP] Trial ${completedIndex + 1}: button=${button}, rewarded=${appState.currentRewarded}, accuracy=${accuracy}, RT=${reactionTime}ms`);
+
+    // Reveal the red dot as a "return here" cue after button press
+    if (elements.promptDot) elements.promptDot.style.display = 'inline-block';
+
+    // Reward animation for non-adult correct trials
+    if (accuracy === 1 && appState.ageGroup !== 'Adult') {
+        const pressedEl = button === 'top' ? elements.topButton :
+                          button === 'btm' ? elements.btmButton :
+                          button === 'mdl' ? elements.mdlButton : null;
+        playRewardAnimation(pressedEl);
+    }
 
     // Move to next trial or task
     appState.currentTrial++;
@@ -1189,6 +1202,104 @@ function cleanupRecording() {
     mediaRecorder = null;
     recordedChunks = [];
     recordedMimeType = '';
+}
+
+// ===== REWARD ANIMATION =====
+
+const FRAME_ANIMATIONS = {
+    apple:      11,
+    bus:        13,
+    cat:         7,
+    chick:       9,
+    dog:         4,
+    elephant:    9,
+    elephant2:   9,
+    elephant4:  12,
+    flower:      9,
+    ghost:       4,
+    happy:       3,
+    mole:        6,
+    monster:     9,
+    owl:         9,
+    penguin:     4,
+    robot:       5,
+    snail:       4,
+    whale:       4
+};
+
+const ANIMATION_NAMES = Object.keys(FRAME_ANIMATIONS);
+let rewardAnimTimer = null;
+
+function playRewardAnimation(buttonEl) {
+    if (rewardAnimTimer) { clearTimeout(rewardAnimTimer); rewardAnimTimer = null; }
+    const animEl = document.getElementById('rewardAnimation');
+    if (!animEl || !buttonEl) return;
+
+    const rect = buttonEl.getBoundingClientRect();
+    animEl.style.left = rect.left + 'px';
+    animEl.style.top = rect.top + 'px';
+    animEl.style.display = 'block';
+    buttonEl.style.display = 'none';
+
+    const name = ANIMATION_NAMES[Math.floor(Math.random() * ANIMATION_NAMES.length)];
+    const frameCount = FRAME_ANIMATIONS[name];
+    let frame = 1;
+
+    const tick = () => {
+        animEl.style.backgroundImage = `url('../graphics/frames/${name}-${String(frame).padStart(2, '0')}.png')`;
+        frame++;
+        if (frame <= frameCount) {
+            rewardAnimTimer = setTimeout(tick, 320);
+        } else {
+            animEl.style.display = 'none';
+            rewardAnimTimer = null;
+        }
+    };
+    tick();
+}
+
+function stopRewardAnimation() {
+    if (rewardAnimTimer) { clearTimeout(rewardAnimTimer); rewardAnimTimer = null; }
+    const animEl = document.getElementById('rewardAnimation');
+    if (animEl) animEl.style.display = 'none';
+}
+
+// ===== ORIENTATION HANDLING =====
+
+function applyOrientationLayout() {
+    const isLandscape = window.matchMedia('(orientation: landscape)').matches;
+    const top = elements.topButton;
+    const btm = elements.btmButton;
+    if (!top || !btm) return;
+
+    if (isLandscape) {
+        // Top button → left side, vertically centered
+        top.style.top = '50%';
+        top.style.left = '20px';
+        top.style.right = '';
+        top.style.bottom = '';
+        top.style.transform = 'translateY(-50%)';
+
+        // Bottom button → right side, vertically centered
+        btm.style.top = '50%';
+        btm.style.right = '20px';
+        btm.style.left = '';
+        btm.style.bottom = '';
+        btm.style.transform = 'translateY(-50%)';
+    } else {
+        // Portrait: restore original top/bottom layout
+        top.style.top = '20px';
+        top.style.left = '50%';
+        top.style.right = '';
+        top.style.bottom = '';
+        top.style.transform = 'translateX(-50%)';
+
+        btm.style.top = '';
+        btm.style.bottom = '20px';
+        btm.style.left = '50%';
+        btm.style.right = '';
+        btm.style.transform = 'translateX(-50%)';
+    }
 }
 
 // ===== UTILITY =====

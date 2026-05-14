@@ -39,8 +39,8 @@
         <div class="centered-content">
             <h2 class="title">Start EEG Recording</h2>
             <p class="end-message">Please start the EEG recording now.</p>
-            <p class="end-message">Press Continue when the recording has started.</p>
-            <button id="recordingReminderContinueBtn" class="start-button">Continue</button>
+            <p class="end-message">Return iPad to participant.</p>
+            <button id="recordingReminderContinueBtn" class="start-button">Ready?</button>
         </div>
     </div>
 
@@ -108,6 +108,9 @@
 
     <!-- Photocell indicator (OUTSIDE all screens so it's always visible) -->
     <div id="buttonIndicator"></div>
+
+    <!-- Reward animation overlay (OUTSIDE screens, persists across transitions) -->
+    <div id="rewardAnimation" style="display:none; position:fixed; width:220px; height:220px; background-size:contain; background-repeat:no-repeat; background-position:center; z-index:200; pointer-events:none;"></div>
 
     <script src="data.js"></script>
     <script src="app.js"></script>
