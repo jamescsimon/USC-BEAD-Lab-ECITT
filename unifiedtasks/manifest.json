@@ -1,6 +1,6 @@
 {
   "name": "ECITT Adult Tasks",
-  "short_name": "ECITT Adult",
+  "short_name": "ECITT",
   "description": "Early Childhood Inhibitory Touchscreen Task - Adult Task Battery",
   "start_url": "./index.html",
   "display": "standalone",
