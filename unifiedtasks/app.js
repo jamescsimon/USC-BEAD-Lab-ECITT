@@ -270,6 +270,7 @@ const TASK_CONFIGS = {
     inf_c1t: {
         id: 'inf_c1t',
         name: 'Infant Control 1 Top',
+        trialType: 'standard',
         emp: 'top',
         empType: 'happy',
         rew: 'top',
@@ -283,6 +284,7 @@ const TASK_CONFIGS = {
     inf_c1b: {
         id: 'inf_c1b',
         name: 'Infant Control 1 Bottom',
+        trialType: 'standard',
         emp: 'btm',
         empType: 'happy',
         rew: 'btm',
@@ -296,6 +298,7 @@ const TASK_CONFIGS = {
     inf_tptt: {
         id: 'inf_tptt',
         name: 'Infant Test PR Top (Prepotent)',
+        trialType: 'prpt',
         emp: 'top',
         empType: 'happy',
         rew: 'top',
@@ -309,6 +312,7 @@ const TASK_CONFIGS = {
     inf_tptb: {
         id: 'inf_tptb',
         name: 'Infant Test PR Top (Inhibitory)',
+        trialType: 'inhb',
         emp: 'btm',
         empType: 'happy',
         rew: 'btm',
@@ -322,6 +326,7 @@ const TASK_CONFIGS = {
     inf_c2t: {
         id: 'inf_c2t',
         name: 'Infant Control 2 Top',
+        trialType: 'standard',
         emp: 'top',
         empType: 'happy',
         rew: 'top',
@@ -335,6 +340,7 @@ const TASK_CONFIGS = {
     inf_c2b: {
         id: 'inf_c2b',
         name: 'Infant Control 2 Bottom',
+        trialType: 'standard',
         emp: 'btm',
         empType: 'happy',
         rew: 'btm',
@@ -348,6 +354,7 @@ const TASK_CONFIGS = {
     inf_tpbt: {
         id: 'inf_tpbt',
         name: 'Infant Test PR Bottom (Prepotent)',
+        trialType: 'prpt',
         emp: 'btm',
         empType: 'happy',
         rew: 'btm',
@@ -361,6 +368,7 @@ const TASK_CONFIGS = {
     inf_tpbb: {
         id: 'inf_tpbb',
         name: 'Infant Test PR Bottom (Inhibitory)',
+        trialType: 'inhb',
         emp: 'top',
         empType: 'happy',
         rew: 'top',
@@ -394,9 +402,12 @@ const INFANT_TASK_SEQUENCE = ['inf_c1t', 'inf_c1b', 'inf_tptt', 'inf_tptb', 'inf
 // Active sequence — set on age group selection
 let activeTaskSequence = null;
 
+// ===== JITTER CONFIGURATION =====
+// Durations (in milliseconds) randomly selected per adult trial between dot press and prompt.
+// Edit this list to control possible wait times (valid range: 500–5000 ms).
+const JITTER_DURATIONS = [500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 1500, 2000, 2500, 3000, 3500, 4000, 1500, 2000, 2500, 3000, 3500, 4000];
 
 // ===== APPLICATION STATE =====
-
 const appState = {
     participantId: '',
     ageGroup: 'Adult',
@@ -406,6 +417,8 @@ const appState = {
     trialSequence: [],
     dotPressTime: 0,
     trialStartTime: 0,
+    jitterDuration: 0,
+    jitterPool: [],
     totalCorrect: 0,
     totalTrials: 0,
     totalReactionTime: 0,
@@ -464,7 +477,9 @@ document.addEventListener('DOMContentLoaded', () => {
         interBlockContinueBtn: document.getElementById('interBlockContinueBtn'),
 
         recordingReminderScreen: document.getElementById('recordingReminderScreen'),
-        recordingReminderContinueBtn: document.getElementById('recordingReminderContinueBtn')
+        recordingReminderContinueBtn: document.getElementById('recordingReminderContinueBtn'),
+
+        waitScreen: document.getElementById('waitScreen')
     };
     
     // Event listeners
@@ -603,6 +618,8 @@ function restart() {
     appState.ageGroup = 'Adult';
     appState.blockReactionTime = 0;
     appState.blockTrials = 0;
+    appState.jitterDuration = 0;
+    appState.jitterPool = [];
     appState.isTransitioning = false;
     activeTaskSequence = null;
     
@@ -629,6 +646,18 @@ function loadTask(taskId) {
     appState.currentTrial = 0;
     appState.isTransitioning = false;
 
+    // Pre-fill the jitter pool for adult tasks: shuffle JITTER_DURATIONS repeatedly
+    // until we have one entry per trial, then draw in order (no repeats until pool exhausted)
+    if (appState.ageGroup === 'Adult') {
+        const pool = [];
+        while (pool.length < config.trials) {
+            const needed = config.trials - pool.length;
+            const slice = shuffleArray([...JITTER_DURATIONS]).slice(0, needed);
+            pool.push(...slice);
+        }
+        appState.jitterPool = pool;
+    }
+
     // Reset block-level RT counters at the start of each test block
     if (config.id === 'adt_tpt' || config.id === 'adt_tpb' ||
         config.id === 'cha_tpt' || config.id === 'cha_tpb' ||
@@ -642,8 +671,10 @@ function loadTask(taskId) {
         // Test tasks with prepotent/inhibitory variants
         appState.trialSequence = generateTestSequence(config);
     } else {
-        // Control/practice tasks - all same
-        appState.trialSequence = Array(config.trials).fill({ type: 'standard' });
+        // Single-type tasks — use trialType if set (e.g. infant prepotent/inhibitory phases),
+        // otherwise default to 'standard' (control/practice tasks)
+        const type = config.trialType || 'standard';
+        appState.trialSequence = Array(config.trials).fill({ type });
     }
     
     // Log task start
@@ -773,13 +804,32 @@ function handleDotPress(event) {
     if (appState.isTransitioning) return;
 
     appState.dotPressTime = Date.now();
-    appState.trialStartTime = Date.now();
-    // Do not log dot press (not a screen transition)
-    // Show prompt screen
-    showPromptScreen();
+    // trialStartTime is set in showPromptScreen() so RT excludes jitter wait
+    if (appState.ageGroup === 'Adult') {
+        showWaitScreen();
+    } else {
+        showPromptScreen();
+    }
+}
+
+function showWaitScreen() {
+    const duration = appState.jitterPool.shift();
+    appState.jitterDuration = duration;
+    dataManager.logEvent({
+        section: 'WaitScreen',
+        stimuli: `jitter_${duration}ms`,
+        invokedBy: 'ParticipantRedDot',
+        accuracy: 'n/a',
+        testName: appState.ageGroup,
+        trialsRemaining: appState.currentTask.trials - appState.currentTrial,
+        trialName: appState.currentTask.id || 'adt_ppt'
+    });
+    showScreen('waitScreen');
+    setTimeout(() => showPromptScreen(), duration);
 }
 
 function showPromptScreen() {
+    appState.trialStartTime = Date.now();
     const config = appState.currentTask;
     const trial = appState.trialSequence[appState.currentTrial];
     

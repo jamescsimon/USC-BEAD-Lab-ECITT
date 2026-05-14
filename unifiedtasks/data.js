@@ -52,6 +52,7 @@ class DataManager {
             'ControlTrialResponse',
             'PromptResponse',
             'ReadyScreen',
+            'WaitScreen',
             'TaskEnd',
             'DNF',
             'FlashConflict'
@@ -140,6 +141,7 @@ class DataManager {
             'ControlTrialResponse',
             'PromptResponse',
             'ReadyScreen',
+            'WaitScreen',
             'TaskEnd',
             'DNF',
             'FlashConflict'
