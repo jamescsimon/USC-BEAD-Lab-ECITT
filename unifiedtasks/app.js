@@ -870,14 +870,14 @@ function showPromptScreen() {
     // Store rewarded position for accuracy check
     appState.currentRewarded = rewPos;
 
-    // Determine section label for this trial
+    // Determine section label from actual face position, not trial type
     let trialSection = 'PromptScreen';
-    if (trial && trial.type === 'prpt') {
-        trialSection = 'TopTrialScreen';
-    } else if (trial && trial.type === 'inhb') {
-        trialSection = 'BottomTrialScreen';
-    } else if (trial && trial.type === 'standard') {
+    if (trial && trial.type === 'standard') {
         trialSection = 'ControlTrialScreen';
+    } else if (empPos === 'top') {
+        trialSection = 'TopTrialScreen';
+    } else if (empPos === 'btm') {
+        trialSection = 'BottomTrialScreen';
     }
 
     showScreen('promptScreen');
@@ -911,16 +911,19 @@ function handleButtonPress(button) {
         appState.blockTrials++;
     }
     
-    // Log response — timestamp is button press, accuracy now known
+    // Log response — section label from actual face position, not trial type
     const completedIndex = appState.currentTrial;
     const completedTrial = appState.trialSequence[completedIndex];
+    const completedEmpPos = completedTrial && completedTrial.emp
+        ? completedTrial.emp
+        : (appState.currentTask.emp || 'mdl');
     let responseSection = 'PromptResponse';
-    if (completedTrial && completedTrial.type === 'prpt') {
-        responseSection = 'TopTrialResponse';
-    } else if (completedTrial && completedTrial.type === 'inhb') {
-        responseSection = 'BottomTrialResponse';
-    } else if (completedTrial && completedTrial.type === 'standard') {
+    if (completedTrial && completedTrial.type === 'standard') {
         responseSection = 'ControlTrialResponse';
+    } else if (completedEmpPos === 'top') {
+        responseSection = 'TopTrialResponse';
+    } else if (completedEmpPos === 'btm') {
+        responseSection = 'BottomTrialResponse';
     }
 
     dataManager.logEvent({
