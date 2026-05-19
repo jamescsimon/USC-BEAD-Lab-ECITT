@@ -532,22 +532,32 @@ document.addEventListener('DOMContentLoaded', () => {
     applyOrientationLayout();
     window.matchMedia('(orientation: landscape)').addEventListener('change', applyOrientationLayout);
 
-    // DNF detection - check for inactivity
-    let inactivityTimer;
-    const INACTIVITY_TIMEOUT = 60000; // 60 seconds
-    
-    const resetInactivityTimer = () => {
-        clearTimeout(inactivityTimer);
-        if (appState.currentTask && !appState.isDNF && !appState.isComplete) {
-            inactivityTimer = setTimeout(() => {
-                console.log('[APP] Inactivity detected - marking as DNF');
-                handleDNF();
-            }, INACTIVITY_TIMEOUT);
-        }
+    // DNF detection - hold photocell for 3 seconds to trigger manually
+    let dnfHoldTimer = null;
+    const DNF_HOLD_MS = 3000;
+
+    const startDnfHold = (e) => {
+        if (!appState.currentTask || appState.isDNF || appState.isComplete) return;
+        e.stopPropagation();
+        dnfHoldTimer = setTimeout(() => {
+            console.log('[APP] Photocell hold — triggering DNF');
+            handleDNF();
+        }, DNF_HOLD_MS);
     };
-    
-    document.addEventListener('touchstart', resetInactivityTimer);
-    document.addEventListener('mousedown', resetInactivityTimer);
+    const cancelDnfHold = () => {
+        clearTimeout(dnfHoldTimer);
+        dnfHoldTimer = null;
+    };
+
+    const indicator = elements.buttonIndicator;
+    if (indicator) {
+        indicator.addEventListener('touchstart',  startDnfHold,  { passive: true });
+        indicator.addEventListener('touchend',    cancelDnfHold);
+        indicator.addEventListener('touchcancel', cancelDnfHold);
+        indicator.addEventListener('mousedown',   startDnfHold);
+        indicator.addEventListener('mouseup',     cancelDnfHold);
+        indicator.addEventListener('mouseleave',  cancelDnfHold);
+    }
     
     console.log('[APP] Initialization complete');
 });
