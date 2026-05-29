@@ -404,8 +404,13 @@ const INFANT_TASK_SEQUENCE = ['inf_c1t', 'inf_c1b', 'inf_tptt', 'inf_tptb', 'inf
 let activeTaskSequence = null;
 
 // ===== JITTER CONFIGURATION =====
-// Durations (in milliseconds) randomly selected per adult trial between dot press and prompt.
+// Durations (in milliseconds) randomly selected per adult/infant trial between dot press and prompt.
 // Edit this list to control possible wait times (valid range: 500–5000 ms).
+
+// Jitter 2: random wait (ms) between button response and red dot reappearing.
+// Adult uses JITTER2_RANGE; Infant, Child, and Toddler (have animations) use JITTER2_ANIM_RANGE.
+const JITTER2_RANGE = [500, 1000];
+const JITTER2_ANIM_RANGE = [2000, 2500];
 const JITTER_DURATIONS = [
   500, 500,
   1000, 1000, 1000,
@@ -559,6 +564,7 @@ document.addEventListener('DOMContentLoaded', () => {
         indicator.addEventListener('mouseleave',  cancelDnfHold);
     }
     
+    preloadAnimationFrames();
     console.log('[APP] Initialization complete');
 });
 
@@ -670,17 +676,15 @@ function loadTask(taskId) {
     appState.currentTrial = 0;
     appState.isTransitioning = false;
 
-    // Pre-fill the jitter pool for adult tasks: shuffle JITTER_DURATIONS repeatedly
+    // Pre-fill the jitter pool: shuffle JITTER_DURATIONS repeatedly
     // until we have one entry per trial, then draw in order (no repeats until pool exhausted)
-    if (appState.ageGroup === 'Adult') {
-        const pool = [];
-        while (pool.length < config.trials) {
-            const needed = config.trials - pool.length;
-            const slice = shuffleArray([...JITTER_DURATIONS]).slice(0, needed);
-            pool.push(...slice);
-        }
-        appState.jitterPool = pool;
+    const pool = [];
+    while (pool.length < config.trials) {
+        const needed = config.trials - pool.length;
+        const slice = shuffleArray([...JITTER_DURATIONS]).slice(0, needed);
+        pool.push(...slice);
     }
+    appState.jitterPool = pool;
 
     // Reset block-level RT counters at the start of each test block
     if (config.id === 'adt_tpt' || config.id === 'adt_tpb' ||
@@ -829,11 +833,7 @@ function handleDotPress(event) {
 
     appState.dotPressTime = Date.now();
     // trialStartTime is set in showPromptScreen() so RT excludes jitter wait
-    if (appState.ageGroup === 'Adult') {
-        showWaitScreen();
-    } else {
-        showPromptScreen();
-    }
+    showWaitScreen();
 }
 
 function showWaitScreen() {
@@ -957,8 +957,8 @@ function handleButtonPress(button) {
 
     console.log(`[APP] Trial ${completedIndex + 1}: button=${button}, rewarded=${appState.currentRewarded}, accuracy=${accuracy}, RT=${reactionTime}ms`);
 
-    // Reveal the red dot as a "return here" cue after button press
-    if (elements.promptDot) elements.promptDot.style.display = 'inline-block';
+    // Reveal the red dot as a "return here" cue after button press (not for infant — dot appears after jitter 2 delay)
+    if (elements.promptDot && appState.ageGroup !== 'Infant') elements.promptDot.style.display = 'inline-block';
 
     // Reward animation for non-adult correct trials
     if (accuracy === 1 && appState.ageGroup !== 'Adult') {
@@ -971,12 +971,17 @@ function handleButtonPress(button) {
     // Move to next trial or task
     appState.currentTrial++;
     
+    const j2Range = (appState.ageGroup === 'Child' || appState.ageGroup === 'Toddler' || appState.ageGroup === 'Infant')
+        ? JITTER2_ANIM_RANGE
+        : JITTER2_RANGE;
+    const j2Delay = Math.round(Math.random() * (j2Range[1] - j2Range[0]) + j2Range[0]);
+
     if (appState.currentTrial < appState.currentTask.trials) {
-        // More trials in current task
-        setTimeout(() => showReadyScreen(), 100);
+        // More trials in current task — jitter 2 delay before red dot reappears
+        setTimeout(() => showReadyScreen(), j2Delay);
     } else {
-        // Task complete
-        finishTask();
+        // Task complete — jitter 2 delay before next task's ready screen
+        setTimeout(() => finishTask(), j2Delay);
     }
         // Removed extra logging for PromptScreen
         // console.log(`[APP] Trial ${completedIndex + 1}: button=${button}, rewarded=${appState.currentRewarded}, accuracy=${accuracy}, RT=${reactionTime}ms`);
@@ -1249,8 +1254,54 @@ const FRAME_ANIMATIONS = {
     whale:       4
 };
 
+// Pair a sound file from ../public/audio/ with each animation, or null for no sound.
+const ANIMATION_SOUNDS = {
+    apple:      'pop.mp3',
+    bus:        'happyTune.mp3',
+    cat:        'happyCat.mp3',
+    chick:      'quack.mp3',
+    dog:        'salsaSh.mp3',
+    elephant:   'pop.mp3',
+    elephant2:  'weee.mp3',
+    elephant4:  'waterSh.mp3',
+    flower:     'happyTune.mp3',
+    ghost:      'chimes.mp3',
+    happy:      'happyTuneSh.mp3',
+    mole:       'pop.mp3',
+    monster:    'salsa.mp3',
+    owl:        'wakingUpSh.mp3',
+    penguin:    'quack.mp3',
+    robot:      'happyGroove.mp3',
+    snail:      'wetClick.mp3',
+    whale:      'waterSh.mp3'
+};
+// Available files: chimes.mp3, happyCat.mp3, happyCatSh.mp3, happyGroove.mp3, happyGrooveSh.mp3,
+//   happyTune.mp3, happyTuneSh.mp3, pop.mp3, quack.mp3, salsa.mp3, salsaSh.mp3, success.mp3,
+//   wakingUp.mp3, wakingUpSh.mp3, water.mp3, waterSh.mp3, weee.mp3, weeeSh.mp3, wetClick.mp3
+
 const ANIMATION_NAMES = Object.keys(FRAME_ANIMATIONS);
 let rewardAnimTimer = null;
+let _currentAnimAudio = null;
+
+// Preload all animation frames and sounds at startup
+const _animPreloadCache = [];
+const _audioCache = {};
+function preloadAnimationFrames() {
+    Object.entries(FRAME_ANIMATIONS).forEach(([name, count]) => {
+        for (let i = 1; i <= count; i++) {
+            const img = new Image();
+            img.src = `../graphics/frames/${name}-${String(i).padStart(2, '0')}.png`;
+            _animPreloadCache.push(img);
+        }
+    });
+    Object.values(ANIMATION_SOUNDS).forEach(file => {
+        if (file && !_audioCache[file]) {
+            const audio = new Audio(`../public/audio/${file}`);
+            audio.preload = 'auto';
+            _audioCache[file] = audio;
+        }
+    });
+}
 
 function playRewardAnimation(buttonEl) {
     if (rewardAnimTimer) { clearTimeout(rewardAnimTimer); rewardAnimTimer = null; }
@@ -1267,14 +1318,28 @@ function playRewardAnimation(buttonEl) {
     const frameCount = FRAME_ANIMATIONS[name];
     let frame = 1;
 
+    // Play paired sound if assigned
+    if (_currentAnimAudio) { _currentAnimAudio.pause(); _currentAnimAudio.currentTime = 0; }
+    const soundFile = ANIMATION_SOUNDS[name];
+    if (soundFile && _audioCache[soundFile]) {
+        _currentAnimAudio = _audioCache[soundFile];
+        _currentAnimAudio.currentTime = 0;
+        _currentAnimAudio.play().catch(() => {});
+    } else {
+        _currentAnimAudio = null;
+    }
+
+    const frameDuration = Math.floor(2000 / frameCount);
     const tick = () => {
         animEl.style.backgroundImage = `url('../graphics/frames/${name}-${String(frame).padStart(2, '0')}.png')`;
         frame++;
         if (frame <= frameCount) {
-            rewardAnimTimer = setTimeout(tick, 320);
+            rewardAnimTimer = setTimeout(tick, frameDuration);
         } else {
-            animEl.style.display = 'none';
-            rewardAnimTimer = null;
+            rewardAnimTimer = setTimeout(() => {
+                animEl.style.display = 'none';
+                rewardAnimTimer = null;
+            }, frameDuration);
         }
     };
     tick();
