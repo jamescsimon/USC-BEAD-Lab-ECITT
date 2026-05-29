@@ -16,10 +16,10 @@
         <div class="centered-content">
             <h1 class="title">ECITT Task</h1>
             <p class="subtitle">Select Age Group</p>
-            <button id="infantBtn" class="age-button">Infant (10-16 mo)</button>
-            <button id="toddlerBtn" class="age-button">Toddler (17-23 mo)</button>
-            <button id="childBtn" class="age-button">Child (2-17)</button>
-            <button id="adultBtn" class="age-button">Adult (18+)</button>
+            <button id="infantBtn" class="age-button">Infant (9-18 mo)</button>
+            <button id="toddlerBtn" class="age-button">Toddler (18-24 mo)</button>
+            <button id="childBtn" class="age-button">Child (24-48 mo)</button>
+            <button id="adultBtn" class="age-button">Adult (6+ years)</button>
         </div>
     </div>
 
@@ -32,6 +32,10 @@
                 <input type="text" id="participantIdInput" placeholder="e.g., PC001" autocomplete="off">
             </div>
             <button id="startBtn" class="start-button">Start Task</button>
+            <div class="cb-row">
+                <button id="cbLeftBtn" class="cb-button">Left First</button>
+                <button id="cbRightBtn" class="cb-button">Right First</button>
+            </div>
         </div>
     </div>
     <!-- Recording Reminder Screen -->
@@ -68,9 +72,9 @@
         <div id="promptDot" class="dotButton" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 0;"></div>
         
         <!-- Buttons positioned FIXED (same as dot) so they align, ALWAYS ABOVE DOT for clicking -->
-        <div id="topButton" class="ecittButton" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); display: none; z-index: 100;"></div>
+        <div id="leftButton" class="ecittButton" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); display: none; z-index: 100;"></div>
         <div id="mdlButton" class="ecittButton" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none; z-index: 100;"></div>
-        <div id="btmButton" class="ecittButton" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: none; z-index: 100;"></div>
+        <div id="rightButton" class="ecittButton" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: none; z-index: 100;"></div>
     </div>
 
     <!-- End Screen -->

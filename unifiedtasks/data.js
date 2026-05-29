@@ -29,7 +29,7 @@ class DataManager {
 
         // Use the caller-provided section when present. Avoid brittle remapping
         // based on partial stimuli strings (e.g. "red dot, blue buttons") which
-        // produced incorrect Top/Bottom mappings previously.
+        // produced incorrect Left/Right mappings previously.
         let sectionStarted = eventData.section || '';
 
         // Keep legacy handling for a few known aliases if necessary
@@ -44,11 +44,11 @@ class DataManager {
         const mainScreens = [
             'TaskStart',
             'PromptScreen',
-            'TopTrialScreen',
-            'BottomTrialScreen',
+            'LeftTrialScreen',
+            'RightTrialScreen',
             'ControlTrialScreen',
-            'TopTrialResponse',
-            'BottomTrialResponse',
+            'LeftTrialResponse',
+            'RightTrialResponse',
             'ControlTrialResponse',
             'PromptResponse',
             'ReadyScreen',
@@ -133,11 +133,11 @@ class DataManager {
         const mainScreens = [
             'TaskStart',
             'PromptScreen',
-            'TopTrialScreen',
-            'BottomTrialScreen',
+            'LeftTrialScreen',
+            'RightTrialScreen',
             'ControlTrialScreen',
-            'TopTrialResponse',
-            'BottomTrialResponse',
+            'LeftTrialResponse',
+            'RightTrialResponse',
             'ControlTrialResponse',
             'PromptResponse',
             'ReadyScreen',
@@ -290,9 +290,9 @@ class DataManager {
             return null;
         }
 
-        // Consider only completed trial rows (TopTrialScreen and BottomTrialScreen)
+        // Consider only completed trial rows (LeftTrialScreen and RightTrialScreen)
         const trialEvents = this.sessionData.filter(r => 
-            r.SectionStarted === 'TopTrialScreen' || r.SectionStarted === 'BottomTrialScreen'
+            r.SectionStarted === 'LeftTrialScreen' || r.SectionStarted === 'RightTrialScreen'
         );
 
         const totalTrials = trialEvents.length;

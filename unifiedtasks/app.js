@@ -6,28 +6,28 @@
 // ===== TASK CONFIGURATIONS =====
 
 const TASK_CONFIGS = {
-    // Control: Bottom (4 trials)
-    adt_cb: {
-        id: 'adt_cb',
-        name: 'Control Bottom',
-        emp: 'btm',
+    // Control: Right (4 trials)
+    adt_cr: {
+        id: 'adt_cr',
+        name: 'Control Right',
+        emp: 'right',
         empType: 'happy',
-        rew: 'btm',
+        rew: 'right',
         trials: 4,
-        promptLayout: { top: 'empty', mdl: 'dot', btm: 'button' },
+        promptLayout: { left: 'empty', mdl: 'dot', right: 'button' },
         readyMsg1: 'When you see the blue buttons, press the one with the happy face as fast as you can when they appear.',
         readyMsg2: 'When ready, press the red dot.',
         readyMsg3: 'Ready? Let\'s practice!'
     },
-    // Control: Top (4 trials)
-    adt_ct: {
-        id: 'adt_ct',
-        name: 'Control Top',
-        emp: 'top',
+    // Control: Left (4 trials)
+    adt_cl: {
+        id: 'adt_cl',
+        name: 'Control Left',
+        emp: 'left',
         empType: 'happy',
-        rew: 'top',
+        rew: 'left',
         trials: 4,
-        promptLayout: { top: 'button', mdl: 'dot', btm: 'empty' },
+        promptLayout: { left: 'button', mdl: 'dot', right: 'empty' },
         readyMsg1: 'Great job!',
         readyMsg2: 'When ready to start the next practice, press the red dot.',
         readyMsg3: 'Ready? Let\'s practice the other side!'
@@ -40,365 +40,399 @@ const TASK_CONFIGS = {
         empType: 'happy',
         rew: 'mdl',
         trials: 4,
-        promptLayout: { top: 'empty', mdl: 'button', btm: 'empty' },
+        promptLayout: { left: 'empty', mdl: 'button', right: 'empty' },
         readyMsg1: 'When you see the blue buttons, press the one with the happy face as fast as you can when they appear.',
         readyMsg2: 'When ready, press the red dot.',
         readyMsg3: 'Ready? Let\'s practice!'
     }, 
-    // Practice: Top (4 trials)
-    adt_ppt: {
-        id: 'adt_ppt',
-        name: 'Practice Top',
-        emp: 'top',
+    // Practice: Left (4 trials)
+    adt_ppl: {
+        id: 'adt_ppl',
+        name: 'Practice Left',
+        emp: 'left',
         empType: 'happy',
-        rew: 'top',
+        rew: 'left',
         trials: 4,
-        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
         readyMsg1: 'Great! Now we will do some practice with both sides. Press the happy face one as fast as you can.',
         readyMsg2: 'Then return to the dot.',
         readyMsg3: 'Ready to practice?'
     },
-    // Practice: Bottom (4 trials)
-    adt_ppb: {
-        id: 'adt_ppb',
-        name: 'Practice Bottom',
-        emp: 'btm',
+    // Practice: Right (4 trials)
+    adt_ppr: {
+        id: 'adt_ppr',
+        name: 'Practice Right',
+        emp: 'right',
         empType: 'happy',
-        rew: 'btm',
+        rew: 'right',
         trials: 4,
-        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
         readyMsg1: 'Great! Now we will do some practice with both sides. Press the happy face one as fast as you can.',
         readyMsg2: 'Then return to the dot.',
         readyMsg3: 'Ready to practice?'
     },
-    // Test: Top (32 trials - 75% top, 25% bottom)
-    adt_tpt: {
-        id: 'adt_tpt',
-        name: 'Test Top', 
+    // Test: Left (32 trials - 75% left, 25% right)
+    adt_tpl: {
+        id: 'adt_tpl',
+        name: 'Test Left', 
         varDistr: [75, 25], // [prepotent %, inhibitory %]
         varLeading: 3, // First 3 trials are prepotent
         varMaxDups: 4, // Max 4 prepotent consecutive
         trials: 32,
-        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
         readyMsg1: 'Excellent! Now for the real test. Keep pressing the happy face as fast as you can.',
         readyMsg2: 'Then return to the dot.',
         readyMsg3: 'Ready? Let\'s start the real test!',
         // Trial variant configs
         variants: {
-            prpt: { emp: 'top', empType: 'happy', rew: 'top' },
-            inhb: { emp: 'btm', empType: 'happy', rew: 'btm' }
+            prpt: { emp: 'left', empType: 'happy', rew: 'left' },
+            inhb: { emp: 'right', empType: 'happy', rew: 'right' }
         }
     },
-    // Test: Bottom (32 trials - 75% bottom, 25% top)
-    adt_tpb: {
-        id: 'adt_tpb',
-        name: 'Test Bottom',
+    // Test: Right (32 trials - 75% right, 25% left)
+    adt_tpr: {
+        id: 'adt_tpr',
+        name: 'Test Right',
         varDistr: [75, 25],
         varLeading: 3,
         varMaxDups: 4,
         trials: 32,
-        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
         readyMsg1: 'Excellent! Now for the real test. Keep pressing the happy face as fast as you can.',
         readyMsg2: 'Then return to the dot.',
         readyMsg3: 'Ready? Let\'s start the real test!',
         variants: {
-            prpt: { emp: 'btm', empType: 'happy', rew: 'btm' },
-            inhb: { emp: 'top', empType: 'happy', rew: 'top' }
+            prpt: { emp: 'right', empType: 'happy', rew: 'right' },
+            inhb: { emp: 'left', empType: 'happy', rew: 'left' }
         }
     },
 
     // ===== CHILD (2-17) ECITT-A TASK CONFIGURATIONS =====
 
-    // Child Practice: Top (4 trials) - both buttons, happy face always top
-    cha_ppt: {
-        id: 'cha_ppt',
-        name: 'Child Practice Top',
-        emp: 'top',
+    // Child Practice: Left (4 trials) - both buttons, happy face always left
+    cha_ppl: {
+        id: 'cha_ppl',
+        name: 'Child Practice Left',
+        emp: 'left',
         empType: 'happy',
-        rew: 'top',
+        rew: 'left',
         trials: 4,
-        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
         readyMsg1: 'Put your finger on the red dot. When you see the buttons, press the happy face as fast as you can.',
         readyMsg2: 'Then return to the dot.',
         readyMsg3: 'Ready?'
     },
-    // Child Baseline: Top (32 trials) - both buttons, happy face always top
-    cha_blt: {
-        id: 'cha_blt',
-        name: 'Child Baseline Top',
-        emp: 'top',
+    // Child Baseline: Left (32 trials) - both buttons, happy face always left
+    cha_bll: {
+        id: 'cha_bll',
+        name: 'Child Baseline Left',
+        emp: 'left',
         empType: 'happy',
-        rew: 'top',
+        rew: 'left',
         trials: 32,
-        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
         readyMsg1: 'Great! Keep pressing the happy face as fast as you can.',
         readyMsg2: 'Then return to the dot.',
         readyMsg3: 'Ready?'
     },
-    // Child Test: Top (32 trials - 75% top, 25% bottom)
-    cha_tpt: {
-        id: 'cha_tpt',
-        name: 'Child Test Top',
+    // Child Test: Left (32 trials - 75% left, 25% right)
+    cha_tpl: {
+        id: 'cha_tpl',
+        name: 'Child Test Left',
         varDistr: [75, 25],
         varLeading: 3,
         varMaxDups: 4,
         trials: 32,
-        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
         readyMsg1: 'Excellent! Now for the real test. Keep pressing the happy face as fast as you can.',
         readyMsg2: 'Then return to the dot.',
         readyMsg3: 'Ready? Let\'s start the real test!',
         variants: {
-            prpt: { emp: 'top', empType: 'happy', rew: 'top' },
-            inhb: { emp: 'btm', empType: 'happy', rew: 'btm' }
+            prpt: { emp: 'left', empType: 'happy', rew: 'left' },
+            inhb: { emp: 'right', empType: 'happy', rew: 'right' }
         }
     },
-    // Child Practice: Bottom (4 trials) - both buttons, happy face always bottom
-    cha_ppb: {
-        id: 'cha_ppb',
-        name: 'Child Practice Bottom',
-        emp: 'btm',
+    // Child Practice: Right (4 trials) - both buttons, happy face always right
+    cha_ppr: {
+        id: 'cha_ppr',
+        name: 'Child Practice Right',
+        emp: 'right',
         empType: 'happy',
-        rew: 'btm',
+        rew: 'right',
         trials: 4,
-        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
         readyMsg1: 'Great! Now we will do some practice. Press the happy face as fast as you can.',
         readyMsg2: 'Then return to the dot.',
         readyMsg3: 'Ready?'
     },
-    // Child Baseline: Bottom (32 trials) - both buttons, happy face always bottom
-    cha_blb: {
-        id: 'cha_blb',
-        name: 'Child Baseline Bottom',
-        emp: 'btm',
+    // Child Baseline: Right (32 trials) - both buttons, happy face always right
+    cha_blr: {
+        id: 'cha_blr',
+        name: 'Child Baseline Right',
+        emp: 'right',
         empType: 'happy',
-        rew: 'btm',
+        rew: 'right',
         trials: 32,
-        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
         readyMsg1: 'Great! Keep pressing the happy face as fast as you can.',
         readyMsg2: 'Then return to the dot.',
         readyMsg3: 'Ready?'
     },
-    // Child Test: Bottom (32 trials - 75% bottom, 25% top)
-    cha_tpb: {
-        id: 'cha_tpb',
-        name: 'Child Test Bottom',
+    // Child Test: Right (32 trials - 75% right, 25% left)
+    cha_tpr: {
+        id: 'cha_tpr',
+        name: 'Child Test Right',
         varDistr: [75, 25],
         varLeading: 3,
         varMaxDups: 4,
         trials: 32,
-        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
         readyMsg1: 'Excellent! Now for the real test. Keep pressing the happy face as fast as you can.',
         readyMsg2: 'Then return to the dot.',
         readyMsg3: 'Ready? Let\'s start the real test!',
         variants: {
-            prpt: { emp: 'btm', empType: 'happy', rew: 'btm' },
-            inhb: { emp: 'top', empType: 'happy', rew: 'top' }
+            prpt: { emp: 'right', empType: 'happy', rew: 'right' },
+            inhb: { emp: 'left', empType: 'happy', rew: 'left' }
         }
     },
 
     // ===== TODDLER (17-23 months) ECITT TASK CONFIGURATIONS =====
 
-    // Toddler Practice: Top (4 trials) - both buttons, happy face always top
-    tod_ppt: {
-        id: 'tod_ppt',
-        name: 'Toddler Practice Top',
-        emp: 'top',
+    // Toddler Practice: Left (4 trials) - both buttons, happy face always left
+    tod_ppl: {
+        id: 'tod_ppl',
+        name: 'Toddler Practice Left',
+        emp: 'left',
         empType: 'happy',
-        rew: 'top',
+        rew: 'left',
         trials: 4,
-        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
         readyMsg1: 'Watch the happy face and press it as fast as you can!',
         readyMsg2: 'Then come back to the dot.',
         readyMsg3: 'Ready?'
     },
-    // Toddler Test: Top (32 trials - 75% top, 25% bottom)
-    tod_tpt: {
-        id: 'tod_tpt',
-        name: 'Toddler Test Top',
+    // Toddler Test: Left (32 trials - 75% left, 25% right)
+    tod_tpl: {
+        id: 'tod_tpl',
+        name: 'Toddler Test Left',
         varDistr: [75, 25],
         varLeading: 3,
         varMaxDups: 4,
         trials: 32,
-        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
         readyMsg1: 'Great job! Keep pressing the happy face as fast as you can!',
         readyMsg2: 'Then come back to the dot.',
         readyMsg3: 'Ready?',
         variants: {
-            prpt: { emp: 'top', empType: 'happy', rew: 'top' },
-            inhb: { emp: 'btm', empType: 'happy', rew: 'btm' }
+            prpt: { emp: 'left', empType: 'happy', rew: 'left' },
+            inhb: { emp: 'right', empType: 'happy', rew: 'right' }
         }
     },
-    // Toddler Practice: Bottom (4 trials) - both buttons, happy face always bottom
-    tod_ppb: {
-        id: 'tod_ppb',
-        name: 'Toddler Practice Bottom',
-        emp: 'btm',
+    // Toddler Practice: Right (4 trials) - both buttons, happy face always right
+    tod_ppr: {
+        id: 'tod_ppr',
+        name: 'Toddler Practice Right',
+        emp: 'right',
         empType: 'happy',
-        rew: 'btm',
+        rew: 'right',
         trials: 4,
-        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
         readyMsg1: 'Watch the happy face and press it as fast as you can!',
         readyMsg2: 'Then come back to the dot.',
         readyMsg3: 'Ready?'
     },
-    // Toddler Test: Bottom (32 trials - 75% bottom, 25% top)
-    tod_tpb: {
-        id: 'tod_tpb',
-        name: 'Toddler Test Bottom',
+    // Toddler Test: Right (32 trials - 75% right, 25% left)
+    tod_tpr: {
+        id: 'tod_tpr',
+        name: 'Toddler Test Right',
         varDistr: [75, 25],
         varLeading: 3,
         varMaxDups: 4,
         trials: 32,
-        promptLayout: { top: 'button', mdl: 'dot', btm: 'button' },
+        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
         readyMsg1: 'Great job! Keep pressing the happy face as fast as you can!',
         readyMsg2: 'Then come back to the dot.',
         readyMsg3: 'Ready?',
         variants: {
-            prpt: { emp: 'btm', empType: 'happy', rew: 'btm' },
-            inhb: { emp: 'top', empType: 'happy', rew: 'top' }
+            prpt: { emp: 'right', empType: 'happy', rew: 'right' },
+            inhb: { emp: 'left', empType: 'happy', rew: 'left' }
         }
     },
 
     // ===== INFANT (10-16 months) ECITT TASK CONFIGURATIONS =====
     // Single button per phase. Control = baseline. Test = prepotent phase then inhibitory phase.
-    // Sequence: Control1 Top → Control1 Bottom →
-    //           Test PR Top (prepotent) → Test PR Top (inhibitory) →
-    //           Control2 Top → Control2 Bottom →
-    //           Test PR Bottom (prepotent) → Test PR Bottom (inhibitory)
+    // Sequence: Control1 Left → Control1 Right →
+    //           Test PR Left (prepotent) → Test PR Left (inhibitory) →
+    //           Control2 Left → Control2 Right →
+    //           Test PR Right (prepotent) → Test PR Right (inhibitory)
 
-    // Control 1: Top (4 trials — 1 demo + 3 trials, single top button)
-    inf_c1t: {
-        id: 'inf_c1t',
-        name: 'Infant Control 1 Top',
+    // Control 1: Left (4 trials — 1 demo + 3 trials, single left button)
+    inf_c1l: {
+        id: 'inf_c1l',
+        name: 'Infant Control 1 Left',
         trialType: 'standard',
-        emp: 'top',
+        emp: 'left',
         empType: 'happy',
-        rew: 'top',
+        rew: 'left',
         trials: 4,
-        promptLayout: { top: 'button', mdl: 'dot', btm: 'empty' },
+        promptLayout: { left: 'button', mdl: 'dot', right: 'empty' },
         readyMsg1: 'Watch the happy face and help baby press it!',
         readyMsg2: '',
         readyMsg3: 'Ready?'
     },
-    // Control 1: Bottom (4 trials — 1 demo + 3 trials, single bottom button)
-    inf_c1b: {
-        id: 'inf_c1b',
-        name: 'Infant Control 1 Bottom',
+    // Control 1: Right (4 trials — 1 demo + 3 trials, single right button)
+    inf_c1r: {
+        id: 'inf_c1r',
+        name: 'Infant Control 1 Right',
         trialType: 'standard',
-        emp: 'btm',
+        emp: 'right',
         empType: 'happy',
-        rew: 'btm',
+        rew: 'right',
         trials: 4,
-        promptLayout: { top: 'empty', mdl: 'dot', btm: 'button' },
+        promptLayout: { left: 'empty', mdl: 'dot', right: 'button' },
         readyMsg1: 'Watch the happy face and help baby press it!',
         readyMsg2: '',
         readyMsg3: 'Ready?'
     },
-    // Test PR Top — prepotent phase: top (4 trials, single top button — builds habit)
-    inf_tptt: {
-        id: 'inf_tptt',
-        name: 'Infant Test PR Top (Prepotent)',
+    // Test PR Left — prepotent phase: left (4 trials, single left button — builds habit)
+    inf_tpll: {
+        id: 'inf_tpll',
+        name: 'Infant Test PR Left (Prepotent)',
         trialType: 'prpt',
-        emp: 'top',
+        emp: 'left',
         empType: 'happy',
-        rew: 'top',
+        rew: 'left',
         trials: 4,
-        promptLayout: { top: 'button', mdl: 'dot', btm: 'empty' },
+        promptLayout: { left: 'button', mdl: 'dot', right: 'empty' },
         readyMsg1: 'Watch the happy face and help baby press it!',
         readyMsg2: '',
         readyMsg3: 'Ready?'
     },
-    // Test PR Top — inhibitory phase: bottom (4 trials, single bottom button — requires switching)
-    inf_tptb: {
-        id: 'inf_tptb',
-        name: 'Infant Test PR Top (Inhibitory)',
+    // Test PR Left — inhibitory phase: right (4 trials, single right button — requires switching)
+    inf_tplr: {
+        id: 'inf_tplr',
+        name: 'Infant Test PR Left (Inhibitory)',
         trialType: 'inhb',
-        emp: 'btm',
+        emp: 'right',
         empType: 'happy',
-        rew: 'btm',
+        rew: 'right',
         trials: 4,
-        promptLayout: { top: 'empty', mdl: 'dot', btm: 'button' },
+        promptLayout: { left: 'empty', mdl: 'dot', right: 'button' },
         readyMsg1: '',
         readyMsg2: '',
         readyMsg3: 'Ready?'
     },
-    // Control 2: Top (4 trials, single top button)
-    inf_c2t: {
-        id: 'inf_c2t',
-        name: 'Infant Control 2 Top',
+    // Control 2: Left (4 trials, single left button)
+    inf_c2l: {
+        id: 'inf_c2l',
+        name: 'Infant Control 2 Left',
         trialType: 'standard',
-        emp: 'top',
+        emp: 'left',
         empType: 'happy',
-        rew: 'top',
+        rew: 'left',
         trials: 4,
-        promptLayout: { top: 'button', mdl: 'dot', btm: 'empty' },
+        promptLayout: { left: 'button', mdl: 'dot', right: 'empty' },
         readyMsg1: 'Watch the happy face and help baby press it!',
         readyMsg2: '',
         readyMsg3: 'Ready?'
     },
-    // Control 2: Bottom (4 trials, single bottom button)
-    inf_c2b: {
-        id: 'inf_c2b',
-        name: 'Infant Control 2 Bottom',
+    // Control 2: Right (4 trials, single right button)
+    inf_c2r: {
+        id: 'inf_c2r',
+        name: 'Infant Control 2 Right',
         trialType: 'standard',
-        emp: 'btm',
+        emp: 'right',
         empType: 'happy',
-        rew: 'btm',
+        rew: 'right',
         trials: 4,
-        promptLayout: { top: 'empty', mdl: 'dot', btm: 'button' },
+        promptLayout: { left: 'empty', mdl: 'dot', right: 'button' },
         readyMsg1: 'Watch the happy face and help baby press it!',
         readyMsg2: '',
         readyMsg3: 'Ready?'
     },
-    // Test PR Bottom — prepotent phase: bottom (4 trials, single bottom button — builds habit)
-    inf_tpbt: {
-        id: 'inf_tpbt',
-        name: 'Infant Test PR Bottom (Prepotent)',
+    // Test PR Right — prepotent phase: right (4 trials, single right button — builds habit)
+    inf_tprl: {
+        id: 'inf_tprl',
+        name: 'Infant Test PR Right (Prepotent)',
         trialType: 'prpt',
-        emp: 'btm',
+        emp: 'right',
         empType: 'happy',
-        rew: 'btm',
+        rew: 'right',
         trials: 4,
-        promptLayout: { top: 'empty', mdl: 'dot', btm: 'button' },
+        promptLayout: { left: 'empty', mdl: 'dot', right: 'button' },
         readyMsg1: 'Watch the happy face and help baby press it!',
         readyMsg2: '',
         readyMsg3: 'Ready?'
     },
-    // Test PR Bottom — inhibitory phase: top (4 trials, single top button — requires switching)
-    inf_tpbb: {
-        id: 'inf_tpbb',
-        name: 'Infant Test PR Bottom (Inhibitory)',
+    // Test PR Right — inhibitory phase: left (4 trials, single left button — requires switching)
+    inf_tprr: {
+        id: 'inf_tprr',
+        name: 'Infant Test PR Right (Inhibitory)',
         trialType: 'inhb',
-        emp: 'top',
+        emp: 'left',
         empType: 'happy',
-        rew: 'top',
+        rew: 'left',
         trials: 4,
-        promptLayout: { top: 'button', mdl: 'dot', btm: 'empty' },
+        promptLayout: { left: 'button', mdl: 'dot', right: 'empty' },
         readyMsg1: '',
         readyMsg2: '',
         readyMsg3: 'Ready?'
     }
 };
 
-// Task execution order — full 18+ adult protocol (legacy study version)
-//const TASK_SEQUENCE = ['adt_ct', 'adt_cb', 'adt_ppt', 'adt_tpt', 'adt_ppb', 'adt_tpb'];
-const TASK_SEQUENCE = ['adt_ct', 'adt_cb', 'adt_ppt', 'adt_tpt', 'adt_tpb'];
+// Infant/Toddler Execution Order
+// Butterfly
+// Control Middleu
+// Sides(?) 
+// Preponent trials x3 ?
+
+// -------------------------------
+
+// Child Test Execution Order
+// demo
+// practice
+// baseline 1 (nirs audio & videos)
+// control 1
+// baseline 2
+// test 1 <- large
+// baseline 3 (nirs audio & videos)
+// control 2
+// baseline 4
+// test 2 <- large
+// baseline 5 (nirs audio & videos)
+// control 3
+// baseline 6
+// test 3 <- large
+// baseline 7 (nirs audio & videos)
+// control 4
+// baseline 8
+// test 4 <- large
+// baseline 9 (nirs audio & videos)
+// control 5
+// baseline 10
+// test 5 <- large
+// baseline 11
+
+//const TASK_SEQUENCE = ['adt_cl', 'adt_cr', 'adt_ppl', 'adt_tpl', 'adt_ppr', 'adt_tpr'];
+// Left-first: Control Left → Control Right → Practice Left → Test Left → Test Right
+const TASK_SEQUENCE_LEFT    = ['adt_cl', 'adt_cr', 'adt_ppl', 'adt_tpl', 'adt_tpr'];
+// Right-first: Control Right → Control Left → Practice Right → Test Right → Test Left
+const TASK_SEQUENCE_RIGHT    = ['adt_cr', 'adt_cl', 'adt_ppr', 'adt_tpr', 'adt_tpl'];
 
 // Task execution order — full 18+ adult protocol (james' version)
-// const TASK_SEQUENCE = ['adt_cm', 'adt_ct', 'adt_ppt', 'adt_tpt', 'adt_cb', 'adt_ppb', 'adt_tpb'];
+// const TASK_SEQUENCE = ['adt_cm', 'adt_cl', 'adt_ppl', 'adt_tpl', 'adt_cr', 'adt_ppr', 'adt_tpr'];
 
 // Task execution order — 2-17 year ECITT-A protocol
-// Sequence: Practice Top → Baseline Top → Test Top → Practice Bottom → Baseline Bottom → Test Bottom
-const CHILD_TASK_SEQUENCE = ['cha_ppt', 'cha_blt', 'cha_tpt', 'cha_ppb', 'cha_blb', 'cha_tpb'];
+const CHILD_TASK_SEQUENCE_LEFT = ['cha_ppl', 'cha_bll', 'cha_tpl', 'cha_ppr', 'cha_blr', 'cha_tpr'];
+const CHILD_TASK_SEQUENCE_RIGHT = ['cha_ppr', 'cha_blr', 'cha_tpr', 'cha_ppl', 'cha_bll', 'cha_tpl'];
 
 // Task execution order — 17-23 month toddler ECITT protocol
-// Sequence: Practice Top → Test Top → Practice Bottom → Test Bottom
-const TODDLER_TASK_SEQUENCE = ['tod_ppt', 'tod_tpt', 'tod_ppb', 'tod_tpb'];
+const TODDLER_TASK_SEQUENCE_LEFT = ['tod_ppl', 'tod_tpl', 'tod_ppr', 'tod_tpr'];
+const TODDLER_TASK_SEQUENCE_RIGHT = ['tod_ppr', 'tod_tpr', 'tod_ppl', 'tod_tpl'];
 
 // Task execution order — 10-16 month infant ECITT protocol
-// Sequence: Ctrl1 Top → Ctrl1 Bottom → Test PR Top (prpt) → Test PR Top (inhb) →
-//           Ctrl2 Top → Ctrl2 Bottom → Test PR Bottom (prpt) → Test PR Bottom (inhb)
-const INFANT_TASK_SEQUENCE = ['inf_c1t', 'inf_c1b', 'inf_tptt', 'inf_tptb', 'inf_c2t', 'inf_c2b', 'inf_tpbt', 'inf_tpbb'];
+const INFANT_TASK_SEQUENCE_LEFT = ['inf_c1l', 'inf_c1r', 'inf_tpll', 'inf_tplr', 'inf_c2l', 'inf_c2r', 'inf_tprl', 'inf_tprr'];
+const INFANT_TASK_SEQUENCE_RIGHT = ['inf_c1r', 'inf_c1l', 'inf_tprl', 'inf_tprr', 'inf_c2r', 'inf_c2l', 'inf_tpll', 'inf_tplr'];
 
 // Active sequence — set on age group selection
 let activeTaskSequence = null;
@@ -410,8 +444,8 @@ let activeTaskSequence = null;
 // Jitter 2: random wait (ms) between button response and red dot reappearing.
 // Adult uses JITTER2_RANGE; Infant, Child, and Toddler (have animations) use JITTER2_ANIM_RANGE.
 const JITTER2_RANGE = [500, 1000];
-const JITTER2_ANIM_RANGE = [2000, 2500];
-const JITTER_DURATIONS = [
+const JITTER2_ANIM_RANGE = [2000, 2500]; // todder animations must last 3.75 to 4 seconds
+const JITTER_DURATIONS_ADULT = [
   500, 500,
   1000, 1000, 1000,
   1500, 1500, 1500, 1500, 1500,
@@ -422,10 +456,33 @@ const JITTER_DURATIONS = [
   4000, 4000
 ];
 
+const JITTER_DURATIONS_CHILD = [
+  500, 500,
+  1000, 1000, 1000,
+  1500, 1500, 1500, 1500, 1500,
+  2000, 2000, 2000, 2000, 2000, 2000,
+  2000, 2000, 2000, 2000, 2000, 2000,
+  2500, 2500, 2500, 2500, 2500,
+  3000, 3000, 3000,
+  3000, 3000
+];
+
+const JITTER_DURATIONS_TODDLER_INFANT = [
+  500, 500,
+  1000, 1000, 1000,
+  1500, 1500, 1500, 1500, 1500,
+  2000, 2000, 2000, 2000, 2000, 2000,
+  2000, 2000, 2000, 2000, 2000, 2000,
+  1500, 1500, 1500, 1500, 1500, 
+  1000, 1000, 1000,
+  500, 500,
+];
+
 // ===== APPLICATION STATE =====
 const appState = {
     participantId: '',
     ageGroup: 'Adult',
+    counterbalance: 'left',
     currentTaskIndex: 0,
     currentTask: null,
     currentTrial: 0,
@@ -464,15 +521,17 @@ document.addEventListener('DOMContentLoaded', () => {
         
         participantIdInput: document.getElementById('participantIdInput'),
         startBtn: document.getElementById('startBtn'),
+        cbLeftBtn: document.getElementById('cbLeftBtn'),
+        cbRightBtn: document.getElementById('cbRightBtn'),
         
         readyMsg1: document.getElementById('readyMsg1'),
         readyMsg2: document.getElementById('readyMsg2'),
         readyMsg3: document.getElementById('readyMsg3'),
         dotButton: document.getElementById('dotButton'),
         
-        topButton: document.getElementById('topButton'),
+        leftButton: document.getElementById('leftButton'),
         mdlButton: document.getElementById('mdlButton'),
-        btmButton: document.getElementById('btmButton'),
+        rightButton: document.getElementById('rightButton'),
         promptDot: document.getElementById('promptDot'),
         
         buttonIndicator: document.getElementById('buttonIndicator'),
@@ -508,21 +567,23 @@ document.addEventListener('DOMContentLoaded', () => {
     if (infantBtn) infantBtn.addEventListener('click', selectInfant);
     
     if (elements.startBtn) elements.startBtn.addEventListener('click', startTest);
+    if (elements.cbLeftBtn) elements.cbLeftBtn.addEventListener('click', () => setCounterbalance('left'));
+    if (elements.cbRightBtn) elements.cbRightBtn.addEventListener('click', () => setCounterbalance('right'));
     if (elements.dotButton) {
         elements.dotButton.addEventListener('touchstart', handleDotPress);
         elements.dotButton.addEventListener('mousedown', handleDotPress);
     }
-    if (elements.topButton) {
-        elements.topButton.addEventListener('touchstart', () => handleButtonPress('top'));
-        elements.topButton.addEventListener('mousedown', () => handleButtonPress('top'));
+    if (elements.leftButton) {
+        elements.leftButton.addEventListener('touchstart', () => handleButtonPress('left'));
+        elements.leftButton.addEventListener('mousedown', () => handleButtonPress('left'));
     }
     if (elements.mdlButton) {
         elements.mdlButton.addEventListener('touchstart', () => handleButtonPress('mdl'));
         elements.mdlButton.addEventListener('mousedown', () => handleButtonPress('mdl'));
     }
-    if (elements.btmButton) {
-        elements.btmButton.addEventListener('touchstart', () => handleButtonPress('btm'));
-        elements.btmButton.addEventListener('mousedown', () => handleButtonPress('btm'));
+    if (elements.rightButton) {
+        elements.rightButton.addEventListener('touchstart', () => handleButtonPress('right'));
+        elements.rightButton.addEventListener('mousedown', () => handleButtonPress('right'));
     }
     if (elements.downloadCsvBtn) elements.downloadCsvBtn.addEventListener('click', downloadCSVOnly);
     if (elements.downloadVideoBtn) elements.downloadVideoBtn.addEventListener('click', downloadVideoOnly);
@@ -580,32 +641,63 @@ function showScreen(screenName) {
     console.log(`[APP] Showing screen: ${screenName}`);
 }
 
+function updateCbButtons() {
+    if (elements.cbLeftBtn) elements.cbLeftBtn.classList.toggle('selected', appState.counterbalance === 'left');
+    if (elements.cbRightBtn) elements.cbRightBtn.classList.toggle('selected', appState.counterbalance === 'right');
+}
+
+function setCounterbalance(side) {
+    appState.counterbalance = side;
+    const seqs = {
+        Adult:   { left: TASK_SEQUENCE_LEFT,        right: TASK_SEQUENCE_RIGHT },
+        Child:   { left: CHILD_TASK_SEQUENCE_LEFT,   right: CHILD_TASK_SEQUENCE_RIGHT },
+        Toddler: { left: TODDLER_TASK_SEQUENCE_LEFT, right: TODDLER_TASK_SEQUENCE_RIGHT },
+        Infant:  { left: INFANT_TASK_SEQUENCE_LEFT,  right: INFANT_TASK_SEQUENCE_RIGHT },
+    };
+    const pair = seqs[appState.ageGroup];
+    if (pair) activeTaskSequence = pair[side];
+    console.log(`[APP] Counterbalance manually set: ${side}-first`);
+    updateCbButtons();
+}
+
 function selectAdult() {
     appState.ageGroup = 'Adult';
-    activeTaskSequence = TASK_SEQUENCE;
+    appState.counterbalance = Math.random() < 0.5 ? 'left' : 'right';
+    activeTaskSequence = appState.counterbalance === 'left' ? TASK_SEQUENCE_LEFT : TASK_SEQUENCE_RIGHT;
+    console.log(`[APP] Adult counterbalance: ${appState.counterbalance}-first`);
     startRecording();
     showScreen('participantScreen');
+    updateCbButtons();
 }
 
 function selectChild() {
     appState.ageGroup = 'Child';
-    activeTaskSequence = CHILD_TASK_SEQUENCE;
+    appState.counterbalance = Math.random() < 0.5 ? 'left' : 'right';
+    activeTaskSequence = appState.counterbalance === 'left' ? CHILD_TASK_SEQUENCE_LEFT : CHILD_TASK_SEQUENCE_RIGHT;
+    console.log(`[APP] Child counterbalance: ${appState.counterbalance}-first`);
     startRecording();
     showScreen('participantScreen');
+    updateCbButtons();
 }
 
 function selectToddler() {
     appState.ageGroup = 'Toddler';
-    activeTaskSequence = TODDLER_TASK_SEQUENCE;
+    appState.counterbalance = Math.random() < 0.5 ? 'left' : 'right';
+    activeTaskSequence = appState.counterbalance === 'left' ? TODDLER_TASK_SEQUENCE_LEFT : TODDLER_TASK_SEQUENCE_RIGHT;
+    console.log(`[APP] Toddler counterbalance: ${appState.counterbalance}-first`);
     startRecording();
     showScreen('participantScreen');
+    updateCbButtons();
 }
 
 function selectInfant() {
     appState.ageGroup = 'Infant';
-    activeTaskSequence = INFANT_TASK_SEQUENCE;
+    appState.counterbalance = Math.random() < 0.5 ? 'left' : 'right';
+    activeTaskSequence = appState.counterbalance === 'left' ? INFANT_TASK_SEQUENCE_LEFT : INFANT_TASK_SEQUENCE_RIGHT;
+    console.log(`[APP] Infant counterbalance: ${appState.counterbalance}-first`);
     startRecording();
     showScreen('participantScreen');
+    updateCbButtons();
 }
 
 function startTest() {
@@ -676,20 +768,23 @@ function loadTask(taskId) {
     appState.currentTrial = 0;
     appState.isTransitioning = false;
 
-    // Pre-fill the jitter pool: shuffle JITTER_DURATIONS repeatedly
+    // Pre-fill the jitter pool: shuffle the age-appropriate list repeatedly
     // until we have one entry per trial, then draw in order (no repeats until pool exhausted)
+    const jitterSource = appState.ageGroup === 'Adult' ? JITTER_DURATIONS_ADULT
+                       : appState.ageGroup === 'Child'  ? JITTER_DURATIONS_CHILD
+                       : JITTER_DURATIONS_TODDLER_INFANT; // Toddler and Infant
     const pool = [];
     while (pool.length < config.trials) {
         const needed = config.trials - pool.length;
-        const slice = shuffleArray([...JITTER_DURATIONS]).slice(0, needed);
+        const slice = shuffleArray([...jitterSource]).slice(0, needed);
         pool.push(...slice);
     }
     appState.jitterPool = pool;
 
     // Reset block-level RT counters at the start of each test block
-    if (config.id === 'adt_tpt' || config.id === 'adt_tpb' ||
-        config.id === 'cha_tpt' || config.id === 'cha_tpb' ||
-        config.id === 'tod_tpt' || config.id === 'tod_tpb') {
+    if (config.id === 'adt_tpl' || config.id === 'adt_tpr' ||
+        config.id === 'cha_tpl' || config.id === 'cha_tpr' ||
+        config.id === 'tod_tpl' || config.id === 'tod_tpr') {
         appState.blockReactionTime = 0;
         appState.blockTrials = 0;
     }
@@ -713,7 +808,7 @@ function loadTask(taskId) {
         accuracy: 'n/a',
         testName: appState.ageGroup,
         trialsRemaining: config.trials,
-        trialName: config.id || 'adt_ppt'
+        trialName: config.id || 'adt_ppl'
     });
     // Start first trial — ReadyScreen fires the flash, no separate TaskStart flash
     showReadyScreen();
@@ -823,7 +918,7 @@ function showReadyScreen() {
         accuracy: 'n/a',
         testName: appState.ageGroup,
         trialsRemaining: appState.currentTask.trials - appState.currentTrial,
-        trialName: appState.currentTask.id || 'adt_ppt'
+        trialName: appState.currentTask.id || 'adt_ppl'
     });
 }
 
@@ -846,7 +941,7 @@ function showWaitScreen() {
         accuracy: 'n/a',
         testName: appState.ageGroup,
         trialsRemaining: appState.currentTask.trials - appState.currentTrial,
-        trialName: appState.currentTask.id || 'adt_ppt'
+        trialName: appState.currentTask.id || 'adt_ppl'
     });
     showScreen('waitScreen');
     setTimeout(() => showPromptScreen(), duration);
@@ -861,12 +956,12 @@ function showPromptScreen() {
     // Determine which button gets the happy face
     const empPos = trial && trial.emp ? trial.emp : (config && config.emp ? config.emp : 'mdl');
     const rewPos = trial && trial.rew ? trial.rew : (config && config.rew ? config.rew : 'mdl');
-    const layout = config && config.promptLayout ? config.promptLayout : { top: 'empty', mdl: 'dot', btm: 'empty' };
+    const layout = config && config.promptLayout ? config.promptLayout : { left: 'empty', mdl: 'dot', right: 'empty' };
     
     // Hide all buttons first
-    if (elements.topButton) elements.topButton.style.display = 'none';
+    if (elements.leftButton) elements.leftButton.style.display = 'none';
     if (elements.mdlButton) elements.mdlButton.style.display = 'none';
-    if (elements.btmButton) elements.btmButton.style.display = 'none';
+    if (elements.rightButton) elements.rightButton.style.display = 'none';
     
     // Dot stays hidden until participant presses a button
     if (elements.promptDot) {
@@ -882,9 +977,9 @@ function showPromptScreen() {
         }
     };
     
-    showButton('top', elements.topButton);
+    showButton('left', elements.leftButton);
     showButton('mdl', elements.mdlButton);
-    showButton('btm', elements.btmButton);
+    showButton('right', elements.rightButton);
     
     // Store rewarded position for accuracy check
     appState.currentRewarded = rewPos;
@@ -893,10 +988,10 @@ function showPromptScreen() {
     let trialSection = 'PromptScreen';
     if (trial && trial.type === 'standard') {
         trialSection = 'ControlTrialScreen';
-    } else if (empPos === 'top') {
-        trialSection = 'TopTrialScreen';
-    } else if (empPos === 'btm') {
-        trialSection = 'BottomTrialScreen';
+    } else if (empPos === 'left') {
+        trialSection = 'LeftTrialScreen';
+    } else if (empPos === 'right') {
+        trialSection = 'RightTrialScreen';
     }
 
     showScreen('promptScreen');
@@ -907,7 +1002,7 @@ function showPromptScreen() {
         accuracy: 'n/a',
         testName: appState.ageGroup,
         trialsRemaining: appState.currentTask.trials - appState.currentTrial,
-        trialName: appState.currentTask.id || 'adt_ppt'
+        trialName: appState.currentTask.id || 'adt_ppl'
     });
 }
 
@@ -923,9 +1018,9 @@ function handleButtonPress(button) {
         appState.totalCorrect++;
     }
     appState.totalReactionTime += reactionTime;
-    if (appState.currentTask.id === 'adt_tpt' || appState.currentTask.id === 'adt_tpb' ||
-        appState.currentTask.id === 'cha_tpt' || appState.currentTask.id === 'cha_tpb' ||
-        appState.currentTask.id === 'tod_tpt' || appState.currentTask.id === 'tod_tpb') {
+    if (appState.currentTask.id === 'adt_tpl' || appState.currentTask.id === 'adt_tpr' ||
+        appState.currentTask.id === 'cha_tpl' || appState.currentTask.id === 'cha_tpr' ||
+        appState.currentTask.id === 'tod_tpl' || appState.currentTask.id === 'tod_tpr') {
         appState.blockReactionTime += reactionTime;
         appState.blockTrials++;
     }
@@ -939,10 +1034,10 @@ function handleButtonPress(button) {
     let responseSection = 'PromptResponse';
     if (completedTrial && completedTrial.type === 'standard') {
         responseSection = 'ControlTrialResponse';
-    } else if (completedEmpPos === 'top') {
-        responseSection = 'TopTrialResponse';
-    } else if (completedEmpPos === 'btm') {
-        responseSection = 'BottomTrialResponse';
+    } else if (completedEmpPos === 'left') {
+        responseSection = 'LeftTrialResponse';
+    } else if (completedEmpPos === 'right') {
+        responseSection = 'RightTrialResponse';
     }
 
     dataManager.logEvent({
@@ -952,18 +1047,19 @@ function handleButtonPress(button) {
         accuracy: accuracy,
         testName: appState.ageGroup,
         trialsRemaining: appState.currentTask.trials - (completedIndex + 1),
-        trialName: appState.currentTask.id || 'adt_ppt'
+        trialName: appState.currentTask.id || 'adt_ppl'
     });
 
     console.log(`[APP] Trial ${completedIndex + 1}: button=${button}, rewarded=${appState.currentRewarded}, accuracy=${accuracy}, RT=${reactionTime}ms`);
 
-    // Reveal the red dot as a "return here" cue after button press (not for infant — dot appears after jitter 2 delay)
-    if (elements.promptDot && appState.ageGroup !== 'Infant') elements.promptDot.style.display = 'inline-block';
+    // Reveal the red dot as a "return here" cue after button press.
+    // Infant and Toddler suppress it here — dot appears via showReadyScreen() after jitter 2 delay.
+    if (elements.promptDot && appState.ageGroup !== 'Infant' && appState.ageGroup !== 'Toddler') elements.promptDot.style.display = 'inline-block';
 
     // Reward animation for non-adult correct trials
     if (accuracy === 1 && appState.ageGroup !== 'Adult') {
-        const pressedEl = button === 'top' ? elements.topButton :
-                          button === 'btm' ? elements.btmButton :
+        const pressedEl = button === 'left' ? elements.leftButton :
+                          button === 'right' ? elements.rightButton :
                           button === 'mdl' ? elements.mdlButton : null;
         playRewardAnimation(pressedEl);
     }
@@ -1006,7 +1102,7 @@ function finishTask() {
             accuracy: 'n/a',
             testName: appState.ageGroup,
             trialsRemaining: 0,
-            trialName: appState.currentTask.id || 'adt_ppt'
+            trialName: appState.currentTask.id || 'adt_ppl'
         });
     }
     
@@ -1016,8 +1112,8 @@ function finishTask() {
     if (appState.currentTaskIndex < activeTaskSequence.length) {
         appState.isTransitioning = true;
         // Show inter-block speed feedback after first test block (not for infant — no RT measure)
-        if (appState.currentTask.id === 'adt_tpt' || appState.currentTask.id === 'cha_tpt' ||
-            appState.currentTask.id === 'tod_tpt') {
+        if (appState.currentTask.id === 'adt_tpl' || appState.currentTask.id === 'cha_tpl' ||
+            appState.currentTask.id === 'tod_tpl') {
             setTimeout(() => showInterBlockFeedback(), 500);
         } else {
             setTimeout(() => loadTask(activeTaskSequence[appState.currentTaskIndex]), 100);
@@ -1258,17 +1354,17 @@ const FRAME_ANIMATIONS = {
 const ANIMATION_SOUNDS = {
     apple:      'pop.mp3',
     bus:        'happyTune.mp3',
-    cat:        'happyCat.mp3',
+    cat:        'happyCatSh.mp3',
     chick:      'quack.mp3',
     dog:        'salsaSh.mp3',
     elephant:   'pop.mp3',
-    elephant2:  'weee.mp3',
+    elephant2:  'weeeSh.mp3',
     elephant4:  'waterSh.mp3',
-    flower:     'happyTune.mp3',
+    flower:     'happyTuneSh.mp3',
     ghost:      'chimes.mp3',
     happy:      'happyTuneSh.mp3',
     mole:       'pop.mp3',
-    monster:    'salsa.mp3',
+    monster:    'salsaSh.mp3',
     owl:        'wakingUpSh.mp3',
     penguin:    'quack.mp3',
     robot:      'happyGroove.mp3',
@@ -1312,7 +1408,10 @@ function playRewardAnimation(buttonEl) {
     animEl.style.left = rect.left + 'px';
     animEl.style.top = rect.top + 'px';
     animEl.style.display = 'block';
-    buttonEl.style.display = 'none';
+    // Hide all buttons — pressed one replaced by animation, others (distractors) disappear
+    if (elements.leftButton) elements.leftButton.style.display = 'none';
+    if (elements.mdlButton) elements.mdlButton.style.display = 'none';
+    if (elements.rightButton) elements.rightButton.style.display = 'none';
 
     const name = ANIMATION_NAMES[Math.floor(Math.random() * ANIMATION_NAMES.length)];
     const frameCount = FRAME_ANIMATIONS[name];
@@ -1355,37 +1454,37 @@ function stopRewardAnimation() {
 
 function applyOrientationLayout() {
     const isLandscape = window.matchMedia('(orientation: landscape)').matches;
-    const top = elements.topButton;
-    const btm = elements.btmButton;
-    if (!top || !btm) return;
+    const leftBtn = elements.leftButton;
+    const rightBtn = elements.rightButton;
+    if (!leftBtn || !rightBtn) return;
 
     if (isLandscape) {
-        // Top button → left side, vertically centered
-        top.style.top = '50%';
-        top.style.left = '20px';
-        top.style.right = '';
-        top.style.bottom = '';
-        top.style.transform = 'translateY(-50%)';
+        // Left button → left side, vertically centered
+        leftBtn.style.top = '50%';
+        leftBtn.style.left = '20px';
+        leftBtn.style.right = '';
+        leftBtn.style.bottom = '';
+        leftBtn.style.transform = 'translateY(-50%)';
 
-        // Bottom button → right side, vertically centered
-        btm.style.top = '50%';
-        btm.style.right = '20px';
-        btm.style.left = '';
-        btm.style.bottom = '';
-        btm.style.transform = 'translateY(-50%)';
+        // Right button → right side, vertically centered
+        rightBtn.style.top = '50%';
+        rightBtn.style.right = '20px';
+        rightBtn.style.left = '';
+        rightBtn.style.bottom = '';
+        rightBtn.style.transform = 'translateY(-50%)';
     } else {
-        // Portrait: restore original top/bottom layout
-        top.style.top = '20px';
-        top.style.left = '50%';
-        top.style.right = '';
-        top.style.bottom = '';
-        top.style.transform = 'translateX(-50%)';
+        // Portrait: restore vertical stacked layout (left=top, right=bottom)
+        leftBtn.style.top = '20px';
+        leftBtn.style.left = '50%';
+        leftBtn.style.right = '';
+        leftBtn.style.bottom = '';
+        leftBtn.style.transform = 'translateX(-50%)';
 
-        btm.style.top = '';
-        btm.style.bottom = '20px';
-        btm.style.left = '50%';
-        btm.style.right = '';
-        btm.style.transform = 'translateX(-50%)';
+        rightBtn.style.top = '';
+        rightBtn.style.bottom = '20px';
+        rightBtn.style.left = '50%';
+        rightBtn.style.right = '';
+        rightBtn.style.transform = 'translateX(-50%)';
     }
 }
 

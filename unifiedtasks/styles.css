@@ -146,6 +146,36 @@ html, body {
     background-color: #0b7dda;
 }
 
+.cb-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+    justify-content: center;
+}
+
+.cb-button {
+    width: 144px;
+    height: 48px;
+    font-size: 1em;
+    font-weight: bold;
+    background-color: #555;
+    color: #aaa;
+    border: 2px solid #555;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.cb-button.selected {
+    background-color: #1976D2;
+    border-color: #1976D2;
+    color: white;
+}
+
+.cb-button:active {
+    opacity: 0.8;
+}
+
 /* ECITT Task Layout (from specs) */
 table.ecittLayout {
     width: 100%;
@@ -221,12 +251,12 @@ div.ecittButton.hidden {
 }
 
 /* Button Images */
-div.ecittButton.button_top {
-    background-image: url('../graphics/buttons/button_top.png');
+div.ecittButton.button_left {
+    background-image: url('../graphics/buttons/button_left.png');
 }
 
-div.ecittButton.button_top_happy {
-    background-image: url('../graphics/buttons/button_top_happy.png');
+div.ecittButton.button_left_happy {
+    background-image: url('../graphics/buttons/button_left_happy.png');
 }
 
 div.ecittButton.button_mdl {
@@ -237,12 +267,12 @@ div.ecittButton.button_mdl_happy {
     background-image: url('../graphics/buttons/button_mdl_happy.png');
 }
 
-div.ecittButton.button_btm {
-    background-image: url('../graphics/buttons/button_btm.png');
+div.ecittButton.button_right {
+    background-image: url('../graphics/buttons/button_right.png');
 }
 
-div.ecittButton.button_btm_happy {
-    background-image: url('../graphics/buttons/button_btm_happy.png');
+div.ecittButton.button_right_happy {
+    background-image: url('../graphics/buttons/button_right_happy.png');
 }
 
 /* Photocell Indicator (from specs) */

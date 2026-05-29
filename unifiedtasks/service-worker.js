@@ -8,12 +8,12 @@ const CACHE_NAME = 'ecitt-adult-tasks-v2';
 // Static assets that are safe to cache-first (images rarely change)
 const STATIC_ASSETS = [
     '../graphics/buttons/button_dot.png',
-    '../graphics/buttons/button_top.png',
-    '../graphics/buttons/button_top_happy.png',
+    '../graphics/buttons/button_left.png',
+    '../graphics/buttons/button_left_happy.png',
     '../graphics/buttons/button_mdl.png',
     '../graphics/buttons/button_mdl_happy.png',
-    '../graphics/buttons/button_btm.png',
-    '../graphics/buttons/button_btm_happy.png',
+    '../graphics/buttons/button_right.png',
+    '../graphics/buttons/button_right_happy.png',
     '../graphics/icons/icon-192.png',
     '../graphics/icons/icon-512.png',
     './manifest.json'
