@@ -266,124 +266,154 @@ const TASK_CONFIGS = {
     //           Control2 Left → Control2 Right →
     //           Test PR Right (prepotent) → Test PR Right (inhibitory)
 
-    // Control 1: Left (4 trials — 1 demo + 3 trials, single left button)
+    // Demo: Middle Button 
+    inf_demo: {
+        id: 'inf_demo',
+        name: 'Infant Demo Middle',
+        trialType: 'standard',
+        emp: 'mdl',
+        empType: 'happy',
+        rew: 'mdl',
+        trials: 1,
+        promptLayout: { left: 'empty', mdl: 'button', right: 'empty' },
+        readyMsg1: 'Watch the happy face and help baby press it!',
+        readyMsg2: '',
+        readyMsg3: 'Ready?'
+    },
+    // Practice 1: Left (1 trials — single left button)
+    inf_plp: {
+        id: 'inf_plp',
+        name: 'Infant Practice Left',
+        trialType: 'standard',
+        emp: 'left',
+        empType: 'happy',
+        rew: 'left',
+        trials: 1,
+        promptLayout: { left: 'button', mdl: 'dot', right: 'empty' },
+        readyMsg1: 'Watch the happy face and help baby press it!',
+        readyMsg2: '',
+        readyMsg3: 'Ready?'
+    },
+    // Practice 2: Right (1 trials — single right button)
+    inf_prp: {
+        id: 'inf_prp',
+        name: 'Infant Practice Right',
+        trialType: 'standard',
+        emp: 'right',
+        empType: 'happy',
+        rew: 'right',
+        trials: 1,
+        promptLayout: { left: 'empty', mdl: 'dot', right: 'button' },
+        readyMsg1: 'Watch the happy face and help baby press it!',
+        readyMsg2: '',
+        readyMsg3: 'Ready?'
+    },
+    // Control: Left (6 trials — 1 demo + 3 trials, both buttons but left is happy)
     inf_c1l: {
         id: 'inf_c1l',
-        name: 'Infant Control 1 Left',
+        name: 'Infant Control Left',
         trialType: 'standard',
         emp: 'left',
         empType: 'happy',
         rew: 'left',
-        trials: 4,
-        promptLayout: { left: 'button', mdl: 'dot', right: 'empty' },
-        readyMsg1: 'Watch the happy face and help baby press it!',
+        trials: 6,
+        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
+        readyMsg1: 'Great job! Now find the happy face and help baby press it!',
         readyMsg2: '',
         readyMsg3: 'Ready?'
     },
-    // Control 1: Right (4 trials — 1 demo + 3 trials, single right button)
+    // Control: Right (6 trials — 1 demo + 3 trials, both buttons but right is happy)
     inf_c1r: {
         id: 'inf_c1r',
-        name: 'Infant Control 1 Right',
+        name: 'Infant Control Right',
         trialType: 'standard',
         emp: 'right',
         empType: 'happy',
         rew: 'right',
-        trials: 4,
-        promptLayout: { left: 'empty', mdl: 'dot', right: 'button' },
-        readyMsg1: 'Watch the happy face and help baby press it!',
+        trials: 6,
+        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
+        readyMsg1: 'Great job! Now find the happy face and help baby press it!',
         readyMsg2: '',
         readyMsg3: 'Ready?'
     },
-    // Test PR Left — prepotent phase: left (4 trials, single left button — builds habit)
-    inf_tpll: {
-        id: 'inf_tpll',
-        name: 'Infant Test PR Left (Prepotent)',
-        trialType: 'prpt',
-        emp: 'left',
-        empType: 'happy',
-        rew: 'left',
-        trials: 4,
-        promptLayout: { left: 'button', mdl: 'dot', right: 'empty' },
-        readyMsg1: 'Watch the happy face and help baby press it!',
+    // Test PR Left — prepotent phase: left (6 trials, both buttons but left is preponent)
+    inf_tpl: {
+        id: 'inf_tpl',
+        name: 'Infant Test Left',
+    
+        varDistr: [50,50],
+        varLeading: 1,
+        maxSameSide: 2,
+        allowCorrection: true,
+    
+        trials: 6,
+    
+        promptLayout: {
+            left: 'button',
+            mdl: 'dot',
+            right: 'button'
+        },
+        readyMsg1: 'Great job! Now continue finding the happy face and help baby press it!',
         readyMsg2: '',
-        readyMsg3: 'Ready?'
+        readyMsg3: 'Ready?',
+    
+        variants: {
+            prpt: {
+                emp: 'left',
+                empType: 'happy',
+                rew: 'left'
+            },
+            inhb: {
+                emp: 'right',
+                empType: 'happy',
+                rew: 'right'
+            }
+        }
     },
-    // Test PR Left — inhibitory phase: right (4 trials, single right button — requires switching)
-    inf_tplr: {
-        id: 'inf_tplr',
-        name: 'Infant Test PR Left (Inhibitory)',
-        trialType: 'inhb',
-        emp: 'right',
-        empType: 'happy',
-        rew: 'right',
-        trials: 4,
-        promptLayout: { left: 'empty', mdl: 'dot', right: 'button' },
-        readyMsg1: '',
+    // Test PR Right — prepotent phase: right (6 trials, both buttons but right is preponent)
+    inf_tpr: {
+        id: 'inf_tpr',
+        name: 'Infant Test Right',
+    
+        varDistr: [50,50],
+        varLeading: 1,
+        maxSameSide: 2,
+        allowCorrection: true,
+    
+        trials: 6,
+    
+        promptLayout: {
+            left: 'button',
+            mdl: 'dot',
+            right: 'button'
+        },
+        readyMsg1: 'Great job! Now continue finding the happy face and help baby press it!',
         readyMsg2: '',
-        readyMsg3: 'Ready?'
-    },
-    // Control 2: Left (4 trials, single left button)
-    inf_c2l: {
-        id: 'inf_c2l',
-        name: 'Infant Control 2 Left',
-        trialType: 'standard',
-        emp: 'left',
-        empType: 'happy',
-        rew: 'left',
-        trials: 4,
-        promptLayout: { left: 'button', mdl: 'dot', right: 'empty' },
-        readyMsg1: 'Watch the happy face and help baby press it!',
-        readyMsg2: '',
-        readyMsg3: 'Ready?'
-    },
-    // Control 2: Right (4 trials, single right button)
-    inf_c2r: {
-        id: 'inf_c2r',
-        name: 'Infant Control 2 Right',
-        trialType: 'standard',
-        emp: 'right',
-        empType: 'happy',
-        rew: 'right',
-        trials: 4,
-        promptLayout: { left: 'empty', mdl: 'dot', right: 'button' },
-        readyMsg1: 'Watch the happy face and help baby press it!',
-        readyMsg2: '',
-        readyMsg3: 'Ready?'
-    },
-    // Test PR Right — prepotent phase: right (4 trials, single right button — builds habit)
-    inf_tprl: {
-        id: 'inf_tprl',
-        name: 'Infant Test PR Right (Prepotent)',
-        trialType: 'prpt',
-        emp: 'right',
-        empType: 'happy',
-        rew: 'right',
-        trials: 4,
-        promptLayout: { left: 'empty', mdl: 'dot', right: 'button' },
-        readyMsg1: 'Watch the happy face and help baby press it!',
-        readyMsg2: '',
-        readyMsg3: 'Ready?'
-    },
-    // Test PR Right — inhibitory phase: left (4 trials, single left button — requires switching)
-    inf_tprr: {
-        id: 'inf_tprr',
-        name: 'Infant Test PR Right (Inhibitory)',
-        trialType: 'inhb',
-        emp: 'left',
-        empType: 'happy',
-        rew: 'left',
-        trials: 4,
-        promptLayout: { left: 'button', mdl: 'dot', right: 'empty' },
-        readyMsg1: '',
-        readyMsg2: '',
-        readyMsg3: 'Ready?'
+        readyMsg3: 'Ready?',
+    
+        variants: {
+            prpt: {
+                emp: 'right',
+                empType: 'happy',
+                rew: 'right'
+            },
+            inhb: {
+                emp: 'left',
+                empType: 'happy',
+                rew: 'left'
+            }
+        }
     }
 };
 
 // Infant/Toddler Execution Order
 // Butterfly
 // Control Middle
+<<<<<<< HEAD
 // Sides(?) 
+=======
+// Practice Sides(?) 
+>>>>>>> 1f92fd5 (Sarvenaz's edits to infant version)
 // Preponent trials x3 ?
 
 // -------------------------------
@@ -431,8 +461,8 @@ const TODDLER_TASK_SEQUENCE_LEFT = ['tod_ppl', 'tod_tpl', 'tod_ppr', 'tod_tpr'];
 const TODDLER_TASK_SEQUENCE_RIGHT = ['tod_ppr', 'tod_tpr', 'tod_ppl', 'tod_tpl'];
 
 // Task execution order — 10-16 month infant ECITT protocol
-const INFANT_TASK_SEQUENCE_LEFT = ['inf_c1l', 'inf_c1r', 'inf_tpll', 'inf_tplr', 'inf_c2l', 'inf_c2r', 'inf_tprl', 'inf_tprr'];
-const INFANT_TASK_SEQUENCE_RIGHT = ['inf_c1r', 'inf_c1l', 'inf_tprl', 'inf_tprr', 'inf_c2r', 'inf_c2l', 'inf_tpll', 'inf_tplr'];
+const INFANT_TASK_SEQUENCE_LEFT = ['inf_demo','inf_plp', 'inf_prp', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr'];
+const INFANT_TASK_SEQUENCE_RIGHT = ['inf_demo','inf_prp', 'inf_plp', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl'];
 
 // Active sequence — set on age group selection
 let activeTaskSequence = null;
@@ -443,8 +473,18 @@ let activeTaskSequence = null;
 
 // Jitter 2: random wait (ms) between button response and red dot reappearing.
 // Adult uses JITTER2_RANGE; Infant, Child, and Toddler (have animations) use JITTER2_ANIM_RANGE.
+<<<<<<< HEAD
 const JITTER2_RANGE = [500, 1000]; 
 const JITTER2_ANIM_RANGE = [2000, 2500]; // todder animations must last 3.75 to 4 seconds 
+=======
+const ANIMATION_DURATION = {
+    Child: 2500,
+    Toddler: 3000,
+    Infant: 3000
+};
+const JITTER2_RANGE = [500, 1000];
+const JITTER2_ANIM_RANGE = [3000, 3500]; // infant/todder animations must last 3.75 to 4 seconds
+>>>>>>> 1f92fd5 (Sarvenaz's edits to infant version)
 const JITTER_DURATIONS_ADULT = [
   500, 500,
   1000, 1000, 1000,
@@ -823,64 +863,90 @@ function generateTestSequence(config) {
         sequence.push({ type: 'prpt', ...config.variants['prpt'] });
     }
 
-    const remaining = trials - varLeading;
-    const prepotentCount = Math.round(remaining * varDistr[0] / 100);
-    const inhibitoryCount = remaining - prepotentCount;
-    
+    let prepotentCount;
+    let inhibitoryCount;
+
+    if (config.maxSameSide !== undefined) {
+
+        // INFANT MODE
+        const totalPrepotent = Math.floor(trials * varDistr[0] / 100);
+
+        prepotentCount = Math.max(0, totalPrepotent - varLeading);
+        inhibitoryCount = Math.max(0, trials - varLeading - prepotentCount);
+
+    } else {
+
+        // ALL OTHER AGE GROUPS (UNCHANGED LOGIC)
+        const remaining = trials - varLeading;
+
+        prepotentCount = Math.round(remaining * varDistr[0] / 100);
+        inhibitoryCount = remaining - prepotentCount;
+    }
+
     // Create pool of remaining trials
     const pool = [
         ...Array(prepotentCount).fill('prpt'),
         ...Array(inhibitoryCount).fill('inhb')
     ];
     
-    // Shuffle with constraints
-    let attempts = 0;
-    const maxAttempts = 1000;
-    let validSequence = false;
-    
-    while (!validSequence && attempts < maxAttempts) {
-        attempts++;
-        const shuffled = shuffleArray([...pool]);
-        
-        // Check constraints
-        let consecutive = 1;
-        let lastType = shuffled[0];
-        let valid = true;
-        
-        for (let i = 1; i < shuffled.length; i++) {
-            if (shuffled[i] === lastType) {
-                consecutive++;
-                // Check max duplicates
-                if ((lastType === 'prpt' && consecutive > varMaxDups) ||
-                    (lastType === 'inhb' && consecutive > 1)) {
-                    valid = false;
-                    break;
-                }
+    // ======================================================
+    // CONSTRAINED BUILDER (NO BRUTE FORCE SHUFFLE)
+    // ======================================================
+
+    const maxSameSide = config.maxSameSide ?? null;
+
+    // Track output sequence types only
+    let sequenceTypes = [];
+
+    let lastType = null;
+    let consecutive = 0;
+
+    // Copy pool so we don't mutate original reference
+    let workingPool = [...pool];
+
+    while (workingPool.length > 0) {
+
+        // filter valid candidates based on constraint
+        let candidates = workingPool.filter(t => {
+            if (maxSameSide !== null) {
+                return !(t === lastType && consecutive >= maxSameSide);
             } else {
-                consecutive = 1;
-                lastType = shuffled[i];
+                // original adult/toddler logic preserved
+                if (t === 'prpt' && consecutive >= varMaxDups) return false;
+                if (t === 'inhb' && consecutive >= 1 && lastType === 'inhb') return false;
+                return true;
             }
-        }
-        
-        if (valid) {
-            // Add to sequence
-            shuffled.forEach(type => {
-                sequence.push({ type, ...config.variants[type] });
-            });
-            validSequence = true;
-        }
-    }
-    
-    if (!validSequence) {
-        console.warn('[APP] Could not generate sequence with all constraints, using random');
-        pool.forEach(type => {
-            sequence.push({ type, ...config.variants[type] });
         });
+
+        // fallback if constraint is too strict
+        if (candidates.length === 0) {
+            candidates = workingPool;
+        }
+
+        const pick = candidates[Math.floor(Math.random() * candidates.length)];
+
+        sequenceTypes.push(pick);
+
+        // remove from pool
+        workingPool.splice(workingPool.indexOf(pick), 1);
+
+        // update run tracking
+        if (pick === lastType) {
+            consecutive++;
+        } else {
+            lastType = pick;
+            consecutive = 1;
+        }
     }
-    
-    console.log(`[APP] Generated sequence for ${config.id}:`, sequence.map(t => t.type));
+
+    // convert to full trial objects
+    sequenceTypes.forEach(type => {
+        sequence.push({ type, ...config.variants[type] });
+    });
+
+    console.log(`[APP] Generated sequence (builder) for ${config.id}:`, sequence.map(t => t.type));
     return sequence;
-}
+    }
 
 function shuffleArray(array) {
     const shuffled = [...array];
@@ -1010,6 +1076,28 @@ function handleButtonPress(button) {
     if (appState.isTransitioning) return;
     const reactionTime = Date.now() - appState.trialStartTime;
     const accuracy = button === appState.currentRewarded ? 1 : 0;
+    // ===============================
+    // INFANT CORRECTION LOGIC
+    // ===============================
+    if (
+        appState.currentTask.allowCorrection &&
+        button !== appState.currentRewarded
+    ) {
+        dataManager.logEvent({
+            section: 'IncorrectPress',
+            stimuli: 'red dot, blue buttons',
+            invokedBy: 'ParticipantRedDot',
+            accuracy: 0,
+            testName: appState.ageGroup,
+            trialsRemaining: appState.currentTask.trials - appState.currentTrial,
+            trialName: appState.currentTask.id
+        });
+
+        console.log('[APP] Infant incorrect press - no trial advance');
+
+        // ❗ DO NOT advance trial
+        return;
+    }
     
     
     // Update stats
@@ -1065,7 +1153,9 @@ function handleButtonPress(button) {
     }
 
     // Move to next trial or task
-    appState.currentTrial++;
+    if (!appState.currentTask.allowCorrection || accuracy === 1) {
+        appState.currentTrial++;
+    }
     
     const j2Range = (appState.ageGroup === 'Child' || appState.ageGroup === 'Toddler' || appState.ageGroup === 'Infant')
         ? JITTER2_ANIM_RANGE
@@ -1354,22 +1444,22 @@ const FRAME_ANIMATIONS = {
 const ANIMATION_SOUNDS = {
     apple:      'pop.mp3',
     bus:        'happyTune.mp3',
-    cat:        'happyCatSh.mp3',
+    cat:        'happyCat.mp3',
     chick:      'quack.mp3',
-    dog:        'salsaSh.mp3',
+    dog:        'salsa.mp3',
     elephant:   'pop.mp3',
-    elephant2:  'weeeSh.mp3',
-    elephant4:  'waterSh.mp3',
-    flower:     'happyTuneSh.mp3',
+    elephant2:  'weee.mp3',
+    elephant4:  'water.mp3',
+    flower:     'happyTune.mp3',
     ghost:      'chimes.mp3',
-    happy:      'happyTuneSh.mp3',
+    happy:      'happyTune.mp3',
     mole:       'pop.mp3',
-    monster:    'salsaSh.mp3',
-    owl:        'wakingUpSh.mp3',
+    monster:    'salsa.mp3',
+    owl:        'wakingUp.mp3',
     penguin:    'quack.mp3',
     robot:      'happyGroove.mp3',
     snail:      'wetClick.mp3',
-    whale:      'waterSh.mp3'
+    whale:      'water.mp3'
 };
 // Available files: chimes.mp3, happyCat.mp3, happyCatSh.mp3, happyGroove.mp3, happyGrooveSh.mp3,
 //   happyTune.mp3, happyTuneSh.mp3, pop.mp3, quack.mp3, salsa.mp3, salsaSh.mp3, success.mp3,
@@ -1428,24 +1518,48 @@ function playRewardAnimation(buttonEl) {
         _currentAnimAudio = null;
     }
 
+<<<<<<< HEAD
     const frameDuration = Math.floor(2000 / frameCount); // ADD IN @Sarvenaz
     const tick = () => {
         animEl.style.backgroundImage = `url('../graphics/frames/${name}-${String(frame).padStart(2, '0')}.png')`;
         frame++;
         if (frame <= frameCount) {
             rewardAnimTimer = setTimeout(tick, frameDuration);
+=======
+    const startTime = performance.now();
+    const totalDuration = ANIMATION_DURATION[appState.ageGroup] ?? 3000;
+
+    const animate = (now) => {
+        const elapsed = now - startTime;
+        const progress = elapsed / totalDuration;
+    
+        const FPS = 30;
+        const frameDuration = totalDuration / FPS;
+
+        // convert time → expected frame
+        const frameIndex = Math.min(
+            frameCount - 1,
+            Math.floor(progress * frameCount)
+        );
+    
+        animEl.style.backgroundImage =
+            `url('../graphics/frames/${name}-${String(frameIndex).padStart(2, '0')}.png')`;
+    
+        if (elapsed < totalDuration) {
+            rewardAnimTimer = requestAnimationFrame(animate);
+>>>>>>> 1f92fd5 (Sarvenaz's edits to infant version)
         } else {
-            rewardAnimTimer = setTimeout(() => {
-                animEl.style.display = 'none';
-                rewardAnimTimer = null;
-            }, frameDuration);
+            animEl.style.display = 'none';
+            rewardAnimTimer = null;
         }
     };
-    tick();
+
+rewardAnimTimer = requestAnimationFrame(animate);
 }
 
 function stopRewardAnimation() {
-    if (rewardAnimTimer) { clearTimeout(rewardAnimTimer); rewardAnimTimer = null; }
+    if (rewardAnimTimer) { cancelAnimationFrame(rewardAnimTimer); }
+    rewardAnimTimer = null;
     const animEl = document.getElementById('rewardAnimation');
     if (animEl) animEl.style.display = 'none';
 }
