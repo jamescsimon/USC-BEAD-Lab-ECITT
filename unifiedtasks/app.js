@@ -382,7 +382,7 @@ const TASK_CONFIGS = {
 
 // Infant/Toddler Execution Order
 // Butterfly
-// Control Middleu
+// Control Middle
 // Sides(?) 
 // Preponent trials x3 ?
 
@@ -443,8 +443,8 @@ let activeTaskSequence = null;
 
 // Jitter 2: random wait (ms) between button response and red dot reappearing.
 // Adult uses JITTER2_RANGE; Infant, Child, and Toddler (have animations) use JITTER2_ANIM_RANGE.
-const JITTER2_RANGE = [500, 1000];
-const JITTER2_ANIM_RANGE = [2000, 2500]; // todder animations must last 3.75 to 4 seconds
+const JITTER2_RANGE = [500, 1000]; 
+const JITTER2_ANIM_RANGE = [2000, 2500]; // todder animations must last 3.75 to 4 seconds 
 const JITTER_DURATIONS_ADULT = [
   500, 500,
   1000, 1000, 1000,
@@ -1428,7 +1428,7 @@ function playRewardAnimation(buttonEl) {
         _currentAnimAudio = null;
     }
 
-    const frameDuration = Math.floor(2000 / frameCount);
+    const frameDuration = Math.floor(2000 / frameCount); // ADD IN @Sarvenaz
     const tick = () => {
         animEl.style.backgroundImage = `url('../graphics/frames/${name}-${String(frame).padStart(2, '0')}.png')`;
         frame++;
