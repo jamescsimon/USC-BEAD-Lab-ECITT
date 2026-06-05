@@ -1069,6 +1069,7 @@ function showPromptScreen() {
 function handleButtonPress(button) {
     if (appState.isTransitioning) return;
     const reactionTime = Date.now() - appState.trialStartTime;
+    const pressTimestamp = new Date();
     const accuracy = button === appState.currentRewarded ? 1 : 0;
     // ===============================
     // INFANT CORRECTION LOGIC
@@ -1078,14 +1079,31 @@ function handleButtonPress(button) {
         button !== appState.currentRewarded
     ) {
         dataManager.logEvent({
-            section: 'IncorrectPress',
-            stimuli: 'red dot, blue buttons',
-            invokedBy: 'ParticipantRedDot',
+            section: 'RawResponse',
+            stimuli: `button_${button}`,
+            invokedBy: 'InfantIncorrectPress',
             accuracy: 0,
             testName: appState.ageGroup,
             trialsRemaining: appState.currentTask.trials - appState.currentTrial,
-            trialName: appState.currentTask.id
+            trialName: appState.currentTask.id,
+            RT: reactionTime,
+            ButtonPressed: button,
+            EventType: 'Incorrect'
         });
+        if (appState.ageGroup === 'Infant') {
+            dataManager.logEvent({
+                section: 'RawResponse',
+                stimuli: `button_${button}`,
+                invokedBy: 'InfantCorrectPress',
+                accuracy: accuracy,
+                testName: appState.ageGroup,
+                trialsRemaining: appState.currentTask.trials - appState.currentTrial,
+                trialName: appState.currentTask.id,
+                RT: reactionTime,
+                ButtonPressed: button,
+                EventType: 'CorrectOrAttempt'
+            });
+        }
 
         console.log('[APP] Infant incorrect press - no trial advance');
 

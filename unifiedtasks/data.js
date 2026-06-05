@@ -57,9 +57,10 @@ class DataManager {
             'DNF',
             'FlashConflict'
         ];
+        const isRawResponse = eventData.section === 'RawResponse';
 
         // Only log main screen transitions (caller should provide the correct section)
-        if (mainScreens.includes(sectionStarted)) {
+        if (mainScreens.includes(sectionStarted) || sectionStarted === 'RawResponse') {
             const record = {
                 ParticipantName: this.participantId,
                 TestName: eventData.testName || this.testName,
@@ -118,7 +119,10 @@ class DataManager {
             'Accuracy',
             'TrialsRemaining',
             'StartTimestamp',
-            'Duration'
+            'Duration',
+            'RT',
+            'ButtonPressed',
+            'EventType'
         ];
         // Helper to parse SoleScreenExample StartTimestamp
         function parseTimestamp(ts) {
@@ -146,7 +150,10 @@ class DataManager {
             'DNF',
             'FlashConflict'
         ];
-        const filtered = this.sessionData.filter(r => mainScreens.includes(r.SectionStarted));
+        const filtered = this.sessionData.filter(r =>
+            mainScreens.includes(r.SectionStarted) ||
+            r.SectionStarted === 'RawResponse'
+        );
         const rows = filtered.map((record, idx) => {
             const mapped = { ...record };
             // Calculate Duration using next main screen event
