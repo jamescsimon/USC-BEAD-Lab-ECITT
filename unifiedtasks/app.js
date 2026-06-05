@@ -316,6 +316,7 @@ const TASK_CONFIGS = {
         emp: 'left',
         empType: 'happy',
         rew: 'left',
+        allowCorrection: true,
         trials: 6,
         promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
         readyMsg1: 'Great job! Now find the happy face and help baby press it!',
@@ -330,6 +331,7 @@ const TASK_CONFIGS = {
         emp: 'right',
         empType: 'happy',
         rew: 'right',
+        allowCorrection: true,
         trials: 6,
         promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
         readyMsg1: 'Great job! Now find the happy face and help baby press it!',
@@ -406,14 +408,15 @@ const TASK_CONFIGS = {
     }
 };
 
+// ===== FLOW CONTROL FLAGS =====
+const SKIP_READY_SCREEN = {
+    Infant: true
+};
+
 // Infant/Toddler Execution Order
 // Butterfly
 // Control Middle
-<<<<<<< HEAD
 // Sides(?) 
-=======
-// Practice Sides(?) 
->>>>>>> 1f92fd5 (Sarvenaz's edits to infant version)
 // Preponent trials x3 ?
 //mostly the same as infant version
 
@@ -462,8 +465,8 @@ const TODDLER_TASK_SEQUENCE_LEFT = ['tod_ppl', 'tod_tpl', 'tod_ppr', 'tod_tpr'];
 const TODDLER_TASK_SEQUENCE_RIGHT = ['tod_ppr', 'tod_tpr', 'tod_ppl', 'tod_tpl'];
 
 // Task execution order — 10-16 month infant ECITT protocol
-const INFANT_TASK_SEQUENCE_LEFT = ['inf_demo','inf_plp', 'inf_prp', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr'];
-const INFANT_TASK_SEQUENCE_RIGHT = ['inf_demo','inf_prp', 'inf_plp', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl'];
+const INFANT_TASK_SEQUENCE_LEFT = ['inf_demo','inf_plp', 'inf_prp', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr', 'inf_tpl', 'inf_c1r','inf_c1r', 'inf_tpr'];
+const INFANT_TASK_SEQUENCE_RIGHT = ['inf_demo','inf_prp', 'inf_plp', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr'];
 
 // Active sequence — set on age group selection
 let activeTaskSequence = null;
@@ -474,18 +477,8 @@ let activeTaskSequence = null;
 
 // Jitter 2: random wait (ms) between button response and red dot reappearing.
 // Adult uses JITTER2_RANGE; Infant, Child, and Toddler (have animations) use JITTER2_ANIM_RANGE.
-<<<<<<< HEAD
 const JITTER2_RANGE = [500, 1000]; 
-const JITTER2_ANIM_RANGE = [2000, 2500]; // todder animations must last 3.75 to 4 seconds 
-=======
-const ANIMATION_DURATION = {
-    Child: 2500,
-    Toddler: 3000,
-    Infant: 3000
-};
-const JITTER2_RANGE = [500, 1000];
-const JITTER2_ANIM_RANGE = [3000, 3500]; // infant/todder animations must last 3.75 to 4 seconds
->>>>>>> 1f92fd5 (Sarvenaz's edits to infant version)
+const JITTER2_ANIM_RANGE = [3500, 4000]; // todder animations must last 3.75 to 4 seconds 
 const JITTER_DURATIONS_ADULT = [
   500, 500,
   1000, 1000, 1000,
@@ -1163,11 +1156,15 @@ function handleButtonPress(button) {
         : JITTER2_RANGE;
     const j2Delay = Math.round(Math.random() * (j2Range[1] - j2Range[0]) + j2Range[0]);
 
+    const isInfant = appState.ageGroup === 'Infant';
+
     if (appState.currentTrial < appState.currentTask.trials) {
-        // More trials in current task — jitter 2 delay before red dot reappears
-        setTimeout(() => showReadyScreen(), j2Delay);
+
+        const nextScreen = isInfant ? showPromptScreen : showReadyScreen;
+
+        setTimeout(() => nextScreen(), j2Delay);
+
     } else {
-        // Task complete — jitter 2 delay before next task's ready screen
         setTimeout(() => finishTask(), j2Delay);
     }
         // Removed extra logging for PromptScreen
@@ -1448,14 +1445,14 @@ const ANIMATION_SOUNDS = {
     cat:        'happyCat.mp3',
     chick:      'quack.mp3',
     dog:        'salsa.mp3',
-    elephant:   'pop.mp3',
+    elephant:   'chimes.mp3',
     elephant2:  'weee.mp3',
     elephant4:  'water.mp3',
     flower:     'happyTune.mp3',
     ghost:      'chimes.mp3',
     happy:      'happyTune.mp3',
     mole:       'pop.mp3',
-    monster:    'salsa.mp3',
+    monster:    'success.mp3',
     owl:        'wakingUp.mp3',
     penguin:    'quack.mp3',
     robot:      'happyGroove.mp3',
@@ -1491,7 +1488,11 @@ function preloadAnimationFrames() {
 }
 
 function playRewardAnimation(buttonEl) {
-    if (rewardAnimTimer) { clearTimeout(rewardAnimTimer); rewardAnimTimer = null; }
+    if (rewardAnimTimer) {
+        cancelAnimationFrame(rewardAnimTimer);
+        rewardAnimTimer = null;
+    }
+
     const animEl = document.getElementById('rewardAnimation');
     if (!animEl || !buttonEl) return;
 
@@ -1499,17 +1500,21 @@ function playRewardAnimation(buttonEl) {
     animEl.style.left = rect.left + 'px';
     animEl.style.top = rect.top + 'px';
     animEl.style.display = 'block';
-    // Hide all buttons — pressed one replaced by animation, others (distractors) disappear
+
+    // Hide buttons during animation
     if (elements.leftButton) elements.leftButton.style.display = 'none';
     if (elements.mdlButton) elements.mdlButton.style.display = 'none';
     if (elements.rightButton) elements.rightButton.style.display = 'none';
 
     const name = ANIMATION_NAMES[Math.floor(Math.random() * ANIMATION_NAMES.length)];
     const frameCount = FRAME_ANIMATIONS[name];
-    let frame = 1;
 
-    // Play paired sound if assigned
-    if (_currentAnimAudio) { _currentAnimAudio.pause(); _currentAnimAudio.currentTime = 0; }
+    // --- SOUND ---
+    if (_currentAnimAudio) {
+        _currentAnimAudio.pause();
+        _currentAnimAudio.currentTime = 0;
+    }
+
     const soundFile = ANIMATION_SOUNDS[name];
     if (soundFile && _audioCache[soundFile]) {
         _currentAnimAudio = _audioCache[soundFile];
@@ -1519,43 +1524,40 @@ function playRewardAnimation(buttonEl) {
         _currentAnimAudio = null;
     }
 
-<<<<<<< HEAD
-    const frameDuration = Math.floor(2000 / frameCount); // ADD IN @Sarvenaz
-    const tick = () => {
-        animEl.style.backgroundImage = `url('../graphics/frames/${name}-${String(frame).padStart(2, '0')}.png')`;
-        frame++;
-        if (frame <= frameCount) {
-            rewardAnimTimer = setTimeout(tick, frameDuration);
-=======
+    // --- TIMING ---
     const startTime = performance.now();
-    const totalDuration = ANIMATION_DURATION[appState.ageGroup] ?? 3000;
+    const LOOP_DURATION = 2000; // 2s per loop
+    const LOOPS = 2;
+    const totalDuration = LOOP_DURATION * LOOPS;
 
     const animate = (now) => {
         const elapsed = now - startTime;
-        const progress = elapsed / totalDuration;
     
-        const FPS = 30;
-        const frameDuration = totalDuration / FPS;
-
-        // convert time → expected frame
+        if (elapsed >= totalDuration) {
+            animEl.style.display = 'none';
+            rewardAnimTimer = null;
+            return;
+        }
+    
+        const loopTime = elapsed % LOOP_DURATION;
+        const loopProgress = loopTime / LOOP_DURATION;
+    
+        const eased =
+            loopProgress < 0.5
+                ? 2 * loopProgress * loopProgress
+                : 1 - Math.pow(-2 * loopProgress + 2, 2) / 2;
+    
         const frameIndex = Math.min(
             frameCount - 1,
-            Math.floor(progress * frameCount)
+            Math.floor(eased * frameCount)
         );
     
         animEl.style.backgroundImage =
-            `url('../graphics/frames/${name}-${String(frameIndex).padStart(2, '0')}.png')`;
+            `url('../graphics/frames/${name}-${String(frameIndex + 1).padStart(2, '0')}.png')`;
     
-        if (elapsed < totalDuration) {
-            rewardAnimTimer = requestAnimationFrame(animate);
->>>>>>> 1f92fd5 (Sarvenaz's edits to infant version)
-        } else {
-            animEl.style.display = 'none';
-            rewardAnimTimer = null;
-        }
+        rewardAnimTimer = requestAnimationFrame(animate);
     };
-
-rewardAnimTimer = requestAnimationFrame(animate);
+    rewardAnimTimer = requestAnimationFrame(animate);
 }
 
 function stopRewardAnimation() {
