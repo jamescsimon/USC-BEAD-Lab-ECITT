@@ -415,6 +415,7 @@ const TASK_CONFIGS = {
 // Practice Sides(?) 
 >>>>>>> 1f92fd5 (Sarvenaz's edits to infant version)
 // Preponent trials x3 ?
+//mostly the same as infant version
 
 // -------------------------------
 
