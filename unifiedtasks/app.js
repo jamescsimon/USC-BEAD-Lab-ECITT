@@ -465,8 +465,11 @@ const TODDLER_TASK_SEQUENCE_LEFT = ['tod_ppl', 'tod_tpl', 'tod_ppr', 'tod_tpr'];
 const TODDLER_TASK_SEQUENCE_RIGHT = ['tod_ppr', 'tod_tpr', 'tod_ppl', 'tod_tpl'];
 
 // Task execution order — 10-16 month infant ECITT protocol
-const INFANT_TASK_SEQUENCE_LEFT = ['inf_demo','inf_plp', 'inf_prp', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr', 'inf_tpl', 'inf_c1r','inf_c1r', 'inf_tpr'];
-const INFANT_TASK_SEQUENCE_RIGHT = ['inf_demo','inf_prp', 'inf_plp', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr'];
+const INFANT_TASK_SEQUENCE_LEFT = ['inf_demo','inf_plp', 'inf_prp', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr'];
+const INFANT_TASK_SEQUENCE_RIGHT = ['inf_demo','inf_prp', 'inf_plp', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl'];
+
+//const INFANT_TASK_SEQUENCE_LEFT = ['inf_demo','inf_plp', 'inf_prp', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr', 'inf_tpl', 'inf_c1r','inf_c1r', 'inf_tpr'];
+//const INFANT_TASK_SEQUENCE_RIGHT = ['inf_demo','inf_prp', 'inf_plp', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr'];
 
 // Active sequence — set on age group selection
 let activeTaskSequence = null;
@@ -532,7 +535,9 @@ const appState = {
     isComplete: false,
     blockReactionTime: 0,
     blockTrials: 0,
-    isTransitioning: false
+    isTransitioning: false,
+    waitTimer: null,
+    nextTrialTimer: null
 };
 
 // ===== DOM ELEMENTS =====
@@ -753,7 +758,11 @@ function startTest() {
     elements.startBtn.classList && elements.startBtn.classList.add('disabled');
 
     appState.participantId = participantId;
-    dataManager.startSession(participantId);
+    dataManager.startSession(
+        participantId,
+        appState.ageGroup,
+        appState.counterbalance
+    );
 
     appState.currentTaskIndex = 0;
     showScreen('recordingReminderScreen');
@@ -799,6 +808,7 @@ function restart() {
 function loadTask(taskId) {
     const config = TASK_CONFIGS[taskId];
     appState.currentTask = config;
+    appState.currentBlockNumber = appState.currentTaskIndex + 1;
     appState.currentTrial = 0;
     appState.isTransitioning = false;
 
@@ -836,6 +846,8 @@ function loadTask(taskId) {
     
     // Log task start
     dataManager.logEvent({
+        blockNumber: appState.currentTaskIndex + 1,
+        trialNumber: appState.currentTrial + 1,
         section: 'TaskStart',
         stimuli: 'blank',
         invokedBy: 'TestSelection',
@@ -1001,10 +1013,15 @@ function showWaitScreen() {
         accuracy: 'n/a',
         testName: appState.ageGroup,
         trialsRemaining: appState.currentTask.trials - appState.currentTrial,
-        trialName: appState.currentTask.id || 'adt_ppl'
+        trialName: appState.currentTask.id || 'adt_ppl',
+        trialNumber: appState.currentTrial + 1
     });
     showScreen('waitScreen');
-    setTimeout(() => showPromptScreen(), duration);
+    clearTimeout(appState.waitTimer);
+
+    appState.waitTimer = setTimeout(() => {
+        showPromptScreen();
+    }, duration);
 }
 
 function showPromptScreen() {
@@ -1043,6 +1060,8 @@ function showPromptScreen() {
     
     // Store rewarded position for accuracy check
     appState.currentRewarded = rewPos;
+    appState.currentEmpPos = empPos;
+    appState.currentTrialNumber = appState.currentTrial + 1;
 
     // Determine section label from actual face position, not trial type
     let trialSection = 'PromptScreen';
@@ -1068,9 +1087,26 @@ function showPromptScreen() {
 
 function handleButtonPress(button) {
     if (appState.isTransitioning) return;
+
     const reactionTime = Date.now() - appState.trialStartTime;
     const pressTimestamp = new Date();
+
     const accuracy = button === appState.currentRewarded ? 1 : 0;
+    const j2Range = (appState.ageGroup === 'Child' || appState.ageGroup === 'Toddler' || appState.ageGroup === 'Infant')
+    ? JITTER2_ANIM_RANGE
+    : JITTER2_RANGE;
+    const j2Delay = Math.round(Math.random() * (j2Range[1] - j2Range[0]) + j2Range[0]);
+
+    const completedIndex = appState.currentTrial;
+    const completedTrial = appState.trialSequence[completedIndex];
+    const completedBlock = appState.currentTaskIndex + 1;
+    const trialTypeLabel =
+    completedTrial?.type === 'prpt'
+        ? 'Prepotent'
+        : completedTrial?.type === 'inhb'
+            ? 'Inhibitory'
+            : 'Control';
+
     // ===============================
     // INFANT CORRECTION LOGIC
     // ===============================
@@ -1082,32 +1118,21 @@ function handleButtonPress(button) {
             section: 'RawResponse',
             stimuli: `button_${button}`,
             invokedBy: 'InfantIncorrectPress',
+            rewardedSide: appState.currentRewarded,
+            happyFaceSide: appState.currentEmpPos,  
+            jitter1: appState.jitterDuration,
             accuracy: 0,
             testName: appState.ageGroup,
             trialsRemaining: appState.currentTask.trials - appState.currentTrial,
             trialName: appState.currentTask.id,
             RT: reactionTime,
-            ButtonPressed: button,
+            trialType: trialTypeLabel,
+            buttonPressed: button,
             EventType: 'Incorrect'
         });
-        if (appState.ageGroup === 'Infant') {
-            dataManager.logEvent({
-                section: 'RawResponse',
-                stimuli: `button_${button}`,
-                invokedBy: 'InfantCorrectPress',
-                accuracy: accuracy,
-                testName: appState.ageGroup,
-                trialsRemaining: appState.currentTask.trials - appState.currentTrial,
-                trialName: appState.currentTask.id,
-                RT: reactionTime,
-                ButtonPressed: button,
-                EventType: 'CorrectOrAttempt'
-            });
-        }
-
         console.log('[APP] Infant incorrect press - no trial advance');
 
-        // ❗ DO NOT advance trial
+        // DO NOT advance trial
         return;
     }
     
@@ -1126,8 +1151,14 @@ function handleButtonPress(button) {
     }
     
     // Log response — section label from actual face position, not trial type
-    const completedIndex = appState.currentTrial;
-    const completedTrial = appState.trialSequence[completedIndex];
+
+    const trialCondition =
+        completedTrial?.type === 'prpt'
+            ? 'prepotent'
+            : completedTrial?.type === 'inhb'
+                ? 'inhibitory'
+                : 'standard';
+    
     const completedEmpPos = completedTrial && completedTrial.emp
         ? completedTrial.emp
         : (appState.currentTask.emp || 'mdl');
@@ -1139,15 +1170,81 @@ function handleButtonPress(button) {
     } else if (completedEmpPos === 'right') {
         responseSection = 'RightTrialResponse';
     }
+    if (
+        appState.ageGroup === 'Infant' &&
+        accuracy === 1
+    ) {
+        dataManager.logEvent({
+            section: 'RawResponse',
+            stimuli: `button_${button}`,
+            invokedBy: 'InfantCorrectPress',
+            rewardedSide: appState.currentRewarded,
+            happyFaceSide: appState.currentEmpPos,
+            jitter1: appState.jitterDuration,
+            accuracy: accuracy,
+            testName: appState.ageGroup,
+            trialsRemaining: appState.currentTask.trials - appState.currentTrial,
+            trialName: appState.currentTask.id,
+            RT: reactionTime,
+            trialType: trialTypeLabel,
+            buttonPressed: button,
+            EventType: 'Correct'
+        });
+    }
+    const firstIncorrectRTForTrial =
+    dataManager.currentTrial?.firstIncorrectRT || '';
+
+    const pressSequenceForTrial =
+    dataManager.currentTrial?.pressSequence?.join('|') ||
+    `${button}@${Math.round(reactionTime)}`;
 
     dataManager.logEvent({
         section: responseSection,
+        blockNumber: completedBlock,
+        trialNumber: completedIndex + 1,
+    
         stimuli: 'red dot, blue buttons',
         invokedBy: 'ParticipantRedDot',
-        accuracy: accuracy,
+    
         testName: appState.ageGroup,
+        taskId: appState.currentTask.id,
+        trialName: appState.currentTask.id,
+        trialType: trialTypeLabel,
+    
+        rewardedSide: appState.currentRewarded,
+        happyFaceSide: appState.currentEmpPos,
+        buttonPressed: button,
+    
+        jitter1: appState.jitterDuration,
+        jitter2: j2Delay,
+    
+        accuracy: accuracy,
+        RT: reactionTime,
+    
         trialsRemaining: appState.currentTask.trials - (completedIndex + 1),
-        trialName: appState.currentTask.id || 'adt_ppl'
+    });
+    dataManager.logTrial({
+        participantId: appState.participantId,
+        ageGroup: appState.ageGroup,
+        counterbalance: appState.counterbalance,
+    
+        blockNumber: completedBlock,
+        taskId: appState.currentTask.id,
+        trialNumber: completedIndex + 1,
+        trialType: trialTypeLabel,
+    
+        rewardedSide: appState.currentRewarded,
+        happyFaceSide: appState.currentEmpPos,
+    
+        buttonPressed: button,
+        accuracy: accuracy,
+        reactionTime: Math.round(reactionTime),
+    
+        jitter1: appState.jitterDuration,
+        jitter2: j2Delay,
+    
+        firstIncorrectRT: firstIncorrectRTForTrial,
+        pressSequence: pressSequenceForTrial
     });
 
     console.log(`[APP] Trial ${completedIndex + 1}: button=${button}, rewarded=${appState.currentRewarded}, accuracy=${accuracy}, RT=${reactionTime}ms`);
@@ -1168,11 +1265,6 @@ function handleButtonPress(button) {
     if (!appState.currentTask.allowCorrection || accuracy === 1) {
         appState.currentTrial++;
     }
-    
-    const j2Range = (appState.ageGroup === 'Child' || appState.ageGroup === 'Toddler' || appState.ageGroup === 'Infant')
-        ? JITTER2_ANIM_RANGE
-        : JITTER2_RANGE;
-    const j2Delay = Math.round(Math.random() * (j2Range[1] - j2Range[0]) + j2Range[0]);
 
     const isInfant = appState.ageGroup === 'Infant';
 
@@ -1180,10 +1272,18 @@ function handleButtonPress(button) {
 
         const nextScreen = isInfant ? showPromptScreen : showReadyScreen;
 
-        setTimeout(() => nextScreen(), j2Delay);
+        clearTimeout(appState.nextTrialTimer);
+
+        appState.nextTrialTimer = setTimeout(() => {
+            nextScreen();
+        }, j2Delay);
 
     } else {
-        setTimeout(() => finishTask(), j2Delay);
+        clearTimeout(appState.nextTrialTimer);
+
+        appState.nextTrialTimer = setTimeout(() => {
+            finishTask();
+        }, j2Delay);
     }
         // Removed extra logging for PromptScreen
         // console.log(`[APP] Trial ${completedIndex + 1}: button=${button}, rewarded=${appState.currentRewarded}, accuracy=${accuracy}, RT=${reactionTime}ms`);
@@ -1459,7 +1559,7 @@ const FRAME_ANIMATIONS = {
 // Pair a sound file from ../public/audio/ with each animation, or null for no sound.
 const ANIMATION_SOUNDS = {
     apple:      'pop.mp3',
-    bus:        'happyTune.mp3',
+    bus:        'weee.mp3',
     cat:        'happyCat.mp3',
     chick:      'quack.mp3',
     dog:        'salsa.mp3',

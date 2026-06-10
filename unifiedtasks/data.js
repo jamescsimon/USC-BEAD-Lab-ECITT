@@ -6,18 +6,31 @@
 class DataManager {
     constructor() {
         this.sessionData = [];
+        this.trialData = [];
         this.participantId = '';
         this.sessionStart = null;
         this.testName = 'Adult';
+        this.currentTrial = null;
+        this.counterbalance = '';
+        this.currentTrialName = '';
     }
 
     /**
      * Initialize a new session
      */
-    startSession(participantId) {
+    startSession(participantId, testName, counterbalance) {
         this.participantId = participantId;
         this.sessionStart = new Date();
+    
+        this.testName = testName;
+        this.counterbalance = counterbalance;
+    
         this.sessionData = [];
+        this.trialData = [];
+    
+        this.currentTrial = null;
+        this.currentTrialName = '';
+    
         console.log(`[DATA] Session started for ${participantId}`);
     }
 
@@ -26,6 +39,68 @@ class DataManager {
      */
     logEvent(eventData) {
         const now = new Date();
+        // ====================================
+        // RAW RESPONSE TRACKING
+        // ====================================
+
+        if (
+            eventData.section === 'RawResponse' &&
+            this.currentTrial
+        ) {
+
+            const rt =
+            eventData.RT !== undefined
+                ? Number(eventData.RT)
+                : performance.now() - this.currentTrial.startTime;
+
+            const button =
+                (eventData.stimuli || '')
+                    .replace('button_', '');
+
+            const responseType =
+                eventData.invokedBy || '';
+
+            this.currentTrial.pressSequence.push(
+                `${button}@${Math.round(rt)}`
+            );
+
+            const isCorrect =
+                responseType === 'InfantCorrectPress';
+
+            const isIncorrect =
+                responseType === 'InfantIncorrectPress' ||
+                responseType === 'InfantIncorrectAttempt';
+
+            if (
+                isCorrect &&
+                this.currentTrial.firstCorrectRT === ''
+            ) {
+                this.currentTrial.firstCorrectRT =
+                    Math.round(rt);
+
+                this.currentTrial.firstCorrectButtonPressed =
+                    button;
+
+                this.currentTrial.firstCorrectResponseType =
+                    responseType;
+            }
+
+            if (
+                isIncorrect &&
+                this.currentTrial.firstIncorrectRT === ''
+            ) {
+                this.currentTrial.firstIncorrectRT =
+                    Math.round(rt);
+
+                this.currentTrial.firstIncorrectButtonPressed =
+                    button;
+
+                this.currentTrial.firstIncorrectResponseType =
+                    responseType;
+            }
+
+            return;
+        }
 
         // Use the caller-provided section when present. Avoid brittle remapping
         // based on partial stimuli strings (e.g. "red dot, blue buttons") which
@@ -57,10 +132,43 @@ class DataManager {
             'DNF',
             'FlashConflict'
         ];
-        const isRawResponse = eventData.section === 'RawResponse';
+        // ====================================
+        // START OF NEW TRIAL
+        // ====================================
 
+        if (
+            sectionStarted === 'LeftTrialScreen' ||
+            sectionStarted === 'RightTrialScreen' ||
+            sectionStarted === 'ControlTrialScreen'
+        ) {
+        
+            if (eventData.trialName) {
+                this.currentTrialName =
+                    eventData.trialName;
+            }
+        
+            this.currentTrial = {
+        
+                startTime: performance.now(),
+        
+                firstCorrectRT: '',
+                firstIncorrectRT: '',
+        
+                correctButton: '',
+                incorrectButton: '',
+        
+                firstCorrectButtonPressed: '',
+                firstIncorrectButtonPressed: '',
+        
+                correctResponseType: '',
+                firstCorrectResponseType: '',
+                firstIncorrectResponseType: '',
+        
+                pressSequence: []
+            };
+        }
         // Only log main screen transitions (caller should provide the correct section)
-        if (mainScreens.includes(sectionStarted) || sectionStarted === 'RawResponse') {
+        if (mainScreens.includes(sectionStarted)) {
             const record = {
                 ParticipantName: this.participantId,
                 TestName: eventData.testName || this.testName,
@@ -71,9 +179,87 @@ class DataManager {
                 Accuracy: eventData.accuracy !== undefined ? eventData.accuracy : 'n/a',
                 TrialsRemaining: eventData.trialsRemaining !== undefined ? eventData.trialsRemaining : 'n/a',
                 StartTimestamp: this.formatSoleScreenTimestamp(now),
-                Duration: '' // Will be calculated in generateCSV
+                Duration: '',
+            
+                FirstCorrectRT: '',
+                FirstIncorrectRT: '',
+                
+                CorrectButton: '',
+                IncorrectButton: '',
+                
+                FirstCorrectButtonPressed: '',
+                FirstIncorrectButtonPressed: '',
+                
+                CorrectResponseType: '',
+                FirstCorrectResponseType: '',
+                FirstIncorrectResponseType: '',
+                
+                PressSequence: ''
             };
+            // ====================================
+            // COPY TRIAL DATA INTO RESPONSE ROWS
+            // ====================================
+
+            if (
+                sectionStarted === 'LeftTrialResponse' ||
+                sectionStarted === 'RightTrialResponse' ||
+                sectionStarted === 'ControlTrialResponse'
+            ) {
+
+                if (this.currentTrial) {
+
+                    const eventRT =
+                        eventData.RT !== undefined
+                            ? Math.round(Number(eventData.RT))
+                            : '';
+                
+                    const eventButton =
+                        eventData.buttonPressed || '';
+                
+                    const isCorrectResponse =
+                        Number(eventData.accuracy) === 1;
+                
+                    record.FirstCorrectRT =
+                        this.currentTrial.firstCorrectRT ||
+                        (isCorrectResponse ? eventRT : '');
+                
+                    record.FirstIncorrectRT =
+                        this.currentTrial.firstIncorrectRT ||
+                        (!isCorrectResponse ? eventRT : '');
+                
+                    record.FirstCorrectButtonPressed =
+                        this.currentTrial.firstCorrectButtonPressed ||
+                        (isCorrectResponse ? eventButton : '');
+                
+                    record.FirstIncorrectButtonPressed =
+                        this.currentTrial.firstIncorrectButtonPressed ||
+                        (!isCorrectResponse ? eventButton : '');
+                
+                    record.FirstCorrectResponseType =
+                        this.currentTrial.firstCorrectResponseType ||
+                        (isCorrectResponse ? 'ParticipantResponse' : '');
+                
+                    record.FirstIncorrectResponseType =
+                        this.currentTrial.firstIncorrectResponseType ||
+                        (!isCorrectResponse ? 'ParticipantResponse' : '');
+                
+                    record.PressSequence =
+                        this.currentTrial.pressSequence.join('|') ||
+                        (eventButton && eventRT !== '' ? `${eventButton}@${eventRT}` : '');
+                }
+            }
             this.sessionData.push(record);
+            // ====================================
+            // CLEAR TRIAL AFTER RESPONSE LOGGED
+            // ====================================
+
+            if (
+                sectionStarted === 'LeftTrialResponse' ||
+                sectionStarted === 'RightTrialResponse' ||
+                sectionStarted === 'ControlTrialResponse'
+            ) {
+                this.currentTrial = null;
+            }
             console.log(`[DATA] Event logged:`, record);
         } else {
             // If not a main screen, we still store it in sessionData as a telemetry item
@@ -120,9 +306,21 @@ class DataManager {
             'TrialsRemaining',
             'StartTimestamp',
             'Duration',
-            'RT',
-            'ButtonPressed',
-            'EventType'
+        
+            'FirstCorrectRT',
+            'FirstIncorrectRT',
+        
+            'CorrectButton',
+            'IncorrectButton',
+        
+            'FirstCorrectButtonPressed',
+            'FirstIncorrectButtonPressed',
+        
+            'CorrectResponseType',
+            'FirstCorrectResponseType',
+            'FirstIncorrectResponseType',
+        
+            'PressSequence'
         ];
         // Helper to parse SoleScreenExample StartTimestamp
         function parseTimestamp(ts) {
@@ -150,10 +348,7 @@ class DataManager {
             'DNF',
             'FlashConflict'
         ];
-        const filtered = this.sessionData.filter(r =>
-            mainScreens.includes(r.SectionStarted) ||
-            r.SectionStarted === 'RawResponse'
-        );
+        const filtered = this.sessionData.filter(r => mainScreens.includes(r.SectionStarted));
         const rows = filtered.map((record, idx) => {
             const mapped = { ...record };
             // Calculate Duration using next main screen event
@@ -182,6 +377,76 @@ class DataManager {
         });
         return [headers.join(','), ...rows].join('\n');
     }
+    generateTrialCSV() {
+
+        if (this.trialData.length === 0) {
+            return null;
+        }
+    
+        const headers = [
+            'ParticipantID',
+            'AgeGroup',
+            'Counterbalance',
+        
+            'BlockNumber',
+            'TaskID',
+            'TrialNumber',
+            'TrialType',
+        
+            'RewardedSide',
+            'HappyFaceSide',
+        
+            'ButtonPressed',
+            'Accuracy',
+        
+            'ReactionTime',
+        
+            'Jitter1',
+            'Jitter2',
+        
+            'FirstIncorrectRT',
+        
+            'PressSequence'
+        ];
+    
+        const rows = this.trialData.map(row =>
+            headers.map(h => row[
+                {
+                    ParticipantID:'participantId',
+                    AgeGroup:'ageGroup',
+                    Counterbalance:'counterbalance',
+                    
+                    BlockNumber:'blockNumber',
+                    
+                    TaskID:'taskId',
+                    
+                    TrialNumber:'trialNumber',
+                    
+                    TrialType:'trialType',
+                    
+                    RewardedSide:'rewardedSide',
+                    
+                    HappyFaceSide:'happyFaceSide',
+                    
+                    ButtonPressed:'buttonPressed',
+                    
+                    Accuracy:'accuracy',
+                    
+                    ReactionTime:'reactionTime',
+                    
+                    Jitter1:'jitter1',
+                    
+                    Jitter2:'jitter2',
+                    
+                    FirstIncorrectRT:'firstIncorrectRT',
+                    
+                    PressSequence:'pressSequence'
+                }[h]
+            ] ?? '').join(',')
+        );
+    
+        return [headers.join(','), ...rows].join('\n');
+    }
 
     /**
      * Format timestamp for SoleScreenExample CSV
@@ -199,29 +464,56 @@ class DataManager {
     }
 
     /**
-     * Download CSV file
+     * Download both CSV files
      */
     downloadCSV() {
-        const csv = this.generateCSV();
-        if (!csv) {
-            console.error('[DATA] No data to download');
-            return;
-        }
 
-        const filename = `ECITT_${this.participantId}_${this.formatFilestamp(this.sessionStart)}.csv`;
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const eventCSV = this.generateCSV();
+        const trialCSV = this.generateTrialCSV();
+    
+        if (eventCSV) {
+    
+            const eventBlob = new Blob(
+                [eventCSV],
+                {type:'text/csv;charset=utf-8;'}
+            );
+    
+            const link1 = document.createElement('a');
+    
+            link1.href = URL.createObjectURL(eventBlob);
+    
+            link1.download =
+                `ECITT_${this.participantId}_events.csv`;
+    
+            document.body.appendChild(link1);
+    
+            link1.click();
+    
+            document.body.removeChild(link1);
+        }
+    
+        if (trialCSV) {
+            setTimeout(() => {
+                const trialBlob = new Blob(
+                    [trialCSV],
+                    { type: 'text/csv;charset=utf-8;' }
+                );
         
-        // Create download link
-        const link = document.createElement('a');
-        if (link.download !== undefined) {
-            const url = URL.createObjectURL(blob);
-            link.setAttribute('href', url);
-            link.setAttribute('download', filename);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            console.log(`[DATA] CSV downloaded: ${filename}`);
+                const link2 = document.createElement('a');
+        
+                link2.href = URL.createObjectURL(trialBlob);
+        
+                link2.download =
+                    `ECITT_${this.participantId}_trials.csv`;
+        
+                document.body.appendChild(link2);
+        
+                link2.click();
+        
+                document.body.removeChild(link2);
+            }, 300);
+        } else {
+            console.warn('[DATA] No trial CSV generated because trialData is empty');
         }
     }
 
@@ -284,6 +576,7 @@ class DataManager {
      */
     clearSession() {
         this.sessionData = [];
+        this.trialData = [];
         this.participantId = '';
         this.sessionStart = null;
         console.log('[DATA] Session cleared');
@@ -352,6 +645,9 @@ class DataManager {
      */
     formatFilestamp(date) {
         return date.toISOString().replace(/[:.]/g, '-').replace('T', '_').split('Z')[0];
+    }
+    logTrial(trialData) {
+        this.trialData.push(trialData);
     }
 }
 
