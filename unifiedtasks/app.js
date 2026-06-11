@@ -742,6 +742,7 @@ document.addEventListener('DOMContentLoaded', () => {
     createHiddenOperatorButtons();
     
     preloadAnimationFrames();
+    createAudioTestButton();
     console.log('[APP] Initialization complete');
 });
 
@@ -892,6 +893,79 @@ function setupHoldToActivate(button, onActivate) {
     button.addEventListener('pointerup', endHold);
     button.addEventListener('pointercancel', cancelHold);
     button.addEventListener('pointerleave', cancelHold);
+}
+
+function showAudioDebug(message) {
+    console.log(message);
+
+    let box = document.getElementById('audioDebugBox');
+
+    if (!box) {
+        box = document.createElement('div');
+        box.id = 'audioDebugBox';
+
+        box.style.position = 'fixed';
+        box.style.left = '10px';
+        box.style.bottom = '10px';
+        box.style.maxWidth = '90vw';
+        box.style.zIndex = '1000000';
+        box.style.backgroundColor = 'rgba(0,0,0,0.85)';
+        box.style.color = 'white';
+        box.style.fontSize = '14px';
+        box.style.padding = '10px';
+        box.style.borderRadius = '8px';
+        box.style.fontFamily = 'monospace';
+        box.style.pointerEvents = 'none';
+
+        document.body.appendChild(box);
+    }
+
+    box.textContent = message;
+}
+function createAudioTestButton() {
+    const btn = document.createElement('button');
+
+    btn.id = 'audioTestButton';
+    btn.textContent = 'Test Audio';
+
+    btn.style.position = 'fixed';
+    btn.style.right = '10px';
+    btn.style.bottom = '10px';
+    btn.style.zIndex = '1000001';
+    btn.style.fontSize = '18px';
+    btn.style.padding = '12px';
+    btn.style.backgroundColor = 'yellow';
+    btn.style.color = 'black';
+    btn.style.border = '2px solid black';
+    btn.style.borderRadius = '8px';
+
+    btn.addEventListener('click', () => {
+        testAudioFile('pop.mp3');
+    });
+
+    document.body.appendChild(btn);
+}
+
+function testAudioFile(fileName) {
+    const src = getAudioSrc(fileName);
+
+    showAudioDebug(`[TEST] Trying audio: ${src}`);
+
+    const audio = new Audio(src);
+    audio.preload = 'auto';
+    audio.volume = 1;
+    audio.muted = false;
+    audio.currentTime = 0;
+
+    audio.play()
+        .then(() => {
+            showAudioDebug(`[TEST] Audio played OK: ${src}`);
+        })
+        .catch(err => {
+            const msg = `[TEST] Audio failed: ${err.name}: ${err.message} | ${src}`;
+            showAudioDebug(msg);
+            alert(msg);
+        });
 }
 
 function updateCbButtons() {
@@ -2062,41 +2136,47 @@ let _currentAnimAudio = null;
 const _animPreloadCache = [];
 const _audioCache = {};
 let _audioUnlockedForIOS = false;
+
 function unlockAllAudioForIOS() {
     if (_audioUnlockedForIOS) return;
 
-    _audioUnlockedForIOS = true;
+    const unlockSrc = getAudioSrc('pop.mp3');
 
-    Object.values(_audioCache).forEach(audio => {
-        if (!audio || typeof audio.play !== 'function') return;
+    let audio = _audioCache[unlockSrc];
 
-        const oldVolume = audio.volume;
+    if (!audio) {
+        audio = new Audio(unlockSrc);
+        audio.preload = 'auto';
+        _audioCache[unlockSrc] = audio;
+    }
 
-        try {
-            audio.volume = 0;
-            audio.muted = false;
-            audio.currentTime = 0;
+    audio.volume = 0.01;
+    audio.muted = false;
+    audio.currentTime = 0;
 
-            const playPromise = audio.play();
+    showAudioDebug(`[AUDIO] Trying iOS unlock with: ${unlockSrc}`);
 
-            if (playPromise && typeof playPromise.then === 'function') {
-                playPromise
-                    .then(() => {
-                        audio.pause();
-                        audio.currentTime = 0;
-                        audio.volume = oldVolume || 1;
-                    })
-                    .catch(err => {
-                        console.warn('[AUDIO] iOS unlock failed:', err.name, err.message);
-                        audio.volume = oldVolume || 1;
-                    });
-            }
-        } catch (err) {
-            console.warn('[AUDIO] iOS unlock exception:', err);
-            audio.volume = oldVolume || 1;
-        }
-    });
+    const playPromise = audio.play();
+
+    if (playPromise && typeof playPromise.then === 'function') {
+        playPromise
+            .then(() => {
+                audio.pause();
+                audio.currentTime = 0;
+                audio.volume = 1;
+
+                _audioUnlockedForIOS = true;
+
+                showAudioDebug('[AUDIO] iOS audio unlocked OK');
+            })
+            .catch(err => {
+                const msg = `[AUDIO] iOS unlock failed: ${err.name}: ${err.message}`;
+                showAudioDebug(msg);
+                alert(msg);
+            });
+    }
 }
+
 function getAudioSrc(fileOrPath) {
     if (!fileOrPath) return '';
 
@@ -2172,16 +2252,46 @@ function playRewardAnimation(buttonEl) {
     const soundSrc =
         getAudioSrc(soundFile);
 
-    if (soundSrc && _audioCache[soundSrc]) {
-        _currentAnimAudio = _audioCache[soundSrc];
-        _currentAnimAudio.currentTime = 0;
-        _currentAnimAudio.play().catch(err => {
-            console.warn('[AUDIO] Reward audio failed:', err.name, err.message);
-            alert(`Reward audio failed: ${err.name}: ${err.message}`);
-        });
-    } else {
-        _currentAnimAudio = null;
-    }
+        showAudioDebug(
+            `[AUDIO] Reward requested: ${soundSrc || 'NO_SOUND_SRC'} | cached=${!!_audioCache[soundSrc]}`
+        );
+        
+        if (soundSrc && !_audioCache[soundSrc]) {
+            showAudioDebug(`[AUDIO] Cache miss. Creating audio now: ${soundSrc}`);
+        
+            const audio = new Audio(soundSrc);
+            audio.preload = 'auto';
+            _audioCache[soundSrc] = audio;
+        }
+        
+        if (soundSrc && _audioCache[soundSrc]) {
+            _currentAnimAudio = _audioCache[soundSrc];
+        
+            _currentAnimAudio.pause();
+            _currentAnimAudio.currentTime = 0;
+            _currentAnimAudio.volume = 1;
+            _currentAnimAudio.muted = false;
+        
+            const rewardPromise = _currentAnimAudio.play();
+        
+            if (rewardPromise && typeof rewardPromise.then === 'function') {
+                rewardPromise
+                    .then(() => {
+                        showAudioDebug(`[AUDIO] Reward audio played OK: ${soundSrc}`);
+                    })
+                    .catch(err => {
+                        const msg = `[AUDIO] Reward audio failed: ${err.name}: ${err.message} | ${soundSrc}`;
+                        showAudioDebug(msg);
+                        alert(msg);
+                    });
+            }
+        } else {
+            _currentAnimAudio = null;
+        
+            const msg = `[AUDIO] No reward audio source found for animation "${name}"`;
+            showAudioDebug(msg);
+            alert(msg);
+        }
 
     // --- TIMING ---
     const startTime = performance.now();
