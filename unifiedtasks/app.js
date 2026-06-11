@@ -636,7 +636,9 @@ const appState = {
     isTransitioning: false,
     waitTimer: null,
     nextTrialTimer: null,
-    currentScreenName: ''
+    currentScreenName: '',
+    lastButtonPressTime: 0,
+    lastButtonPressKey: ''
 };
 
 // ===== DOM ELEMENTS =====
@@ -708,20 +710,25 @@ document.addEventListener('DOMContentLoaded', () => {
     if (elements.cbLeftBtn) elements.cbLeftBtn.addEventListener('click', () => setCounterbalance('left'));
     if (elements.cbRightBtn) elements.cbRightBtn.addEventListener('click', () => setCounterbalance('right'));
     if (elements.dotButton) {
-        elements.dotButton.addEventListener('touchstart', handleDotPress);
-        elements.dotButton.addEventListener('mousedown', handleDotPress);
+        elements.dotButton.addEventListener('pointerdown', handleDotPress);
     }
+    
     if (elements.leftButton) {
-        elements.leftButton.addEventListener('touchstart', () => handleButtonPress('left'));
-        elements.leftButton.addEventListener('mousedown', () => handleButtonPress('left'));
+        elements.leftButton.addEventListener('pointerdown', (event) => {
+            handleButtonPress('left', event);
+        });
     }
+    
     if (elements.mdlButton) {
-        elements.mdlButton.addEventListener('touchstart', () => handleButtonPress('mdl'));
-        elements.mdlButton.addEventListener('mousedown', () => handleButtonPress('mdl'));
+        elements.mdlButton.addEventListener('pointerdown', (event) => {
+            handleButtonPress('mdl', event);
+        });
     }
+    
     if (elements.rightButton) {
-        elements.rightButton.addEventListener('touchstart', () => handleButtonPress('right'));
-        elements.rightButton.addEventListener('mousedown', () => handleButtonPress('right'));
+        elements.rightButton.addEventListener('pointerdown', (event) => {
+            handleButtonPress('right', event);
+        });
     }
     if (elements.downloadCsvBtn) elements.downloadCsvBtn.addEventListener('click', downloadCSVOnly);
     if (elements.downloadVideoBtn) elements.downloadVideoBtn.addEventListener('click', downloadVideoOnly);
@@ -869,9 +876,6 @@ function setupHoldToActivate(button, onActivate) {
 
         if (heldLongEnough || readyToActivate) {
             resetHold();
-
-            // Extra safety: the release after a 3-sec hold is still a user action.
-            unlockAllAudioForIOS();
 
             onActivate();
             return;
@@ -1046,9 +1050,6 @@ function startTest() {
     elements.startBtn.classList && elements.startBtn.classList.add('disabled');
 
     appState.participantId = participantId;
-
-    // iPad/Safari audio unlock from a real button press.
-    unlockAllAudioForIOS();
     dataManager.startSession(
         participantId,
         appState.ageGroup,
@@ -1286,10 +1287,15 @@ function showReadyScreen() {
 }
 
 function handleDotPress(event) {
-    event.preventDefault();
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
     if (appState.isTransitioning) return;
 
     appState.dotPressTime = Date.now();
+
     // trialStartTime is set in showPromptScreen() so RT excludes jitter wait
     showWaitScreen();
 }
@@ -1376,11 +1382,27 @@ function showPromptScreen() {
     });
 }
 
-function handleButtonPress(button) {
+function handleButtonPress(button, event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
     if (appState.isTransitioning) return;
 
-    // Extra safety for iPad/Safari: button press is a real user gesture.
-    unlockAllAudioForIOS();
+    const nowPressTime = Date.now();
+
+    const isDuplicatePress =
+        appState.lastButtonPressKey === button &&
+        nowPressTime - appState.lastButtonPressTime < 400;
+
+    if (isDuplicatePress) {
+        showAudioDebug(`[APP] Ignored duplicate button press: ${button}`);
+        return;
+    }
+
+    appState.lastButtonPressKey = button;
+    appState.lastButtonPressTime = nowPressTime;
 
     const reactionTime = Date.now() - appState.trialStartTime;
     const pressTimestamp = new Date();
@@ -1876,8 +1898,17 @@ function playNirsBaselineVideo(resumeScreenName) {
     });
 
     audioPromise.catch(err => {
+        if (err.name === 'AbortError') {
+            showAudioDebug('[BASELINE] Audio was interrupted/stopped');
+            return;
+        }
+    
+        const msg =
+            `Baseline audio failed: ${err.name}: ${err.message}`;
+    
         console.warn('[BASELINE] Audio play failed:', err.name, err.message);
-        alert(`Baseline audio failed: ${err.name}: ${err.message}`);
+        showAudioDebug(msg);
+        alert(msg);
     });
 }
 function resumeAfterNirsBaseline(resumeScreenName) {
@@ -2235,16 +2266,20 @@ function playRewardAnimation(buttonEl) {
     const name = ANIMATION_NAMES[Math.floor(Math.random() * ANIMATION_NAMES.length)];
     const frameCount = FRAME_ANIMATIONS[name];
 
-    // --- SOUND ---
+// --- SOUND ---
     if (_currentAnimAudio) {
-        _currentAnimAudio.pause();
-        _currentAnimAudio.currentTime = 0;
+        try {
+            _currentAnimAudio.pause();
+            _currentAnimAudio.currentTime = 0;
+        } catch (e) {}
+
+        _currentAnimAudio = null;
     }
 
     const soundMap =
-    appState.ageGroup === 'Child'
-        ? ANIMATION_SOUNDS_CHILD
-        : ANIMATION_SOUNDS_INFANT_TODDLER;
+        appState.ageGroup === 'Child'
+            ? ANIMATION_SOUNDS_CHILD
+            : ANIMATION_SOUNDS_INFANT_TODDLER;
 
     const soundFile =
         soundMap[name];
@@ -2252,46 +2287,51 @@ function playRewardAnimation(buttonEl) {
     const soundSrc =
         getAudioSrc(soundFile);
 
-        showAudioDebug(
-            `[AUDIO] Reward requested: ${soundSrc || 'NO_SOUND_SRC'} | cached=${!!_audioCache[soundSrc]}`
-        );
-        
-        if (soundSrc && !_audioCache[soundSrc]) {
-            showAudioDebug(`[AUDIO] Cache miss. Creating audio now: ${soundSrc}`);
-        
-            const audio = new Audio(soundSrc);
-            audio.preload = 'auto';
-            _audioCache[soundSrc] = audio;
+    showAudioDebug(
+        `[AUDIO] Reward requested: ${soundSrc || 'NO_SOUND_SRC'}`
+    );
+
+    if (soundSrc) {
+        // Use a fresh Audio object for each reward on iPad.
+        // Do not reuse the cached element, because reused media elements can get AbortError.
+        const rewardAudio = new Audio(soundSrc);
+
+        rewardAudio.preload = 'auto';
+        rewardAudio.volume = 1;
+        rewardAudio.muted = false;
+        rewardAudio.currentTime = 0;
+
+        _currentAnimAudio = rewardAudio;
+
+        const rewardPromise = rewardAudio.play();
+
+        if (rewardPromise && typeof rewardPromise.then === 'function') {
+            rewardPromise
+                .then(() => {
+                    showAudioDebug(`[AUDIO] Reward audio played OK: ${soundSrc}`);
+                })
+                .catch(err => {
+                    // AbortError usually means we intentionally interrupted the audio
+                    // with a new trial, new sound, or duplicate event. Do not alert for it.
+                    if (err.name === 'AbortError') {
+                        showAudioDebug(`[AUDIO] Reward audio interrupted: ${soundSrc}`);
+                        return;
+                    }
+
+                    const msg =
+                        `[AUDIO] Reward audio failed: ${err.name}: ${err.message} | ${soundSrc}`;
+
+                    showAudioDebug(msg);
+                    alert(msg);
+                });
         }
-        
-        if (soundSrc && _audioCache[soundSrc]) {
-            _currentAnimAudio = _audioCache[soundSrc];
-        
-            _currentAnimAudio.pause();
-            _currentAnimAudio.currentTime = 0;
-            _currentAnimAudio.volume = 1;
-            _currentAnimAudio.muted = false;
-        
-            const rewardPromise = _currentAnimAudio.play();
-        
-            if (rewardPromise && typeof rewardPromise.then === 'function') {
-                rewardPromise
-                    .then(() => {
-                        showAudioDebug(`[AUDIO] Reward audio played OK: ${soundSrc}`);
-                    })
-                    .catch(err => {
-                        const msg = `[AUDIO] Reward audio failed: ${err.name}: ${err.message} | ${soundSrc}`;
-                        showAudioDebug(msg);
-                        alert(msg);
-                    });
-            }
-        } else {
-            _currentAnimAudio = null;
-        
-            const msg = `[AUDIO] No reward audio source found for animation "${name}"`;
-            showAudioDebug(msg);
-            alert(msg);
-        }
+    } else {
+        const msg =
+            `[AUDIO] No reward audio source found for animation "${name}"`;
+
+        showAudioDebug(msg);
+        alert(msg);
+    }
 
     // --- TIMING ---
     const startTime = performance.now();
@@ -2316,6 +2356,16 @@ function playRewardAnimation(buttonEl) {
         if (elapsed >= totalDuration) {
             animEl.style.display = 'none';
             rewardAnimTimer = null;
+        
+            if (_currentAnimAudio) {
+                try {
+                    _currentAnimAudio.pause();
+                    _currentAnimAudio.currentTime = 0;
+                } catch (e) {}
+        
+                _currentAnimAudio = null;
+            }
+        
             return;
         }
     
