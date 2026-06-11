@@ -1752,21 +1752,21 @@ function playNirsBaselineVideo(resumeScreenName) {
             baselineAudio.pause();
             baselineAudio.currentTime = 0;
         } catch (e) {}
-    }
     
-    baselineAudio = null;
+        baselineAudio = null;
+    }
     
     if (audioPath) {
         const audioSrc = getAudioSrc(audioPath);
     
-        baselineAudio =
-            _audioCache[audioSrc] || new Audio(audioSrc);
+        // Use a fresh Audio object each time, like the reward sounds.
+        // This avoids iPad AbortError / silent failure from reused media elements.
+        baselineAudio = new Audio(audioSrc);
     
         baselineAudio.preload = 'auto';
-        baselineAudio.currentTime = 0;
         baselineAudio.volume = 1;
-    
-        _audioCache[audioSrc] = baselineAudio;
+        baselineAudio.muted = false;
+        baselineAudio.currentTime = 0;
     }
 
     overlay.appendChild(video);
@@ -1780,9 +1780,14 @@ function playNirsBaselineVideo(resumeScreenName) {
         baselineDone = true;
         baselineVideoActive = false;
 
-        try {
-            video.pause();
-        } catch (e) {}
+        if (baselineAudio) {
+            try {
+                baselineAudio.pause();
+                baselineAudio.currentTime = 0;
+            } catch (e) {}
+        
+            baselineAudio = null;
+        }
         if (baselineAudio) {
             try {
                 baselineAudio.pause();
@@ -1819,31 +1824,41 @@ function playNirsBaselineVideo(resumeScreenName) {
 
     setTimeout(finishBaseline, NIRS_BASELINE_DURATION_MS);
 
-    const videoPromise =
-    video.play();
+    let audioPromise = Promise.resolve();
 
-    const audioPromise =
-        baselineAudio
-            ? baselineAudio.play()
-            : Promise.resolve();
-
-    videoPromise.catch(err => {
-        console.warn('[BASELINE] Video play failed:', err);
-        finishBaseline();
-    });
-
-    audioPromise.catch(err => {
-        if (err.name === 'AbortError') {
-            showAudioDebug('[BASELINE] Audio was interrupted/stopped');
-            return;
+    if (baselineAudio) {
+        // Start baseline audio FIRST on iPad, before starting the muted video.
+        audioPromise = baselineAudio.play();
+    
+        if (audioPromise && typeof audioPromise.then === 'function') {
+            audioPromise
+                .then(() => {
+                    showAudioDebug(`[BASELINE] Audio played OK: ${audioPath}`);
+                })
+                .catch(err => {
+                    if (err.name === 'AbortError') {
+                        showAudioDebug('[BASELINE] Audio was interrupted/stopped');
+                        return;
+                    }
+    
+                    const msg =
+                        `Baseline audio failed: ${err.name}: ${err.message}`;
+    
+                    console.warn('[BASELINE] Audio play failed:', err.name, err.message);
+                    showAudioDebug(msg);
+                    alert(msg);
+                });
         }
+    }
     
-        const msg =
-            `Baseline audio failed: ${err.name}: ${err.message}`;
+    const videoPromise = video.play();
     
-        console.warn('[BASELINE] Audio play failed:', err.name, err.message);
-        showAudioDebug(msg);
-    });
+    if (videoPromise && typeof videoPromise.then === 'function') {
+        videoPromise.catch(err => {
+            console.warn('[BASELINE] Video play failed:', err);
+            finishBaseline();
+        });
+    }
 }
 function resumeAfterNirsBaseline(resumeScreenName) {
     if (appState.isDNF || appState.isComplete) {
