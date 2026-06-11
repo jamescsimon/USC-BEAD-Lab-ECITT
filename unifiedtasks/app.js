@@ -1682,7 +1682,92 @@ function startNirsBaselineFromHiddenButton() {
         return;
     }
 
-    playNirsBaselineVideo(appState.currentScreenName);
+    showNirsBaselineStartOverlay(appState.currentScreenName);
+}
+function showNirsBaselineStartOverlay(resumeScreenName) {
+    if (baselineVideoActive) {
+        return;
+    }
+
+    const existingOverlay =
+        document.getElementById('nirsBaselineStartOverlay');
+
+    if (existingOverlay) {
+        existingOverlay.remove();
+    }
+
+    const overlay = document.createElement('div');
+    overlay.id = 'nirsBaselineStartOverlay';
+
+    overlay.style.position = 'fixed';
+    overlay.style.left = '0';
+    overlay.style.top = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.backgroundColor = 'black';
+    overlay.style.zIndex = '1000000';
+    overlay.style.display = 'flex';
+    overlay.style.flexDirection = 'column';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+    overlay.style.color = 'white';
+    overlay.style.fontFamily = 'Arial, sans-serif';
+
+    const message = document.createElement('div');
+    message.textContent = 'Baseline ready';
+    message.style.fontSize = '32px';
+    message.style.marginBottom = '24px';
+
+    const startButton = document.createElement('button');
+    startButton.textContent = 'Tap to start baseline';
+
+    startButton.style.fontSize = '28px';
+    startButton.style.padding = '18px 28px';
+    startButton.style.borderRadius = '12px';
+    startButton.style.border = '3px solid white';
+    startButton.style.backgroundColor = 'white';
+    startButton.style.color = 'black';
+    startButton.style.touchAction = 'none';
+
+    const cancelButton = document.createElement('button');
+    cancelButton.textContent = 'Cancel';
+
+    cancelButton.style.fontSize = '18px';
+    cancelButton.style.marginTop = '24px';
+    cancelButton.style.padding = '10px 18px';
+    cancelButton.style.borderRadius = '8px';
+    cancelButton.style.border = '1px solid white';
+    cancelButton.style.backgroundColor = 'black';
+    cancelButton.style.color = 'white';
+
+    let started = false;
+
+    const startBaseline = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (started) return;
+        started = true;
+
+        overlay.remove();
+
+        // This call is now inside a direct iPad user tap.
+        playNirsBaselineVideo(resumeScreenName);
+    };
+
+    startButton.addEventListener('pointerdown', startBaseline, { once: true });
+
+    cancelButton.addEventListener('pointerdown', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        overlay.remove();
+    }, { once: true });
+
+    overlay.appendChild(message);
+    overlay.appendChild(startButton);
+    overlay.appendChild(cancelButton);
+
+    document.body.appendChild(overlay);
 }
 function playNirsBaselineVideo(resumeScreenName) {
     baselineVideoActive = true;
@@ -1827,7 +1912,6 @@ function playNirsBaselineVideo(resumeScreenName) {
     let audioPromise = Promise.resolve();
 
     if (baselineAudio) {
-        // Start baseline audio FIRST on iPad, before starting the muted video.
         audioPromise = baselineAudio.play();
     
         if (audioPromise && typeof audioPromise.then === 'function') {
