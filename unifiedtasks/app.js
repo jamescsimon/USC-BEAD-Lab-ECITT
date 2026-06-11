@@ -749,7 +749,6 @@ document.addEventListener('DOMContentLoaded', () => {
     createHiddenOperatorButtons();
     
     preloadAnimationFrames();
-    createAudioTestButton();
     console.log('[APP] Initialization complete');
 });
 
@@ -902,74 +901,10 @@ function setupHoldToActivate(button, onActivate) {
 function showAudioDebug(message) {
     console.log(message);
 
-    let box = document.getElementById('audioDebugBox');
-
-    if (!box) {
-        box = document.createElement('div');
-        box.id = 'audioDebugBox';
-
-        box.style.position = 'fixed';
-        box.style.left = '10px';
-        box.style.bottom = '10px';
-        box.style.maxWidth = '90vw';
-        box.style.zIndex = '1000000';
-        box.style.backgroundColor = 'rgba(0,0,0,0.85)';
-        box.style.color = 'white';
-        box.style.fontSize = '14px';
-        box.style.padding = '10px';
-        box.style.borderRadius = '8px';
-        box.style.fontFamily = 'monospace';
-        box.style.pointerEvents = 'none';
-
-        document.body.appendChild(box);
+    const box = document.getElementById('audioDebugBox');
+    if (box) {
+        box.remove();
     }
-
-    box.textContent = message;
-}
-function createAudioTestButton() {
-    const btn = document.createElement('button');
-
-    btn.id = 'audioTestButton';
-    btn.textContent = 'Test Audio';
-
-    btn.style.position = 'fixed';
-    btn.style.right = '10px';
-    btn.style.bottom = '10px';
-    btn.style.zIndex = '1000001';
-    btn.style.fontSize = '18px';
-    btn.style.padding = '12px';
-    btn.style.backgroundColor = 'yellow';
-    btn.style.color = 'black';
-    btn.style.border = '2px solid black';
-    btn.style.borderRadius = '8px';
-
-    btn.addEventListener('click', () => {
-        testAudioFile('pop.mp3');
-    });
-
-    document.body.appendChild(btn);
-}
-
-function testAudioFile(fileName) {
-    const src = getAudioSrc(fileName);
-
-    showAudioDebug(`[TEST] Trying audio: ${src}`);
-
-    const audio = new Audio(src);
-    audio.preload = 'auto';
-    audio.volume = 1;
-    audio.muted = false;
-    audio.currentTime = 0;
-
-    audio.play()
-        .then(() => {
-            showAudioDebug(`[TEST] Audio played OK: ${src}`);
-        })
-        .catch(err => {
-            const msg = `[TEST] Audio failed: ${err.name}: ${err.message} | ${src}`;
-            showAudioDebug(msg);
-            alert(msg);
-        });
 }
 
 function updateCbButtons() {
@@ -1908,7 +1843,6 @@ function playNirsBaselineVideo(resumeScreenName) {
     
         console.warn('[BASELINE] Audio play failed:', err.name, err.message);
         showAudioDebug(msg);
-        alert(msg);
     });
 }
 function resumeAfterNirsBaseline(resumeScreenName) {
@@ -2203,7 +2137,6 @@ function unlockAllAudioForIOS() {
             .catch(err => {
                 const msg = `[AUDIO] iOS unlock failed: ${err.name}: ${err.message}`;
                 showAudioDebug(msg);
-                alert(msg);
             });
     }
 }
@@ -2322,7 +2255,6 @@ function playRewardAnimation(buttonEl) {
                         `[AUDIO] Reward audio failed: ${err.name}: ${err.message} | ${soundSrc}`;
 
                     showAudioDebug(msg);
-                    alert(msg);
                 });
         }
     } else {
@@ -2330,7 +2262,6 @@ function playRewardAnimation(buttonEl) {
             `[AUDIO] No reward audio source found for animation "${name}"`;
 
         showAudioDebug(msg);
-        alert(msg);
     }
 
     // --- TIMING ---
