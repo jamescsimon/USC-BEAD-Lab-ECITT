@@ -2128,7 +2128,10 @@ function playRewardAnimation(buttonEl) {
     if (soundSrc && _audioCache[soundSrc]) {
         _currentAnimAudio = _audioCache[soundSrc];
         _currentAnimAudio.currentTime = 0;
-        _currentAnimAudio.play().catch(() => {});
+        _currentAnimAudio.play().catch(err => {
+            console.warn('[AUDIO] Reward audio failed:', err.name, err.message);
+            alert(`Reward audio failed: ${err.name}: ${err.message}`);
+        });
     } else {
         _currentAnimAudio = null;
     }
