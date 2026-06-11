@@ -868,6 +868,10 @@ function setupHoldToActivate(button, onActivate) {
 
         if (heldLongEnough || readyToActivate) {
             resetHold();
+
+            // Extra safety: the release after a 3-sec hold is still a user action.
+            unlockAllAudioForIOS();
+
             onActivate();
             return;
         }
@@ -968,6 +972,9 @@ function startTest() {
     elements.startBtn.classList && elements.startBtn.classList.add('disabled');
 
     appState.participantId = participantId;
+
+    // iPad/Safari audio unlock from a real button press.
+    unlockAllAudioForIOS();
     dataManager.startSession(
         participantId,
         appState.ageGroup,
@@ -1297,6 +1304,9 @@ function showPromptScreen() {
 
 function handleButtonPress(button) {
     if (appState.isTransitioning) return;
+
+    // Extra safety for iPad/Safari: button press is a real user gesture.
+    unlockAllAudioForIOS();
 
     const reactionTime = Date.now() - appState.trialStartTime;
     const pressTimestamp = new Date();
@@ -1792,7 +1802,8 @@ function playNirsBaselineVideo(resumeScreenName) {
     });
 
     audioPromise.catch(err => {
-        console.warn('[BASELINE] Audio play failed:', err);
+        console.warn('[BASELINE] Audio play failed:', err.name, err.message);
+        alert(`Baseline audio failed: ${err.name}: ${err.message}`);
     });
 }
 function resumeAfterNirsBaseline(resumeScreenName) {
@@ -2050,6 +2061,42 @@ let _currentAnimAudio = null;
 // Preload all animation frames and sounds at startup
 const _animPreloadCache = [];
 const _audioCache = {};
+let _audioUnlockedForIOS = false;
+function unlockAllAudioForIOS() {
+    if (_audioUnlockedForIOS) return;
+
+    _audioUnlockedForIOS = true;
+
+    Object.values(_audioCache).forEach(audio => {
+        if (!audio || typeof audio.play !== 'function') return;
+
+        const oldVolume = audio.volume;
+
+        try {
+            audio.volume = 0;
+            audio.muted = false;
+            audio.currentTime = 0;
+
+            const playPromise = audio.play();
+
+            if (playPromise && typeof playPromise.then === 'function') {
+                playPromise
+                    .then(() => {
+                        audio.pause();
+                        audio.currentTime = 0;
+                        audio.volume = oldVolume || 1;
+                    })
+                    .catch(err => {
+                        console.warn('[AUDIO] iOS unlock failed:', err.name, err.message);
+                        audio.volume = oldVolume || 1;
+                    });
+            }
+        } catch (err) {
+            console.warn('[AUDIO] iOS unlock exception:', err);
+            audio.volume = oldVolume || 1;
+        }
+    });
+}
 function getAudioSrc(fileOrPath) {
     if (!fileOrPath) return '';
 
