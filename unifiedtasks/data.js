@@ -128,6 +128,8 @@ class DataManager {
             'PromptResponse',
             'ReadyScreen',
             'WaitScreen',
+            'NIRSBaselineStart',
+            'NIRSBaselineEnd',
             'TaskEnd',
             'DNF',
             'FlashConflict'
@@ -344,6 +346,8 @@ class DataManager {
             'PromptResponse',
             'ReadyScreen',
             'WaitScreen',
+            'NIRSBaselineStart',
+            'NIRSBaselineEnd',
             'TaskEnd',
             'DNF',
             'FlashConflict'

@@ -108,91 +108,147 @@ const TASK_CONFIGS = {
     },
 
     // ===== CHILD (2-17) ECITT-A TASK CONFIGURATIONS =====
+    // Child Demo: Middle Button
+    cha_demo: {
+        id: 'cha_demo',
+        name: 'Child Demo Middle',
+        trialType: 'standard',
+        emp: 'mdl',
+        empType: 'happy',
+        rew: 'mdl',
+        trials: 1,
+        promptLayout: { left: 'empty', mdl: 'button', right: 'empty' },
+        readyMsg1: 'Watch the happy face and press it as fast as you can!',
+        readyMsg2: '',
+        readyMsg3: 'Ready?'
+    },
 
-    // Child Practice: Left (4 trials) - both buttons, happy face always left
+    // Child Practice: Left (1 trial) - one button, happy face always left
     cha_ppl: {
         id: 'cha_ppl',
         name: 'Child Practice Left',
+        trialType: 'standard',
         emp: 'left',
         empType: 'happy',
         rew: 'left',
-        trials: 4,
-        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
-        readyMsg1: 'Put your finger on the red dot. When you see the buttons, press the happy face as fast as you can.',
-        readyMsg2: 'Then return to the dot.',
+        trials: 1,
+        promptLayout: { left: 'button', mdl: 'dot', right: 'empty' },
+        readyMsg1: 'Watch the happy face and press it as fast as you can!',
+        readyMsg2: '',
         readyMsg3: 'Ready?'
     },
-    // Child Baseline: Left (32 trials) - both buttons, happy face always left
-    cha_bll: {
-        id: 'cha_bll',
-        name: 'Child Baseline Left',
-        emp: 'left',
-        empType: 'happy',
-        rew: 'left',
-        trials: 32,
-        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
-        readyMsg1: 'Great! Keep pressing the happy face as fast as you can.',
-        readyMsg2: 'Then return to the dot.',
-        readyMsg3: 'Ready?'
-    },
-    // Child Test: Left (32 trials - 75% left, 25% right)
-    cha_tpl: {
-        id: 'cha_tpl',
-        name: 'Child Test Left',
-        varDistr: [75, 25],
-        varLeading: 3,
-        varMaxDups: 4,
-        trials: 32,
-        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
-        readyMsg1: 'Excellent! Now for the real test. Keep pressing the happy face as fast as you can.',
-        readyMsg2: 'Then return to the dot.',
-        readyMsg3: 'Ready? Let\'s start the real test!',
-        variants: {
-            prpt: { emp: 'left', empType: 'happy', rew: 'left' },
-            inhb: { emp: 'right', empType: 'happy', rew: 'right' }
-        }
-    },
-    // Child Practice: Right (4 trials) - both buttons, happy face always right
+    // Child Practice: Right (1 trials) - one button, happy face always right
     cha_ppr: {
         id: 'cha_ppr',
         name: 'Child Practice Right',
+        trialType: 'standard',
         emp: 'right',
         empType: 'happy',
         rew: 'right',
-        trials: 4,
-        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
-        readyMsg1: 'Great! Now we will do some practice. Press the happy face as fast as you can.',
-        readyMsg2: 'Then return to the dot.',
+        trials: 1,
+        promptLayout: { left: 'empty', mdl: 'dot', right: 'button' },
+        readyMsg1: 'Watch the happy face and press it as fast as you can!',
+        readyMsg2: '',
         readyMsg3: 'Ready?'
     },
-    // Child Baseline: Right (32 trials) - both buttons, happy face always right
-    cha_blr: {
+    // Child Control: Left (8 trials) - both buttons, happy face always left
+    cha_cll: {
+        id: 'cha_bll',
+        name: 'Child Control Left',
+        trialType: 'standard',
+        emp: 'left',
+        empType: 'happy',
+        rew: 'left',
+        allowCorrection: true,
+        trials: 8,
+        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
+        readyMsg1: 'Great job! Now find the happy face and press it as fast as you can!',
+        readyMsg2: '',
+        readyMsg3: 'Ready?'
+    },
+    // Child Control: Right (8 trials) - both buttons, happy face always right
+    cha_clr: {
         id: 'cha_blr',
-        name: 'Child Baseline Right',
+        name: 'Child Control Right',
+        trialType: 'standard',
         emp: 'right',
         empType: 'happy',
         rew: 'right',
-        trials: 32,
+        allowCorrection: true,
+        trials: 8,
         promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
-        readyMsg1: 'Great! Keep pressing the happy face as fast as you can.',
-        readyMsg2: 'Then return to the dot.',
+        readyMsg1: 'Great job! Now find the happy face and press it as fast as you can!',
+        readyMsg2: '',
         readyMsg3: 'Ready?'
     },
-    // Child Test: Right (32 trials - 75% right, 25% left)
+    // Child Test: Left (8 trials - 75% left, 25% right)
+    cha_tpl: {
+        id: 'cha_tpl',
+        name: 'Child Test Left',
+    
+        varDistr: [50, 50],
+        varLeading: 1,
+        maxSameSide: 2,
+        allowCorrection: true,
+    
+        trials: 8,
+    
+        promptLayout: {
+            left: 'button',
+            mdl: 'dot',
+            right: 'button'
+        },
+    
+        readyMsg1: 'Great job! Now continue finding the happy face and press it as fast as you can!',
+        readyMsg2: '',
+        readyMsg3: 'Ready?',
+    
+        variants: {
+            prpt: {
+                emp: 'left',
+                empType: 'happy',
+                rew: 'left'
+            },
+            inhb: {
+                emp: 'right',
+                empType: 'happy',
+                rew: 'right'
+            }
+        }
+    },
+    // Child Test: Right (8 trials - 75% right, 25% left)
     cha_tpr: {
         id: 'cha_tpr',
         name: 'Child Test Right',
-        varDistr: [75, 25],
-        varLeading: 3,
-        varMaxDups: 4,
-        trials: 32,
-        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
-        readyMsg1: 'Excellent! Now for the real test. Keep pressing the happy face as fast as you can.',
-        readyMsg2: 'Then return to the dot.',
-        readyMsg3: 'Ready? Let\'s start the real test!',
+    
+        varDistr: [50, 50],
+        varLeading: 1,
+        maxSameSide: 2,
+        allowCorrection: true,
+    
+        trials: 8,
+    
+        promptLayout: {
+            left: 'button',
+            mdl: 'dot',
+            right: 'button'
+        },
+    
+        readyMsg1: 'Great job! Now continue finding the happy face and press it as fast as you can!',
+        readyMsg2: '',
+        readyMsg3: 'Ready?',
+    
         variants: {
-            prpt: { emp: 'right', empType: 'happy', rew: 'right' },
-            inhb: { emp: 'left', empType: 'happy', rew: 'left' }
+            prpt: {
+                emp: 'right',
+                empType: 'happy',
+                rew: 'right'
+            },
+            inhb: {
+                emp: 'left',
+                empType: 'happy',
+                rew: 'left'
+            }
         }
     },
 
@@ -410,7 +466,8 @@ const TASK_CONFIGS = {
 
 // ===== FLOW CONTROL FLAGS =====
 const SKIP_READY_SCREEN = {
-    Infant: true
+    Infant: true,
+    Child: true
 };
 
 // Infant/Toddler Execution Order
@@ -457,31 +514,72 @@ const TASK_SEQUENCE_RIGHT    = ['adt_cr', 'adt_cl', 'adt_ppr', 'adt_tpr', 'adt_t
 // const TASK_SEQUENCE = ['adt_cm', 'adt_cl', 'adt_ppl', 'adt_tpl', 'adt_cr', 'adt_ppr', 'adt_tpr'];
 
 // Task execution order — 2-17 year ECITT-A protocol
-const CHILD_TASK_SEQUENCE_LEFT = ['cha_ppl', 'cha_bll', 'cha_tpl', 'cha_ppr', 'cha_blr', 'cha_tpr'];
-const CHILD_TASK_SEQUENCE_RIGHT = ['cha_ppr', 'cha_blr', 'cha_tpr', 'cha_ppl', 'cha_bll', 'cha_tpl'];
+const CHILD_TASK_SEQUENCE_LEFT = ['cha_demo','cha_ppl','cha_ppr', 'cha_cll', 'cha_tpl', 'cha_clr', 'cha_tpr', 'cha_cll', 'cha_tpl', 'cha_clr', 'cha_tpr', 'cha_cll', 'cha_tpl', 'cha_clr', 'cha_tpr', 'cha_cll', 'cha_tpl', 'cha_clr', 'cha_tpr', 'cha_cll', 'cha_tpl', 'cha_clr', 'cha_tpr'];
+const CHILD_TASK_SEQUENCE_RIGHT = ['cha_demo','cha_ppr','cha_ppl', 'cha_clr', 'cha_tpr', 'cha_cll', 'cha_tpl', 'cha_clr', 'cha_tpr', 'cha_cll', 'cha_tpl', 'cha_clr', 'cha_tpr', 'cha_cll', 'cha_tpl', 'cha_clr', 'cha_tpr', 'cha_cll', 'cha_tpl', 'cha_clr', 'cha_tpr', 'cha_cll', 'cha_tpl'];
 
 // Task execution order — 17-23 month toddler ECITT protocol
 const TODDLER_TASK_SEQUENCE_LEFT = ['tod_ppl', 'tod_tpl', 'tod_ppr', 'tod_tpr'];
 const TODDLER_TASK_SEQUENCE_RIGHT = ['tod_ppr', 'tod_tpr', 'tod_ppl', 'tod_tpl'];
 
 // Task execution order — 10-16 month infant ECITT protocol
-const INFANT_TASK_SEQUENCE_LEFT = ['inf_demo','inf_plp', 'inf_prp', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr'];
-const INFANT_TASK_SEQUENCE_RIGHT = ['inf_demo','inf_prp', 'inf_plp', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl'];
-
-//const INFANT_TASK_SEQUENCE_LEFT = ['inf_demo','inf_plp', 'inf_prp', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr', 'inf_tpl', 'inf_c1r','inf_c1r', 'inf_tpr'];
-//const INFANT_TASK_SEQUENCE_RIGHT = ['inf_demo','inf_prp', 'inf_plp', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr'];
+const INFANT_TASK_SEQUENCE_LEFT = ['inf_demo','inf_plp', 'inf_prp', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr', 'inf_tpl', 'inf_c1r','inf_c1r', 'inf_tpr'];
+const INFANT_TASK_SEQUENCE_RIGHT = ['inf_demo','inf_prp', 'inf_plp', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr'];
 
 // Active sequence — set on age group selection
 let activeTaskSequence = null;
+
+// ===== HIDDEN OPERATOR BUTTONS + BASELINE VIDEO =====
+
+const HOLD_TO_ACTIVATE_MS = 3000;
+const NIRS_BASELINE_DURATION_MS = 18000;
+
+const NIRS_BASELINE_VIDEOS = [
+    '../public/video/nirs/bl1Hor.mp4',
+    '../public/video/nirs/bl2Hor.mp4',
+    '../public/video/nirs/bl3Hor.mp4',
+    '../public/video/nirs/bl4Hor.mp4',
+    '../public/video/nirs/bl5Hor.mp4',
+    '../public/video/nirs/bl6Hor.mp4',
+    '../public/video/nirs/bl7Hor.mp4',
+    '../public/video/nirs/bl8Hor.mp4',
+];
+
+const NIRS_BASELINE_AUDIOS = [
+    '../public/audio/nirs/bl1Hor.mp3',
+    '../public/audio/nirs/bl2Hor.mp3',
+    '../public/audio/nirs/bl3Hor.mp3',
+    '../public/audio/nirs/bl4Hor.mp3',
+    '../public/audio/nirs/bl5Hor.mp3',
+    '../public/audio/nirs/bl6Hor.mp3',
+    '../public/audio/nirs/bl7Hor.mp3',
+    '../public/audio/nirs/bl8Hor.mp3',
+];
+
+let baselineVideoIndex = 0;
+let baselineVideoActive = false;
+let baselineAudio = null;
 
 // ===== JITTER CONFIGURATION =====
 // Durations (in milliseconds) randomly selected per adult/infant trial between dot press and prompt.
 // Edit this list to control possible wait times (valid range: 500–5000 ms).
 
 // Jitter 2: random wait (ms) between button response and red dot reappearing.
-// Adult uses JITTER2_RANGE; Infant, Child, and Toddler (have animations) use JITTER2_ANIM_RANGE.
-const JITTER2_RANGE = [500, 1000]; 
-const JITTER2_ANIM_RANGE = [3500, 4000]; // todder animations must last 3.75 to 4 seconds 
+// Adult uses short delay.
+// Child uses ~1 second reward animation.
+// Toddler and Infant use ~4 second reward animation.
+const CHILD_REWARD_DURATION_MS = 1500;
+const INFANT_TODDLER_REWARD_DURATION_MS = 4000;
+
+const JITTER2_RANGE = [500, 1000];
+const JITTER2_CHILD_ANIM_RANGE = [
+    CHILD_REWARD_DURATION_MS,
+    CHILD_REWARD_DURATION_MS
+];
+
+const JITTER2_ANIM_RANGE = [
+    INFANT_TODDLER_REWARD_DURATION_MS,
+    INFANT_TODDLER_REWARD_DURATION_MS
+];
 const JITTER_DURATIONS_ADULT = [
   500, 500,
   1000, 1000, 1000,
@@ -499,9 +597,9 @@ const JITTER_DURATIONS_CHILD = [
   1500, 1500, 1500, 1500, 1500,
   2000, 2000, 2000, 2000, 2000, 2000,
   2000, 2000, 2000, 2000, 2000, 2000,
-  2500, 2500, 2500, 2500, 2500,
-  3000, 3000, 3000,
-  3000, 3000
+  1500, 1500, 1500, 1500, 1500,
+  1000, 1000, 1000,
+  500, 500
 ];
 
 const JITTER_DURATIONS_TODDLER_INFANT = [
@@ -537,7 +635,8 @@ const appState = {
     blockTrials: 0,
     isTransitioning: false,
     waitTimer: null,
-    nextTrialTimer: null
+    nextTrialTimer: null,
+    currentScreenName: ''
 };
 
 // ===== DOM ELEMENTS =====
@@ -637,32 +736,10 @@ document.addEventListener('DOMContentLoaded', () => {
     applyOrientationLayout();
     window.matchMedia('(orientation: landscape)').addEventListener('change', applyOrientationLayout);
 
-    // DNF detection - hold photocell for 3 seconds to trigger manually
-    let dnfHoldTimer = null;
-    const DNF_HOLD_MS = 3000;
-
-    const startDnfHold = (e) => {
-        if (!appState.currentTask || appState.isDNF || appState.isComplete) return;
-        e.stopPropagation();
-        dnfHoldTimer = setTimeout(() => {
-            console.log('[APP] Photocell hold — triggering DNF');
-            handleDNF();
-        }, DNF_HOLD_MS);
-    };
-    const cancelDnfHold = () => {
-        clearTimeout(dnfHoldTimer);
-        dnfHoldTimer = null;
-    };
-
-    const indicator = elements.buttonIndicator;
-    if (indicator) {
-        indicator.addEventListener('touchstart',  startDnfHold,  { passive: true });
-        indicator.addEventListener('touchend',    cancelDnfHold);
-        indicator.addEventListener('touchcancel', cancelDnfHold);
-        indicator.addEventListener('mousedown',   startDnfHold);
-        indicator.addEventListener('mouseup',     cancelDnfHold);
-        indicator.addEventListener('mouseleave',  cancelDnfHold);
-    }
+    // Hidden operator buttons:
+    // top-left = quit early / DNF
+    // top-right = NIRS baseline video
+    createHiddenOperatorButtons();
     
     preloadAnimationFrames();
     console.log('[APP] Initialization complete');
@@ -676,8 +753,141 @@ function showScreen(screenName) {
             el.classList.remove('active');
         }
     });
+
+    if (!elements[screenName]) {
+        console.error(`[APP] Screen not found: ${screenName}`);
+        return;
+    }
+
     elements[screenName].classList.add('active');
+    appState.currentScreenName = screenName;
+
     console.log(`[APP] Showing screen: ${screenName}`);
+}
+function createHiddenOperatorButtons() {
+    const quitBtn = document.createElement('button');
+    quitBtn.id = 'hiddenQuitEarlyButton';
+    quitBtn.setAttribute('aria-label', 'Hold to quit early');
+    quitBtn.title = 'Hold 3 seconds to quit early';
+
+    const baselineBtn = document.createElement('button');
+    baselineBtn.id = 'hiddenBaselineButton';
+    baselineBtn.setAttribute('aria-label', 'Hold for NIRS baseline');
+    baselineBtn.title = 'Hold 3 seconds for NIRS baseline';
+
+    styleHiddenOperatorButton(quitBtn, 'left');
+    styleHiddenOperatorButton(baselineBtn, 'right');
+
+    setupHoldToActivate(
+        quitBtn,
+        () => {
+            console.log('[APP] Hidden quit button held — triggering DNF');
+            handleDNF();
+        }
+    );
+
+    setupHoldToActivate(
+        baselineBtn,
+        () => {
+            console.log('[APP] Hidden baseline button held — starting NIRS baseline');
+            startNirsBaselineFromHiddenButton();
+        }
+    );
+
+
+    document.body.appendChild(quitBtn);
+    document.body.appendChild(baselineBtn);
+}
+
+function styleHiddenOperatorButton(button, side) {
+    button.textContent = '';
+
+    button.style.position = 'fixed';
+    button.style.top = '0px';
+
+    if (side === 'left') {
+        button.style.left = '0px';
+    } else {
+        button.style.right = '0px';
+    }
+
+    button.style.width = '34px';
+    button.style.height = '34px';
+    button.style.zIndex = '999998';
+
+    button.style.opacity = '0.04';
+    button.style.backgroundColor = 'white';
+    button.style.border = 'none';
+    button.style.borderRadius = '0px';
+
+    button.style.padding = '0';
+    button.style.margin = '0';
+
+    button.style.touchAction = 'none';
+    button.style.userSelect = 'none';
+    button.style.webkitUserSelect = 'none';
+}
+
+function setupHoldToActivate(button, onActivate) {
+    let holdStartTime = null;
+    let holdTimer = null;
+    let readyToActivate = false;
+
+    const resetHold = () => {
+        holdStartTime = null;
+        readyToActivate = false;
+        clearTimeout(holdTimer);
+        holdTimer = null;
+        button.style.opacity = '0.04';
+    };
+
+    const startHold = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        holdStartTime = Date.now();
+        readyToActivate = false;
+
+        clearTimeout(holdTimer);
+
+        button.style.opacity = '0.25';
+
+        holdTimer = setTimeout(() => {
+            readyToActivate = true;
+            button.style.opacity = '0.45';
+        }, HOLD_TO_ACTIVATE_MS);
+    };
+
+    const endHold = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const heldLongEnough =
+            holdStartTime &&
+            Date.now() - holdStartTime >= HOLD_TO_ACTIVATE_MS;
+
+        if (heldLongEnough || readyToActivate) {
+            resetHold();
+            onActivate();
+            return;
+        }
+
+        resetHold();
+    };
+
+    const cancelHold = (event) => {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        resetHold();
+    };
+
+    button.addEventListener('pointerdown', startHold);
+    button.addEventListener('pointerup', endHold);
+    button.addEventListener('pointercancel', cancelHold);
+    button.addEventListener('pointerleave', cancelHold);
 }
 
 function updateCbButtons() {
@@ -1092,9 +1302,12 @@ function handleButtonPress(button) {
     const pressTimestamp = new Date();
 
     const accuracy = button === appState.currentRewarded ? 1 : 0;
-    const j2Range = (appState.ageGroup === 'Child' || appState.ageGroup === 'Toddler' || appState.ageGroup === 'Infant')
-    ? JITTER2_ANIM_RANGE
-    : JITTER2_RANGE;
+    const j2Range =
+    appState.ageGroup === 'Child'
+        ? JITTER2_CHILD_ANIM_RANGE
+        : (appState.ageGroup === 'Toddler' || appState.ageGroup === 'Infant')
+            ? JITTER2_ANIM_RANGE
+            : JITTER2_RANGE;
     const j2Delay = Math.round(Math.random() * (j2Range[1] - j2Range[0]) + j2Range[0]);
 
     const completedIndex = appState.currentTrial;
@@ -1250,8 +1463,10 @@ function handleButtonPress(button) {
     console.log(`[APP] Trial ${completedIndex + 1}: button=${button}, rewarded=${appState.currentRewarded}, accuracy=${accuracy}, RT=${reactionTime}ms`);
 
     // Reveal the red dot as a "return here" cue after button press.
-    // Infant and Toddler suppress it here — dot appears via showReadyScreen() after jitter 2 delay.
-    if (elements.promptDot && appState.ageGroup !== 'Infant' && appState.ageGroup !== 'Toddler') elements.promptDot.style.display = 'inline-block';
+    // Adult only. Infant, Child, and Toddler suppress it.
+    if (elements.promptDot && appState.ageGroup === 'Adult') {
+        elements.promptDot.style.display = 'inline-block';
+    }
 
     // Reward animation for non-adult correct trials
     if (accuracy === 1 && appState.ageGroup !== 'Adult') {
@@ -1266,11 +1481,15 @@ function handleButtonPress(button) {
         appState.currentTrial++;
     }
 
-    const isInfant = appState.ageGroup === 'Infant';
+    const skipReadyBetweenTrials =
+    SKIP_READY_SCREEN[appState.ageGroup] === true;
 
     if (appState.currentTrial < appState.currentTask.trials) {
 
-        const nextScreen = isInfant ? showPromptScreen : showReadyScreen;
+        const nextScreen =
+            skipReadyBetweenTrials
+                ? showPromptScreen
+                : showReadyScreen;
 
         clearTimeout(appState.nextTrialTimer);
 
@@ -1380,6 +1599,228 @@ function handleDNF() {
     
     showScreen('dnfScreen');
     stopAndAutoDownload();
+}
+
+// Top-left tiny hidden button:
+    //hold 3 sec → DNF / quit early
+
+    //Top-right tiny hidden button:
+        //hold 3 sec → play NIRS baseline video
+               //→ log NIRSBaselineStart
+               //→ log NIRSBaselineEnd
+               //→ resume sequence
+        //Baseline video cannot corrupt a trial by starting a video during promptScreen or waitScreen
+
+function startNirsBaselineFromHiddenButton() {
+    if (baselineVideoActive) {
+        console.warn('[BASELINE] Baseline already active');
+        return;
+    }
+
+    if (appState.isDNF || appState.isComplete) {
+        console.warn('[BASELINE] Cannot start baseline after DNF or completion');
+        return;
+    }
+
+    if (!appState.participantId) {
+        console.warn('[BASELINE] Cannot start baseline before participant ID is entered');
+        return;
+    }
+
+    const allowedScreens = [
+        'recordingReminderScreen',
+        'readyScreen',
+        'interBlockScreen',
+        'promptScreen'
+    ];
+
+    if (!allowedScreens.includes(appState.currentScreenName)) {
+        console.warn(
+            `[BASELINE] Ignored. Current screen "${appState.currentScreenName}" is not a safe baseline screen.`
+        );
+        return;
+    }
+
+    playNirsBaselineVideo(appState.currentScreenName);
+}
+function playNirsBaselineVideo(resumeScreenName) {
+    baselineVideoActive = true;
+
+    clearTimeout(appState.waitTimer);
+    clearTimeout(appState.nextTrialTimer);
+
+    const baselineIndex =
+    baselineVideoIndex % NIRS_BASELINE_VIDEOS.length;
+
+    const videoPath =
+        NIRS_BASELINE_VIDEOS[baselineIndex];
+
+    const audioPath =
+        NIRS_BASELINE_AUDIOS[baselineIndex] || '';
+
+    baselineVideoIndex++;
+
+    dataManager.logEvent({
+        section: 'NIRSBaselineStart',
+        stimuli: audioPath
+            ? `${videoPath}|${audioPath}`
+            : videoPath,
+        invokedBy: 'HiddenBaselineHold',
+        accuracy: 'n/a',
+        testName: appState.ageGroup,
+        trialsRemaining: appState.currentTask
+            ? appState.currentTask.trials - appState.currentTrial
+            : 'n/a',
+        trialName: appState.currentTask
+            ? appState.currentTask.id
+            : ''
+    });
+
+    const overlay = document.createElement('div');
+
+    overlay.id = 'nirsBaselineOverlay';
+
+    overlay.style.position = 'fixed';
+    overlay.style.left = '0';
+    overlay.style.top = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.backgroundColor = 'black';
+    overlay.style.zIndex = '999999';
+    overlay.style.display = 'flex';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+
+    const video = document.createElement('video');
+
+    video.src = videoPath;
+    video.autoplay = true;
+    
+    // Keep the video muted because separate baseline audio is played below.
+    video.muted = true;
+    
+    video.playsInline = true;
+    video.setAttribute('playsinline', '');
+
+    video.style.width = '100vw';
+    video.style.height = '100vh';
+    video.style.objectFit = 'contain';
+    video.style.backgroundColor = 'black';
+    if (baselineAudio) {
+        try {
+            baselineAudio.pause();
+            baselineAudio.currentTime = 0;
+        } catch (e) {}
+    }
+    
+    baselineAudio = null;
+    
+    if (audioPath) {
+        const audioSrc = getAudioSrc(audioPath);
+    
+        baselineAudio =
+            _audioCache[audioSrc] || new Audio(audioSrc);
+    
+        baselineAudio.preload = 'auto';
+        baselineAudio.currentTime = 0;
+        baselineAudio.volume = 1;
+    
+        _audioCache[audioSrc] = baselineAudio;
+    }
+
+    overlay.appendChild(video);
+    document.body.appendChild(overlay);
+
+    let baselineDone = false;
+
+    const finishBaseline = () => {
+        if (baselineDone) return;
+
+        baselineDone = true;
+        baselineVideoActive = false;
+
+        try {
+            video.pause();
+        } catch (e) {}
+        if (baselineAudio) {
+            try {
+                baselineAudio.pause();
+                baselineAudio.currentTime = 0;
+            } catch (e) {}
+        
+            baselineAudio = null;
+        }
+
+        if (overlay.parentNode) {
+            overlay.parentNode.removeChild(overlay);
+        }
+
+        dataManager.logEvent({
+            section: 'NIRSBaselineEnd',
+            stimuli: audioPath
+                ? `${videoPath}|${audioPath}`
+                : videoPath,
+            invokedBy: 'System',
+            accuracy: 'n/a',
+            testName: appState.ageGroup,
+            trialsRemaining: appState.currentTask
+                ? appState.currentTask.trials - appState.currentTrial
+                : 'n/a',
+            trialName: appState.currentTask
+                ? appState.currentTask.id
+                : ''
+        });
+
+        resumeAfterNirsBaseline(resumeScreenName);
+    };
+
+    video.addEventListener('ended', finishBaseline, { once: true });
+
+    setTimeout(finishBaseline, NIRS_BASELINE_DURATION_MS);
+
+    const videoPromise =
+    video.play();
+
+    const audioPromise =
+        baselineAudio
+            ? baselineAudio.play()
+            : Promise.resolve();
+
+    videoPromise.catch(err => {
+        console.warn('[BASELINE] Video play failed:', err);
+        finishBaseline();
+    });
+
+    audioPromise.catch(err => {
+        console.warn('[BASELINE] Audio play failed:', err);
+    });
+}
+function resumeAfterNirsBaseline(resumeScreenName) {
+    if (appState.isDNF || appState.isComplete) {
+        return;
+    }
+
+    if (resumeScreenName === 'recordingReminderScreen') {
+        continueAfterRecordingReminder();
+        return;
+    }
+
+    if (resumeScreenName === 'interBlockScreen') {
+        continueAfterInterBlock();
+        return;
+    }
+
+    if (resumeScreenName === 'readyScreen') {
+        showScreen('readyScreen');
+        return;
+    }
+
+    if (resumeScreenName && elements[resumeScreenName]) {
+        showScreen(resumeScreenName);
+        return;
+    }
+
+    showReadyScreen();
 }
 
 // ===== INTER-BLOCK FEEDBACK =====
@@ -1557,7 +1998,7 @@ const FRAME_ANIMATIONS = {
 };
 
 // Pair a sound file from ../public/audio/ with each animation, or null for no sound.
-const ANIMATION_SOUNDS = {
+const ANIMATION_SOUNDS_INFANT_TODDLER = {
     apple:      'pop.mp3',
     bus:        'weee.mp3',
     cat:        'happyCat.mp3',
@@ -1577,6 +2018,27 @@ const ANIMATION_SOUNDS = {
     snail:      'wetClick.mp3',
     whale:      'water.mp3'
 };
+
+const ANIMATION_SOUNDS_CHILD = {
+    apple:      'pop.mp3',
+    bus:        'weeeSh.mp3',
+    cat:        'happyCatSh.mp3',
+    chick:      'quack.mp3',
+    dog:        'salsaSh.mp3',
+    elephant:   'chimes.mp3',
+    elephant2:  'weeeSh.mp3',
+    elephant4:  'waterSh.mp3',
+    flower:     'happyTuneSh.mp3',
+    ghost:      'chimes.mp3',
+    happy:      'happyTuneSh.mp3',
+    mole:       'pop.mp3',
+    monster:    'success.mp3',
+    owl:        'wakingUpSh.mp3',
+    penguin:    'quack.mp3',
+    robot:      'happyGrooveSh.mp3',
+    snail:      'wetClick.mp3',
+    whale:      'waterSh.mp3'
+};
 // Available files: chimes.mp3, happyCat.mp3, happyCatSh.mp3, happyGroove.mp3, happyGrooveSh.mp3,
 //   happyTune.mp3, happyTuneSh.mp3, pop.mp3, quack.mp3, salsa.mp3, salsaSh.mp3, success.mp3,
 //   wakingUp.mp3, wakingUpSh.mp3, water.mp3, waterSh.mp3, weee.mp3, weeeSh.mp3, wetClick.mp3
@@ -1588,6 +2050,26 @@ let _currentAnimAudio = null;
 // Preload all animation frames and sounds at startup
 const _animPreloadCache = [];
 const _audioCache = {};
+function getAudioSrc(fileOrPath) {
+    if (!fileOrPath) return '';
+
+    if (fileOrPath.includes('/')) {
+        return fileOrPath;
+    }
+
+    return `../public/audio/${fileOrPath}`;
+}
+
+function preloadAudioFile(fileOrPath) {
+    const src = getAudioSrc(fileOrPath);
+
+    if (!src || _audioCache[src]) return;
+
+    const audio = new Audio(src);
+    audio.preload = 'auto';
+    _audioCache[src] = audio;
+}
+
 function preloadAnimationFrames() {
     Object.entries(FRAME_ANIMATIONS).forEach(([name, count]) => {
         for (let i = 1; i <= count; i++) {
@@ -1596,13 +2078,12 @@ function preloadAnimationFrames() {
             _animPreloadCache.push(img);
         }
     });
-    Object.values(ANIMATION_SOUNDS).forEach(file => {
-        if (file && !_audioCache[file]) {
-            const audio = new Audio(`../public/audio/${file}`);
-            audio.preload = 'auto';
-            _audioCache[file] = audio;
-        }
-    });
+
+    [
+        ...Object.values(ANIMATION_SOUNDS_INFANT_TODDLER),
+        ...Object.values(ANIMATION_SOUNDS_CHILD),
+        ...NIRS_BASELINE_AUDIOS
+    ].forEach(preloadAudioFile);
 }
 
 function playRewardAnimation(buttonEl) {
@@ -1633,9 +2114,19 @@ function playRewardAnimation(buttonEl) {
         _currentAnimAudio.currentTime = 0;
     }
 
-    const soundFile = ANIMATION_SOUNDS[name];
-    if (soundFile && _audioCache[soundFile]) {
-        _currentAnimAudio = _audioCache[soundFile];
+    const soundMap =
+    appState.ageGroup === 'Child'
+        ? ANIMATION_SOUNDS_CHILD
+        : ANIMATION_SOUNDS_INFANT_TODDLER;
+
+    const soundFile =
+        soundMap[name];
+
+    const soundSrc =
+        getAudioSrc(soundFile);
+
+    if (soundSrc && _audioCache[soundSrc]) {
+        _currentAnimAudio = _audioCache[soundSrc];
         _currentAnimAudio.currentTime = 0;
         _currentAnimAudio.play().catch(() => {});
     } else {
@@ -1644,9 +2135,20 @@ function playRewardAnimation(buttonEl) {
 
     // --- TIMING ---
     const startTime = performance.now();
-    const LOOP_DURATION = 2000; // 2s per loop
-    const LOOPS = 2;
-    const totalDuration = LOOP_DURATION * LOOPS;
+
+    const isChildReward =
+        appState.ageGroup === 'Child';
+    
+    const totalDuration =
+        isChildReward
+            ? CHILD_REWARD_DURATION_MS
+            : INFANT_TODDLER_REWARD_DURATION_MS;
+    
+    const LOOPS =
+        isChildReward ? 1 : 2;
+    
+    const LOOP_DURATION =
+        totalDuration / LOOPS;
 
     const animate = (now) => {
         const elapsed = now - startTime;
