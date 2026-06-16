@@ -747,6 +747,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // top-left = quit early / DNF
     // top-right = NIRS baseline video
     createHiddenOperatorButtons();
+    createBackupRecoveryButton();
     
     preloadAnimationFrames();
     console.log('[APP] Initialization complete');
@@ -804,6 +805,64 @@ function createHiddenOperatorButtons() {
 
     document.body.appendChild(quitBtn);
     document.body.appendChild(baselineBtn);
+}
+
+function createBackupRecoveryButton() {
+    if (
+        !dataManager ||
+        typeof dataManager.getLatestAutosaveKey !== 'function' ||
+        !dataManager.getLatestAutosaveKey()
+    ) {
+        return;
+    }
+
+    const existing =
+        document.getElementById('recoverBackupButton');
+
+    if (existing) {
+        existing.remove();
+    }
+
+    const btn = document.createElement('button');
+
+    btn.id = 'recoverBackupButton';
+    btn.textContent = 'Recover CSV Backup';
+
+    btn.style.position = 'fixed';
+    btn.style.left = '50%';
+    btn.style.top = '10px';
+    btn.style.transform = 'translateX(-50%)';
+    btn.style.zIndex = '1000001';
+    btn.style.fontSize = '18px';
+    btn.style.padding = '12px 18px';
+    btn.style.backgroundColor = 'orange';
+    btn.style.color = 'black';
+    btn.style.border = '2px solid black';
+    btn.style.borderRadius = '8px';
+
+    btn.addEventListener('pointerdown', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const restored =
+            dataManager.restoreLatestAutosave();
+
+        if (!restored) {
+            return;
+        }
+
+        elements.endStats.innerHTML = `
+            <p>Recovered saved ECITT backup.</p>
+            <p>Participant: ${dataManager.participantId}</p>
+            <p>Event rows: ${dataManager.sessionData.length}</p>
+            <p>Trial rows: ${dataManager.trialData.length}</p>
+            <p>Press Download CSV now.</p>
+        `;
+
+        showScreen('endScreen');
+    });
+
+    document.body.appendChild(btn);
 }
 
 function styleHiddenOperatorButton(button, side) {
@@ -2037,6 +2096,7 @@ let mediaRecorder = null;
 let recordedChunks = [];
 let mediaStream = null;
 let recordedMimeType = '';
+let recordingFinalizing = false;
 
 function startRecording() {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -2057,7 +2117,7 @@ function startRecording() {
             mediaRecorder.ondataavailable = e => {
                 if (e.data && e.data.size > 0) recordedChunks.push(e.data);
             };
-            mediaRecorder.start();
+            mediaRecorder.start(1000);
             console.log('[REC] Recording started, mimeType:', mimeType);
         })
         .catch(err => {
@@ -2066,26 +2126,103 @@ function startRecording() {
 }
 
 function downloadCSVOnly() {
-    dataManager.downloadCSV();
+    try {
+        dataManager.saveToLocalStorage();
+        dataManager.downloadCSV();
+
+        alert(
+            'CSV download started. If Files/Safari does not show it, use Recover CSV Backup before starting another participant.'
+        );
+    } catch (err) {
+        alert(`CSV download failed, but backup should still be saved: ${err.message}`);
+        console.error('[DATA] CSV download failed:', err);
+    }
 }
 
 function downloadVideoOnly() {
+    if (recordingFinalizing) {
+        alert('Video is still finalizing. Wait a few seconds and press Download Video again.');
+        return;
+    }
+
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        recordingFinalizing = true;
+
+        alert('Stopping and finalizing video. Press Download Video again in a few seconds if the download does not start.');
+
+        mediaRecorder.addEventListener('stop', () => {
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(t => t.stop());
+                mediaStream = null;
+            }
+
+            mediaRecorder = null;
+            recordingFinalizing = false;
+
+            setTimeout(() => {
+                downloadVideoOnly();
+            }, 500);
+        }, { once: true });
+
+        try {
+            mediaRecorder.requestData();
+        } catch (e) {}
+
+        mediaRecorder.stop();
+        return;
+    }
+
     if (!recordedChunks || recordedChunks.length === 0) {
+        alert(
+            'No video data is available. The CSV backup is still safe, but the iPad may not have finalized the video.'
+        );
         console.warn('[REC] No video data available');
         return;
     }
+
     const mimeType = recordedMimeType || 'video/webm';
     const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
-    const blob = new Blob(recordedChunks, { type: mimeType });
-    const filename = `ECITT_${dataManager.participantId}_${dataManager.formatFilestamp(dataManager.sessionStart)}.${ext}`;
-    const link = document.createElement('a');
-    link.setAttribute('href', URL.createObjectURL(blob));
-    link.setAttribute('download', filename);
-    link.style.visibility = 'hidden';
+
+    const blob =
+        new Blob(recordedChunks, { type: mimeType });
+
+    const filename =
+        `ECITT_${dataManager.participantId}_${dataManager.formatFilestamp(dataManager.sessionStart)}.${ext}`;
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const link =
+        document.createElement('a');
+
+    link.href = url;
+    link.download = filename;
+    link.textContent = 'Download video file';
+    link.style.position = 'fixed';
+    link.style.left = '50%';
+    link.style.bottom = '20px';
+    link.style.transform = 'translateX(-50%)';
+    link.style.zIndex = '1000002';
+    link.style.fontSize = '22px';
+    link.style.padding = '14px 20px';
+    link.style.backgroundColor = 'white';
+    link.style.color = 'black';
+    link.style.border = '3px solid black';
+    link.style.borderRadius = '10px';
+
     document.body.appendChild(link);
+
     link.click();
-    document.body.removeChild(link);
-    console.log('[REC] Video downloaded:', filename);
+
+    setTimeout(() => {
+        if (link.parentNode) {
+            link.parentNode.removeChild(link);
+        }
+
+        URL.revokeObjectURL(url);
+    }, 30000);
+
+    console.log('[REC] Video download prepared:', filename);
 }
 
 // Stops the recorder and auto-downloads both files (used on DNF)
@@ -2105,11 +2242,28 @@ function stopAndAutoDownload() {
 
 // Stops the recorder without downloading (used on normal end — user presses buttons)
 function stopRecording() {
-    if (!mediaRecorder || mediaRecorder.state === 'inactive') return;
+    if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+        return;
+    }
+
+    recordingFinalizing = true;
+
     mediaRecorder.addEventListener('stop', () => {
-        if (mediaStream) { mediaStream.getTracks().forEach(t => t.stop()); mediaStream = null; }
+        if (mediaStream) {
+            mediaStream.getTracks().forEach(t => t.stop());
+            mediaStream = null;
+        }
+
         mediaRecorder = null;
+        recordingFinalizing = false;
+
+        console.log('[REC] Recording finalized');
     }, { once: true });
+
+    try {
+        mediaRecorder.requestData();
+    } catch (e) {}
+
     mediaRecorder.stop();
 }
 
@@ -2121,6 +2275,7 @@ function cleanupRecording() {
     mediaRecorder = null;
     recordedChunks = [];
     recordedMimeType = '';
+    recordingFinalizing = false;
 }
 
 // ===== REWARD ANIMATION =====

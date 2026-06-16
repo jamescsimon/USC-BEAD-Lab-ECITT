@@ -13,6 +13,7 @@ class DataManager {
         this.currentTrial = null;
         this.counterbalance = '';
         this.currentTrialName = '';
+        this.autosaveKey = '';
     }
 
     /**
@@ -31,6 +32,11 @@ class DataManager {
         this.currentTrial = null;
         this.currentTrialName = '';
     
+        this.autosaveKey =
+            `ecitt_autosave_${participantId}_${Date.now()}`;
+
+        this.saveToLocalStorage();
+
         console.log(`[DATA] Session started for ${participantId}`);
     }
 
@@ -251,6 +257,7 @@ class DataManager {
                 }
             }
             this.sessionData.push(record);
+            this.saveToLocalStorage();
             // ====================================
             // CLEAR TRIAL AFTER RESPONSE LOGGED
             // ====================================
@@ -526,17 +533,40 @@ class DataManager {
      */
     saveToLocalStorage() {
         try {
-            const key = `ecitt_session_${this.participantId}_${this.sessionStart.getTime()}`;
+            if (!this.participantId || !this.sessionStart) {
+                return;
+            }
+    
+            if (!this.autosaveKey) {
+                this.autosaveKey =
+                    `ecitt_autosave_${this.participantId}_${this.sessionStart.getTime()}`;
+            }
+    
             const data = {
                 participantId: this.participantId,
                 sessionStart: this.sessionStart.toISOString(),
                 testName: this.testName,
-                records: this.sessionData
+                counterbalance: this.counterbalance,
+    
+                sessionData: this.sessionData,
+                trialData: this.trialData,
+    
+                savedAt: new Date().toISOString()
             };
-            localStorage.setItem(key, JSON.stringify(data));
-            console.log(`[DATA] Session saved to localStorage: ${key}`);
+    
+            localStorage.setItem(
+                this.autosaveKey,
+                JSON.stringify(data)
+            );
+    
+            localStorage.setItem(
+                'ecitt_autosave_latest_key',
+                this.autosaveKey
+            );
+    
+            console.log(`[DATA] Autosaved session: ${this.autosaveKey}`);
         } catch (error) {
-            console.error('[DATA] Failed to save to localStorage:', error);
+            console.error('[DATA] Failed to autosave session:', error);
         }
     }
 
@@ -573,6 +603,87 @@ class DataManager {
             }
         }
         return sessions;
+    }
+
+    getLatestAutosaveKey() {
+        const latestKey =
+            localStorage.getItem('ecitt_autosave_latest_key');
+    
+        if (latestKey && localStorage.getItem(latestKey)) {
+            return latestKey;
+        }
+    
+        const autosaveKeys = [];
+    
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+    
+            if (
+                key &&
+                key.startsWith('ecitt_autosave_') &&
+                key !== 'ecitt_autosave_latest_key'
+            ) {
+                autosaveKeys.push(key);
+            }
+        }
+    
+        if (autosaveKeys.length === 0) {
+            return null;
+        }
+    
+        autosaveKeys.sort((a, b) => {
+            try {
+                const dataA = JSON.parse(localStorage.getItem(a));
+                const dataB = JSON.parse(localStorage.getItem(b));
+    
+                return new Date(dataB.savedAt) - new Date(dataA.savedAt);
+            } catch (e) {
+                return 0;
+            }
+        });
+    
+        return autosaveKeys[0];
+    }
+    
+    restoreLatestAutosave() {
+        try {
+            const key = this.getLatestAutosaveKey();
+    
+            if (!key) {
+                alert('No ECITT backup was found on this iPad.');
+                return false;
+            }
+    
+            const raw = localStorage.getItem(key);
+    
+            if (!raw) {
+                alert('The ECITT backup key exists, but the backup data was empty.');
+                return false;
+            }
+    
+            const parsed = JSON.parse(raw);
+    
+            this.participantId = parsed.participantId || '';
+            this.sessionStart = parsed.sessionStart
+                ? new Date(parsed.sessionStart)
+                : new Date();
+    
+            this.testName = parsed.testName || 'Unknown';
+            this.counterbalance = parsed.counterbalance || '';
+    
+            this.sessionData = parsed.sessionData || parsed.records || [];
+            this.trialData = parsed.trialData || [];
+    
+            this.autosaveKey = key;
+    
+            console.log(`[DATA] Restored autosave: ${key}`);
+    
+            return true;
+        } catch (error) {
+            console.error('[DATA] Failed to restore autosave:', error);
+            alert(`Failed to restore ECITT backup: ${error.message}`);
+            return false;
+        }
     }
 
     /**
@@ -652,6 +763,7 @@ class DataManager {
     }
     logTrial(trialData) {
         this.trialData.push(trialData);
+        this.saveToLocalStorage();
     }
 }
 
