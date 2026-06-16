@@ -747,7 +747,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // top-left = quit early / DNF
     // top-right = NIRS baseline video
     createHiddenOperatorButtons();
-    createBackupRecoveryButton();
+
+    appState.currentScreenName = 'ageSelectionScreen';
+    updateBackupRecoveryButton();
     
     preloadAnimationFrames();
     console.log('[APP] Initialization complete');
@@ -769,7 +771,9 @@ function showScreen(screenName) {
 
     elements[screenName].classList.add('active');
     appState.currentScreenName = screenName;
-
+    
+    updateBackupRecoveryButton();
+    
     console.log(`[APP] Showing screen: ${screenName}`);
 }
 function createHiddenOperatorButtons() {
@@ -807,20 +811,25 @@ function createHiddenOperatorButtons() {
     document.body.appendChild(baselineBtn);
 }
 
-function createBackupRecoveryButton() {
+function updateBackupRecoveryButton() {
+    const existing =
+        document.getElementById('recoverBackupButton');
+
+    if (existing) {
+        existing.remove();
+    }
+
+    // Only show recovery on the home / age-selection page.
+    if (appState.currentScreenName !== 'ageSelectionScreen') {
+        return;
+    }
+
     if (
         !dataManager ||
         typeof dataManager.getLatestAutosaveKey !== 'function' ||
         !dataManager.getLatestAutosaveKey()
     ) {
         return;
-    }
-
-    const existing =
-        document.getElementById('recoverBackupButton');
-
-    if (existing) {
-        existing.remove();
     }
 
     const btn = document.createElement('button');
@@ -856,10 +865,11 @@ function createBackupRecoveryButton() {
             <p>Participant: ${dataManager.participantId}</p>
             <p>Event rows: ${dataManager.sessionData.length}</p>
             <p>Trial rows: ${dataManager.trialData.length}</p>
-            <p>Press Download CSV now.</p>
+            <p>Use the CSV links below to save the files.</p>
         `;
 
         showScreen('endScreen');
+        showCsvDownloadLinks('endScreen');
     });
 
     document.body.appendChild(btn);
@@ -1043,6 +1053,15 @@ function startTest() {
     elements.startBtn.disabled = true;
     elements.startBtn.classList && elements.startBtn.classList.add('disabled');
 
+    const recoverBtn =
+    document.getElementById('recoverBackupButton');
+
+    if (recoverBtn) {
+        recoverBtn.remove();
+    }
+
+    removeCsvDownloadLinks();
+
     appState.participantId = participantId;
     dataManager.startSession(
         participantId,
@@ -1056,6 +1075,8 @@ function startTest() {
 
 function restart() {
     // Reset state
+    removeCsvDownloadLinks();
+    
     appState.participantId = '';
     appState.currentTaskIndex = 0;
     appState.currentTask = null;
@@ -1670,6 +1691,9 @@ function finishTest() {
 
     stopRecording();
     showScreen('endScreen');
+
+    // iPad-safe CSV links appear immediately at the end.
+    showCsvDownloadLinks();
 }
 
 function handleDNF() {
@@ -1698,6 +1722,9 @@ function handleDNF() {
     `;
     
     showScreen('dnfScreen');
+    // Show CSV links immediately on DNF.
+    showCsvDownloadLinks();
+    
     stopAndAutoDownload();
 }
 
@@ -2125,17 +2152,151 @@ function startRecording() {
         });
 }
 
+function removeCsvDownloadLinks() {
+    const existing =
+        document.getElementById('csvDownloadLinksBox');
+
+    if (existing) {
+        existing.remove();
+    }
+}
+
+function showCsvDownloadLinks() {
+    removeCsvDownloadLinks();
+
+    const eventCSV =
+        dataManager.generateCSV();
+
+    const trialCSV =
+        dataManager.generateTrialCSV();
+
+    if (!eventCSV && !trialCSV) {
+        alert('No CSV data is available yet.');
+        return;
+    }
+
+    const box =
+        document.createElement('div');
+
+    box.id = 'csvDownloadLinksBox';
+
+    box.style.position = 'fixed';
+    box.style.left = '50%';
+    box.style.bottom = '20px';
+    box.style.transform = 'translateX(-50%)';
+    box.style.zIndex = '1000002';
+    box.style.display = 'flex';
+    box.style.flexDirection = 'column';
+    box.style.gap = '10px';
+    box.style.alignItems = 'center';
+    box.style.backgroundColor = 'rgba(255,255,255,0.98)';
+    box.style.padding = '14px';
+    box.style.border = '3px solid black';
+    box.style.borderRadius = '12px';
+
+    const title =
+        document.createElement('div');
+
+    title.textContent =
+        'Tap each CSV file to save';
+
+    title.style.fontSize = '18px';
+    title.style.fontWeight = 'bold';
+    title.style.color = 'black';
+
+    box.appendChild(title);
+
+    const participant =
+        dataManager.participantId ||
+        appState.participantId ||
+        'unknown';
+
+    const makeLink = (csvText, filename, label) => {
+        const blob =
+            new Blob(
+                [csvText],
+                { type: 'text/csv;charset=utf-8;' }
+            );
+
+        const url =
+            URL.createObjectURL(blob);
+
+        const link =
+            document.createElement('a');
+
+        link.href = url;
+        link.download = filename;
+        link.textContent = label;
+
+        link.style.fontSize = '20px';
+        link.style.padding = '12px 18px';
+        link.style.backgroundColor = 'black';
+        link.style.color = 'white';
+        link.style.borderRadius = '8px';
+        link.style.textDecoration = 'none';
+        link.style.display = 'block';
+        link.style.textAlign = 'center';
+        link.style.minWidth = '230px';
+
+        return link;
+    };
+
+    if (eventCSV) {
+        box.appendChild(
+            makeLink(
+                eventCSV,
+                `ECITT_${participant}_events.csv`,
+                'Download Events CSV'
+            )
+        );
+    }
+
+    if (trialCSV) {
+        box.appendChild(
+            makeLink(
+                trialCSV,
+                `ECITT_${participant}_trials.csv`,
+                'Download Trials CSV'
+            )
+        );
+    }
+
+    const closeBtn =
+        document.createElement('button');
+
+    closeBtn.textContent = 'Hide CSV links';
+
+    closeBtn.style.fontSize = '16px';
+    closeBtn.style.padding = '8px 12px';
+    closeBtn.style.backgroundColor = 'white';
+    closeBtn.style.color = 'black';
+    closeBtn.style.border = '1px solid black';
+    closeBtn.style.borderRadius = '6px';
+
+    closeBtn.addEventListener('pointerdown', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        removeCsvDownloadLinks();
+    });
+
+    box.appendChild(closeBtn);
+
+    document.body.appendChild(box);
+}
+
 function downloadCSVOnly() {
     try {
         dataManager.saveToLocalStorage();
-        dataManager.downloadCSV();
 
-        alert(
-            'CSV download started. If Files/Safari does not show it, use Recover CSV Backup before starting another participant.'
-        );
+        // iPad-safe: show visible CSV links instead of relying on automatic download.
+        showCsvDownloadLinks();
+
     } catch (err) {
-        alert(`CSV download failed, but backup should still be saved: ${err.message}`);
-        console.error('[DATA] CSV download failed:', err);
+        alert(
+            `CSV link creation failed, but backup should still be saved: ${err.message}`
+        );
+
+        console.error('[DATA] CSV link creation failed:', err);
     }
 }
 
@@ -2227,7 +2388,8 @@ function downloadVideoOnly() {
 
 // Stops the recorder and auto-downloads both files (used on DNF)
 function stopAndAutoDownload() {
-    downloadCSVOnly();
+    dataManager.saveToLocalStorage();
+
     if (!mediaRecorder || mediaRecorder.state === 'inactive') {
         downloadVideoOnly();
         return;
