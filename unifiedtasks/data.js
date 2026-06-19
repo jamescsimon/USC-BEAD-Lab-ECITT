@@ -138,7 +138,10 @@ class DataManager {
             'NIRSBaselineEnd',
             'TaskEnd',
             'DNF',
-            'FlashConflict'
+            'FlashConflict',
+            'ButterflyStart',
+            'ButterflyTouch',
+            'ButterflyEnd'
         ];
         // ====================================
         // START OF NEW TRIAL
@@ -188,6 +191,9 @@ class DataManager {
                 TrialsRemaining: eventData.trialsRemaining !== undefined ? eventData.trialsRemaining : 'n/a',
                 StartTimestamp: this.formatSoleScreenTimestamp(now),
                 Duration: '',
+                ReactionTime: eventData.RT !== undefined
+                    ? Math.round(Number(eventData.RT))
+                    : '',
             
                 FirstCorrectRT: '',
                 FirstIncorrectRT: '',
@@ -315,6 +321,7 @@ class DataManager {
             'TrialsRemaining',
             'StartTimestamp',
             'Duration',
+            'ReactionTime',
         
             'FirstCorrectRT',
             'FirstIncorrectRT',
@@ -357,7 +364,10 @@ class DataManager {
             'NIRSBaselineEnd',
             'TaskEnd',
             'DNF',
-            'FlashConflict'
+            'FlashConflict',
+            'ButterflyStart',
+            'ButterflyTouch',
+            'ButterflyEnd'
         ];
         const filtered = this.sessionData.filter(r => mainScreens.includes(r.SectionStarted));
         const rows = filtered.map((record, idx) => {
