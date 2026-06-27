@@ -139,6 +139,7 @@ class DataManager {
             'TaskEnd',
             'DNF',
             'FlashConflict',
+            'SyncTrainFlash',
             'ButterflyStart',
             'ButterflyTouch',
             'ButterflyEnd'
@@ -336,7 +337,12 @@ class DataManager {
             'FirstCorrectResponseType',
             'FirstIncorrectResponseType',
         
-            'PressSequence'
+            'PressSequence',
+            'ButterflyStart',
+            'ButterflyTouch',
+            'ButterflyEnd',
+            'SyncTrainFlash',
+            'FlashConflict'
         ];
         // Helper to parse SoleScreenExample StartTimestamp
         function parseTimestamp(ts) {
@@ -365,6 +371,7 @@ class DataManager {
             'TaskEnd',
             'DNF',
             'FlashConflict',
+            'SyncTrainFlash',
             'ButterflyStart',
             'ButterflyTouch',
             'ButterflyEnd'
