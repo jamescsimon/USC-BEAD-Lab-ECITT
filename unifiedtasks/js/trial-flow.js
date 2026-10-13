@@ -147,6 +147,7 @@ function showPromptScreen() {
     appState.currentRewarded = rewPos;
     appState.currentEmpPos = empPos;
     appState.currentTrialNumber = appState.currentTrial + 1;
+    appState.trialTaps = []; // every tap of this trial, for first-response accuracy and incorrect-tap counts
 
     // Determine section label from actual face position, not trial type
     let trialSection = 'PromptScreen';
@@ -196,6 +197,7 @@ function handleButtonPress(button, event) {
     const pressTimestamp = new Date();
 
     const accuracy = button === appState.currentRewarded ? 1 : 0;
+    appState.trialTaps.push({ button, correct: accuracy === 1, rt: Math.round(reactionTime) });
     const j2Range =
     appState.ageGroup === 'Child'
         ? JITTER2_CHILD_ANIM_RANGE
@@ -221,10 +223,10 @@ function handleButtonPress(button, event) {
         appState.currentTask.allowCorrection &&
         button !== appState.currentRewarded
     ) {
-        dataManager.logEvent({
+        flashButtonIndicator({
             section: 'RawResponse',
             stimuli: `button_${button}`,
-            invokedBy: 'InfantIncorrectPress',
+            invokedBy: 'IncorrectPress',
             rewardedSide: appState.currentRewarded,
             happyFaceSide: appState.currentEmpPos,  
             jitter1: appState.jitterDuration,
@@ -256,10 +258,6 @@ function handleButtonPress(button, event) {
             appState.blockReactionTime += reactionTime;
             appState.blockTrials++;
         }
-        // Proxy for the 32-trial inhibitory target. True validity is decided later from the EEG.
-        if (completedTrial?.type === 'inhb' && accuracy === 1) {
-            appState.inhibitoryCompleted++;
-        }
     }
     
     // Log response — section label from actual face position, not trial type
@@ -283,13 +281,13 @@ function handleButtonPress(button, event) {
         responseSection = 'RightTrialResponse';
     }
     if (
-        appState.ageGroup === 'Infant' &&
+        appState.currentTask.allowCorrection &&
         accuracy === 1
     ) {
         dataManager.logEvent({
             section: 'RawResponse',
             stimuli: `button_${button}`,
-            invokedBy: 'InfantCorrectPress',
+            invokedBy: 'CorrectPress',
             rewardedSide: appState.currentRewarded,
             happyFaceSide: appState.currentEmpPos,
             jitter1: appState.jitterDuration,
@@ -310,7 +308,8 @@ function handleButtonPress(button, event) {
     dataManager.currentTrial?.pressSequence?.join('|') ||
     `${button}@${Math.round(reactionTime)}`;
 
-    dataManager.logEvent({
+    // The response row is locked to a photocell flash so its EEG time is exact, not interpolated.
+    flashButtonIndicator({
         section: responseSection,
         blockNumber: completedBlock,
         trialNumber: completedIndex + 1,
@@ -335,6 +334,23 @@ function handleButtonPress(button, event) {
     
         trialsRemaining: appState.currentTask.trials - (completedIndex + 1),
     });
+    // Per-trial summary from every tap of this trial (wrong taps included)
+    const taps = appState.trialTaps;
+    const firstResponseCorrect = taps.length > 0 && taps[0].correct ? 1 : 0;
+    const incorrectTaps = taps.filter(t => !t.correct).length;
+    const isExperiment = !!appState.currentTask.isExperimentBlock;
+    const phase = isExperiment ? 'experiment' : appState.currentTask.isPractice ? 'practice' : 'demo';
+
+    if (isExperiment) {
+        appState.experimentTrialsDone++;
+        appState.experimentFirstCorrect += firstResponseCorrect;
+        // Progress toward the 32-trial inhibitory target. A first tap on the wrong side does not count.
+        // This is only a proxy: true validity is decided later from the EEG.
+        if (completedTrial?.type === 'inhb' && firstResponseCorrect === 1) {
+            appState.inhibitoryCompleted++;
+        }
+    }
+
     dataManager.logTrial({
         participantId: appState.participantId,
         ageGroup: appState.ageGroup,
@@ -349,14 +365,23 @@ function handleButtonPress(button, event) {
         happyFaceSide: appState.currentEmpPos,
     
         buttonPressed: button,
-        accuracy: accuracy,
+        firstResponseCorrect,
+        incorrectTaps,
         reactionTime: Math.round(reactionTime),
+    
+        phase,
+        direction: appState.counterbalance,
     
         jitter1: appState.jitterDuration,
         jitter2: j2Delay,
     
         firstIncorrectRT: firstIncorrectRTForTrial,
-        pressSequence: pressSequenceForTrial
+        pressSequence: pressSequenceForTrial,
+
+        inhibitoryCompletedSoFar: appState.inhibitoryCompleted,
+        lowEngagement: isExperiment
+            ? (isLowEngagement(appState.experimentTrialsDone, appState.experimentFirstCorrect) ? 1 : 0)
+            : ''
     });
 
     console.log(`[APP] Trial ${completedIndex + 1}: button=${button}, rewarded=${appState.currentRewarded}, accuracy=${accuracy}, RT=${reactionTime}ms`);
@@ -440,6 +465,13 @@ function finishTask() {
     }
 }
 
+function photocellCheckHtml() {
+    const c = dataManager.getFlashCheck();
+    return c.missing === 0
+        ? `<p>Photocell check: OK (${c.flashedRows} flashes for ${c.requiredRows} rows)</p>`
+        : `<p><strong>Photocell check: ${c.missing} of ${c.requiredRows} rows had no flash (${c.conflicts} flash conflicts).</strong></p>`;
+}
+
 function finishTest() {
     console.log('[APP] All tasks complete');
     appState.isComplete = true;
@@ -452,6 +484,7 @@ function finishTest() {
     
     // Display stats
     elements.endStats.innerHTML = `
+        ${photocellCheckHtml()}
         <p>Test Battery Complete!</p>
         <p>Total Trials: ${appState.totalTrials}</p>
         <p>Correct: ${appState.totalCorrect}</p>
@@ -484,6 +517,7 @@ function handleDNF() {
     
     // Display stats
     elements.dnfStats.innerHTML = `
+        ${photocellCheckHtml()}
         <p>Session Did Not Finish</p>
         <p>Completed Trials: ${appState.totalTrials} / ${totalExpected}</p>
         <p>Correct: ${appState.totalCorrect}</p>

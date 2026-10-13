@@ -71,6 +71,7 @@ const ctx = {
     setInterval: () => 0, clearInterval: noop,
     requestAnimationFrame: fn => ctx.setTimeout(fn, 16), cancelAnimationFrame: noop,
     Audio: function () { return { play: () => Promise.resolve(), pause: noop, load: noop, addEventListener: noop }; },
+    Blob: class { constructor(parts) { this.parts = parts; } }, URL: { createObjectURL: () => 'blob:test', revokeObjectURL() {} },
     Image: function () { return {}; }, performance: { now: () => clock }, Date: FakeDate, Math, JSON, Object, Array, Promise, Map, Set, String, Number, Error, RegExp, parseInt, parseFloat, isNaN
 };
 ctx.window.document = ctx.document;
@@ -84,10 +85,10 @@ const get = expr => vm.runInContext(expr, ctx);
 ctx._domReady();
 
 // recording / download side effects are not under test
-ctx.__anim = []; vm.runInContext('startRecording = () => {}; stopRecording = () => {};  showCsvDownloadLinks = () => {}; stopAndAutoDownload = () => {}; playRewardAnimation = (el, opts) => { __anim.push(opts || {}); }; stopRewardAnimation = () => {}; showButterflyTask = cb => cb();', ctx);
+ctx.__anim = []; vm.runInContext('startRecording = () => {}; stopRecording = () => {};  stopAndAutoDownload = () => {}; playRewardAnimation = (el, opts) => { __anim.push(opts || {}); }; stopRewardAnimation = () => {}; showButterflyTask = cb => cb();', ctx);
 
 function playTrial(wrongFirst) {
-    get('handleDotPress')(); drain();                       // dot -> (wait) -> prompt
+    clock += 400; get('handleDotPress')(); drain();   // a person takes a moment to press the dot                       // dot -> (wait) -> prompt
     assert.strictEqual(get('appState.currentScreenName'), 'promptScreen');
     const rewarded = get('appState.currentRewarded');
     if (wrongFirst) {
@@ -104,6 +105,17 @@ function playUntilScreenChange(maxTrials = 200) {
     }
     throw new Error('never reached the choice screen');
 }
+// minimal CSV line parser (handles quoted fields with commas)
+function csvLine(line) {
+    const out = []; let cur = ''; let q = false;
+    for (let i = 0; i < line.length; i++) {
+        const c = line[i];
+        if (q) { if (c === '"' && line[i + 1] === '"') { cur += '"'; i++; } else if (c === '"') q = false; else cur += c; }
+        else if (c === '"') q = true; else if (c === ',') { out.push(cur); cur = ''; } else cur += c;
+    }
+    out.push(cur); return out;
+}
+
 const choice = () => Array.from(els.choiceButtons.children.map(b => b.textContent));
 const press = label => els.choiceButtons.children.find(b => b.textContent === label).click();
 
@@ -114,12 +126,12 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     const tag = `${bracket}/${side}`;
     get('restart')();
     ctx._syncCount = 0; ctx.__anim.length = 0;
+    clock += 5000; drain();                                 // real sessions start minutes after the last flash
     els.participantIdInput.value = 'T001';
     get(`select${bracket}`)();
     get('setCounterbalance')(side);
     get('startTest')();
-    get('continueAfterRecordingReminder')();                // would start calibration/butterfly: skip straight to the task
-    drain();
+    // calibration/butterfly screens are DOM-only; start the first task directly
     // calibration overlays are DOM-only in the real app; jump to the first task directly
     get('loadTask')(get('activeTaskSequence')[0]); drain();
     assert.ok(get('activeTaskSequence').length <= 2, tag + ': initial sequence is demo + practice');
@@ -145,14 +157,38 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     const first = get('appState.trialSequence')[0];
     assert.strictEqual(first.emp, side, tag + ' prepotent side');
 
-    // Infant: a wrong tap must not end the trial; others advance on the first response
-    if (bracket === 'Infant') {
-        get('handleDotPress')(); drain();
+    // First trial of the block: wrong tap first.
+    // Infant keeps the trial open until the correct button; Child/Adult end it on the first response.
+    {
+        clock += 400; get('handleDotPress')(); drain();   // a person takes a moment to press the dot
         const rewarded = get('appState.currentRewarded');
         clock += 600; get('handleButtonPress')(rewarded === 'left' ? 'right' : 'left'); drain();
-        assert.strictEqual(get('appState.currentTrial'), 0, 'infant wrong tap keeps the trial open');
-        clock += 600; get('handleButtonPress')(rewarded); drain();
+        const events = () => String(get('dataManager.generateCSV()')).split('\n');
+        const header = csvLine(events()[0]);
+        const col = name => header.indexOf(name);
+        if (bracket === 'Infant') {
+            assert.strictEqual(get('appState.currentTrial'), 0, 'infant wrong tap keeps the trial open');
+            const wrongRows = events().filter(r => csvLine(r)[col('SectionStarted')] === 'IncorrectResponse');
+            assert.strictEqual(wrongRows.length, 1, tag + ' the wrong tap has its own Events CSV row');
+            const cells = csvLine(wrongRows[0]);
+            assert.strictEqual(cells[col('Accuracy')], '0');
+            assert.strictEqual(cells[col('PhotocellFlash')], '1', tag + ' wrong tap is locked to a flash');
+            assert.ok(['left', 'right'].includes(cells[col('ButtonPressed')]));
+            clock += 600; get('handleButtonPress')(rewarded); drain();
+        } else {
+            assert.strictEqual(get('appState.currentTrial'), 1, tag + ' child/adult: first response ends the trial');
+            assert.ok(events().some(r => /Response/.test(csvLine(r)[col('SectionStarted')]) && csvLine(r)[col('Accuracy')] === '0'),
+                tag + ' a response row with Accuracy 0 exists');
+        }
         assert.strictEqual(get('appState.currentTrial'), 1);
+        // trials CSV: first response wrong; infant had 1 incorrect tap
+        const t = String(get('dataManager.generateTrialCSV()')).split('\n');
+        const th = csvLine(t[0]);
+        const last = csvLine(t[t.length - 1]);
+        assert.strictEqual(last[th.indexOf('Phase')], 'experiment');
+        assert.strictEqual(last[th.indexOf('FirstResponseCorrect')], '0');
+        assert.strictEqual(last[th.indexOf('IncorrectTaps')], bracket === 'Infant' ? '1' : '1');
+        assert.strictEqual(last[th.indexOf('Direction')], side);
     }
     ctx.__anim.length = 0;
     playUntilScreenChange();
@@ -184,12 +220,69 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     assert.ok(!/\d+ \/ 32/.test(els.choiceStats.innerHTML), 'no number shown');
 
     // End needs a second tap
+    // trials CSV: one row per experiment trial, one accuracy column, phases labelled
+    {
+        const t = String(get('dataManager.generateTrialCSV()')).split('\n');
+        const th = csvLine(t[0]);
+        assert.ok(!th.includes('Accuracy'), 'old Accuracy column replaced');
+        assert.ok(['Phase', 'FirstResponseCorrect', 'IncorrectTaps', 'Direction', 'InhibitoryCompletedSoFar', 'LowEngagement'].every(h => th.includes(h)));
+        const rows = t.slice(1).map(csvLine);
+        const ph = th.indexOf('Phase');
+        assert.strictEqual(rows.filter(r => r[ph] === 'experiment').length, 128, tag + ' 4 blocks x 32 experiment trials');
+        assert.ok(rows.filter(r => r[ph] === 'practice').length >= 2, tag + ' practice trials labelled');
+        assert.strictEqual(rows[rows.length - 1][th.indexOf('InhibitoryCompletedSoFar')], '32');
+    }
     press('End');
     assert.strictEqual(get('appState.currentScreenName'), 'choiceScreen', tag + ' End first tap only arms');
     els.choiceButtons.children[2].click(); drain();   // label now reads 'Tap again to confirm'
     assert.strictEqual(get('appState.currentScreenName'), 'endScreen', tag + ' ended');
     assert.strictEqual(get('appState.isComplete'), true);
     assert.strictEqual(ctx._syncCount, 1, tag + ' sync train runs once per session');
+    // every flash-required row got a flash at normal pacing, and the screen says so
+    const fc = get('dataManager.getFlashCheck()');
+    if (fc.missing !== 0) {
+        const lines = String(get('dataManager.generateCSV()')).split('\n').map(csvLine);
+        const h = lines[0]; const sI = h.indexOf('SectionStarted'), pI = h.indexOf('PhotocellFlash'), tI = h.indexOf('StartTimestamp'), nI = h.indexOf('TrialName');
+        lines.forEach((r, i) => { if (i > 0 && r[pI] === '0') console.log('NO FLASH:', r[sI], r[nI], r[tI], '| prev:', lines[i - 1][sI], lines[i - 1][tI]); });
+    }
+    assert.strictEqual(fc.missing, 0, tag + ' no row without a flash');
+    assert.strictEqual(fc.conflicts, 0, tag + ' no flash conflicts at normal pacing');
+    assert.ok(fc.requiredRows > 128, tag + ' flash rows counted');
+    assert.ok(/Photocell check: OK/.test(els.endStats.innerHTML), tag + ' end screen reports the check');
+    const links = els.endCsvDownloads.children.map(a => a.textContent);
+    assert.strictEqual(links.join('|'), 'Events CSV|Trials CSV', tag + ' end screen has one link per CSV');
+    assert.ok(els.endCsvDownloads.children.every(a => /\.csv$/.test(a.download)));
     console.log('ok', tag);
+}
+// ---- flash gate: a second flash requested while the first is on is refused, but its row is kept ----
+{
+    get('restart')();
+    clock += 5000; drain();
+    get('dataManager').startSession('GATE', 'Adult', 'left');
+    const flash = get('flashButtonIndicator');
+    const ev = section => ({ section, stimuli: 'x', invokedBy: 'test', accuracy: 'n/a', testName: 'Adult', trialsRemaining: 1, trialName: 'adt_exp1_left' });
+    const first = flash(ev('ReadyScreen'));
+    const second = flash(ev('LeftTrialScreen'));       // same instant -> gate closed
+    assert.strictEqual(first, true); assert.strictEqual(second, false);
+    drain();                                            // flash on, off, dark period
+    clock += 5;
+    const tooSoon = flash(ev('LeftTrialScreen'));       // inside the dark period? drain() already ran past it
+    drain();
+    const rows = String(get('dataManager.generateCSV()')).split('\n').slice(1).map(csvLine);
+    const hdr = csvLine(String(get('dataManager.generateCSV()')).split('\n')[0]);
+    const sec = rows.map(r => r[hdr.indexOf('SectionStarted')]);
+    const pf = rows.map(r => r[hdr.indexOf('PhotocellFlash')]);
+    assert.ok(sec.includes('FlashConflict'), 'refused flash leaves a FlashConflict marker');
+    const refusedIdx = sec.indexOf('LeftTrialScreen');
+    assert.strictEqual(pf[refusedIdx], '0', 'refused row is kept, flagged as not flashed');
+    assert.strictEqual(pf[sec.indexOf('ReadyScreen')], '1');
+    const chk = get('dataManager.getFlashCheck()');
+    assert.strictEqual(tooSoon, false, 'a flash inside the dark period after the previous one is refused');
+    assert.ok(chk.missing >= 1 && chk.conflicts === 2, 'check reports the unflashed rows: ' + JSON.stringify(chk));
+    // after the dark period the gate reopens
+    clock += 500; drain();
+    assert.strictEqual(flash(ev('ReadyScreen')), true, 'gate reopens after the dark period');
+    drain();
+    console.log('ok flash gate');
 }
 console.log('flow: all tests passed');

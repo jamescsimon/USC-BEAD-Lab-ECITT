@@ -35,12 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
         buttonIndicator: document.getElementById('buttonIndicator'),
         
         endStats: document.getElementById('endStats'),
-        downloadCsvBtn: document.getElementById('downloadCsvBtn'),
+        endCsvDownloads: document.getElementById('endCsvDownloads'),
         downloadVideoBtn: document.getElementById('downloadVideoBtn'),
         restartBtn: document.getElementById('restartBtn'),
 
         dnfStats: document.getElementById('dnfStats'),
-        dnfDownloadCsvBtn: document.getElementById('dnfDownloadCsvBtn'),
+        dnfCsvDownloads: document.getElementById('dnfCsvDownloads'),
         dnfDownloadVideoBtn: document.getElementById('dnfDownloadVideoBtn'),
         dnfRestartBtn: document.getElementById('dnfRestartBtn'),
 
@@ -105,10 +105,8 @@ document.addEventListener('DOMContentLoaded', () => {
             handleButtonPress('right', event);
         });
     }
-    if (elements.downloadCsvBtn) elements.downloadCsvBtn.addEventListener('click', downloadCSVOnly);
     if (elements.downloadVideoBtn) elements.downloadVideoBtn.addEventListener('click', downloadVideoOnly);
     if (elements.restartBtn) elements.restartBtn.addEventListener('click', restart);
-    if (elements.dnfDownloadCsvBtn) elements.dnfDownloadCsvBtn.addEventListener('click', downloadCSVOnly);
     if (elements.dnfDownloadVideoBtn) elements.dnfDownloadVideoBtn.addEventListener('click', downloadVideoOnly);
     if (elements.dnfRestartBtn) elements.dnfRestartBtn.addEventListener('click', restart);
     if (elements.recordingReminderContinueBtn) elements.recordingReminderContinueBtn.addEventListener('click', continueAfterRecordingReminder);

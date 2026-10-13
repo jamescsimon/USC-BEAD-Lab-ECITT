@@ -98,6 +98,11 @@ function showBlockEnd() {
     // Progress cue: one static chick-hatching frame, no number or bar. Hatched = target reached.
     const chickFrames = FRAME_ANIMATIONS.chick;
     const frame = chickFrameFor(appState.inhibitoryCompleted, INHIBITORY_TARGET, chickFrames);
+    if (isLowEngagement(appState.experimentTrialsDone, appState.experimentFirstCorrect)) {
+        const pct = Math.round(100 * appState.experimentFirstCorrect / appState.experimentTrialsDone);
+        html += `<p class="engagement-note">Low accuracy so far (${pct}% first-tap correct). Participant may not be engaging.</p>`;
+    }
+
     html += `
         <img class="progress-chick" alt="" src="../graphics/frames/chick-${String(frame).padStart(2, '0')}.png">`;
 
@@ -109,9 +114,10 @@ function showBlockEnd() {
 }
 
 function endSession() {
+    const check = dataManager.getFlashCheck();
     flashButtonIndicator({
         section: 'TaskEnd',
-        stimuli: 'blank',
+        stimuli: `blank|flash_check rows=${check.requiredRows} flashed=${check.flashedRows} missing=${check.missing} conflicts=${check.conflicts}`,
         invokedBy: 'ParticipantBlueButton',
         accuracy: 'n/a',
         testName: appState.ageGroup,

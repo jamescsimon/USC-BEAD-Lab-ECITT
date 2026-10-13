@@ -38,59 +38,32 @@ function startRecording() {
         });
 }
 
-function removeCsvDownloadLinks() {
-    const existing =
-        document.getElementById('csvDownloadLinksBox');
+let csvDownloadUrls = [];
 
-    if (existing) {
-        existing.remove();
-    }
+function removeCsvDownloadLinks() {
+    csvDownloadUrls.forEach(url => URL.revokeObjectURL(url));
+    csvDownloadUrls = [];
+
+    [elements.endCsvDownloads, elements.dnfCsvDownloads].forEach(container => {
+        if (container) container.innerHTML = '';
+    });
 }
 
+// Puts "Events CSV" and "Trials CSV" download links on the end and DNF screens.
+// They are real <a download> links (not scripted clicks) so iPad saves each file on a single tap.
 function showCsvDownloadLinks() {
     removeCsvDownloadLinks();
 
-    const eventCSV =
-        dataManager.generateCSV();
+    // keep the local-storage backup current whenever the files are offered
+    dataManager.saveToLocalStorage();
 
-    const trialCSV =
-        dataManager.generateTrialCSV();
+    const eventCSV = dataManager.generateCSV();
+    const trialCSV = dataManager.generateTrialCSV();
 
     if (!eventCSV && !trialCSV) {
         alert('No CSV data is available yet.');
         return;
     }
-
-    const box =
-        document.createElement('div');
-
-    box.id = 'csvDownloadLinksBox';
-
-    box.style.position = 'fixed';
-    box.style.left = '50%';
-    box.style.bottom = '20px';
-    box.style.transform = 'translateX(-50%)';
-    box.style.zIndex = '1000002';
-    box.style.display = 'flex';
-    box.style.flexDirection = 'column';
-    box.style.gap = '10px';
-    box.style.alignItems = 'center';
-    box.style.backgroundColor = 'rgba(255,255,255,0.98)';
-    box.style.padding = '14px';
-    box.style.border = '3px solid black';
-    box.style.borderRadius = '12px';
-
-    const title =
-        document.createElement('div');
-
-    title.textContent =
-        'Tap each CSV file to save';
-
-    title.style.fontSize = '18px';
-    title.style.fontWeight = 'bold';
-    title.style.color = 'black';
-
-    box.appendChild(title);
 
     const participant =
         dataManager.participantId ||
@@ -98,92 +71,27 @@ function showCsvDownloadLinks() {
         'unknown';
 
     const makeLink = (csvText, filename, label) => {
-        const blob =
-            new Blob(
-                [csvText],
-                { type: 'text/csv;charset=utf-8;' }
-            );
+        const url = URL.createObjectURL(new Blob([csvText], { type: 'text/csv;charset=utf-8;' }));
+        csvDownloadUrls.push(url);
 
-        const url =
-            URL.createObjectURL(blob);
-
-        const link =
-            document.createElement('a');
-
+        const link = document.createElement('a');
         link.href = url;
         link.download = filename;
         link.textContent = label;
-
-        link.style.fontSize = '20px';
-        link.style.padding = '12px 18px';
-        link.style.backgroundColor = 'black';
-        link.style.color = 'white';
-        link.style.borderRadius = '8px';
-        link.style.textDecoration = 'none';
-        link.style.display = 'block';
-        link.style.textAlign = 'center';
-        link.style.minWidth = '230px';
-
+        link.className = 'download-button';
         return link;
     };
 
-    if (eventCSV) {
-        box.appendChild(
-            makeLink(
-                eventCSV,
-                `ECITT_${participant}_events.csv`,
-                'Download Events CSV'
-            )
-        );
-    }
+    [elements.endCsvDownloads, elements.dnfCsvDownloads].forEach(container => {
+        if (!container) return;
 
-    if (trialCSV) {
-        box.appendChild(
-            makeLink(
-                trialCSV,
-                `ECITT_${participant}_trials.csv`,
-                'Download Trials CSV'
-            )
-        );
-    }
-
-    const closeBtn =
-        document.createElement('button');
-
-    closeBtn.textContent = 'Hide CSV links';
-
-    closeBtn.style.fontSize = '16px';
-    closeBtn.style.padding = '8px 12px';
-    closeBtn.style.backgroundColor = 'white';
-    closeBtn.style.color = 'black';
-    closeBtn.style.border = '1px solid black';
-    closeBtn.style.borderRadius = '6px';
-
-    closeBtn.addEventListener('pointerdown', (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        removeCsvDownloadLinks();
+        if (eventCSV) {
+            container.appendChild(makeLink(eventCSV, `ECITT_${participant}_events.csv`, 'Events CSV'));
+        }
+        if (trialCSV) {
+            container.appendChild(makeLink(trialCSV, `ECITT_${participant}_trials.csv`, 'Trials CSV'));
+        }
     });
-
-    box.appendChild(closeBtn);
-
-    document.body.appendChild(box);
-}
-
-function downloadCSVOnly() {
-    try {
-        dataManager.saveToLocalStorage();
-
-        // iPad-safe: show visible CSV links instead of relying on automatic download.
-        showCsvDownloadLinks();
-
-    } catch (err) {
-        alert(
-            `CSV link creation failed, but backup should still be saved: ${err.message}`
-        );
-
-        console.error('[DATA] CSV link creation failed:', err);
-    }
 }
 
 function downloadVideoOnly() {

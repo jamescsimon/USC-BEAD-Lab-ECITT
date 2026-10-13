@@ -3,6 +3,13 @@
  * Handles CSV generation, local storage, and data export
  */
 
+// Rows that must be locked to a photocell flash (stimulus onsets, responses, sync pulses, task end).
+const FLASH_REQUIRED_SECTIONS = [
+    'ReadyScreen', 'LeftTrialScreen', 'RightTrialScreen', 'ControlTrialScreen',
+    'LeftTrialResponse', 'RightTrialResponse', 'ControlTrialResponse',
+    'IncorrectResponse', 'SyncTrainFlash', 'TaskEnd'
+];
+
 class DataManager {
     constructor() {
         this.sessionData = [];
@@ -71,9 +78,11 @@ class DataManager {
             );
 
             const isCorrect =
+                responseType === 'CorrectPress' ||
                 responseType === 'InfantCorrectPress';
 
             const isIncorrect =
+                responseType === 'IncorrectPress' ||
                 responseType === 'InfantIncorrectPress' ||
                 responseType === 'InfantIncorrectAttempt';
 
@@ -105,13 +114,23 @@ class DataManager {
                     responseType;
             }
 
+            
+        }
+
+        // Every wrong tap gets its own Events CSV row (SectionStarted = IncorrectResponse).
+        // Correct raw presses only fill the trial's response row, so they stop here.
+        const isIncorrectRaw =
+            eventData.section === 'RawResponse' &&
+            ['IncorrectPress', 'InfantIncorrectPress', 'InfantIncorrectAttempt'].includes(eventData.invokedBy);
+
+        if (eventData.section === 'RawResponse' && !isIncorrectRaw) {
             return;
         }
 
         // Use the caller-provided section when present. Avoid brittle remapping
         // based on partial stimuli strings (e.g. "red dot, blue buttons") which
         // produced incorrect Left/Right mappings previously.
-        let sectionStarted = eventData.section || '';
+        let sectionStarted = isIncorrectRaw ? 'IncorrectResponse' : (eventData.section || '');
 
         // Keep legacy handling for a few known aliases if necessary
         if (!sectionStarted && eventData.sectionAlias) {
@@ -132,6 +151,7 @@ class DataManager {
             'RightTrialResponse',
             'ControlTrialResponse',
             'PromptResponse',
+            'IncorrectResponse',
             'ReadyScreen',
             'WaitScreen',
             'NIRSBaselineStart',
@@ -195,6 +215,8 @@ class DataManager {
                 ReactionTime: eventData.RT !== undefined
                     ? Math.round(Number(eventData.RT))
                     : '',
+                ButtonPressed: eventData.buttonPressed || '',
+                PhotocellFlash: eventData.photocellFlash ? 1 : 0,
             
                 FirstCorrectRT: '',
                 FirstIncorrectRT: '',
@@ -323,6 +345,8 @@ class DataManager {
             'StartTimestamp',
             'Duration',
             'ReactionTime',
+            'ButtonPressed',
+            'PhotocellFlash',
         
             'FirstCorrectRT',
             'FirstIncorrectRT',
@@ -364,6 +388,7 @@ class DataManager {
             'RightTrialResponse',
             'ControlTrialResponse',
             'PromptResponse',
+            'IncorrectResponse',
             'ReadyScreen',
             'WaitScreen',
             'NIRSBaselineStart',
@@ -405,75 +430,56 @@ class DataManager {
         });
         return [headers.join(','), ...rows].join('\n');
     }
+    /**
+     * One row per trial. FirstResponseCorrect is whether the very first tap was right
+     * (the participant's accuracy); IncorrectTaps counts wrong taps before the trial ended.
+     */
     generateTrialCSV() {
-
         if (this.trialData.length === 0) {
             return null;
         }
-    
-        const headers = [
-            'ParticipantID',
-            'AgeGroup',
-            'Counterbalance',
-        
-            'BlockNumber',
-            'TaskID',
-            'TrialNumber',
-            'TrialType',
-        
-            'RewardedSide',
-            'HappyFaceSide',
-        
-            'ButtonPressed',
-            'Accuracy',
-        
-            'ReactionTime',
-        
-            'Jitter1',
-            'Jitter2',
-        
-            'FirstIncorrectRT',
-        
-            'PressSequence'
+
+        // [CSV header, key in trialData]
+        const columns = [
+            ['ParticipantID', 'participantId'],
+            ['AgeGroup', 'ageGroup'],
+            ['Counterbalance', 'counterbalance'],
+
+            ['Phase', 'phase'],
+            ['BlockNumber', 'blockNumber'],
+            ['TaskID', 'taskId'],
+            ['TrialNumber', 'trialNumber'],
+            ['TrialType', 'trialType'],
+            ['Direction', 'direction'],
+
+            ['RewardedSide', 'rewardedSide'],
+            ['HappyFaceSide', 'happyFaceSide'],
+
+            ['ButtonPressed', 'buttonPressed'],
+            ['FirstResponseCorrect', 'firstResponseCorrect'],
+            ['IncorrectTaps', 'incorrectTaps'],
+            ['ReactionTime', 'reactionTime'],
+
+            ['Jitter1', 'jitter1'],
+            ['Jitter2', 'jitter2'],
+
+            ['FirstIncorrectRT', 'firstIncorrectRT'],
+            ['PressSequence', 'pressSequence'],
+
+            ['InhibitoryCompletedSoFar', 'inhibitoryCompletedSoFar'],
+            ['LowEngagement', 'lowEngagement']
         ];
-    
+
+        const escape = value => {
+            const text = String(value ?? '');
+            return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+        };
+
         const rows = this.trialData.map(row =>
-            headers.map(h => row[
-                {
-                    ParticipantID:'participantId',
-                    AgeGroup:'ageGroup',
-                    Counterbalance:'counterbalance',
-                    
-                    BlockNumber:'blockNumber',
-                    
-                    TaskID:'taskId',
-                    
-                    TrialNumber:'trialNumber',
-                    
-                    TrialType:'trialType',
-                    
-                    RewardedSide:'rewardedSide',
-                    
-                    HappyFaceSide:'happyFaceSide',
-                    
-                    ButtonPressed:'buttonPressed',
-                    
-                    Accuracy:'accuracy',
-                    
-                    ReactionTime:'reactionTime',
-                    
-                    Jitter1:'jitter1',
-                    
-                    Jitter2:'jitter2',
-                    
-                    FirstIncorrectRT:'firstIncorrectRT',
-                    
-                    PressSequence:'pressSequence'
-                }[h]
-            ] ?? '').join(',')
+            columns.map(([, key]) => escape(row[key])).join(',')
         );
-    
-        return [headers.join(','), ...rows].join('\n');
+
+        return [columns.map(([header]) => header).join(','), ...rows].join('\n');
     }
 
     /**
@@ -717,6 +723,22 @@ class DataManager {
     /**
      * Get session statistics
      */
+    /**
+     * Consistency check between photocell flashes and CSV rows. The MATLAB step pairs one DIN mark
+     * with one row, so every row in FLASH_REQUIRED_SECTIONS should have been logged with a flash.
+     * missing > 0 means some rows will only get interpolated times.
+     */
+    getFlashCheck() {
+        const required = this.sessionData.filter(r => FLASH_REQUIRED_SECTIONS.includes(r.SectionStarted));
+        const flashed = required.filter(r => r.PhotocellFlash === 1).length;
+        return {
+            requiredRows: required.length,
+            flashedRows: flashed,
+            missing: required.length - flashed,
+            conflicts: this.sessionData.filter(r => r.SectionStarted === 'FlashConflict').length
+        };
+    }
+
     getStats() {
         if (!this.sessionData || this.sessionData.length === 0) {
             return null;

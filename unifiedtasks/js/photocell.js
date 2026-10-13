@@ -12,9 +12,13 @@
 // (~16ms at 60Hz) rather than the unreliable JS event-loop timer.
 
 let flashInProgress = false;
+let flashGateOpenAt = 0; // performance.now() time before which a new flash is refused
 
 const PHOTOCELL_FLASH_ON_MS_DEFAULT = 80;
 const PHOTOCELL_FLASH_ON_MS_ANCHOR = 120;
+// Dark time required between flashes (about 3 frames at 60 Hz). Placeholder: measure on the real
+// iPad + GitHub Pages build; the PWA cannot repaint reliably much faster than ~20 ms.
+const PHOTOCELL_MIN_OFF_MS = 50;
 
 const PHOTOCELL_FLASH_OFF_COLOR = 'black';
 const PHOTOCELL_FLASH_ON_COLOR = 'white';
@@ -41,6 +45,15 @@ function isSyncAnchorCandidate(pendingEvent) {
     );
 }
 
+/**
+ * Fires one photocell flash and logs `pendingEvent` at the moment it is painted.
+ * Returns true if the flash fired.
+ *
+ * Flash gate: a flash is refused while the previous one is still on, or during the dark period
+ * after it (PHOTOCELL_MIN_OFF_MS). A refused request logs a FlashConflict marker (which the
+ * MATLAB step skips) and still logs the real row, flagged PhotocellFlash=0, so no data is lost.
+ * The row's time is then only interpolated by MATLAB, not locked to a DIN mark.
+ */
 function flashButtonIndicator(pendingEvent) {
     const indicator = ensurePhotocellIndicatorVisible();
 
@@ -48,15 +61,13 @@ function flashButtonIndicator(pendingEvent) {
         if (pendingEvent) {
             dataManager.logEvent(pendingEvent);
         }
-        return;
+        return false;
     }
 
-    if (flashInProgress) {
-        // Do NOT log the pending event as if it had a clean physical flash.
-        // Log only a conflict marker so the CSV tells us this flash was not trustworthy.
+    if (flashInProgress || performance.now() < flashGateOpenAt) {
         dataManager.logEvent({
             section: 'FlashConflict',
-            stimuli: pendingEvent ? pendingEvent.section : 'unknown',
+            stimuli: `no_flash_for:${pendingEvent ? pendingEvent.section : 'unknown'}`,
             invokedBy: 'System',
             accuracy: 'n/a',
             testName: pendingEvent ? pendingEvent.testName : '',
@@ -64,7 +75,11 @@ function flashButtonIndicator(pendingEvent) {
             trialName: pendingEvent ? pendingEvent.trialName : ''
         });
 
-        return;
+        if (pendingEvent) {
+            dataManager.logEvent(pendingEvent);
+        }
+
+        return false;
     }
 
     flashInProgress = true;
@@ -86,16 +101,20 @@ function flashButtonIndicator(pendingEvent) {
         indicator.style.backgroundColor = PHOTOCELL_FLASH_ON_COLOR;
 
         if (pendingEvent) {
-            dataManager.logEvent(pendingEvent);
+            dataManager.logEvent({ ...pendingEvent, photocellFlash: true });
         }
 
         setTimeout(() => {
             requestAnimationFrame(() => {
                 indicator.style.backgroundColor = PHOTOCELL_FLASH_OFF_COLOR;
+                // Stay dark for a minimum period before the next flash is allowed.
+                flashGateOpenAt = performance.now() + PHOTOCELL_MIN_OFF_MS;
                 flashInProgress = false;
             });
         }, flashOnMs);
     });
+
+    return true;
 }
 
 function ensurePhotocellIndicatorVisible() {

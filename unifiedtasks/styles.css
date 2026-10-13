@@ -350,6 +350,24 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
+/* CSV downloads on the end / DNF screens: real links so iPad saves each file on a single tap */
+.csv-downloads {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+a.download-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+.engagement-note {
+    color: #b26a00;
+    font-weight: bold;
+}
+
 /* Choice screen (practice gate, block end) */
 .choice-buttons {
     display: flex;

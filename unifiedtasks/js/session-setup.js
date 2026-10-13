@@ -67,6 +67,8 @@ function startTest() {
     appState.currentTaskIndex = 0;
     appState.experimentBlockCount = 0;
     appState.inhibitoryCompleted = 0;
+    appState.experimentTrialsDone = 0;
+    appState.experimentFirstCorrect = 0;
     appState.syncTrainDone = {};
     if (elements.recordingReminderContinueBtn) {
         elements.recordingReminderContinueBtn.disabled = false;
@@ -93,6 +95,8 @@ function restart() {
     appState.blockTrials = 0;
     appState.experimentBlockCount = 0;
     appState.inhibitoryCompleted = 0;
+    appState.experimentTrialsDone = 0;
+    appState.experimentFirstCorrect = 0;
     appState.jitterDuration = 0;
     appState.jitterPool = [];
     appState.isTransitioning = false;
