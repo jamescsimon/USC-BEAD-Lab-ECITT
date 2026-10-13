@@ -44,9 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
         dnfDownloadVideoBtn: document.getElementById('dnfDownloadVideoBtn'),
         dnfRestartBtn: document.getElementById('dnfRestartBtn'),
 
-        interBlockScreen: document.getElementById('interBlockScreen'),
-        interBlockStats: document.getElementById('interBlockStats'),
-        interBlockContinueBtn: document.getElementById('interBlockContinueBtn'),
+        choiceScreen: document.getElementById('choiceScreen'),
+        choiceTitle: document.getElementById('choiceTitle'),
+        choiceStats: document.getElementById('choiceStats'),
+        choiceButtons: document.getElementById('choiceButtons'),
 
         recordingReminderScreen: document.getElementById('recordingReminderScreen'),
         recordingReminderContinueBtn: document.getElementById('recordingReminderContinueBtn'),
@@ -71,11 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
         childBtn.style.backgroundColor = '#f567d8';
         childBtn.style.borderColor = '#f060e4';
         childBtn.style.color = 'white';
-    }
-    const toddlerBtn = document.getElementById('toddlerBtn');
-
-    if (toddlerBtn) {
-        toddlerBtn.style.display = 'none';
     }
     
     const infantBtn = document.getElementById('infantBtn');
@@ -115,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (elements.dnfDownloadCsvBtn) elements.dnfDownloadCsvBtn.addEventListener('click', downloadCSVOnly);
     if (elements.dnfDownloadVideoBtn) elements.dnfDownloadVideoBtn.addEventListener('click', downloadVideoOnly);
     if (elements.dnfRestartBtn) elements.dnfRestartBtn.addEventListener('click', restart);
-    if (elements.interBlockContinueBtn) elements.interBlockContinueBtn.addEventListener('click', continueAfterInterBlock);
     if (elements.recordingReminderContinueBtn) elements.recordingReminderContinueBtn.addEventListener('click', continueAfterRecordingReminder);
     
     // Orientation-aware button positioning

@@ -256,69 +256,6 @@ const TASK_CONFIGS = {
         }
     },
 
-    // ===== TODDLER (17-23 months) ECITT TASK CONFIGURATIONS =====
-
-    // Toddler Practice: Left (4 trials) - both buttons, happy face always left
-    tod_ppl: {
-        id: 'tod_ppl',
-        name: 'Toddler Practice Left',
-        emp: 'left',
-        empType: 'happy',
-        rew: 'left',
-        trials: 4,
-        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
-        readyMsg1: 'Watch the happy face and press it as fast as you can!',
-        readyMsg2: 'Then come back to the dot.',
-        readyMsg3: 'Ready?'
-    },
-    // Toddler Test: Left (32 trials - 75% left, 25% right)
-    tod_tpl: {
-        id: 'tod_tpl',
-        name: 'Toddler Test Left',
-        varDistr: [75, 25],
-        varLeading: 3,
-        varMaxDups: 4,
-        trials: 32,
-        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
-        readyMsg1: 'Great job! Keep pressing the happy face as fast as you can!',
-        readyMsg2: 'Then come back to the dot.',
-        readyMsg3: 'Ready?',
-        variants: {
-            prpt: { emp: 'left', empType: 'happy', rew: 'left' },
-            inhb: { emp: 'right', empType: 'happy', rew: 'right' }
-        }
-    },
-    // Toddler Practice: Right (4 trials) - both buttons, happy face always right
-    tod_ppr: {
-        id: 'tod_ppr',
-        name: 'Toddler Practice Right',
-        emp: 'right',
-        empType: 'happy',
-        rew: 'right',
-        trials: 4,
-        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
-        readyMsg1: 'Watch the happy face and press it as fast as you can!',
-        readyMsg2: 'Then come back to the dot.',
-        readyMsg3: 'Ready?'
-    },
-    // Toddler Test: Right (32 trials - 75% right, 25% left)
-    tod_tpr: {
-        id: 'tod_tpr',
-        name: 'Toddler Test Right',
-        varDistr: [75, 25],
-        varLeading: 3,
-        varMaxDups: 4,
-        trials: 32,
-        promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
-        readyMsg1: 'Great job! Keep pressing the happy face as fast as you can!',
-        readyMsg2: 'Then come back to the dot.',
-        readyMsg3: 'Ready?',
-        variants: {
-            prpt: { emp: 'right', empType: 'happy', rew: 'right' },
-            inhb: { emp: 'left', empType: 'happy', rew: 'left' }
-        }
-    },
-
     // ===== INFANT (10-16 months) ECITT TASK CONFIGURATIONS =====
     // Single button per phase. Control = baseline. Test = prepotent phase then inhibitory phase.
     // Sequence: Control1 Left → Control1 Right →

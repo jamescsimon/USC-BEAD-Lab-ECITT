@@ -53,7 +53,7 @@ function startNirsBaselineFromHiddenButton() {
     const allowedScreens = [
         'recordingReminderScreen',
         'readyScreen',
-        'interBlockScreen',
+        'choiceScreen',
         'promptScreen'
     ];
 
@@ -336,11 +336,6 @@ function resumeAfterNirsBaseline(resumeScreenName) {
 
     if (resumeScreenName === 'recordingReminderScreen') {
         continueAfterRecordingReminder();
-        return;
-    }
-
-    if (resumeScreenName === 'interBlockScreen') {
-        continueAfterInterBlock();
         return;
     }
 

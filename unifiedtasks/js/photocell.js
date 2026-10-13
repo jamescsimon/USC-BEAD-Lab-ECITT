@@ -20,7 +20,7 @@ const PHOTOCELL_FLASH_OFF_COLOR = 'black';
 const PHOTOCELL_FLASH_ON_COLOR = 'white';
 
 function isTestBlockTrialName(trialName) {
-    return /_(tpl|tpr)$/.test(String(trialName || ''));
+    return /_(tpl|tpr)$|_exp\d+_(left|right)$/.test(String(trialName || ''));
 }
 
 function isScreenOnsetSection(sectionName) {
@@ -133,10 +133,14 @@ function ensurePhotocellIndicatorVisible() {
 }
 
 function isTestTaskId(taskId) {
-    return /_(tpl|tpr)$/.test(String(taskId || ''));
+    return /_(tpl|tpr)$|_exp\d+_(left|right)$/.test(String(taskId || ''));
 }
 
-function runPhotocellSyncTrain(syncName, onComplete, nPulses = 4) {
+/**
+ * @param {function} [onBeforeReveal] runs while the black overlay still covers the screen, so the
+ *   next screen can be set up underneath and appear the moment the overlay is removed.
+ */
+function runPhotocellSyncTrain(syncName, onComplete, nPulses = 4, onBeforeReveal) {
     const overlay = document.createElement('div');
 
     overlay.id = 'photocellSyncOverlay';
@@ -176,8 +180,14 @@ function runPhotocellSyncTrain(syncName, onComplete, nPulses = 4) {
             setTimeout(runPulse, 500);
         } else {
             setTimeout(() => {
+                if (typeof onBeforeReveal === 'function') {
+                    onBeforeReveal();
+                }
+
                 overlay.remove();
 
+                // Keep this gap: the first task flash must stay clearly separate from the last sync pulse
+                // so the DIN events pair up with the right CSV rows.
                 setTimeout(() => {
                     if (typeof onComplete === 'function') {
                         onComplete();
@@ -202,9 +212,16 @@ function loadTaskWithOptionalSync(taskId) {
     ) {
         appState.syncTrainDone[syncKey] = true;
 
-        runPhotocellSyncTrain(syncKey, () => {
-            loadTask(taskId);
-        });
+        // Load the task behind the overlay (screen drawn, first flash held back), reveal it,
+        // then fire the first flash after the usual gap.
+        let fireFirstFlash = null;
+
+        runPhotocellSyncTrain(
+            syncKey,
+            () => { if (fireFirstFlash) fireFirstFlash(); },
+            4,
+            () => { fireFirstFlash = loadTask(taskId, { deferFlash: true }); }
+        );
 
         return;
     }

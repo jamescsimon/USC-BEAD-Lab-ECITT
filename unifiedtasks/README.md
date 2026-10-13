@@ -2,6 +2,8 @@
 
 ## Overview
 
+> **Note (Iteration 2):** the "Task Batteries" tables below describe the old fixed block lists. The app now runs one practice trial (with an Another Practice / Start Test gate), then 32-trial experiment blocks on demand (Resume / Break / End) until 32 inhibitory trials are completed. Brackets are Infant (infant/toddler merged), Child and Adult. The prepotent side is the counterbalance side for the whole visit. Tests: `tests/` at the repo root.
+
 This is a single-screen Progressive Web App (PWA) implementation of the ECITT (Early Childhood Inhibitory Touchscreen Tasks) battery. The app supports four age groups (Adult, Child, Toddler, Infant) and runs all task variations for the selected group as one combined session without requiring a separate controller device.
 
 ## Features
@@ -275,7 +277,9 @@ unifiedtasks/
 │   ├── task-loader.js      # Task loading, trial sequence generation
 │   ├── trial-flow.js       # Trials, responses, finish, DNF
 │   ├── nirs-baseline.js    # fNIRS baseline video
-│   ├── interblock.js       # Progress and inter-block feedback
+│   ├── trial-sequence.js   # Experiment-block trial order generator (pure, unit-tested)
+│   ├── protocol-config.js  # Per-bracket practice + on-demand experiment blocks
+│   ├── block-flow.js       # Practice gate, Resume/Break/End screen
 │   ├── calibration.js      # Frog calibration, butterfly break
 │   ├── photocell.js        # Photocell flash and sync
 │   ├── recording.js        # Video recording, CSV/video download

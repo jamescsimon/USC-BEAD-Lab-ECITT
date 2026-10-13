@@ -349,3 +349,19 @@ body {
     -webkit-touch-callout: none;
     -webkit-tap-highlight-color: transparent;
 }
+
+/* Choice screen (practice gate, block end) */
+.choice-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.progress-chick {
+    width: 160px;
+    height: 160px;
+    margin-top: 1em;
+}
+.choice-button:disabled {
+    opacity: 0.6;
+    cursor: default;
+}

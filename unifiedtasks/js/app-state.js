@@ -23,6 +23,8 @@ const appState = {
     isComplete: false,
     blockReactionTime: 0,
     blockTrials: 0,
+    experimentBlockCount: 0,
+    inhibitoryCompleted: 0,
     isTransitioning: false,
     waitTimer: null,
     nextTrialTimer: null,

@@ -5,7 +5,8 @@
 
 // ===== TASK MANAGEMENT =====
 
-function loadTask(taskId) {
+/** With { deferFlash: true } returns the function that fires the first photocell flash (see showReadyScreen). */
+function loadTask(taskId, options) {
     const config = TASK_CONFIGS[taskId];
     appState.currentTask = config;
     appState.currentBlockNumber = appState.currentTaskIndex + 1;
@@ -16,7 +17,7 @@ function loadTask(taskId) {
     // until we have one entry per trial, then draw in order (no repeats until pool exhausted)
     const jitterSource = appState.ageGroup === 'Adult' ? JITTER_DURATIONS_ADULT
                        : appState.ageGroup === 'Child'  ? JITTER_DURATIONS_CHILD
-                       : JITTER_DURATIONS_TODDLER_INFANT; // Toddler and Infant
+                       : JITTER_DURATIONS_TODDLER_INFANT; // merged infant/toddler bracket
     const pool = [];
     while (pool.length < config.trials) {
         const needed = config.trials - pool.length;
@@ -25,22 +26,18 @@ function loadTask(taskId) {
     }
     appState.jitterPool = pool;
 
-    // Reset block-level RT counters at the start of each test block
-    if (config.id === 'adt_tpl' || config.id === 'adt_tpr' ||
-        config.id === 'cha_tpl' || config.id === 'cha_tpr' ||
-        config.id === 'tod_tpl' || config.id === 'tod_tpr' || 
-        config.id === 'inf_tpl' || config.id === 'inf_tpr') {
+    // Reset block-level RT counters at the start of each experiment block
+    if (config.isExperimentBlock) {
         appState.blockReactionTime = 0;
         appState.blockTrials = 0;
     }
 
     // Generate trial sequence
-    if (config.variants) {
-        // Test tasks with prepotent/inhibitory variants
-        appState.trialSequence = generateTestSequence(config);
+    if (config.presetTypes) {
+        // Experiment block: order was drawn by buildExperimentBlock() when the block was created
+        appState.trialSequence = config.presetTypes.map(type => ({ type, ...config.variants[type] }));
     } else {
-        // Single-type tasks — use trialType if set (e.g. infant prepotent/inhibitory phases),
-        // otherwise default to 'standard' (control/practice tasks)
+        // Single-type tasks (demo / practice) — use trialType if set, otherwise 'standard'
         const type = config.trialType || 'standard';
         appState.trialSequence = Array(config.trials).fill({ type });
     }
@@ -58,102 +55,8 @@ function loadTask(taskId) {
         trialName: config.id || 'adt_ppl'
     });
     // Start first trial — ReadyScreen fires the flash, no separate TaskStart flash
-    showReadyScreen();
+    return showReadyScreen(options);
 }
-
-function generateTestSequence(config) {
-    const { trials, varDistr, varLeading, varMaxDups } = config;
-    const sequence = [];
-
-    // Add leading prepotent trials
-    for (let i = 0; i < varLeading; i++) {
-        sequence.push({ type: 'prpt', ...config.variants['prpt'] });
-    }
-
-    let prepotentCount;
-    let inhibitoryCount;
-
-    if (config.maxSameSide !== undefined) {
-
-        // INFANT MODE
-        const totalPrepotent = Math.floor(trials * varDistr[0] / 100);
-
-        prepotentCount = Math.max(0, totalPrepotent - varLeading);
-        inhibitoryCount = Math.max(0, trials - varLeading - prepotentCount);
-
-    } else {
-
-        // ALL OTHER AGE GROUPS (UNCHANGED LOGIC)
-        const remaining = trials - varLeading;
-
-        prepotentCount = Math.round(remaining * varDistr[0] / 100);
-        inhibitoryCount = remaining - prepotentCount;
-    }
-
-    // Create pool of remaining trials
-    const pool = [
-        ...Array(prepotentCount).fill('prpt'),
-        ...Array(inhibitoryCount).fill('inhb')
-    ];
-    
-    // ======================================================
-    // CONSTRAINED BUILDER (NO BRUTE FORCE SHUFFLE)
-    // ======================================================
-
-    const maxSameSide = config.maxSameSide ?? null;
-
-    // Track output sequence types only
-    let sequenceTypes = [];
-
-    let lastType = null;
-    let consecutive = 0;
-
-    // Copy pool so we don't mutate original reference
-    let workingPool = [...pool];
-
-    while (workingPool.length > 0) {
-
-        // filter valid candidates based on constraint
-        let candidates = workingPool.filter(t => {
-            if (maxSameSide !== null) {
-                return !(t === lastType && consecutive >= maxSameSide);
-            } else {
-                // original adult/toddler logic preserved
-                if (t === 'prpt' && consecutive >= varMaxDups) return false;
-                if (t === 'inhb' && consecutive >= 1 && lastType === 'inhb') return false;
-                return true;
-            }
-        });
-
-        // fallback if constraint is too strict
-        if (candidates.length === 0) {
-            candidates = workingPool;
-        }
-
-        const pick = candidates[Math.floor(Math.random() * candidates.length)];
-
-        sequenceTypes.push(pick);
-
-        // remove from pool
-        workingPool.splice(workingPool.indexOf(pick), 1);
-
-        // update run tracking
-        if (pick === lastType) {
-            consecutive++;
-        } else {
-            lastType = pick;
-            consecutive = 1;
-        }
-    }
-
-    // convert to full trial objects
-    sequenceTypes.forEach(type => {
-        sequence.push({ type, ...config.variants[type] });
-    });
-
-    console.log(`[APP] Generated sequence (builder) for ${config.id}:`, sequence.map(t => t.type));
-    return sequence;
-    }
 
 function shuffleArray(array) {
     const shuffled = [...array];

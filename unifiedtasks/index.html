@@ -88,12 +88,12 @@
         </div>
     </div>
 
-    <!-- Inter-Block Feedback Screen -->
-    <div id="interBlockScreen" class="screen">
+    <!-- Choice Screen (practice gate, block end): title, stats, buttons filled in by showChoiceScreen() -->
+    <div id="choiceScreen" class="screen">
         <div class="centered-content">
-            <h2 class="title">Block Complete</h2>
-            <div id="interBlockStats" class="end-message"></div>
-            <button id="interBlockContinueBtn" class="start-button">Continue</button>
+            <h2 id="choiceTitle" class="title"></h2>
+            <div id="choiceStats" class="end-message"></div>
+            <div id="choiceButtons" class="choice-buttons"></div>
         </div>
     </div>
 
@@ -118,6 +118,8 @@
     <script src="data.js"></script>
     <script src="js/task-configs.js"></script>
     <script src="js/task-sequences.js"></script>
+    <script src="js/trial-sequence.js"></script>
+    <script src="js/protocol-config.js"></script>
     <script src="js/timing-config.js"></script>
     <script src="js/app-state.js"></script>
     <script src="js/media-helpers.js"></script>
@@ -127,7 +129,7 @@
     <script src="js/task-loader.js"></script>
     <script src="js/trial-flow.js"></script>
     <script src="js/nirs-baseline.js"></script>
-    <script src="js/interblock.js"></script>
+    <script src="js/block-flow.js"></script>
     <script src="js/calibration.js"></script>
     <script src="js/photocell.js"></script>
     <script src="js/recording.js"></script>

@@ -3,7 +3,7 @@
  * Enables offline functionality and caching
  */
 
-const CACHE_NAME = 'ecitt-adult-tasks-v3';
+const CACHE_NAME = 'ecitt-adult-tasks-v5';
 
 // Static assets that are safe to cache-first (images rarely change)
 const STATIC_ASSETS = [
@@ -28,6 +28,8 @@ const APP_FILES = [
     './data.js',
     './js/task-configs.js',
     './js/task-sequences.js',
+    './js/trial-sequence.js',
+    './js/protocol-config.js',
     './js/timing-config.js',
     './js/app-state.js',
     './js/media-helpers.js',
@@ -37,7 +39,7 @@ const APP_FILES = [
     './js/task-loader.js',
     './js/trial-flow.js',
     './js/nirs-baseline.js',
-    './js/interblock.js',
+    './js/block-flow.js',
     './js/calibration.js',
     './js/photocell.js',
     './js/recording.js',
@@ -81,9 +83,15 @@ self.addEventListener('activate', event => {
 // Fetch event - network-first for app files, cache-first for static assets
 self.addEventListener('fetch', event => {
     const url = new URL(event.request.url);
-    const isAppFile = APP_FILES.some(f => url.pathname.endsWith(f.replace('./', '')));
+    // Exact match against the app files. (The old endsWith() test matched './' as '' and so
+    // treated EVERY request as an app file, sending animation frames to the network each time.)
+    const appPaths = APP_FILES.map(f => new URL(f, self.registration.scope).pathname);
+    const isAppFile = appPaths.includes(url.pathname);
+    // Only images are served cache-first. Audio/video stay network-first because Safari
+    // requests them with Range headers, which a cached full response would break.
+    const isImage = event.request.destination === 'image' || /\.(png|jpe?g|gif|webp|ico)$/i.test(url.pathname);
 
-    if (isAppFile) {
+    if (isAppFile || !isImage) {
         // Network-first: always try to get fresh version, fall back to cache
         event.respondWith(
             fetch(event.request)
@@ -100,7 +108,7 @@ self.addEventListener('fetch', event => {
                 })
         );
     } else {
-        // Cache-first for images and other static assets
+        // Cache-first for images (button faces, reward animation frames, sprites)
         event.respondWith(
             caches.match(event.request)
                 .then(response => {

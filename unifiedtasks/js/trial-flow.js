@@ -5,18 +5,14 @@
 
 // ===== TRIAL FLOW =====
 
-function showReadyScreen() {
+/**
+ * Shows the ready screen for the current trial and fires its photocell flash.
+ * With { deferFlash: true } the screen is drawn but the flash is NOT fired; the function that
+ * fires it is returned instead (used to load a task behind the photocell sync overlay).
+ */
+function showReadyScreen(options) {
     const config = appState.currentTask;
     const trial = appState.trialSequence[appState.currentTrial] || {};
-
-    const progress =
-        getNonPracticeProgress();
-
-    const progressText =
-        `
-        Blocks completed: ${progress.completedBlocks} / ${progress.totalBlocks}
-        Trials completed: ${progress.completedTrials} / ${progress.totalTrials}
-        `;
 
     // Only show messages on first trial of each task/block.
     if (appState.currentTrial === 0) {
@@ -26,14 +22,8 @@ function showReadyScreen() {
         elements.readyMsg2.textContent =
             config.readyMsg2 || '';
 
-        elements.readyMsg3.innerHTML =
-            `
-            ${(config.readyMsg3 || '')}
-            <br><br>
-            <span style="font-size: 0.8em;">
-                ${progressText}
-            </span>
-            `;
+        elements.readyMsg3.textContent =
+            config.readyMsg3 || '';
     } else {
         elements.readyMsg1.textContent = '';
         elements.readyMsg2.textContent = '';
@@ -42,7 +32,7 @@ function showReadyScreen() {
 
     showScreen('readyScreen');
 
-    flashButtonIndicator({
+    const fireFlash = () => flashButtonIndicator({
         section: 'ReadyScreen',
         stimuli: 'red dot',
         invokedBy: 'ParticipantBlueButton',
@@ -51,6 +41,9 @@ function showReadyScreen() {
         trialsRemaining: appState.currentTask.trials - appState.currentTrial,
         trialName: appState.currentTask.id || 'adt_ppl'
     });
+
+    if (options && options.deferFlash) return fireFlash;
+    fireFlash();
 }
 
 function handleDotPress(event) {
@@ -206,7 +199,7 @@ function handleButtonPress(button, event) {
     const j2Range =
     appState.ageGroup === 'Child'
         ? JITTER2_CHILD_ANIM_RANGE
-        : (appState.ageGroup === 'Toddler' || appState.ageGroup === 'Infant')
+        : appState.ageGroup === 'Infant'
             ? JITTER2_ANIM_RANGE
             : JITTER2_RANGE;
     const j2Delay = Math.round(Math.random() * (j2Range[1] - j2Range[0]) + j2Range[0]);
@@ -257,12 +250,13 @@ function handleButtonPress(button, event) {
         appState.totalCorrect++;
     }
     appState.totalReactionTime += reactionTime;
-    if (appState.currentTask.id === 'adt_tpl' || appState.currentTask.id === 'adt_tpr' ||
-        appState.currentTask.id === 'cha_tpl' || appState.currentTask.id === 'cha_tpr' ||
-        appState.currentTask.id === 'tod_tpl' || appState.currentTask.id === 'tod_tpr' ||
-        appState.currentTask.id === 'inf_tpl' || appState.currentTask.id === 'inf_tpr') {
+    if (appState.currentTask.isExperimentBlock) {
         appState.blockReactionTime += reactionTime;
         appState.blockTrials++;
+        // Proxy for the 32-trial inhibitory target. True validity is decided later from the EEG.
+        if (completedTrial?.type === 'inhb' && accuracy === 1) {
+            appState.inhibitoryCompleted++;
+        }
     }
     
     // Log response — section label from actual face position, not trial type
@@ -424,52 +418,20 @@ function handlePromptDotPress(event) {
 }
 
 function finishTask() {
-    console.log(`[APP] Task complete: ${appState.currentTask.name}`);
-    
-    // Log task end only for last task
-    if (appState.currentTaskIndex === activeTaskSequence.length - 1) {
-        flashButtonIndicator({
-            section: 'TaskEnd',
-            stimuli: 'blank',
-            invokedBy: 'ParticipantBlueButton',
-            accuracy: 'n/a',
-            testName: appState.ageGroup,
-            trialsRemaining: 0,
-            trialName: appState.currentTask.id || 'adt_ppl'
-        });
-    }
-    
-    // Move to next task
+    const finished = appState.currentTask;
+    console.log(`[APP] Task complete: ${finished.name}`);
+
     appState.currentTaskIndex++;
-    
+    appState.isTransitioning = true;
+
     if (appState.currentTaskIndex < activeTaskSequence.length) {
-        appState.isTransitioning = true;
-        // Show inter-block speed feedback after first test block (not for infant — no RT measure)
-        const justFinishedAdultExperimentalBlock =
-        appState.ageGroup === 'Adult' &&
-        (
-            appState.currentTask.id === 'adt_tpl' ||
-            appState.currentTask.id === 'adt_tpr'
-        );
-
-        const justFinishedNonAdultTestBlock =
-            appState.currentTask.id === 'cha_tpl' ||
-            appState.currentTask.id === 'cha_tpr' ||
-            appState.currentTask.id === 'tod_tpl' ||
-            appState.currentTask.id === 'tod_tpr' ||
-            appState.currentTask.id === 'inf_tpl' ||
-            appState.currentTask.id === 'inf_tpr';
-
-        if (justFinishedAdultExperimentalBlock) {
-            setTimeout(() => showAdultBlockEndAnimationThenFeedback(), 500);
-        } else if (justFinishedNonAdultTestBlock) {
-            setTimeout(() => showInterBlockFeedback(), 500);
-        } else {
-            setTimeout(() => loadTask(activeTaskSequence[appState.currentTaskIndex]), 100);
-        }
-
+        // Demo -> practice and other fixed pre-test steps
+        setTimeout(() => loadTask(activeTaskSequence[appState.currentTaskIndex]), 100);
+    } else if (finished.isPractice) {
+        setTimeout(() => showPracticeChoice(), 500);
+    } else if (finished.isExperimentBlock) {
+        setTimeout(() => showBlockEnd(), 500);
     } else {
-        // All tasks complete
         finishTest();
     }
 }

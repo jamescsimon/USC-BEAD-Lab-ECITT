@@ -10,57 +10,25 @@ function updateCbButtons() {
 
 function setCounterbalance(side) {
     appState.counterbalance = side;
-    const seqs = {
-        Adult:   { left: TASK_SEQUENCE_LEFT,        right: TASK_SEQUENCE_RIGHT },
-        Child:   { left: CHILD_TASK_SEQUENCE_LEFT,   right: CHILD_TASK_SEQUENCE_RIGHT },
-        Toddler: { left: TODDLER_TASK_SEQUENCE_LEFT, right: TODDLER_TASK_SEQUENCE_RIGHT },
-        Infant:  { left: INFANT_TASK_SEQUENCE_LEFT,  right: INFANT_TASK_SEQUENCE_RIGHT },
-    };
-    const pair = seqs[appState.ageGroup];
-    if (pair) activeTaskSequence = pair[side];
+    activeTaskSequence = buildInitialSequence(appState.ageGroup, side);
     console.log(`[APP] Counterbalance manually set: ${side}-first`);
     updateCbButtons();
 }
 
-function selectAdult() {
-    appState.ageGroup = 'Adult';
+function selectAgeGroup(ageGroup) {
+    appState.ageGroup = ageGroup;
     appState.counterbalance = Math.random() < 0.5 ? 'left' : 'right';
-    activeTaskSequence = appState.counterbalance === 'left' ? TASK_SEQUENCE_LEFT : TASK_SEQUENCE_RIGHT;
-    console.log(`[APP] Adult counterbalance: ${appState.counterbalance}-first`);
+    activeTaskSequence = buildInitialSequence(ageGroup, appState.counterbalance);
+    console.log(`[APP] ${ageGroup} counterbalance: ${appState.counterbalance}-first`);
     startRecording();
     showScreen('participantScreen');
     updateCbButtons();
 }
 
-function selectChild() {
-    appState.ageGroup = 'Child';
-    appState.counterbalance = Math.random() < 0.5 ? 'left' : 'right';
-    activeTaskSequence = appState.counterbalance === 'left' ? CHILD_TASK_SEQUENCE_LEFT : CHILD_TASK_SEQUENCE_RIGHT;
-    console.log(`[APP] Child counterbalance: ${appState.counterbalance}-first`);
-    startRecording();
-    showScreen('participantScreen');
-    updateCbButtons();
-}
-
-function selectToddler() {
-    appState.ageGroup = 'Toddler';
-    appState.counterbalance = Math.random() < 0.5 ? 'left' : 'right';
-    activeTaskSequence = appState.counterbalance === 'left' ? TODDLER_TASK_SEQUENCE_LEFT : TODDLER_TASK_SEQUENCE_RIGHT;
-    console.log(`[APP] Toddler counterbalance: ${appState.counterbalance}-first`);
-    startRecording();
-    showScreen('participantScreen');
-    updateCbButtons();
-}
-
-function selectInfant() {
-    appState.ageGroup = 'Infant';
-    appState.counterbalance = Math.random() < 0.5 ? 'left' : 'right';
-    activeTaskSequence = appState.counterbalance === 'left' ? INFANT_TASK_SEQUENCE_LEFT : INFANT_TASK_SEQUENCE_RIGHT;
-    console.log(`[APP] Infant counterbalance: ${appState.counterbalance}-first`);
-    startRecording();
-    showScreen('participantScreen');
-    updateCbButtons();
-}
+function selectAdult() { selectAgeGroup('Adult'); }
+function selectChild() { selectAgeGroup('Child'); }
+// "Infant" is the merged infant/toddler bracket.
+function selectInfant() { selectAgeGroup('Infant'); }
 
 function startTest() {
     // Prevent double-start by early-returning if start is already disabled
@@ -97,6 +65,8 @@ function startTest() {
     );
 
     appState.currentTaskIndex = 0;
+    appState.experimentBlockCount = 0;
+    appState.inhibitoryCompleted = 0;
     if (elements.recordingReminderContinueBtn) {
         elements.recordingReminderContinueBtn.disabled = false;
     }
@@ -120,6 +90,8 @@ function restart() {
     appState.ageGroup = 'Adult';
     appState.blockReactionTime = 0;
     appState.blockTrials = 0;
+    appState.experimentBlockCount = 0;
+    appState.inhibitoryCompleted = 0;
     appState.jitterDuration = 0;
     appState.jitterPool = [];
     appState.isTransitioning = false;
