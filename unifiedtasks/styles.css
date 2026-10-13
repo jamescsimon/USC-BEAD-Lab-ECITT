@@ -9,6 +9,8 @@
 }
 
 html, body {
+    /* rapid taps must not be read as double-tap-zoom or scroll gestures */
+    touch-action: none;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -232,6 +234,7 @@ div.dotButton.hidden {
 
 /* Response Buttons (from specs) */
 div.ecittButton {
+    touch-action: none;
     width: 220px;
     height: 220px;
     display: inline-block;

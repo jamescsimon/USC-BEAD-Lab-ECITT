@@ -291,6 +291,10 @@ unifiedtasks/
 └── README.md               # This file
 ```
 
+## Debug overlay
+
+Open the app with `?debug` on the end of the address (e.g. `.../unifiedtasks/?debug`) to show a small black box in the top-right corner: longest screen-frame gap, tap-handler time, touches vs. accepted taps, and photocell gate state. Use it to see whether the page is busy when taps or the photocell seem to stall. It does nothing without `?debug`.
+
 ## Experimenter procedure notes
 
 - **Infant/toddler:** hold or move the iPad out of the child's reach between trials, and hand it back when the next trial is ready. All the toddler studies did this to stop the child pressing buttons without looking at which one is correct. Give no time pressure. Repeat "press the happy face" as needed and keep reactions to wrong taps neutral.

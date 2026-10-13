@@ -98,7 +98,11 @@ ctx._domReady();
 ctx.__anim = []; vm.runInContext('startRecording = () => {}; stopRecording = () => {};  stopAndAutoDownload = () => {}; playRewardAnimation = (el, opts) => { __anim.push(opts || {}); }; stopRewardAnimation = () => {}; showButterflyTask = cb => cb();', ctx);
 
 function playTrial(wrongFirst) {
-    clock += 400; get('handleDotPress')(); drain();   // a person takes a moment to press the dot                       // dot -> (wait) -> prompt
+    // Trial 1 of a task waits for the dot; trials 2+ start by themselves after jitter
+    if (get('appState.currentScreenName') === 'readyScreen') {
+        clock += 400; get('handleDotPress')();                // a person takes a moment to press the dot
+    }
+    drain();
     assert.strictEqual(get('appState.currentScreenName'), 'promptScreen');
     const rewarded = get('appState.currentRewarded');
     if (wrongFirst) {
@@ -251,6 +255,15 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
         assert.strictEqual(rows.filter(r => r[ph] === 'experiment').length, 128, tag + ' 4 blocks x 32 experiment trials');
         assert.ok(rows.filter(r => r[ph] === 'practice').length >= 2, tag + ' practice trials labelled');
         assert.strictEqual(rows[rows.length - 1][th.indexOf('InhibitoryCompletedSoFar')], '32');
+        // Jitter 1 on EVERY experiment trial, inside this bracket's pool range, and actually random
+        const poolName = { Infant: 'JITTER_DURATIONS_TODDLER_INFANT', Child: 'JITTER_DURATIONS_CHILD', Adult: 'JITTER_DURATIONS_ADULT' }[bracket];
+        const pool = Array.from(get(poolName));
+        const lo = Math.min(...pool), hi = Math.max(...pool);
+        const j1 = rows.filter(r => r[ph] === 'experiment').map(r => Number(r[th.indexOf('Jitter1')]));
+        assert.ok(j1.every(v => v >= lo && v <= hi), tag + ' every Jitter1 within ' + lo + '-' + hi);
+        assert.ok(new Set(j1).size >= 3, tag + ' Jitter1 varies from trial to trial');
+        const waitRows = String(get('dataManager.generateCSV()')).split('\n').filter(r => /WaitScreen/.test(r)).length;
+        assert.ok(waitRows >= 128, tag + ' a jitter wait before every trial (' + waitRows + ' wait rows)');
     }
     press('End');
     assert.strictEqual(get('appState.currentScreenName'), 'choiceScreen', tag + ' End first tap only arms');

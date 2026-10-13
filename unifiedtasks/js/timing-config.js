@@ -35,10 +35,10 @@ const JITTER_DURATIONS_ADULT = [
   4000, 4000
 ];
 
-// Temporary adult setting:
-// false = no random Jitter 1 for adult; buttons appear immediately after red-dot press.
-const USE_RANDOM_ADULT_JITTER1 = false;
-const ADULT_FIXED_JITTER1_MS = 0;
+// Jitter 1 (random wait before the buttons, every trial) is drawn from the JITTER_DURATIONS_*
+// pools below: adult 500-4000 ms, child 500-2000 ms, infant/toddler 500-1000 ms. Each pool is
+// bell-shaped (more entries near the middle). Final min/max per bracket are still to be decided;
+// to change them, edit the pools.
 
 const JITTER_DURATIONS_CHILD = [
   500, 500,

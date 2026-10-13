@@ -56,48 +56,42 @@ function handleDotPress(event) {
 
     appState.dotPressTime = Date.now();
 
-    // Temporarily remove random adult Jitter 1.
-    // Adult button screen appears immediately after red-dot press.
-    if (
-        appState.ageGroup === 'Adult' &&
-        USE_RANDOM_ADULT_JITTER1 === false
-    ) {
-        appState.jitterDuration =
-            ADULT_FIXED_JITTER1_MS;
-    
-        dataManager.logEvent({
-            section: 'WaitScreen',
-            stimuli: `adult_jitter1_disabled_${ADULT_FIXED_JITTER1_MS}ms`,
-            invokedBy: 'ParticipantRedDot',
-            accuracy: 'n/a',
-            testName: appState.ageGroup,
-            trialsRemaining: appState.currentTask.trials - appState.currentTrial,
-            trialName: appState.currentTask.id || 'adt_ppl',
-            trialNumber: appState.currentTrial + 1
-        });
-    
-        showPromptScreen();
-        return;
-    }
-    
-    // Non-adult versions keep the regular jitter/wait screen.
-    showWaitScreen();
+    // Every trial, every bracket: random Jitter 1 before the buttons appear.
+    showWaitScreen('ParticipantRedDot');
 }
 
-function showWaitScreen() {
+// During the jitter wait the buttons are hidden. Adults keep seeing the red dot (it is always
+// on screen for them); the other brackets see a blank screen.
+function showJitterScreen() {
+    if (appState.ageGroup === 'Adult') {
+        [elements.leftButton, elements.mdlButton, elements.rightButton].forEach(button => {
+            if (button) button.style.display = 'none';
+        });
+        if (elements.promptDot) elements.promptDot.style.display = 'inline-block';
+        showScreen('promptScreen');
+    } else {
+        showScreen('waitScreen');
+    }
+}
+
+/**
+ * Random wait (Jitter 1) before a trial's buttons appear, drawn from the bracket's pool
+ * (JITTER_DURATIONS_* in timing-config.js; the pool is bell-shaped between its min and max).
+ */
+function showWaitScreen(invokedBy) {
     const duration = appState.jitterPool.shift();
     appState.jitterDuration = duration;
     dataManager.logEvent({
         section: 'WaitScreen',
         stimuli: `jitter_${duration}ms`,
-        invokedBy: 'ParticipantRedDot',
+        invokedBy: invokedBy || 'System',
         accuracy: 'n/a',
         testName: appState.ageGroup,
         trialsRemaining: appState.currentTask.trials - appState.currentTrial,
         trialName: appState.currentTask.id || 'adt_ppl',
         trialNumber: appState.currentTrial + 1
     });
-    showScreen('waitScreen');
+    showJitterScreen();
     clearTimeout(appState.waitTimer);
 
     appState.waitTimer = setTimeout(() => {
@@ -422,9 +416,10 @@ function handleButtonPress(button, event) {
 
     if (appState.currentTrial < appState.currentTask.trials) {
 
+        // Between trials: reward/response period (Jitter 2), then the random Jitter 1 wait, then the buttons.
         const nextScreen =
             skipReadyBetweenTrials
-                ? showPromptScreen
+                ? () => showWaitScreen('System')
                 : showReadyScreen;
 
         clearTimeout(appState.nextTrialTimer);

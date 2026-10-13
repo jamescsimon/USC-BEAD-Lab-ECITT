@@ -19,6 +19,8 @@ const PHOTOCELL_FLASH_ON_MS_ANCHOR = 120;
 // Dark time required between flashes (about 3 frames at 60 Hz). Placeholder: measure on the real
 // iPad + GitHub Pages build; the PWA cannot repaint reliably much faster than ~20 ms.
 const PHOTOCELL_MIN_OFF_MS = 50;
+// If the frame callbacks stop arriving, end the flash this long after it should have ended.
+const PHOTOCELL_WATCHDOG_MS = 300;
 
 const PHOTOCELL_FLASH_OFF_COLOR = 'black';
 const PHOTOCELL_FLASH_ON_COLOR = 'white';
@@ -96,22 +98,34 @@ function flashButtonIndicator(pendingEvent) {
             `${pendingEvent.stimuli || pendingEvent.section || ''}|sync_anchor_candidate`;
     }
 
+    // End the flash exactly once. A watchdog also ends it if a frame callback never arrives
+    // (busy or throttled page), so one stuck flash can never silence the photocell for good.
+    let finished = false;
+    const finishFlash = () => {
+        if (finished) return;
+        finished = true;
+        clearTimeout(watchdog);
+        indicator.style.backgroundColor = PHOTOCELL_FLASH_OFF_COLOR;
+        // Stay dark for a minimum period before the next flash is allowed.
+        flashGateOpenAt = performance.now() + PHOTOCELL_MIN_OFF_MS;
+        flashInProgress = false;
+    };
+    const watchdog = setTimeout(finishFlash, flashOnMs + PHOTOCELL_WATCHDOG_MS);
+
     requestAnimationFrame(() => {
         // DIN-relevant onset
         indicator.style.backgroundColor = PHOTOCELL_FLASH_ON_COLOR;
 
-        if (pendingEvent) {
-            dataManager.logEvent({ ...pendingEvent, photocellFlash: true });
+        try {
+            if (pendingEvent) {
+                dataManager.logEvent({ ...pendingEvent, photocellFlash: true });
+            }
+        } catch (err) {
+            // a logging error must not leave the square stuck white
+            console.error('[PHOTOCELL] logging failed during flash:', err);
         }
 
-        setTimeout(() => {
-            requestAnimationFrame(() => {
-                indicator.style.backgroundColor = PHOTOCELL_FLASH_OFF_COLOR;
-                // Stay dark for a minimum period before the next flash is allowed.
-                flashGateOpenAt = performance.now() + PHOTOCELL_MIN_OFF_MS;
-                flashInProgress = false;
-            });
-        }, flashOnMs);
+        setTimeout(() => requestAnimationFrame(finishFlash), flashOnMs);
     });
 
     return true;
@@ -146,7 +160,10 @@ function ensurePhotocellIndicatorVisible() {
     indicator.style.opacity = '1';
     indicator.style.display = 'block';
     indicator.style.transition = 'none';
-    indicator.style.backgroundColor = 'black';
+    // Do not cut a flash short: only reset the colour when no flash is running
+    if (!flashInProgress) {
+        indicator.style.backgroundColor = PHOTOCELL_FLASH_OFF_COLOR;
+    }
 
     return indicator;
 }

@@ -3,7 +3,7 @@
  * Enables offline functionality and caching
  */
 
-const CACHE_NAME = 'ecitt-adult-tasks-v5';
+const CACHE_NAME = 'ecitt-adult-tasks-v6';
 
 // Static assets that are safe to cache-first (images rarely change)
 const STATIC_ASSETS = [
@@ -44,7 +44,8 @@ const APP_FILES = [
     './js/photocell.js',
     './js/recording.js',
     './js/reward-animation.js',
-    './js/orientation.js'
+    './js/orientation.js',
+    './js/debug-monitor.js'
 ];
 
 // Install event - pre-cache everything
