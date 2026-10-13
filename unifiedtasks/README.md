@@ -293,7 +293,7 @@ unifiedtasks/
 
 ## Debug overlay
 
-Open the app with `?debug` on the end of the address (e.g. `.../unifiedtasks/?debug`) to show a small black box in the top-right corner: longest screen-frame gap, tap-handler time, touches vs. accepted taps, and photocell gate state. Use it to see whether the page is busy when taps or the photocell seem to stall. It does nothing without `?debug`.
+Turn on the `debug` flag to show a small black box in the top-right corner. In a browser add `?debug` to the address (e.g. `.../unifiedtasks/?debug`). On a home-screen app, which ignores the address, tap the "ECITT Task" title on the first screen 5 times quickly, type `debug`, press OK, and the app reloads. The box shows: longest screen-frame gap, tap-handler time, touches vs. accepted taps, and photocell gate state. Use it to see whether the page is busy when taps or the photocell seem to stall. Other flags for finding slowdowns: `norec` (no camera/video recording) and `nopreload` (no animation preloading); combine with spaces, e.g. `debug norec`. Clear them by opening the same prompt and leaving it empty. With no flags the app is normal.
 
 ## Experimenter procedure notes
 
