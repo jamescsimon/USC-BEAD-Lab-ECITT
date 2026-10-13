@@ -179,11 +179,11 @@ Example: `ECITT_PC001_2026-03-04_14-32-15-123.csv`
 
 ## Changing Task Setup and Timing
 
-All task configuration lives in **`app.js`**.
+Task configuration lives in **`js/task-configs.js`** (tasks), **`js/task-sequences.js`** (task order per age group) and **`js/timing-config.js`** (jitter and reward durations).
 
 ### Modifying a task (trials, button layout, instructions)
 
-Each task is defined in `TASK_CONFIGS` (top of `app.js`). Find the task by its ID and edit directly:
+Each task is defined in `TASK_CONFIGS` (`js/task-configs.js`). Find the task by its ID and edit directly:
 
 ```js
 adt_tpl: {
@@ -262,7 +262,25 @@ npx http-server -p 8000
 unifiedtasks/
 ├── index.html              # Main HTML structure
 ├── styles.css              # Visual styling
-├── app.js                  # Task logic and flow
+├── app.js                  # Entry point: DOM setup and event wiring
+├── js/                     # Split task logic (loaded in order by index.html)
+│   ├── task-configs.js     # TASK_CONFIGS
+│   ├── task-sequences.js   # Flow flags and per-age task sequences
+│   ├── timing-config.js    # Jitter and reward durations
+│   ├── app-state.js        # Shared state
+│   ├── media-helpers.js    # Sprite loops, one-shot audio
+│   ├── screens.js          # Screen switching
+│   ├── operator-controls.js# Hidden operator buttons
+│   ├── session-setup.js    # Age select, counterbalance, start/restart
+│   ├── task-loader.js      # Task loading, trial sequence generation
+│   ├── trial-flow.js       # Trials, responses, finish, DNF
+│   ├── nirs-baseline.js    # fNIRS baseline video
+│   ├── interblock.js       # Progress and inter-block feedback
+│   ├── calibration.js      # Frog calibration, butterfly break
+│   ├── photocell.js        # Photocell flash and sync
+│   ├── recording.js        # Video recording, CSV/video download
+│   ├── reward-animation.js # Reward animation, audio preload
+│   └── orientation.js      # Orientation layout
 ├── data.js                 # Data management and CSV generation
 ├── service-worker.js       # PWA offline support
 ├── manifest.json           # PWA configuration

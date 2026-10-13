@@ -3,7 +3,7 @@
  * Enables offline functionality and caching
  */
 
-const CACHE_NAME = 'ecitt-adult-tasks-v2';
+const CACHE_NAME = 'ecitt-adult-tasks-v3';
 
 // Static assets that are safe to cache-first (images rarely change)
 const STATIC_ASSETS = [
@@ -25,7 +25,24 @@ const APP_FILES = [
     './index.html',
     './styles.css',
     './app.js',
-    './data.js'
+    './data.js',
+    './js/task-configs.js',
+    './js/task-sequences.js',
+    './js/timing-config.js',
+    './js/app-state.js',
+    './js/media-helpers.js',
+    './js/screens.js',
+    './js/operator-controls.js',
+    './js/session-setup.js',
+    './js/task-loader.js',
+    './js/trial-flow.js',
+    './js/nirs-baseline.js',
+    './js/interblock.js',
+    './js/calibration.js',
+    './js/photocell.js',
+    './js/recording.js',
+    './js/reward-animation.js',
+    './js/orientation.js'
 ];
 
 // Install event - pre-cache everything
