@@ -241,6 +241,10 @@ function handleButtonPress(button, event) {
         });
         console.log('[APP] Infant incorrect press - no trial advance');
 
+        if (shouldReverseDirection()) {
+            reverseDirection(button);
+        }
+
         // DO NOT advance trial
         return;
     }
@@ -370,7 +374,8 @@ function handleButtonPress(button, event) {
         reactionTime: Math.round(reactionTime),
     
         phase,
-        direction: appState.counterbalance,
+        direction: appState.counterbalance, // current side; changes if the direction was reversed
+        directionReversed: appState.directionReversed ? 1 : 0,
     
         jitter1: appState.jitterDuration,
         jitter2: j2Delay,
@@ -437,6 +442,48 @@ function handleButtonPress(button, event) {
     }
         // Removed extra logging for PromptScreen
         // console.log(`[APP] Trial ${completedIndex + 1}: button=${button}, rewarded=${appState.currentRewarded}, accuracy=${accuracy}, RT=${reactionTime}ms`);
+}
+
+/**
+ * Papers (infant/toddler study 3): if the infant's very first tap lands on the side that is NOT
+ * rewarded, swap the prepotent and inhibitory sides so prepotency builds on the side they chose.
+ * Only the first trial of the first experiment block can trigger it, and only once per visit.
+ * The tap itself stays logged as incorrect; the happy face moves to the side that was tapped.
+ */
+function shouldReverseDirection() {
+    return !!BRACKET_PROTOCOL[appState.ageGroup].reverseOnFirstWrongTap &&
+        !!appState.currentTask.isExperimentBlock &&
+        appState.experimentBlockCount === 1 &&
+        appState.currentTrial === 0 &&
+        appState.trialTaps.length === 1 &&
+        !appState.directionReversed;
+}
+
+function reverseDirection(tappedSide) {
+    const flip = side => (side === 'left' ? 'right' : side === 'right' ? 'left' : side);
+
+    appState.trialSequence.forEach(trial => {
+        trial.emp = flip(trial.emp);
+        trial.rew = flip(trial.rew);
+    });
+    appState.counterbalance = flip(appState.counterbalance); // later blocks are built from this
+    appState.currentRewarded = flip(appState.currentRewarded);
+    appState.currentEmpPos = flip(appState.currentEmpPos);
+    appState.directionReversed = true;
+
+    refreshButtonFaces();
+    console.log(`[APP] Direction reversed after first tap on ${tappedSide}; prepotent side is now ${appState.counterbalance}`);
+}
+
+// Redraw which blue button shows the happy face without re-showing the whole prompt screen.
+function refreshButtonFaces() {
+    [['left', elements.leftButton], ['mdl', elements.mdlButton], ['right', elements.rightButton]].forEach(([pos, el]) => {
+        if (el && el.style.display !== 'none') {
+            el.style.backgroundImage = appState.currentEmpPos === pos
+                ? `url('../graphics/buttons/button_${pos}_happy.png')`
+                : `url('../graphics/buttons/button_${pos}.png')`;
+        }
+    });
 }
 
 function handlePromptDotPress(event) {

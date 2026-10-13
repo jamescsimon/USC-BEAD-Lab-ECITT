@@ -43,6 +43,16 @@ function drain(limit = 100000) {
         t.fn();
     }
 }
+// run only the timers due within `ms` of now (leaves later ones such as the 2 s autosave pending)
+function drainFor(ms) {
+    const limit = clock + ms;
+    while (true) {
+        timers.sort((a, b) => a.at - b.at || a.seq - b.seq);
+        if (!timers.length || timers[0].at > limit) break;
+        const t = timers.shift(); clock = Math.max(clock, t.at); t.fn();
+    }
+    clock = Math.max(clock, limit - ms + 1);
+}
 class FakeDate extends Date { static now() { return clock; } }
 const noop = () => {};
 const ctx = {
@@ -64,7 +74,7 @@ const ctx = {
         querySelectorAll: () => [], querySelector: () => null
     },
     window: { matchMedia: () => ({ matches: false, addEventListener: noop }), addEventListener: noop, localStorage: null },
-    localStorage: { getItem: () => null, setItem: noop, removeItem: noop },
+    localStorage: { getItem: () => null, setItem: () => { ctx._saves = (ctx._saves || 0) + 1; }, removeItem: noop },
     navigator: { mediaDevices: undefined }, alert: noop,
     setTimeout: (fn, ms) => { const id = ++timerSeq; timers.push({ at: clock + (ms || 0), seq: id, fn, id }); return id; },
     clearTimeout: id => { const i = timers.findIndex(t => t.id === id); if (i >= 0) timers.splice(i, 1); },
@@ -126,6 +136,7 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     const tag = `${bracket}/${side}`;
     get('restart')();
     ctx._syncCount = 0; ctx.__anim.length = 0;
+    ctx._saves = 0;
     clock += 5000; drain();                                 // real sessions start minutes after the last flash
     els.participantIdInput.value = 'T001';
     get(`select${bracket}`)();
@@ -174,8 +185,16 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
             assert.strictEqual(cells[col('Accuracy')], '0');
             assert.strictEqual(cells[col('PhotocellFlash')], '1', tag + ' wrong tap is locked to a flash');
             assert.ok(['left', 'right'].includes(cells[col('ButtonPressed')]));
-            clock += 600; get('handleButtonPress')(rewarded); drain();
+            // first tap of the visit was on the wrong side: the sides swap and the face moves to the tapped side
+            assert.strictEqual(get('appState.directionReversed'), true, tag + ' direction reversed');
+            assert.strictEqual(get('appState.counterbalance'), side === 'left' ? 'right' : 'left');
+            assert.notStrictEqual(get('appState.currentRewarded'), rewarded, tag + ' face moved');
+            assert.strictEqual(get('appState.trialSequence')[0].emp, get('appState.counterbalance'));
+            ctx._expectedSide = get('appState.counterbalance');
+            clock += 600; get('handleButtonPress')(get('appState.currentRewarded')); drain();
         } else {
+            ctx._expectedSide = side;
+            assert.strictEqual(get('appState.directionReversed'), false, tag + ' no reversal for child/adult');
             assert.strictEqual(get('appState.currentTrial'), 1, tag + ' child/adult: first response ends the trial');
             assert.ok(events().some(r => /Response/.test(csvLine(r)[col('SectionStarted')]) && csvLine(r)[col('Accuracy')] === '0'),
                 tag + ' a response row with Accuracy 0 exists');
@@ -188,7 +207,8 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
         assert.strictEqual(last[th.indexOf('Phase')], 'experiment');
         assert.strictEqual(last[th.indexOf('FirstResponseCorrect')], '0');
         assert.strictEqual(last[th.indexOf('IncorrectTaps')], bracket === 'Infant' ? '1' : '1');
-        assert.strictEqual(last[th.indexOf('Direction')], side);
+        assert.strictEqual(last[th.indexOf('Direction')], ctx._expectedSide);
+        assert.strictEqual(last[th.indexOf('DirectionReversed')], bracket === 'Infant' ? '1' : '0');
     }
     ctx.__anim.length = 0;
     playUntilScreenChange();
@@ -212,7 +232,7 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
         assert.strictEqual(get('appState.currentTask.isExperimentBlock'), true);
         assert.strictEqual(get('appState.experimentBlockCount'), b);
         assert.strictEqual(get('appState.currentTask.trials'), 32);
-        assert.strictEqual(get('appState.trialSequence')[0].emp, side, 'direction stays fixed');
+        assert.strictEqual(get('appState.trialSequence')[0].emp, ctx._expectedSide, 'direction stays fixed (after any reversal)');
         playUntilScreenChange();
     }
     assert.strictEqual(get('appState.inhibitoryCompleted'), 32);
@@ -264,9 +284,9 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     const first = flash(ev('ReadyScreen'));
     const second = flash(ev('LeftTrialScreen'));       // same instant -> gate closed
     assert.strictEqual(first, true); assert.strictEqual(second, false);
-    drain();                                            // flash on, off, dark period
+    drainFor(115);                                      // flash on and off, still inside the dark period
     clock += 5;
-    const tooSoon = flash(ev('LeftTrialScreen'));       // inside the dark period? drain() already ran past it
+    const tooSoon = flash(ev('LeftTrialScreen'));       // inside the dark period after the first flash
     drain();
     const rows = String(get('dataManager.generateCSV()')).split('\n').slice(1).map(csvLine);
     const hdr = csvLine(String(get('dataManager.generateCSV()')).split('\n')[0]);
@@ -284,5 +304,24 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     assert.strictEqual(flash(ev('ReadyScreen')), true, 'gate reopens after the dark period');
     drain();
     console.log('ok flash gate');
+}
+// ---- autosave debounce: rapid rows do not each serialise the whole session ----
+{
+    get('restart')();
+    clock += 5000; drain();
+    get('dataManager').startSession('SAVE', 'Adult', 'left');   // one immediate save
+    ctx._saves = 0;
+    const log = () => get('dataManager').logTrial({ participantId: 'SAVE', trialNumber: 1 });
+    // 40 rows, 100 ms apart (rapid tapping): nothing is saved while activity continues
+    for (let i = 0; i < 40; i++) { clock += 100; log(); drainFor(100); }
+    assert.strictEqual(ctx._saves, 0, 'no save while rows keep arriving, got ' + ctx._saves);
+    // a quiet period flushes exactly once (two setItem calls per save)
+    clock += 3500; drain();
+    assert.strictEqual(ctx._saves, 2, 'one save after the quiet period');
+    // continuous activity for 35 s still saves once at the 30 s cap
+    ctx._saves = 0;
+    for (let i = 0; i < 350; i++) { clock += 100; log(); drainFor(100); }
+    assert.ok(ctx._saves >= 2 && ctx._saves <= 4, 'capped save during long activity, got ' + ctx._saves);
+    console.log('ok autosave debounce');
 }
 console.log('flow: all tests passed');

@@ -56,7 +56,7 @@ const TASK_CONFIGS = {
         promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
         readyMsg1: 'We will start with practice on both sides! Start with your dominant index finger on the red dot.',
         readyMsg2: 'Press the happy face button that appears as fast as you can.',
-        readyMsg3: 'Then return to the dot.',
+        readyMsg3: 'Then rest your finger back on the red dot.',
         readyMsg4: 'Ready to practice?'
     },
     // Practice: Right (4 trials)
@@ -70,7 +70,7 @@ const TASK_CONFIGS = {
         promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
         readyMsg1: 'We will start with practice on both sides! Start with your dominant index finger on the red dot.',
         readyMsg2: 'Press the happy face button that appears as fast as you can.',
-        readyMsg3: 'Then return to the dot.',
+        readyMsg3: 'Then rest your finger back on the red dot.',
         readyMsg4: 'Ready to practice?'
     },
     // Test: Left (32 trials - 75% left, 25% right)
@@ -83,8 +83,8 @@ const TASK_CONFIGS = {
         trials: 32,
         promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
         readyMsg1: 'Excellent! Now for the real test. Keep pressing the happy face as fast as you can.',
-        readyMsg2: 'Then return to the dot.',
-        readyMsg3: 'Make sure you come back to the red dot after EVERY press!',
+        readyMsg2: 'Then rest your finger back on the red dot.',
+        readyMsg3: 'The red dot is just a place to rest your finger between presses.',
         readyMsg4: 'Ready? Let\'s start the real test!',
         // Trial variant configs
         variants: {
@@ -102,8 +102,8 @@ const TASK_CONFIGS = {
         trials: 32,
         promptLayout: { left: 'button', mdl: 'dot', right: 'button' },
         readyMsg1: 'Excellent! Now for the real test. Keep pressing the happy face as fast as you can.',
-        readyMsg2: 'Then return to the dot.',
-        readyMsg3: 'Make sure you come back to the red dot after EVERY press!',
+        readyMsg2: 'Then rest your finger back on the red dot.',
+        readyMsg3: 'The red dot is just a place to rest your finger between presses.',
         readyMsg4: 'Ready? Let\'s start the real test!',
         variants: {
             prpt: { emp: 'right', empType: 'happy', rew: 'right' },

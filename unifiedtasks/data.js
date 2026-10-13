@@ -3,6 +3,9 @@
  * Handles CSV generation, local storage, and data export
  */
 
+const AUTOSAVE_QUIET_MS = 3000;
+const AUTOSAVE_MAX_WAIT_MS = 30000;
+
 // Rows that must be locked to a photocell flash (stimulus onsets, responses, sync pulses, task end).
 const FLASH_REQUIRED_SECTIONS = [
     'ReadyScreen', 'LeftTrialScreen', 'RightTrialScreen', 'ControlTrialScreen',
@@ -286,7 +289,7 @@ class DataManager {
                 }
             }
             this.sessionData.push(record);
-            this.saveToLocalStorage();
+            this.scheduleSave();
             // ====================================
             // CLEAR TRIAL AFTER RESPONSE LOGGED
             // ====================================
@@ -451,6 +454,7 @@ class DataManager {
             ['TrialNumber', 'trialNumber'],
             ['TrialType', 'trialType'],
             ['Direction', 'direction'],
+            ['DirectionReversed', 'directionReversed'],
 
             ['RewardedSide', 'rewardedSide'],
             ['HappyFaceSide', 'happyFaceSide'],
@@ -802,9 +806,36 @@ class DataManager {
     }
     logTrial(trialData) {
         this.trialData.push(trialData);
+        this.scheduleSave();
+    }
+
+    /**
+     * Debounced autosave: waits for AUTOSAVE_QUIET_MS without new rows (but never longer than
+     * AUTOSAVE_MAX_WAIT_MS). saveToLocalStorage() serialises the whole session synchronously, so
+     * doing it on every row freezes an old iPad during rapid taps and the next correct tap can seem
+     * blocked. Final saves (end of session, page hide) still run immediately.
+     */
+    scheduleSave() {
+        const now = Date.now();
+        if (!this.saveFirstPendingAt) this.saveFirstPendingAt = now;
+        clearTimeout(this.saveTimer);
+
+        const wait = Math.max(0, Math.min(AUTOSAVE_QUIET_MS, this.saveFirstPendingAt + AUTOSAVE_MAX_WAIT_MS - now));
+        this.saveTimer = setTimeout(() => this.flushSave(), wait);
+    }
+
+    flushSave() {
+        clearTimeout(this.saveTimer);
+        this.saveTimer = null;
+        this.saveFirstPendingAt = 0;
         this.saveToLocalStorage();
     }
 }
 
 // Create global instance
 const dataManager = new DataManager();
+
+// Do not lose the last couple of seconds of rows if the page is closed or hidden
+if (typeof window !== 'undefined' && window.addEventListener) {
+    window.addEventListener('pagehide', () => dataManager.flushSave());
+}

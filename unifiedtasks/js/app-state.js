@@ -25,6 +25,7 @@ const appState = {
     blockTrials: 0,
     experimentBlockCount: 0,
     inhibitoryCompleted: 0,
+    directionReversed: false,
     experimentTrialsDone: 0,
     experimentFirstCorrect: 0,
     trialTaps: [],

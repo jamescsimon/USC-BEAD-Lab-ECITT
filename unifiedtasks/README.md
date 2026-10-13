@@ -291,6 +291,13 @@ unifiedtasks/
 └── README.md               # This file
 ```
 
+## Experimenter procedure notes
+
+- **Infant/toddler:** hold or move the iPad out of the child's reach between trials, and hand it back when the next trial is ready. All the toddler studies did this to stop the child pressing buttons without looking at which one is correct. Give no time pressure. Repeat "press the happy face" as needed and keep reactions to wrong taps neutral.
+- **Wrong taps:** infants may tap the blank button repeatedly. The app shows nothing on a wrong tap. Do not react to it and point back to the happy face.
+- **First tap on the wrong side:** for infant/toddler, if the first tap of the visit is on the non-happy side, the app swaps the prepotent and inhibitory sides for the whole visit (see `DirectionReversed` in the trials CSV).
+- **Progress:** the hatching chick on the block-end screen shows progress toward 32 inhibitory trials. Resume until it is fully hatched. An orange note on that screen means first-tap accuracy is below 60%.
+
 ## Dependencies
 
 ### Required Graphics

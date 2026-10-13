@@ -33,6 +33,9 @@ const BRACKET_PROTOCOL = {
         practiceTemplate: { left: 'inf_plp', right: 'inf_prp' },
         testTemplate: { left: 'inf_tpl', right: 'inf_tpr' },
         waitForCorrectResponse: true,
+        // Infant/toddler study 3: if the very first tap of the visit is on the non-rewarded side,
+        // the prepotent and inhibitory sides are swapped for the rest of the visit.
+        reverseOnFirstWrongTap: true,
         showResponseTimeFeedback: false
     },
     Child: {
