@@ -511,9 +511,9 @@ const SKIP_READY_SCREEN = {
 
 //const TASK_SEQUENCE = ['adt_cl', 'adt_cr', 'adt_ppl', 'adt_tpl', 'adt_ppr', 'adt_tpr'];
 // Left-first: Control Left → Control Right → Practice Left → Test Left → Test Right
-const TASK_SEQUENCE_LEFT    = ['adt_ppl', 'adt_ppr', 'adt_tpl', 'adt_tpr', 'adt_tpl', 'adt_tpr'];
+const TASK_SEQUENCE_LEFT = ['adt_ppl', 'adt_ppr', 'adt_tpl', 'adt_tpr', 'adt_tpl', 'adt_tpr'];
 // Right-first: Control Right → Control Left → Practice Right → Test Right → Test Left
-const TASK_SEQUENCE_RIGHT    = ['adt_ppr', 'adt_ppl', 'adt_tpr', 'adt_tpl', 'adt_tpr', 'adt_tpl'];
+const TASK_SEQUENCE_RIGHT = ['adt_ppr', 'adt_ppl', 'adt_tpr', 'adt_tpl', 'adt_tpr', 'adt_tpl'];
 
 // Task execution order — full 18+ adult protocol (james' version)
 // const TASK_SEQUENCE = ['adt_cm', 'adt_cl', 'adt_ppl', 'adt_tpl', 'adt_cr', 'adt_ppr', 'adt_tpr'];
@@ -522,6 +522,11 @@ const TASK_SEQUENCE_RIGHT    = ['adt_ppr', 'adt_ppl', 'adt_tpr', 'adt_tpl', 'adt
 const CHILD_TASK_SEQUENCE_LEFT = ['cha_demo','cha_ppl','cha_ppr', 'cha_cll', 'cha_tpl', 'cha_clr', 'cha_tpr', 'cha_cll', 'cha_tpl', 'cha_clr', 'cha_tpr', 'cha_cll', 'cha_tpl', 'cha_clr', 'cha_tpr', 'cha_cll', 'cha_tpl', 'cha_clr', 'cha_tpr', 'cha_cll', 'cha_tpl', 'cha_clr', 'cha_tpr'];
 const CHILD_TASK_SEQUENCE_RIGHT = ['cha_demo','cha_ppr','cha_ppl', 'cha_clr', 'cha_tpr', 'cha_cll', 'cha_tpl', 'cha_clr', 'cha_tpr', 'cha_cll', 'cha_tpl', 'cha_clr', 'cha_tpr', 'cha_cll', 'cha_tpl', 'cha_clr', 'cha_tpr', 'cha_cll', 'cha_tpl', 'cha_clr', 'cha_tpr', 'cha_cll', 'cha_tpl'];
 
+/*
+CHILD_TASK_SEQUENCE_LEFT(80Left/80Right) = 5xcha_cll(8Left/0Right), 5xcha_tpl(4Left/4Right), 5xcha_clr(0Left/8Right), 5xcha_tpr(4Left/4Right)
+CHILD_TASK_SEQUENCE_RIGHT(48Left/112Right) = 1xcha_cll(8Left/0Right), 1xcha_tpl(4Left/4Right), 9xcha_clr(0Left/8Right), 9xcha_tpr(4Left/4Right)
+*/
+
 // Task execution order — 17-23 month toddler ECITT protocol
 const TODDLER_TASK_SEQUENCE_LEFT = ['tod_ppl', 'tod_tpl', 'tod_ppr', 'tod_tpr'];
 const TODDLER_TASK_SEQUENCE_RIGHT = ['tod_ppr', 'tod_tpr', 'tod_ppl', 'tod_tpl'];
@@ -529,6 +534,12 @@ const TODDLER_TASK_SEQUENCE_RIGHT = ['tod_ppr', 'tod_tpr', 'tod_ppl', 'tod_tpl']
 // Task execution order — 10-16 month infant ECITT protocol
 const INFANT_TASK_SEQUENCE_LEFT = ['inf_demo','inf_plp', 'inf_prp', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr', 'inf_tpl', 'inf_c1r','inf_c1r', 'inf_tpr'];
 const INFANT_TASK_SEQUENCE_RIGHT = ['inf_demo','inf_prp', 'inf_plp', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr', 'inf_c1l', 'inf_tpl', 'inf_c1r', 'inf_tpr'];
+
+/*
+INFANT_TASK_SEQUENCE_LEFT =
+INFANT_TASK_SEQUENCE_RIGHT =
+*/
+
 
 // Active sequence — set on age group selection
 let activeTaskSequence = null;
@@ -1169,7 +1180,8 @@ function loadTask(taskId) {
     // Reset block-level RT counters at the start of each test block
     if (config.id === 'adt_tpl' || config.id === 'adt_tpr' ||
         config.id === 'cha_tpl' || config.id === 'cha_tpr' ||
-        config.id === 'tod_tpl' || config.id === 'tod_tpr') {
+        config.id === 'tod_tpl' || config.id === 'tod_tpr' || 
+        config.id === 'inf_tpl' || config.id === 'inf_tpr') {
         appState.blockReactionTime = 0;
         appState.blockTrials = 0;
     }
@@ -1560,7 +1572,8 @@ function handleButtonPress(button, event) {
     appState.totalReactionTime += reactionTime;
     if (appState.currentTask.id === 'adt_tpl' || appState.currentTask.id === 'adt_tpr' ||
         appState.currentTask.id === 'cha_tpl' || appState.currentTask.id === 'cha_tpr' ||
-        appState.currentTask.id === 'tod_tpl' || appState.currentTask.id === 'tod_tpr') {
+        appState.currentTask.id === 'tod_tpl' || appState.currentTask.id === 'tod_tpr' ||
+        appState.currentTask.id === 'inf_tpl' || appState.currentTask.id === 'inf_tpr') {
         appState.blockReactionTime += reactionTime;
         appState.blockTrials++;
     }
@@ -1756,7 +1769,9 @@ function finishTask() {
             appState.currentTask.id === 'cha_tpl' ||
             appState.currentTask.id === 'cha_tpr' ||
             appState.currentTask.id === 'tod_tpl' ||
-            appState.currentTask.id === 'tod_tpr';
+            appState.currentTask.id === 'tod_tpr' ||
+            appState.currentTask.id === 'inf_tpl' ||
+            appState.currentTask.id === 'inf_tpr';
 
         if (justFinishedAdultExperimentalBlock) {
             setTimeout(() => showAdultBlockEndAnimationThenFeedback(), 500);
@@ -1872,6 +1887,7 @@ function startNirsBaselineFromHiddenButton() {
 
     showNirsBaselineStartOverlay(appState.currentScreenName);
 }
+
 function showNirsBaselineStartOverlay(resumeScreenName) {
     if (baselineVideoActive) {
         return;
@@ -1957,6 +1973,7 @@ function showNirsBaselineStartOverlay(resumeScreenName) {
 
     document.body.appendChild(overlay);
 }
+
 function playNirsBaselineVideo(resumeScreenName) {
     baselineVideoActive = true;
 
@@ -1999,7 +2016,7 @@ function playNirsBaselineVideo(resumeScreenName) {
     overlay.style.top = '0';
     overlay.style.width = '100vw';
     overlay.style.height = '100vh';
-    overlay.style.backgroundColor = 'black';
+    overlay.style.backgroundColor = '#333';
     overlay.style.zIndex = '999999';
     overlay.style.display = 'flex';
     overlay.style.alignItems = 'center';
@@ -2019,7 +2036,7 @@ function playNirsBaselineVideo(resumeScreenName) {
     video.style.width = '100vw';
     video.style.height = '100vh';
     video.style.objectFit = 'contain';
-    video.style.backgroundColor = 'black';
+    video.style.backgroundColor = '#333';
     if (baselineAudio) {
         try {
             baselineAudio.pause();
@@ -2132,6 +2149,7 @@ function playNirsBaselineVideo(resumeScreenName) {
         });
     }
 }
+
 function resumeAfterNirsBaseline(resumeScreenName) {
     if (appState.isDNF || appState.isComplete) {
         return;
@@ -2329,7 +2347,7 @@ function showInterBlockFeedback() {
     showScreen('interBlockScreen');
 }
 
-function showAdultBlockEndAnimationThenFeedback() {
+function showAdultBlockEndAnimationThenFeedback() { // jumpscare
     const overlay =
         document.createElement('div');
 
@@ -2347,7 +2365,7 @@ function showAdultBlockEndAnimationThenFeedback() {
     overlay.style.justifyContent = 'center';
     overlay.style.fontSize = '64px';
     overlay.style.fontFamily = 'Arial, sans-serif';
-    overlay.style.color = 'black';
+    overlay.style.color = '#333';
 
     overlay.textContent = '★';
 
@@ -2385,18 +2403,14 @@ function showVideoCalibrationTask(onComplete) {
     overlay.style.width = '100vw';
     overlay.style.height = '100vh';
     overlay.style.zIndex = '1000000';
-    overlay.style.backgroundColor = 'black';
+    overlay.style.backgroundColor = '#333';
     overlay.style.border = '8px solid white';
     overlay.style.boxSizing = 'border-box';
     overlay.style.overflow = 'hidden';
     overlay.style.color = 'white';
     overlay.style.fontFamily = 'Arial, sans-serif';
 
-    const message =
-        document.createElement('div');
-
-    message.textContent =
-        'Follow the moving frog.';
+    const message = document.createElement('div');
 
     message.style.position = 'fixed';
     message.style.left = '50%';
@@ -2420,7 +2434,7 @@ function showVideoCalibrationTask(onComplete) {
     frog.style.zIndex = '1000001';
     frog.style.transition = 'left 350ms ease, top 350ms ease';
     frog.style.pointerEvents = 'none';
-    frog.style.transform = 'translate(-50%, -50%)';
+    frog.style.transform = 'translate(-100%, -100%)';
 
     frog.onerror = () => {
         console.warn('[CALIBRATION] Frog sprite frame not found:', frog.src);
@@ -2486,11 +2500,9 @@ function showVideoCalibrationTask(onComplete) {
             return;
         }
 
-        const pos =
-            sequence[stepIndex];
+        const pos = sequence[stepIndex];
 
-        message.textContent =
-             'Follow the moving frog.';
+        message.textContent = 'Watch the moving frog.';
 
         positionCalibrationSprite(frog, pos);
 
@@ -2498,8 +2510,7 @@ function showVideoCalibrationTask(onComplete) {
 
         stepIndex++;
 
-        timer =
-            setTimeout(runStep, CALIBRATION_STEP_MS);
+        timer = setTimeout(runStep, CALIBRATION_STEP_MS);
     };
 
     startButton.addEventListener('pointerdown', (event) => {
@@ -2513,34 +2524,51 @@ function showVideoCalibrationTask(onComplete) {
 }
 
 function positionCalibrationSprite(target, pos) {
-    const size =
-        CALIBRATION_SPRITE_SIZE_PX;
+    const isLandscape = window.matchMedia('(orientation: landscape)').matches;
+    const margin = 20;
 
-    const margin =
-        20;
+    // Get actual button dimensions if available in DOM, falling back to sprite size
+    const btnWidth = elements?.leftButton?.offsetWidth || CALIBRATION_SPRITE_SIZE_PX;
+    const btnHeight = elements?.leftButton?.offsetHeight || CALIBRATION_SPRITE_SIZE_PX;
 
-    target.style.transform =
-        'translate(-50%, -50%)';
+    // Reset offsets and center transform
+    target.style.transform = 'translate(-50%, -50%)';
+    target.style.right = '';
+    target.style.bottom = '';
 
-    // Red dot / center location
+    // Red dot / center location (identical in both orientations)
     if (pos === 'mdl') {
         target.style.left = '50%';
         target.style.top = '50%';
         return;
     }
 
-    // Blue-button locations
-    // This matches the task layout: left button on left side, right button on right side.
-    target.style.top = '50%';
+    if (isLandscape) {
+        // Landscape: Left button on left side, Right button on right side (vertically centered)
+        target.style.top = '50%';
 
-    if (pos === 'left') {
-        target.style.left = `${margin + size / 2}px`;
-        return;
-    }
+        if (pos === 'left') {
+            target.style.left = `${margin + btnWidth / 2}px`;
+            return;
+        }
 
-    if (pos === 'right') {
-        target.style.left = `calc(100vw - ${margin + size / 2}px)`;
-        return;
+        if (pos === 'right') {
+            target.style.left = `calc(100% - ${margin + btnWidth / 2}px)`;
+            return;
+        }
+    } else {
+        // Portrait: Left button at top, Right button at bottom (horizontally centered)
+        target.style.left = '50%';
+
+        if (pos === 'left') {
+            target.style.top = `${margin + btnHeight / 2}px`;
+            return;
+        }
+
+        if (pos === 'right') {
+            target.style.top = `calc(100% - ${margin + btnHeight / 2}px)`;
+            return;
+        }
     }
 
     // Safety fallback
@@ -2604,7 +2632,7 @@ function showButterflyTask(onComplete) {
     overlay.style.width = '100vw';
     overlay.style.height = '100vh';
     overlay.style.zIndex = '1000000';
-    overlay.style.backgroundColor = 'white';
+    overlay.style.backgroundColor = '#333';
     overlay.style.overflow = 'hidden';
     overlay.style.fontFamily = 'Arial, sans-serif';
 
@@ -2618,7 +2646,7 @@ function showButterflyTask(onComplete) {
     touchCounter.style.left = '12px';
     touchCounter.style.bottom = '12px';
     touchCounter.style.fontSize = '16px';
-    touchCounter.style.color = 'black';
+    touchCounter.style.color = 'white';
     touchCounter.style.zIndex = '1000002';
 
     const butterfly =
