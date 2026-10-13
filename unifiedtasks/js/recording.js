@@ -70,6 +70,10 @@ function showCsvDownloadLinks() {
         appState.participantId ||
         'unknown';
 
+    // Same stamp as the video file. Lab convention: ECITT_<participantID>_<date-time>_events.csv / _trials.csv,
+    // each file kept in its own events/ or trials/ folder on the lab server.
+    const stamp = dataManager.formatFilestamp(dataManager.sessionStart || new Date());
+
     const makeLink = (csvText, filename, label) => {
         const url = URL.createObjectURL(new Blob([csvText], { type: 'text/csv;charset=utf-8;' }));
         csvDownloadUrls.push(url);
@@ -86,10 +90,10 @@ function showCsvDownloadLinks() {
         if (!container) return;
 
         if (eventCSV) {
-            container.appendChild(makeLink(eventCSV, `ECITT_${participant}_events.csv`, 'Events CSV'));
+            container.appendChild(makeLink(eventCSV, `ECITT_${participant}_${stamp}_events.csv`, 'Events CSV'));
         }
         if (trialCSV) {
-            container.appendChild(makeLink(trialCSV, `ECITT_${participant}_trials.csv`, 'Trials CSV'));
+            container.appendChild(makeLink(trialCSV, `ECITT_${participant}_${stamp}_trials.csv`, 'Trials CSV'));
         }
     });
 }

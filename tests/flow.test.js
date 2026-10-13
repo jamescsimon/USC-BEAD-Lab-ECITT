@@ -271,7 +271,9 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     assert.ok(/Photocell check: OK/.test(els.endStats.innerHTML), tag + ' end screen reports the check');
     const links = els.endCsvDownloads.children.map(a => a.textContent);
     assert.strictEqual(links.join('|'), 'Events CSV|Trials CSV', tag + ' end screen has one link per CSV');
-    assert.ok(els.endCsvDownloads.children.every(a => /\.csv$/.test(a.download)));
+    const names = els.endCsvDownloads.children.map(a => a.download);
+    assert.ok(/^ECITT_T001_\d{4}-\d{2}-\d{2}_[\d-]+_events\.csv$/.test(names[0]), 'events file name: ' + names[0]);
+    assert.ok(/^ECITT_T001_\d{4}-\d{2}-\d{2}_[\d-]+_trials\.csv$/.test(names[1]), 'trials file name: ' + names[1]);
     console.log('ok', tag);
 }
 // ---- flash gate: a second flash requested while the first is on is refused, but its row is kept ----
