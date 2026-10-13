@@ -28,14 +28,16 @@ const BRACKET_PROTOCOL = {
         preTestTasks: ['cha_demo'],
         practiceTemplate: { left: 'cha_ppl', right: 'cha_ppr' },
         testTemplate: { left: 'cha_tpl', right: 'cha_tpr' },
-        showResponseTimeFeedback: true
+        showResponseTimeFeedback: true,
+        blockEndAnimation: true
     },
     Adult: {
         prefix: 'adt',
         preTestTasks: [],
         practiceTemplate: { left: 'adt_ppl', right: 'adt_ppr' },
         testTemplate: { left: 'adt_tpl', right: 'adt_tpr' },
-        showResponseTimeFeedback: true
+        showResponseTimeFeedback: true,
+        blockEndAnimation: true
     }
 };
 

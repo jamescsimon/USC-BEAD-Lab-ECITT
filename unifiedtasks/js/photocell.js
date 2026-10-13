@@ -203,8 +203,9 @@ function runPhotocellSyncTrain(syncName, onComplete, nPulses = 4, onBeforeReveal
 function loadTaskWithOptionalSync(taskId) {
     appState.syncTrainDone = appState.syncTrainDone || {};
 
-    const syncKey =
-        `pre_${appState.currentTaskIndex}_${taskId}`;
+    // One sync train per session, before the first experiment block (MATLAB fits a single clock
+    // offset per session, and fewer interruptions between blocks is better for the task).
+    const syncKey = 'before_first_experiment_block';
 
     if (
         isTestTaskId(taskId) &&

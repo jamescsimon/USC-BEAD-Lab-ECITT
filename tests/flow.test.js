@@ -53,7 +53,8 @@ const ctx = {
             const e = new FakeEl(null); e.tag = tag;
             e.remove = function () {
                 if (this.id === 'photocellSyncOverlay') {
-                    ctx._atReveal = { screen: get('appState.currentScreenName'), block: get('appState.currentTask.isExperimentBlock') };
+                    ctx._syncCount = (ctx._syncCount || 0) + 1;
+                ctx._atReveal = { screen: get('appState.currentScreenName'), block: get('appState.currentTask.isExperimentBlock') };
                 }
             };
             return e;
@@ -83,7 +84,7 @@ const get = expr => vm.runInContext(expr, ctx);
 ctx._domReady();
 
 // recording / download side effects are not under test
-vm.runInContext('startRecording = () => {}; stopRecording = () => {};  showCsvDownloadLinks = () => {}; stopAndAutoDownload = () => {}; playRewardAnimation = () => {}; stopRewardAnimation = () => {}; showButterflyTask = cb => cb();', ctx);
+ctx.__anim = []; vm.runInContext('startRecording = () => {}; stopRecording = () => {};  showCsvDownloadLinks = () => {}; stopAndAutoDownload = () => {}; playRewardAnimation = (el, opts) => { __anim.push(opts || {}); }; stopRewardAnimation = () => {}; showButterflyTask = cb => cb();', ctx);
 
 function playTrial(wrongFirst) {
     get('handleDotPress')(); drain();                       // dot -> (wait) -> prompt
@@ -112,6 +113,7 @@ assert.deepStrictEqual([chick(0, 32, 9), chick(16, 32, 9), chick(31, 32, 9), chi
 for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child', 'left'], ['Adult', 'right']]) {
     const tag = `${bracket}/${side}`;
     get('restart')();
+    ctx._syncCount = 0; ctx.__anim.length = 0;
     els.participantIdInput.value = 'T001';
     get(`select${bracket}`)();
     get('setCounterbalance')(side);
@@ -152,8 +154,16 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
         clock += 600; get('handleButtonPress')(rewarded); drain();
         assert.strictEqual(get('appState.currentTrial'), 1);
     }
+    ctx.__anim.length = 0;
     playUntilScreenChange();
     assert.strictEqual(els.choiceTitle.textContent, 'Block Complete', tag);
+    if (bracket === 'Infant') {
+        assert.ok(ctx.__anim.length >= 31, tag + ' infant: reward animation after correct responses');
+    } else {
+        assert.strictEqual(ctx.__anim.length, 1, tag + ' child/adult: only the block-end animation');
+        assert.strictEqual(ctx.__anim[0].durationMs, 1500);
+        assert.strictEqual(ctx.__anim[0].silent, bracket === 'Adult');
+    }
     assert.deepStrictEqual(choice(), ['Resume', 'Break', 'End']);
     assert.strictEqual(get('appState.inhibitoryCompleted'), 8, tag + ' inhibitory completed after block 1');
     const rt = /Average Response Time/.test(els.choiceStats.innerHTML);
@@ -179,6 +189,7 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     els.choiceButtons.children[2].click(); drain();   // label now reads 'Tap again to confirm'
     assert.strictEqual(get('appState.currentScreenName'), 'endScreen', tag + ' ended');
     assert.strictEqual(get('appState.isComplete'), true);
+    assert.strictEqual(ctx._syncCount, 1, tag + ' sync train runs once per session');
     console.log('ok', tag);
 }
 console.log('flow: all tests passed');

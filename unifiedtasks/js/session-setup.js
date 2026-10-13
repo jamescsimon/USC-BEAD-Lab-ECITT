@@ -67,6 +67,7 @@ function startTest() {
     appState.currentTaskIndex = 0;
     appState.experimentBlockCount = 0;
     appState.inhibitoryCompleted = 0;
+    appState.syncTrainDone = {};
     if (elements.recordingReminderContinueBtn) {
         elements.recordingReminderContinueBtn.disabled = false;
     }

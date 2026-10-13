@@ -162,7 +162,12 @@ function preloadAnimationFrames() {
     ].forEach(preloadAudioFile);
 }
 
-function playRewardAnimation(buttonEl) {
+/**
+ * @param {Element} buttonEl animation appears at this element's position
+ * @param {{durationMs?: number, loops?: number, silent?: boolean}} [options]
+ */
+function playRewardAnimation(buttonEl, options) {
+    options = options || {};
     if (rewardAnimTimer) {
         cancelAnimationFrame(rewardAnimTimer);
         rewardAnimTimer = null;
@@ -209,7 +214,9 @@ function playRewardAnimation(buttonEl) {
         `[AUDIO] Reward requested: ${soundSrc || 'NO_SOUND_SRC'}`
     );
 
-    if (soundSrc) {
+    if (options.silent) {
+        // no sound for this animation
+    } else if (soundSrc) {
         // Use a fresh Audio object for each reward on iPad.
         // Do not reuse the cached element, because reused media elements can get AbortError.
         const rewardAudio = new Audio(soundSrc);
@@ -256,12 +263,16 @@ function playRewardAnimation(buttonEl) {
         appState.ageGroup === 'Child';
     
     const totalDuration =
-        isChildReward
-            ? CHILD_REWARD_DURATION_MS
-            : INFANT_TODDLER_REWARD_DURATION_MS;
+        options.durationMs !== undefined
+            ? options.durationMs
+            : isChildReward
+                ? CHILD_REWARD_DURATION_MS
+                : INFANT_TODDLER_REWARD_DURATION_MS;
     
     const LOOPS =
-        isChildReward ? 1 : 2;
+        options.loops !== undefined
+            ? options.loops
+            : isChildReward ? 1 : 2;
     
     const LOOP_DURATION =
         totalDuration / LOOPS;
@@ -304,6 +315,22 @@ function playRewardAnimation(buttonEl) {
         rewardAnimTimer = requestAnimationFrame(animate);
     };
     rewardAnimTimer = requestAnimationFrame(animate);
+}
+
+/** One short animation in the middle of the screen (end of a Child/Adult block). Silent for adults. */
+function playBlockEndAnimation(durationMs) {
+    const size = 220; // matches the #rewardAnimation box
+    const centre = {
+        getBoundingClientRect: () => ({
+            left: (window.innerWidth - size) / 2,
+            top: (window.innerHeight - size) / 2
+        })
+    };
+    playRewardAnimation(centre, {
+        durationMs,
+        loops: 1,
+        silent: appState.ageGroup === 'Adult'
+    });
 }
 
 function stopRewardAnimation() {

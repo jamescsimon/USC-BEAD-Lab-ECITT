@@ -68,6 +68,18 @@ function startNextExperimentBlock() {
     loadTaskWithOptionalSync(activeTaskSequence[appState.currentTaskIndex]);
 }
 
+// Child/Adult: no animation after responses, one short animation when the 32-trial block ends.
+const BLOCK_END_ANIMATION_MS = 1500;
+
+function showBlockEndAfterAnimation() {
+    if (!BRACKET_PROTOCOL[appState.ageGroup].blockEndAnimation) {
+        showBlockEnd();
+        return;
+    }
+    playBlockEndAnimation(BLOCK_END_ANIMATION_MS);
+    setTimeout(showBlockEnd, BLOCK_END_ANIMATION_MS + 300);
+}
+
 function showBlockEnd() {
     const proto = BRACKET_PROTOCOL[appState.ageGroup];
     let html = '';

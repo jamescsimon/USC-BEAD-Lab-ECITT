@@ -251,8 +251,11 @@ function handleButtonPress(button, event) {
     }
     appState.totalReactionTime += reactionTime;
     if (appState.currentTask.isExperimentBlock) {
-        appState.blockReactionTime += reactionTime;
-        appState.blockTrials++;
+        // Block mean RT (shown to Child/Adult at block end) uses correct responses only
+        if (accuracy === 1) {
+            appState.blockReactionTime += reactionTime;
+            appState.blockTrials++;
+        }
         // Proxy for the 32-trial inhibitory target. True validity is decided later from the EEG.
         if (completedTrial?.type === 'inhb' && accuracy === 1) {
             appState.inhibitoryCompleted++;
@@ -370,8 +373,9 @@ function handleButtonPress(button, event) {
         }
     }
 
-    // Reward animation for non-adult correct trials
-    if (accuracy === 1 && appState.ageGroup !== 'Adult') {
+    // Reward animation after correct responses: Infant only. Child and Adult get one short
+    // animation at the end of each block instead (see showBlockEndAfterAnimation).
+    if (accuracy === 1 && appState.ageGroup === 'Infant') {
         const pressedEl = button === 'left' ? elements.leftButton :
                           button === 'right' ? elements.rightButton :
                           button === 'mdl' ? elements.mdlButton : null;
@@ -430,7 +434,7 @@ function finishTask() {
     } else if (finished.isPractice) {
         setTimeout(() => showPracticeChoice(), 500);
     } else if (finished.isExperimentBlock) {
-        setTimeout(() => showBlockEnd(), 500);
+        setTimeout(() => showBlockEndAfterAnimation(), 500);
     } else {
         finishTest();
     }
