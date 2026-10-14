@@ -147,6 +147,7 @@ function showPromptScreen() {
     appState.currentRewarded = rewPos;
     appState.currentEmpPos = empPos;
     appState.currentTrialNumber = appState.currentTrial + 1;
+    appState.trialResponded = false;
 
     // Determine section label from actual face position, not trial type
     let trialSection = 'PromptScreen';
@@ -177,6 +178,8 @@ function handleButtonPress(button, event) {
     }
 
     if (appState.isTransitioning) return;
+    // The trial already ended (Child/Adult first response, or Infant correct tap): ignore taps until the next trial starts
+    if (appState.trialResponded) return;
 
     const nowPressTime = Date.now();
 
@@ -244,6 +247,9 @@ function handleButtonPress(button, event) {
     }
     
     
+    // The trial ends with this response
+    appState.trialResponded = true;
+
     // Update stats
     appState.totalTrials++;
     if (accuracy === 1) {
@@ -361,14 +367,16 @@ function handleButtonPress(button, event) {
 
     console.log(`[APP] Trial ${completedIndex + 1}: button=${button}, rewarded=${appState.currentRewarded}, accuracy=${accuracy}, RT=${reactionTime}ms`);
 
-    // Adult ECITT-A: after any response, blue buttons disappear immediately,
-    // but the red dot stays visible so the participant can re-center.
-    if (appState.ageGroup === 'Adult') {
+    // Child and Adult (ECITT-A): after any response the blue buttons disappear immediately, with no
+    // other feedback (papers: stimuli disappear after correct AND incorrect responses). Without this
+    // a tap seems to do nothing until the next trial starts. Infant buttons are hidden by the reward
+    // animation. Adults keep the red dot visible so they can re-centre their finger.
+    if (appState.ageGroup === 'Child' || appState.ageGroup === 'Adult') {
         if (elements.leftButton) elements.leftButton.style.display = 'none';
         if (elements.mdlButton) elements.mdlButton.style.display = 'none';
         if (elements.rightButton) elements.rightButton.style.display = 'none';
 
-        if (elements.promptDot) {
+        if (appState.ageGroup === 'Adult' && elements.promptDot) {
             elements.promptDot.style.display = 'inline-block';
         }
     }
