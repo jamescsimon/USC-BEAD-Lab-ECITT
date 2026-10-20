@@ -23,6 +23,7 @@ class FakeEl {
     appendChild(c) { this.children.push(c); return c; }
     removeChild() {}
     remove() {}
+    getBoundingClientRect() { return { left: 100, top: 100, width: 220, height: 220 }; }
     querySelectorAll(sel) { return sel === 'button' ? this.children.filter(c => c.tag === 'button') : []; }
     querySelector() { return null; }
     setAttribute() {} getAttribute() { return null; }
@@ -60,7 +61,7 @@ const ctx = {
     document: {
         getElementById: getEl,
         createElement: tag => {
-            const e = new FakeEl(null); e.tag = tag; (ctx._created = ctx._created || []).push(e);
+            const e = new FakeEl(null); e.tag = tag; e.tagName = String(tag).toUpperCase(); (ctx._created = ctx._created || []).push(e);
             e.remove = function () {
                 if (this.id === 'photocellSyncOverlay') {
                     ctx._syncCount = (ctx._syncCount || 0) + 1;
@@ -79,7 +80,7 @@ const ctx = {
     setTimeout: (fn, ms) => { const id = ++timerSeq; timers.push({ at: clock + (ms || 0), seq: id, fn, id }); return id; },
     clearTimeout: id => { const i = timers.findIndex(t => t.id === id); if (i >= 0) timers.splice(i, 1); },
     setInterval: () => 0, clearInterval: noop,
-    requestAnimationFrame: fn => ctx.setTimeout(fn, 16), cancelAnimationFrame: noop,
+    requestAnimationFrame: fn => ctx.setTimeout(() => fn(clock), 16), cancelAnimationFrame: noop,
     Audio: function () { return { play: () => Promise.resolve(), pause: noop, load: noop, addEventListener: noop }; },
     Blob: class { constructor(parts) { this.parts = parts; } }, URL: { createObjectURL: () => 'blob:test', revokeObjectURL() {} },
     Image: function () { this.decode = () => { ctx._decoded = (ctx._decoded || 0) + 1; return Promise.resolve(); }; }, performance: { now: () => clock }, Date: FakeDate, Math, JSON, Object, Array, Promise, Map, Set, String, Number, Error, RegExp, parseInt, parseFloat, isNaN
@@ -95,7 +96,7 @@ const get = expr => vm.runInContext(expr, ctx);
 ctx._domReady();
 
 // recording / download side effects are not under test
-ctx.__anim = []; ctx.__animEl = []; vm.runInContext('globalThis.__realButterfly = showButterflyTask; globalThis.__realCalibration = showVideoCalibrationTask; startRecording = () => {}; stopRecording = () => {};  playRewardAnimation = (el, opts) => { __anim.push(opts || {}); __animEl.push(el && el.style ? el.style.display : 0); }; stopRewardAnimation = () => {}; showButterflyTask = cb => cb();', ctx);
+ctx.__anim = []; ctx.__animEl = []; vm.runInContext('globalThis.__realReward = playRewardAnimation; globalThis.__realButterfly = showButterflyTask; globalThis.__realCalibration = showVideoCalibrationTask; startRecording = () => {}; stopRecording = () => {};  playRewardAnimation = (el, opts) => { __anim.push(opts || {}); __animEl.push(el && el.style ? el.style.display : 0); }; stopRewardAnimation = () => {}; showButterflyTask = cb => cb();', ctx);
 
 function playTrial(wrongFirst) {
     // Trial 1 of a task waits for the dot; trials 2+ start by themselves after jitter
@@ -375,6 +376,41 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     console.log('ok break/calibration sounds');
 }
 
+// ---- sprite sheets: the files on disk match the frame counts the app expects ----
+{
+    const pngSize = file => { const b = fs.readFileSync(file); return [b.readUInt32BE(16), b.readUInt32BE(20)]; };
+    const expectedFrames = Object.assign({}, get('FRAME_ANIMATIONS'), { frog: get('CALIBRATION_SPRITE_FRAMES'), bfly: get('BUTTERFLY_SPRITE_FRAMES') });
+    for (const [name, frames] of Object.entries(expectedFrames)) {
+        const [w, h] = pngSize(path.join(root, '../graphics/sheets', name + '.png'));
+        assert.strictEqual(h, get('SHEET_FRAME_PX'), name + ' sheet height');
+        assert.strictEqual(w, frames * get('SHEET_FRAME_PX'), name + ' sheet is ' + frames + ' frames wide, got ' + w / get('SHEET_FRAME_PX'));
+    }
+    console.log('ok sprite sheets match the app (' + Object.keys(expectedFrames).length + ' sheets)');
+}
+
+// ---- a reward animation loads its sheet ONCE and then only moves the window ----
+{
+    clock += 5000; drain();
+    const writes = [];
+    const animEl = getEl('rewardAnimation');
+    animEl.style = new Proxy({}, { set(t, prop, value) { writes.push([prop, value]); t[prop] = value; return true; } });
+    get('appState').ageGroup = 'Child';
+    const button = getEl('leftButton'); button.style.display = 'block';
+    ctx.__realReward(button);
+    drainFor(1700);
+    const sheetWrites = writes.filter(w => w[0] === 'backgroundImage');
+    assert.strictEqual(sheetWrites.length, 1, 'the sheet is set once per play, not once per frame: ' + sheetWrites.length);
+    assert.ok(/graphics\/sheets\/[a-z0-9]+\.png/.test(sheetWrites[0][1]), 'it is a sheet: ' + sheetWrites[0][1]);
+    assert.ok(writes.findIndex(w => w[0] === 'backgroundImage') < writes.findIndex(w => w[0] === 'display' && w[1] === 'block'),
+        'the sheet and first frame are in place before the animation becomes visible');
+    const positions = writes.filter(w => w[0] === 'backgroundPosition').map(w => parseInt(w[1], 10));
+    assert.ok(positions.every(x => x <= 0 && x % get('SHEET_FRAME_PX') === 0), 'positions are whole frames: ' + positions.slice(0, 6));
+    assert.ok(new Set(positions).size >= 3, 'the window actually moves through several frames');
+    assert.strictEqual(animEl.style.display, 'none', 'the animation hides itself when done');
+    get('appState').ageGroup = 'Adult';
+    console.log('ok reward animation plays from one sheet');
+}
+
 // ---- session incomplete (DNF) screen: chick + count, and no extra white video popup ----
 {
     get('restart')();
@@ -401,7 +437,8 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
 (async () => {
     ctx._decoded = 0;
     const expected = get('allVisualAssetUrls()').length;
-    assert.ok(expected >= 140, 'all reward frames, sprites and button pictures are listed: ' + expected);
+    const sheetCount = Object.keys(get('FRAME_ANIMATIONS')).length + 2;           // reward animations + frog + butterfly
+    assert.strictEqual(expected, sheetCount + get('FRAME_ANIMATIONS.chick') + 7, 'sheets, chick progress frames and button faces are listed: ' + expected);
     ['infantBtn', 'childBtn', 'adultBtn'].forEach(id => { getEl(id).disabled = false; });
     get('setAgeButtonsEnabled')(false);
     assert.ok(['infantBtn', 'childBtn', 'adultBtn'].every(id => getEl(id).disabled === true), 'age buttons locked while loading');

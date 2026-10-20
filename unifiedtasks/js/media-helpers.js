@@ -3,30 +3,19 @@
  * (split from app.js; load order is set in index.html)
  */
 
-function getSpriteFrameSrc(prefix, frameNumber) {
-    return `${SPRITE_DIR}/${prefix}-${String(frameNumber).padStart(2, '0')}.png`;
-}
-
+// Loops an animation sheet on an <img> (frog, butterfly). Returns a function that stops the loop.
 function startSpriteLoop(imgEl, prefix, frameCount, fps = 8) {
     if (!imgEl) return () => {};
 
-    let frame = 1;
+    let frame = 0;
 
-    imgEl.src = getSpriteFrameSrc(prefix, frame);
-
-    const intervalMs =
-        Math.round(1000 / fps);
+    setupSheet(imgEl, prefix, frameCount);
 
     const timer =
         setInterval(() => {
-            frame =
-                frame >= frameCount
-                    ? 1
-                    : frame + 1;
-
-            imgEl.src =
-                getSpriteFrameSrc(prefix, frame);
-        }, intervalMs);
+            frame = (frame + 1) % frameCount;
+            showSheetFrame(imgEl, frame);
+        }, Math.round(1000 / fps));
 
     return () => clearInterval(timer);
 }

@@ -291,6 +291,12 @@ unifiedtasks/
 └── README.md               # This file
 ```
 
+## Animations (sprite sheets)
+
+Each animation is ONE wide picture in `graphics/sheets/<name>.png` with its frames side by side, built from the numbered frames in `graphics/frames/` and `graphics/sprites/`. The app downloads and decodes every sheet when it opens (the age buttons stay locked until that finishes), then plays an animation by moving a window along the sheet (`js/sprite-sheet.js`). Nothing is fetched or decoded during play, which is what stops the first play of each animation from flickering.
+
+**To add or change an animation:** put the numbered frames (`name-01.png`, `name-02.png`, ...; all 220x220) in `graphics/frames/`, run `python tools/build_sprite_sheets.py` (needs `pip install pillow`), and add the name and frame count to `FRAME_ANIMATIONS` in `js/reward-animation.js`. The tests check that every sheet's size matches its frame count.
+
 ## Debug overlay
 
 Turn on the `debug` flag to show a small black box in the top-right corner. In a browser add `?debug` to the address (e.g. `.../unifiedtasks/?debug`). On a home-screen app, which ignores the address, tap the "ECITT Task" title on the first screen 5 times quickly, type `debug`, press OK, and the app reloads. The box shows: longest screen-frame gap, tap-handler time, touches vs. accepted taps, and photocell gate state. Use it to see whether the page is busy when taps or the photocell seem to stall. Other flags for finding slowdowns: `norec` (no camera/video recording) and `nopreload` (no animation preloading); combine with spaces, e.g. `debug norec`. Clear them by opening the same prompt and leaving it empty. With no flags the app is normal.

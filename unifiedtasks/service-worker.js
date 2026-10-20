@@ -33,6 +33,7 @@ const APP_FILES = [
     './js/protocol-config.js',
     './js/timing-config.js',
     './js/app-state.js',
+    './js/sprite-sheet.js',
     './js/media-helpers.js',
     './js/screens.js',
     './js/operator-controls.js',

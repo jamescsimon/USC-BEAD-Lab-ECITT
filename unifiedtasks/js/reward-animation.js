@@ -141,21 +141,18 @@ function preloadAudioFile(fileOrPath) {
 }
 
 // Every picture the task shows, as URLs relative to the page (the same strings the CSS/img code uses,
-// so the browser serves the already-decoded copy).
+// so the browser serves the already-decoded copy). Animations are single sprite sheets (sprite-sheet.js).
 function allVisualAssetUrls() {
     const urls = [];
 
-    Object.entries(FRAME_ANIMATIONS).forEach(([name, count]) => {
-        for (let i = 1; i <= count; i++) {
-            urls.push(`../graphics/frames/${name}-${String(i).padStart(2, '0')}.png`);
-        }
-    });
+    // one sheet per reward animation, plus the frog and the butterfly
+    Object.keys(FRAME_ANIMATIONS).forEach(name => urls.push(sheetUrl(name)));
+    urls.push(sheetUrl(CALIBRATION_SPRITE_PREFIX));
+    urls.push(sheetUrl(BUTTERFLY_SPRITE_PREFIX));
 
-    for (let i = 1; i <= CALIBRATION_SPRITE_FRAMES; i++) {
-        urls.push(getSpriteFrameSrc(CALIBRATION_SPRITE_PREFIX, i));
-    }
-    for (let i = 1; i <= BUTTERFLY_SPRITE_FRAMES; i++) {
-        urls.push(getSpriteFrameSrc(BUTTERFLY_SPRITE_PREFIX, i));
+    // the chick progress pictures on the block-end and incomplete screens are single frames
+    for (let i = 1; i <= FRAME_ANIMATIONS.chick; i++) {
+        urls.push(`../graphics/frames/chick-${String(i).padStart(2, '0')}.png`);
     }
 
     ['left', 'mdl', 'right'].forEach(pos => {
@@ -236,7 +233,6 @@ function playRewardAnimation(buttonEl, options) {
     const rect = buttonEl.getBoundingClientRect();
     animEl.style.left = rect.left + 'px';
     animEl.style.top = rect.top + 'px';
-    animEl.style.display = 'block';
 
     // Hide buttons during animation
     if (elements.leftButton) elements.leftButton.style.display = 'none';
@@ -245,6 +241,11 @@ function playRewardAnimation(buttonEl, options) {
 
     const name = ANIMATION_NAMES[Math.floor(Math.random() * ANIMATION_NAMES.length)];
     const frameCount = FRAME_ANIMATIONS[name];
+
+    // Point the animation element at this animation's sheet and show frame 1 BEFORE making it visible,
+    // so a stale picture from the previous animation never shows. The sheet was decoded at startup.
+    setupSheet(animEl, name, frameCount);
+    animEl.style.display = 'block';
 
 // --- SOUND ---
     if (_currentAnimAudio) {
@@ -366,8 +367,7 @@ function playRewardAnimation(buttonEl, options) {
             Math.floor(eased * frameCount)
         );
     
-        animEl.style.backgroundImage =
-            `url('../graphics/frames/${name}-${String(frameIndex + 1).padStart(2, '0')}.png')`;
+        showSheetFrame(animEl, frameIndex);
     
         rewardAnimTimer = requestAnimationFrame(animate);
     };

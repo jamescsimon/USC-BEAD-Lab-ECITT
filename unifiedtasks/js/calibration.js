@@ -5,8 +5,6 @@
 
 // ===== PRE-TASK CALIBRATION + BUTTERFLY SPRITES =====
 
-const SPRITE_DIR = '../graphics/sprites';
-
 // Calibration sprite frames:
 // ../graphics/sprites/frog-01.png
 // ../graphics/sprites/frog-02.png
