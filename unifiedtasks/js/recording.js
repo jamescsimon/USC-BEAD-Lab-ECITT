@@ -99,6 +99,11 @@ function showCsvDownloadLinks() {
         if (trialCSV) {
             container.appendChild(makeLink(trialCSV, `ECITT_${participant}_${stamp}_trials.csv`, 'Trials CSV'));
         }
+        // only with the `debuglog` developer flag
+        if (typeof DebugLog !== 'undefined' && DebugLog.enabled) {
+            DebugLog.save();
+            container.appendChild(makeLink(DebugLog.toCSV(), `ECITT_${participant}_${stamp}_debug.csv`, 'Debug Log CSV'));
+        }
     });
 }
 

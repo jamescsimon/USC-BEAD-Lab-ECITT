@@ -75,7 +75,7 @@ const ctx = {
         querySelectorAll: () => [], querySelector: () => null
     },
     window: { matchMedia: () => ({ matches: false, addEventListener: noop }), addEventListener: noop, localStorage: null },
-    localStorage: { getItem: () => null, setItem: () => { ctx._saves = (ctx._saves || 0) + 1; }, removeItem: noop },
+    localStorage: { getItem: k => (k === 'ecittDevFlags' ? (process.env.ECITT_FLAGS || null) : null), setItem: k => { if (!/_debuglog$/.test(k)) ctx._saves = (ctx._saves || 0) + 1; }, removeItem: noop },
     navigator: { mediaDevices: undefined }, alert: noop,
     setTimeout: (fn, ms) => { const id = ++timerSeq; timers.push({ at: clock + (ms || 0), seq: id, fn, id }); return id; },
     clearTimeout: id => { const i = timers.findIndex(t => t.id === id); if (i >= 0) timers.splice(i, 1); },
@@ -289,7 +289,8 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     assert.ok(fc.requiredRows > 128, tag + ' flash rows counted');
     assert.ok(/Photocell check: OK/.test(els.endStats.innerHTML), tag + ' end screen reports the check');
     const links = els.endCsvDownloads.children.map(a => a.textContent);
-    assert.strictEqual(links.join('|'), 'Events CSV|Trials CSV', tag + ' end screen has one link per CSV');
+    const debugOn = get('DebugLog.enabled');   // run with ECITT_FLAGS=debuglog to test the flag on
+    assert.strictEqual(links.join('|'), 'Events CSV|Trials CSV' + (debugOn ? '|Debug Log CSV' : ''), tag + ' end screen has one link per CSV (+ the debug log only with its flag)');
     const names = els.endCsvDownloads.children.map(a => a.download);
     assert.ok(/^ECITT_T001_\d{4}-\d{2}-\d{2}_[\d-]+_events\.csv$/.test(names[0]), 'events file name: ' + names[0]);
     assert.ok(/^ECITT_T001_\d{4}-\d{2}-\d{2}_[\d-]+_trials\.csv$/.test(names[1]), 'trials file name: ' + names[1]);

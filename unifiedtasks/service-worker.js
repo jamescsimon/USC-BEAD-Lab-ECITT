@@ -47,7 +47,8 @@ const APP_FILES = [
     './js/recording.js',
     './js/reward-animation.js',
     './js/orientation.js',
-    './js/debug-monitor.js'
+    './js/debug-monitor.js',
+    './js/debug-log.js'
 ];
 
 // Install event - pre-cache everything

@@ -100,7 +100,7 @@
     const panel = document.createElement('div');
     panel.style.cssText =
         'position:fixed;top:4px;left:4px;z-index:2147483647;pointer-events:none;' +
-        'background:rgba(0,0,0,0.8);color:#0f0;font:bold 20px/1.3 monospace;padding:6px 10px;white-space:pre;';
+        'background:rgba(0,0,0,0.45);color:#0f0;font:bold 17px/1.25 monospace;padding:4px 8px;white-space:pre;';
 
     const tapLine = document.createElement('div');
     tapLine.style.color = '#ff0';
@@ -111,10 +111,13 @@
     hitLine.style.color = '#f9f';
     const stateLine = document.createElement('div');
     stateLine.style.color = '#0ff';
+    const buttonLine = document.createElement('div');
+    buttonLine.style.color = '#fa0';
     panel.appendChild(tapLine);
     panel.appendChild(touchLine);
     panel.appendChild(hitLine);
     panel.appendChild(stateLine);
+    panel.appendChild(buttonLine);
 
     // What the browser does with touches, independent of the task code:
     //   touches   every finger-down the page received
@@ -124,6 +127,7 @@
     // and what element the latest touch landed on (an invisible layer over the buttons would show up here).
     let touches = 0, blueTouches = 0, handlerCalls = 0, cancelled = 0;
     let lastHit = 'nothing yet';
+    let lastXY = '-';
     let acceptedTaps = 0;
     let lastTapText = 'none yet';
     let lastTapAt = 0;
@@ -137,6 +141,7 @@
         const id = event && event.target && event.target.id;
         if (id === 'leftButton' || id === 'mdlButton' || id === 'rightButton') blueTouches++;
         lastHit = describe(event && event.target);
+        lastXY = event ? `x${Math.round(event.clientX)} y${Math.round(event.clientY)}` : '-';
     }, true);
     document.addEventListener('pointercancel', () => { cancelled++; }, true);
 
@@ -174,7 +179,21 @@
         const ago = lastTapAt ? ((performance.now() - lastTapAt) / 1000).toFixed(1) + ' s ago' : '';
         tapLine.textContent = `tap #${acceptedTaps} (steps below are from it): ${lastTapText}  ${ago}`;
         touchLine.textContent = `touches ${touches} | on blue ${blueTouches} | calls ${handlerCalls} | cancelled ${cancelled}`;
-        hitLine.textContent = `last touch landed on: ${lastHit}`;
+        hitLine.textContent = `last touch at ${lastXY} landed on: ${lastHit}`;
+
+        // Where each visible blue button really is, and what is on top at its centre. If a touch inside
+        // a button's box lands on something else, that something covers the button.
+        const NL = String.fromCharCode(10);
+        buttonLine.textContent = ['leftButton', 'mdlButton', 'rightButton'].map(id => {
+            const el = elements[id];
+            if (!el || el.style.display === 'none' || !el.getBoundingClientRect) return null;
+            const r = el.getBoundingClientRect();
+            if (!r.width) return null;
+            const top = typeof document.elementFromPoint === 'function'
+                ? describe(document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2))
+                : '?';
+            return `${id.replace('Button', '')}: x${Math.round(r.left)}-${Math.round(r.right)} y${Math.round(r.top)}-${Math.round(r.bottom)} top at centre: ${top}`;
+        }).filter(Boolean).join(NL);
 
         const display = id => (appState.currentScreenName === 'promptScreen' && elements[id] ? elements[id].style.display || 'default' : '-');
         stateLine.textContent =

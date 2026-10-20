@@ -6,7 +6,9 @@
  * "ECITT Task" title 5 times quickly, type the flags separated by spaces or commas, and press OK.
  * Leave it empty to clear them. The page reloads to apply.
  *
- *   debug      show the performance overlay (see debug-monitor.js)
+ *   debug      show the performance overlay and step panel on screen (see debug-monitor.js)
+ *   debuglog   record a debug log CSV, with nothing drawn on screen (see debug-log.js); adds a
+ *              "Debug Log CSV" download on the end screen
  *   norec      do not start the camera / video recording
  *   nopreload  do not preload the reward animation frames and sounds
  *
@@ -31,7 +33,14 @@ const DEV_FLAGS = readDevFlags();
 
 // Reports that a named step of the task has just finished running. The debug panel (debug-monitor.js,
 // `debug` flag) lights the matching line. Does nothing, and costs nothing, when the panel is off.
+const debugStepListeners = [];
+
+function onDebugStep(listener) {
+    debugStepListeners.push(listener);
+}
+
 function debugStep(id) {
+    debugStepListeners.forEach(listener => listener(id));
     if (typeof window !== 'undefined' && typeof window.__debugStepSink === 'function') {
         window.__debugStepSink(id);
     }
@@ -55,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         taps = [];
 
         const current = (localStorage.getItem(DEV_FLAGS_STORAGE_KEY) || '');
-        const answer = window.prompt('Developer flags (debug, norec, nopreload). Empty = none.', current);
+        const answer = window.prompt('Developer flags (debuglog, debug, norec, nopreload). Empty = none.', current);
         if (answer === null) return;
         try {
             if (answer.trim()) {

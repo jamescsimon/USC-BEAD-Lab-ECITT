@@ -45,6 +45,8 @@ class DataManager {
         this.autosaveKey =
             `ecitt_autosave_${participantId}_${Date.now()}`;
 
+        if (typeof DebugLog !== 'undefined') DebugLog.begin(this.autosaveKey);
+
         this.saveToLocalStorage();
 
         console.log(`[DATA] Session started for ${participantId}`);
@@ -703,6 +705,8 @@ class DataManager {
             this.trialData = parsed.trialData || [];
     
             this.autosaveKey = key;
+
+            if (typeof DebugLog !== 'undefined') DebugLog.restore(key);
     
             console.log(`[DATA] Restored autosave: ${key}`);
     
@@ -722,6 +726,7 @@ class DataManager {
         this.trialData = [];
         this.participantId = '';
         this.sessionStart = null;
+        if (typeof DebugLog !== 'undefined') DebugLog.clear();
         console.log('[DATA] Session cleared');
     }
 
