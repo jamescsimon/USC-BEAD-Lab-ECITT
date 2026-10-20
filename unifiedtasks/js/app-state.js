@@ -29,6 +29,7 @@ const appState = {
     experimentTrialsDone: 0,
     experimentFirstCorrect: 0,
     trialTaps: [],
+    trialResponded: false,
     isTransitioning: false,
     waitTimer: null,
     nextTrialTimer: null,
