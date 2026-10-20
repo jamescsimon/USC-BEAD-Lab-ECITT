@@ -114,8 +114,8 @@ function styleHiddenOperatorButton(button, side) {
         button.style.right = '0px';
     }
 
-    button.style.width = '34px';
-    button.style.height = '34px';
+    button.style.width = '56px';
+    button.style.height = '56px';
     button.style.zIndex = '999998';
 
     button.style.opacity = '0.04';
@@ -132,13 +132,10 @@ function styleHiddenOperatorButton(button, side) {
 }
 
 function setupHoldToActivate(button, onActivate) {
-    let holdStartTime = null;
     let holdTimer = null;
-    let readyToActivate = false;
+    const name = button.id || 'hold';
 
     const resetHold = () => {
-        holdStartTime = null;
-        readyToActivate = false;
         clearTimeout(holdTimer);
         holdTimer = null;
         button.style.opacity = '0.04';
@@ -148,50 +145,37 @@ function setupHoldToActivate(button, onActivate) {
         event.preventDefault();
         event.stopPropagation();
 
-        holdStartTime = Date.now();
-        readyToActivate = false;
-
         clearTimeout(holdTimer);
-
         button.style.opacity = '0.25';
+        debugStep(`hold:${name} touch started`);
 
+        // Activate the moment 3 seconds have passed, while the finger is still down. It used to wait for
+        // the finger to lift, but iOS can take a long touch back (pointercancel) and then it never fired,
+        // and holding with no visible result looked like nothing happened.
         holdTimer = setTimeout(() => {
-            readyToActivate = true;
+            holdTimer = null;
             button.style.opacity = '0.45';
+            debugStep(`hold:${name} 3 s reached - activating`);
+            onActivate();
         }, HOLD_TO_ACTIVATE_MS);
     };
 
-    const endHold = (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        const heldLongEnough =
-            holdStartTime &&
-            Date.now() - holdStartTime >= HOLD_TO_ACTIVATE_MS;
-
-        if (heldLongEnough || readyToActivate) {
-            resetHold();
-
-            onActivate();
-            return;
-        }
-
-        resetHold();
-    };
-
-    const cancelHold = (event) => {
+    const stopHold = (event) => {
         if (event) {
             event.preventDefault();
             event.stopPropagation();
         }
 
+        if (holdTimer) {
+            debugStep(`hold:${name} ended before 3 s (${event ? event.type : 'reset'})`);
+        }
         resetHold();
     };
 
     button.addEventListener('pointerdown', startHold);
-    button.addEventListener('pointerup', endHold);
-    button.addEventListener('pointercancel', cancelHold);
-    button.addEventListener('pointerleave', cancelHold);
+    button.addEventListener('pointerup', stopHold);
+    button.addEventListener('pointercancel', stopHold);
+    button.addEventListener('pointerleave', stopHold);
 }
 
 function showAudioDebug(message) {

@@ -17,7 +17,7 @@ function makeContext(flags) {
             querySelector: () => null, visibilityState: 'visible',
             elementFromPoint: () => ({ tagName: 'DIV', id: 'rightButton', className: 'ecittButton' })
         },
-        window: { addEventListener: (type, fn) => { (winListeners[type] = winListeners[type] || []).push(fn); } },
+        window: { innerWidth: 1024, innerHeight: 768, addEventListener: (type, fn) => { (winListeners[type] = winListeners[type] || []).push(fn); } },
         performance: { now: () => ctx._now },
         _now: 1000,
         setTimeout: fn => { timeouts.push(fn); return timeouts.length; },
@@ -67,8 +67,9 @@ fire(on._docListeners.pointerdown, { clientX: 850.4, clientY: 420.2, pointerType
 fire(on._docListeners.touchstart, { touches: [{ clientX: 851, clientY: 421 }], target: { tagName: 'DIV', id: 'promptScreen', className: 'screen' } });
 fire(on._docListeners.pointercancel, { clientX: 5, clientY: 6, target: { tagName: 'DIV', id: 'rightButton', className: 'ecittButton' } });
 let rows = rowsOf(on);
-assert.ok(rows.some(r => /,touch,x850 y420 on div#promptScreen.screen \(touch\),promptScreen,false,false,3\/32$/.test(r)), 'touch row: ' + rows[0]);
+assert.ok(rows.some(r => /,touch,"x850 y420 on div#promptScreen.screen \(touch\) size=1024x768 scroll=0,0",promptScreen,false,false,3\/32$/.test(r)), 'touch row: ' + rows[0]);
 assert.ok(kinds(on).includes('touchstart') && kinds(on).includes('pointercancel'), 'touchstart and pointercancel are logged');
+assert.ok(rowsOf(on).some(r => /,buttons,at the missed touch: right x100-320 y200-420/.test(r)), 'a touch that misses the buttons also records where the buttons were');
 
 // the steps and taps from trial-flow.js
 vm.runInContext("debugStep('call'); debugStep('reset'); debugStep('tap:accepted (right)'); debugStep('lock'); debugStep('tap:ignored - taps are locked (trial already answered)')", on);
@@ -78,6 +79,18 @@ assert.ok(kinds(on).includes('call'), 'call');
 assert.ok(rows.some(r => /,tap,ignored - taps are locked \(trial already answered\),/.test(r)), 'ignored taps say why');
 assert.ok(rows.some(r => /,step,lock,/.test(r)), 'steps are logged');
 assert.ok(rows.some(r => /,buttons,right x100-320 y200-420 top-at-centre=div#rightButton.ecittButton,/.test(r)), 'button boxes logged when the prompt is shown: ' + rows.filter(r => /,buttons,/.test(r)));
+
+// zoom: with a visual viewport, touch rows carry zoom/offset and zoom changes are logged
+{
+    const vvListeners = {};
+    on.window.visualViewport = { scale: 1, offsetLeft: 0, offsetTop: 0, width: 1024, height: 768, addEventListener: (t, f) => { (vvListeners[t] = vvListeners[t] || []).push(f); } };
+    fire(on._docListeners.pointerdown, { clientX: 10, clientY: 20, pointerType: 'touch', target: { tagName: 'DIV', id: 'promptScreen', className: 'screen' } });
+    assert.ok(rowsOf(on).some(r => /,touch,"x10 y20 .*zoom=1.00 offset=0,0 size=1024x768 scroll=0,0"/.test(r)), 'touch rows carry the zoom');
+    on.window.visualViewport.scale = 1.6; on.window.visualViewport.offsetLeft = 140;
+    fire(on._docListeners.pointerdown, { clientX: 11, clientY: 21, pointerType: 'touch', target: { tagName: 'DIV', id: 'promptScreen', className: 'screen' } });
+    assert.ok(rowsOf(on).some(r => /,touch,"x11 y21 .*zoom=1.60 offset=140,0/.test(r)), 'a zoomed page shows in the touch row');
+    on.window.visualViewport = undefined;
+}
 
 // errors
 fire(on._winListeners.error, { message: 'boom', filename: 'http://x/js/trial-flow.js', lineno: 77 });

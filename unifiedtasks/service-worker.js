@@ -27,6 +27,7 @@ const APP_FILES = [
     './app.js',
     './data.js',
     './js/dev-flags.js',
+    './js/zoom-guard.js',
     './js/task-configs.js',
     './js/task-sequences.js',
     './js/trial-sequence.js',

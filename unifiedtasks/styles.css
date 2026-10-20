@@ -9,7 +9,9 @@
 }
 
 html, body {
-    /* rapid taps must not be read as double-tap-zoom or scroll gestures */
+    /* rapid taps must not be read as double-tap-zoom or scroll gestures; iOS before 13 only knows
+       'manipulation', so it is declared first and 'none' overrides it where supported */
+    touch-action: manipulation;
     touch-action: none;
     width: 100%;
     height: 100%;

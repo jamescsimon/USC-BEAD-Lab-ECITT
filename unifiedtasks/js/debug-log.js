@@ -15,12 +15,14 @@
  *   call / tap           the blue-button tap code was entered; accepted, or ignored and why
  *   step                 the steps after a tap: lock, row, flash, trial row, animation, counter,
  *                        timer set / fired, wait screen, finishTask, prompt, buttons, taps unlocked
+ *   hold                 the hidden top-left / top-right operator buttons: touch started, 3 s reached, ended early
  *   screen               the task changed screen
  *   state                screen / transitioning / taps locked / trial / which blue buttons are shown (on change)
  *   buttons              where each shown blue button is, and what element is on top at its centre
  *   stall                the page went more than 100 ms without drawing a frame
  *   error                a JavaScript error or unhandled promise rejection
  *   visibility           the page was hidden or shown
+ *   viewport             the page was zoomed, panned, resized or rotated (touch rows also carry zoom/offset)
  */
 const DebugLog = (function () {
     const enabled = typeof hasDevFlag === 'function' && hasDevFlag('debuglog');
@@ -119,11 +121,21 @@ const DebugLog = (function () {
 
     const where = event => (event ? `x${Math.round(event.clientX)} y${Math.round(event.clientY)}` : 'x? y?');
 
+    // Is the page zoomed or shifted? (iOS can zoom on rapid taps, which would move the buttons away from
+    // where they were drawn.) scale 1.00 and offset 0,0 is normal.
+    const viewportNote = () => {
+        const vv = typeof window !== 'undefined' ? window.visualViewport : null;
+        return vv
+            ? `zoom=${Number(vv.scale).toFixed(2)} offset=${Math.round(vv.offsetLeft)},${Math.round(vv.offsetTop)} size=${Math.round(vv.width)}x${Math.round(vv.height)} scroll=${Math.round(window.scrollX || 0)},${Math.round(window.scrollY || 0)}`
+            : `size=${window.innerWidth}x${window.innerHeight} scroll=${Math.round(window.scrollX || 0)},${Math.round(window.scrollY || 0)}`;
+    };
+
     function visibleButtonBoxes() {
         const NLs = [];
-        ['leftButton', 'mdlButton', 'rightButton'].forEach(id => {
+        ['leftButton', 'mdlButton', 'rightButton', 'dotButton'].forEach(id => {
             const el = typeof elements !== 'undefined' ? elements[id] : null;
             if (!el || el.style.display === 'none' || !el.getBoundingClientRect) return;
+            if (id === 'dotButton' && appState.currentScreenName !== 'readyScreen') return; // the dot lives on the ready screen
             const r = el.getBoundingClientRect();
             if (!r.width) return;
             const top = typeof document.elementFromPoint === 'function'
@@ -144,7 +156,14 @@ const DebugLog = (function () {
     if (enabled) {
         // finger down, as the browser reports it (capture phase: sees touches before any handler)
         document.addEventListener('pointerdown', event => {
-            add('touch', `${where(event)} on ${describe(event && event.target)} (${(event && event.pointerType) || '?'})`);
+            add('touch', `${where(event)} on ${describe(event && event.target)} (${(event && event.pointerType) || '?'}) ${viewportNote()}`);
+            // A touch on a task screen that did not land on a button: log where the buttons were just then,
+            // so a shifted layout shows up next to the touch that missed.
+            const id = event && event.target && event.target.id;
+            const isButton = id === 'leftButton' || id === 'mdlButton' || id === 'rightButton' || id === 'dotButton';
+            if (!isButton && (appState.currentScreenName === 'promptScreen' || appState.currentScreenName === 'readyScreen')) {
+                add('buttons', 'at the missed touch: ' + visibleButtonBoxes());
+            }
         }, true);
         document.addEventListener('touchstart', event => {
             const t = event && event.touches && event.touches[0];
@@ -164,11 +183,21 @@ const DebugLog = (function () {
         });
         window.addEventListener('pagehide', save);
 
+        // the page being zoomed, panned, resized or rotated
+        const logViewport = () => add('viewport', viewportNote());
+        if (window.visualViewport && window.visualViewport.addEventListener) {
+            window.visualViewport.addEventListener('resize', logViewport);
+            window.visualViewport.addEventListener('scroll', logViewport);
+        }
+        window.addEventListener('resize', logViewport);
+        window.addEventListener('orientationchange', logViewport);
+
         // the steps and taps reported by trial-flow.js through debugStep()
         onDebugStep(id => {
             if (id === 'reset') return add('tap', 'accepted: steps for this tap start');
             if (id === 'call') return add('call', 'blue-button tap code entered');
             if (id.startsWith('tap:')) return add('tap', id.slice(4));
+            if (id.startsWith('hold:')) return add('hold', id.slice(5));
             add('step', id);
             if (id === 'promptRendered') add('buttons', visibleButtonBoxes());
         });
@@ -179,6 +208,8 @@ const DebugLog = (function () {
             const originalShowScreen = showScreen;
             showScreen = function (name) {
                 add('screen', name);
+                add('viewport', viewportNote());
+                if (name === 'readyScreen') setTimeout(() => add('buttons', visibleButtonBoxes()), 150); // red dot position
                 return originalShowScreen.apply(this, arguments);
             };
         };

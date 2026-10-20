@@ -578,6 +578,7 @@ function finishTest() {
 }
 
 function handleDNF() {
+    debugStep('hold:handleDNF entered');
     if (appState.isDNF || appState.isComplete) return;
     
     appState.isDNF = true;
@@ -613,6 +614,7 @@ function handleDNF() {
     `;
     
     showScreen('dnfScreen');
+    debugStep('hold:DNF screen shown');
     // Show CSV links immediately on DNF.
     showCsvDownloadLinks();
     
