@@ -289,6 +289,7 @@ class DataManager {
                 }
             }
             this.sessionData.push(record);
+            if (/TrialResponse$/.test(sectionStarted) && typeof debugStep === 'function') debugStep('rowLogged');
             this.scheduleSave();
             // ====================================
             // CLEAR TRIAL AFTER RESPONSE LOGGED

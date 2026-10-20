@@ -65,3 +65,82 @@
             `flash: ${flashInProgress ? 'ON' : 'off'}, gate closed for ${gateWait} ms, refused ${refused}`;
     }, 250);
 })();
+
+/**
+ * Step tracker panel (`debug` flag). A large list of the steps that run after a tap ends a trial.
+ * Each line is tracked on its own and appears only when ITS code has finished, in whatever order that
+ * happens, with the time since the tap. A step that never appears is the one that did not run.
+ *
+ *   1  taps locked                   2  response row logged        3  response photocell flash on
+ *   4  trial row logged              5  reward animation started   6  trial counter advanced
+ *   7a next-trial timer set          7b next-trial timer fired     7c jitter wait screen shown
+ *   7d task over (finishTask)        7e prompt starting            7f buttons shown
+ *   7g TAPS UNLOCKED
+ * The top lines show what happened to the latest tap and the live state that decides whether taps count.
+ */
+(function () {
+    if (typeof hasDevFlag !== 'function' || !hasDevFlag('debug')) return;
+
+    const SLOTS = [
+        { labels: { lock: '1  taps locked' } },
+        { labels: { rowLogged: '2  response row logged' } },
+        { labels: { flash: '3  response photocell flash on' } },
+        { labels: { trialLogged: '4  trial row logged' } },
+        { labels: { animation: '5  reward animation started', animationSkipped: '5  reward animation skipped' } },
+        { labels: { advance: '6  trial counter advanced' } },
+        { labels: { timerSet: '7a next-trial timer set' } },
+        { labels: { timerFired: '7b next-trial timer fired' } },
+        { labels: { waitShown: '7c jitter wait screen shown' } },
+        { labels: { finishEntered: '7d task over: finishTask entered' } },
+        { labels: { promptStarted: '7e prompt starting' } },
+        { labels: { promptRendered: '7f buttons shown' } },
+        { labels: { unlocked: '7g TAPS UNLOCKED' } }
+    ];
+
+    const panel = document.createElement('div');
+    panel.style.cssText =
+        'position:fixed;top:4px;left:4px;z-index:2147483647;pointer-events:none;' +
+        'background:rgba(0,0,0,0.8);color:#0f0;font:bold 20px/1.3 monospace;padding:6px 10px;white-space:pre;';
+
+    const tapLine = document.createElement('div');
+    tapLine.style.color = '#ff0';
+    tapLine.textContent = 'last tap: none yet';
+    const stateLine = document.createElement('div');
+    stateLine.style.color = '#0ff';
+    panel.appendChild(tapLine);
+    panel.appendChild(stateLine);
+
+    const rows = SLOTS.map(() => {
+        const row = document.createElement('div');
+        row.style.visibility = 'hidden';
+        row.textContent = ' ';
+        panel.appendChild(row);
+        return row;
+    });
+
+    let resetAt = performance.now();
+
+    const reset = () => {
+        resetAt = performance.now();
+        rows.forEach(row => { row.style.visibility = 'hidden'; row.textContent = ' '; });
+    };
+
+    window.__debugStepSink = id => {
+        if (id === 'reset') return reset();
+        if (id.startsWith('tap:')) { tapLine.textContent = 'last tap: ' + id.slice(4); return; }
+
+        SLOTS.forEach((slot, index) => {
+            if (slot.labels[id]) {
+                rows[index].textContent = `${slot.labels[id]}  +${Math.round(performance.now() - resetAt)} ms`;
+                rows[index].style.visibility = 'visible';
+            }
+        });
+    };
+
+    document.addEventListener('DOMContentLoaded', () => document.body.appendChild(panel));
+
+    setInterval(() => {
+        stateLine.textContent =
+            `screen: ${appState.currentScreenName}  transitioning: ${appState.isTransitioning}  taps locked: ${appState.trialResponded}`;
+    }, 250);
+})();

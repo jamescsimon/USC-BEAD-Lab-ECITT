@@ -92,6 +92,7 @@ function showWaitScreen(invokedBy) {
         trialNumber: appState.currentTrial + 1
     });
     showJitterScreen();
+    debugStep('waitShown');
     clearTimeout(appState.waitTimer);
 
     appState.waitTimer = setTimeout(() => {
@@ -100,6 +101,7 @@ function showWaitScreen(invokedBy) {
 }
 
 function showPromptScreen() {
+    debugStep('promptStarted');
     stopRewardAnimation();
     appState.trialStartTime = Date.now();
     const config = appState.currentTask;
@@ -143,6 +145,7 @@ function showPromptScreen() {
     appState.currentTrialNumber = appState.currentTrial + 1;
     appState.trialTaps = []; // every tap of this trial, for first-response accuracy and incorrect-tap counts
     appState.trialResponded = false;
+    debugStep('unlocked');
 
     // Determine section label from actual face position, not trial type
     let trialSection = 'PromptScreen';
@@ -164,6 +167,7 @@ function showPromptScreen() {
         trialsRemaining: appState.currentTask.trials - appState.currentTrial,
         trialName: appState.currentTask.id || 'adt_ppl'
     });
+    debugStep('promptRendered');
 }
 
 function handleButtonPress(button, event) {
@@ -172,9 +176,15 @@ function handleButtonPress(button, event) {
         event.stopPropagation();
     }
 
-    if (appState.isTransitioning) return;
+    if (appState.isTransitioning) {
+        debugStep('tap:ignored - screen is changing (isTransitioning)');
+        return;
+    }
     // The trial already ended (Child/Adult first response, or Infant correct tap): ignore taps until the next trial starts
-    if (appState.trialResponded) return;
+    if (appState.trialResponded) {
+        debugStep('tap:ignored - taps are locked (trial already answered)');
+        return;
+    }
 
     const nowPressTime = Date.now();
 
@@ -184,11 +194,14 @@ function handleButtonPress(button, event) {
 
     if (isDuplicatePress) {
         showAudioDebug(`[APP] Ignored duplicate button press: ${button}`);
+        debugStep('tap:ignored - duplicate (same button within 400 ms)');
         return;
     }
 
     appState.lastButtonPressKey = button;
     appState.lastButtonPressTime = nowPressTime;
+    debugStep('reset');
+    debugStep('tap:accepted (' + button + ')');
 
     const reactionTime = Date.now() - appState.trialStartTime;
     const pressTimestamp = new Date();
@@ -249,6 +262,7 @@ function handleButtonPress(button, event) {
     
     // The trial ends with this response
     appState.trialResponded = true;
+    debugStep('lock');
 
     // Update stats
     appState.totalTrials++;
@@ -389,6 +403,7 @@ function handleButtonPress(button, event) {
             : ''
     });
 
+    debugStep('trialLogged');
     console.log(`[APP] Trial ${completedIndex + 1}: button=${button}, rewarded=${appState.currentRewarded}, accuracy=${accuracy}, RT=${reactionTime}ms`);
 
     // Child and Adult: after a response with no reward animation the blue buttons disappear immediately,
@@ -415,12 +430,16 @@ function handleButtonPress(button, event) {
                           button === 'right' ? elements.rightButton :
                           button === 'mdl' ? elements.mdlButton : null;
         playRewardAnimation(pressedEl);
+        debugStep('animation');
+    } else {
+        debugStep('animationSkipped');
     }
 
     // Move to next trial or task
     if (!appState.currentTask.allowCorrection || accuracy === 1) {
         appState.currentTrial++;
     }
+    debugStep('advance');
 
     const skipReadyBetweenTrials =
     SKIP_READY_SCREEN[appState.ageGroup] === true;
@@ -436,15 +455,19 @@ function handleButtonPress(button, event) {
         clearTimeout(appState.nextTrialTimer);
 
         appState.nextTrialTimer = setTimeout(() => {
+            debugStep('timerFired');
             nextScreen();
         }, j2Delay);
+        debugStep('timerSet');
 
     } else {
         clearTimeout(appState.nextTrialTimer);
 
         appState.nextTrialTimer = setTimeout(() => {
+            debugStep('timerFired');
             finishTask();
         }, j2Delay);
+        debugStep('timerSet');
     }
         // Removed extra logging for PromptScreen
         // console.log(`[APP] Trial ${completedIndex + 1}: button=${button}, rewarded=${appState.currentRewarded}, accuracy=${accuracy}, RT=${reactionTime}ms`);
@@ -500,6 +523,7 @@ function handlePromptDotPress(event) {
 }
 
 function finishTask() {
+    debugStep('finishEntered');
     const finished = appState.currentTask;
     console.log(`[APP] Task complete: ${finished.name}`);
 

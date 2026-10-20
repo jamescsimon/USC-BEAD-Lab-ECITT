@@ -13,6 +13,7 @@ function loadTask(taskId, options) {
     appState.currentTrial = 0;
     appState.isTransitioning = false;
     appState.trialResponded = false;
+    debugStep('unlocked');
 
     // Pre-fill the jitter pool: shuffle the age-appropriate list repeatedly
     // until we have one entry per trial, then draw in order (no repeats until pool exhausted)

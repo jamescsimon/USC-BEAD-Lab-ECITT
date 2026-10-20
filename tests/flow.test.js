@@ -411,6 +411,61 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     console.log('ok reward animation plays from one sheet');
 }
 
+// ---- debug step tracker: every step reports itself, independently, from the code that runs it ----
+{
+    get('restart')(); els.participantIdInput.value = 'STEPS'; get('selectChild')(); get('setCounterbalance')('left'); get('startTest')();
+    clock += 5000; drain();
+    const seen = [];
+    ctx.window.__debugStepSink = id => seen.push(id);
+    const blockId = get("makeExperimentBlockTask('Child','left',1)");
+    get('appState').experimentBlockCount = 1;
+    get('activeTaskSequence').push(blockId); get('appState').currentTaskIndex = get('activeTaskSequence').length - 1;
+    get('loadTask')(blockId); drain();
+    clock += 400; get('handleDotPress')(); drain(); clock += 400;
+    seen.length = 0;
+
+    const rewarded = get('appState.currentRewarded');
+    get('handleButtonPress')(rewarded);
+    // straight away (synchronous steps)
+    for (const id of ['reset', 'lock', 'trialLogged', 'animation', 'advance', 'timerSet']) assert.ok(seen.includes(id), 'step reported at once: ' + id + ' in ' + seen);
+    assert.ok(seen.some(id => /^tap:accepted/.test(id)), 'the tap is reported as accepted');
+    // a second tap while locked is reported with its reason
+    get('handleButtonPress')(rewarded === 'left' ? 'right' : 'left');
+    assert.ok(seen.some(id => /^tap:ignored - taps are locked/.test(id)), 'ignored tap says why: ' + seen.filter(id => id.startsWith('tap:')));
+    // later steps, each from its own code path
+    drainFor(100);
+    for (const id of ['rowLogged', 'flash']) assert.ok(seen.includes(id), 'step reported after the frame: ' + id);
+    drain();
+    for (const id of ['timerFired', 'waitShown', 'promptStarted', 'promptRendered', 'unlocked']) assert.ok(seen.includes(id), 'step reported later: ' + id + ' in ' + seen);
+    assert.strictEqual(get('appState.trialResponded'), false, 'taps really are unlocked when step 7g is reported');
+
+    // end of a task (practice trial): the finish path reports itself instead of the next-trial steps
+    get('activeTaskSequence').push(get("makePracticeTask('Child','left')")); get('appState').currentTaskIndex = get('activeTaskSequence').length - 1;
+    get('loadTask')(get('activeTaskSequence')[get('appState').currentTaskIndex]); drain();
+    clock += 400; get('handleDotPress')(); drain(); clock += 400;
+    seen.length = 0;
+    get('handleButtonPress')(get('appState.currentRewarded')); drain();
+    assert.ok(seen.includes('finishEntered'), 'finishTask reports itself: ' + seen);
+    assert.ok(!seen.includes('waitShown'), 'no next-trial wait after the last trial');
+
+    // the panel: a line appears only when its own step ran, in any order
+    vm.runInContext("DEV_FLAGS.add('debug')", ctx);
+    ctx._created.length = 0;
+    vm.runInContext(fs.readFileSync(path.join(root, 'js/debug-monitor.js'), 'utf8'), ctx);
+    const rowByText = text => ctx._created.find(e => typeof e.textContent === 'string' && e.textContent.startsWith(text));
+    const sink = ctx.window.__debugStepSink;
+    assert.strictEqual(typeof sink, 'function', 'panel installs its sink');
+    sink('unlocked');                                      // a LATE step first: nothing forces the order
+    sink('lock');
+    const shown = ctx._created.filter(e => e.style && e.style.visibility === 'visible').map(e => e.textContent.split('  +')[0]);
+    assert.deepStrictEqual(Array.from(shown).sort(), ['1  taps locked', '7g TAPS UNLOCKED'].sort(), 'only the steps that ran are shown');
+    sink('reset');
+    assert.strictEqual(ctx._created.filter(e => e.style && e.style.visibility === 'visible').length, 0, 'a new tap clears the list');
+    ctx.window.__debugStepSink = undefined;
+    vm.runInContext("DEV_FLAGS.delete('debug')", ctx);
+    console.log('ok debug step tracker');
+}
+
 // ---- session incomplete (DNF) screen: chick + count, and no extra white video popup ----
 {
     get('restart')();

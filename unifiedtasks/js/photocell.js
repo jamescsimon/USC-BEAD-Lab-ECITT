@@ -115,6 +115,7 @@ function flashButtonIndicator(pendingEvent) {
     requestAnimationFrame(() => {
         // DIN-relevant onset
         indicator.style.backgroundColor = PHOTOCELL_FLASH_ON_COLOR;
+        if (pendingEvent && /TrialResponse$/.test(pendingEvent.section)) debugStep('flash');
 
         try {
             if (pendingEvent) {

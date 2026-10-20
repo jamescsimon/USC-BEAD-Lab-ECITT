@@ -29,6 +29,14 @@ function readDevFlags() {
 
 const DEV_FLAGS = readDevFlags();
 
+// Reports that a named step of the task has just finished running. The debug panel (debug-monitor.js,
+// `debug` flag) lights the matching line. Does nothing, and costs nothing, when the panel is off.
+function debugStep(id) {
+    if (typeof window !== 'undefined' && typeof window.__debugStepSink === 'function') {
+        window.__debugStepSink(id);
+    }
+}
+
 function hasDevFlag(name) {
     return DEV_FLAGS.has(name);
 }
