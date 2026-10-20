@@ -148,7 +148,10 @@ function showVideoCalibrationTask(onComplete) {
 
         positionCalibrationSprite(frog, pos);
 
-        playCalibrationAudio();
+        // The sound plays once, when calibration starts (the first tap). Later frog moves are silent.
+        if (stepIndex === 0) {
+            playCalibrationAudio();
+        }
 
         stepIndex++;
 
@@ -472,7 +475,10 @@ function showButterflyTask(onComplete) {
             pressSequence: `butterfly@${Math.round(butterflyRT)}`
         });
 
-        playOneShotAudio(BUTTERFLY_SOUND, 1);
+        // The sound plays once, on the first touch of the butterfly. Later touches only move it.
+        if (touchCount === 1) {
+            playOneShotAudio(BUTTERFLY_SOUND, 1);
+        }
         moveButterfly();
 
         continueButton.style.display = 'block';

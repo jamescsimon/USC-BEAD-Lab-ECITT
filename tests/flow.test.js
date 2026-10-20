@@ -95,7 +95,7 @@ const get = expr => vm.runInContext(expr, ctx);
 ctx._domReady();
 
 // recording / download side effects are not under test
-ctx.__anim = []; vm.runInContext('startRecording = () => {}; stopRecording = () => {};  playRewardAnimation = (el, opts) => { __anim.push(opts || {}); }; stopRewardAnimation = () => {}; showButterflyTask = cb => cb();', ctx);
+ctx.__anim = []; vm.runInContext('globalThis.__realButterfly = showButterflyTask; globalThis.__realCalibration = showVideoCalibrationTask; startRecording = () => {}; stopRecording = () => {};  playRewardAnimation = (el, opts) => { __anim.push(opts || {}); }; stopRewardAnimation = () => {}; showButterflyTask = cb => cb();', ctx);
 
 function playTrial(wrongFirst) {
     // Trial 1 of a task waits for the dot; trials 2+ start by themselves after jitter
@@ -217,12 +217,14 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     ctx.__anim.length = 0;
     playUntilScreenChange();
     assert.strictEqual(els.choiceTitle.textContent, 'Block Complete', tag);
-    if (bracket === 'Infant') {
-        assert.ok(ctx.__anim.length >= 31, tag + ' infant: reward animation after correct responses');
-    } else {
-        assert.strictEqual(ctx.__anim.length, 1, tag + ' child/adult: only the block-end animation');
+    if (bracket === 'Adult') {
+        assert.strictEqual(ctx.__anim.length, 1, tag + ' adult: only the block-end animation');
         assert.strictEqual(ctx.__anim[0].durationMs, 1500);
-        assert.strictEqual(ctx.__anim[0].silent, bracket === 'Adult');
+        assert.strictEqual(ctx.__anim[0].silent, true);
+    } else {
+        // Infant and Child: a reward animation after each correct trial, and nothing extra at the block end
+        assert.strictEqual(ctx.__anim.length, 31, tag + ' reward animation after each of the 31 remaining correct trials, got ' + ctx.__anim.length);
+        assert.ok(ctx.__anim.every(o => o.durationMs === undefined), tag + ' no block-end animation');
     }
     assert.deepStrictEqual(choice(), ['Resume', 'Break', 'End']);
     assert.strictEqual(get('appState.inhibitoryCompleted'), 8, tag + ' inhibitory completed after block 1');
@@ -339,6 +341,37 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     assert.ok(ctx._saves >= 2 && ctx._saves <= 4, 'capped save during long activity, got ' + ctx._saves);
     console.log('ok autosave debounce');
 }
+// ---- calibration and break sounds play once, not on every move/tap ----
+{
+    clock += 5000; drain();
+    ctx.__sounds = [];
+    vm.runInContext("playOneShotAudio = (file) => { __sounds.push(file); }; playCalibrationAudio = () => { __sounds.push('frog-sound'); };", ctx);
+    const fire = (el, type) => (el.listeners[type] || []).forEach(f => f({ preventDefault() {}, stopPropagation() {} }));
+
+    // Break butterfly: four touches, one sound (on the first)
+    ctx._created.length = 0;
+    ctx.__realButterfly(() => {});
+    const butterfly = ctx._created.find(e => e.id === 'butterflyTarget');
+    assert.ok(butterfly, 'butterfly screen built');
+    for (let i = 0; i < 4; i++) { clock += 400; fire(butterfly, 'pointerdown'); }
+    assert.strictEqual(ctx.__sounds.filter(f => /happyTune/.test(f)).length, 1, 'butterfly sound plays once: ' + ctx.__sounds);
+    // a fresh Break plays it once again on its first touch
+    ctx._created.length = 0;
+    ctx.__realButterfly(() => {});
+    const butterfly2 = ctx._created.find(e => e.id === 'butterflyTarget');
+    clock += 400; fire(butterfly2, 'pointerdown'); clock += 400; fire(butterfly2, 'pointerdown');
+    assert.strictEqual(ctx.__sounds.filter(f => /happyTune/.test(f)).length, 2, 'a second Break plays it once more');
+
+    // Frog calibration: four frog moves, one sound (when calibration starts)
+    ctx.__sounds.length = 0; ctx._created.length = 0;
+    ctx.__realCalibration(() => {});
+    const start = ctx._created.find(e => e.tag === 'button' && /Tap to start/.test(e.textContent));
+    assert.ok(start, 'calibration start button built');
+    fire(start, 'pointerdown'); drain();
+    assert.strictEqual(ctx.__sounds.filter(f => f === 'frog-sound').length, 1, 'frog sound plays once, not on each of the 4 moves: ' + ctx.__sounds);
+    console.log('ok break/calibration sounds');
+}
+
 // ---- session incomplete (DNF) screen: chick + count, and no extra white video popup ----
 {
     get('restart')();

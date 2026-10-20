@@ -405,9 +405,9 @@ function handleButtonPress(button, event) {
         }
     }
 
-    // Reward animation after correct responses: Infant only. Child and Adult get one short
-    // animation at the end of each block instead (see showBlockEndAfterAnimation).
-    if (accuracy === 1 && appState.ageGroup === 'Infant') {
+    // Reward animation after correct responses (Infant and Child, see rewardAfterCorrect in protocol-config.js).
+    // Adult gets one short animation at the end of each block instead (see showBlockEndAfterAnimation).
+    if (accuracy === 1 && BRACKET_PROTOCOL[appState.ageGroup].rewardAfterCorrect) {
         const pressedEl = button === 'left' ? elements.leftButton :
                           button === 'right' ? elements.rightButton :
                           button === 'mdl' ? elements.mdlButton : null;

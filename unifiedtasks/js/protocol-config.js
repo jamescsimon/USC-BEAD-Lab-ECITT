@@ -36,6 +36,7 @@ const BRACKET_PROTOCOL = {
         // Infant/toddler study 3: if the very first tap of the visit is on the non-rewarded side,
         // the prepotent and inhibitory sides are swapped for the rest of the visit.
         reverseOnFirstWrongTap: true,
+        rewardAfterCorrect: true,
         showResponseTimeFeedback: false
     },
     Child: {
@@ -44,8 +45,9 @@ const BRACKET_PROTOCOL = {
         practiceTemplate: { left: 'cha_ppl', right: 'cha_ppr' },
         testTemplate: { left: 'cha_tpl', right: 'cha_tpr' },
         waitForCorrectResponse: false,
-        showResponseTimeFeedback: true,
-        blockEndAnimation: true
+        // Reward animation after every correct trial (lab decision 2026-10-20)
+        rewardAfterCorrect: true,
+        showResponseTimeFeedback: true
     },
     Adult: {
         prefix: 'adt',
@@ -53,6 +55,7 @@ const BRACKET_PROTOCOL = {
         practiceTemplate: { left: 'adt_ppl', right: 'adt_ppr' },
         testTemplate: { left: 'adt_tpl', right: 'adt_tpr' },
         waitForCorrectResponse: false,
+        // No animation after responses; one short silent animation when a block ends
         showResponseTimeFeedback: true,
         blockEndAnimation: true
     }
