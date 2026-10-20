@@ -391,11 +391,14 @@ function handleButtonPress(button, event) {
 
     console.log(`[APP] Trial ${completedIndex + 1}: button=${button}, rewarded=${appState.currentRewarded}, accuracy=${accuracy}, RT=${reactionTime}ms`);
 
-    // Child and Adult (ECITT-A): after any response the blue buttons disappear immediately, with no
-    // other feedback (papers: stimuli disappear after correct AND incorrect responses). Without this
-    // a tap seems to do nothing until the next trial starts. Infant buttons are hidden by the reward
-    // animation. Adults keep the red dot visible so they can re-centre their finger.
-    if (appState.ageGroup === 'Child' || appState.ageGroup === 'Adult') {
+    // Child and Adult: after a response with no reward animation the blue buttons disappear immediately,
+    // so the tap visibly registers (papers: stimuli disappear after correct AND incorrect responses).
+    // When a reward animation follows, the animation hides the buttons itself. It must NOT be hidden
+    // here first: the animation is placed at the tapped button's position, and a hidden button
+    // reports position 0,0, which put the animation in the top-left corner.
+    // Adults keep the red dot visible so they can re-centre their finger.
+    const rewardFollows = accuracy === 1 && BRACKET_PROTOCOL[appState.ageGroup].rewardAfterCorrect;
+    if ((appState.ageGroup === 'Child' || appState.ageGroup === 'Adult') && !rewardFollows) {
         if (elements.leftButton) elements.leftButton.style.display = 'none';
         if (elements.mdlButton) elements.mdlButton.style.display = 'none';
         if (elements.rightButton) elements.rightButton.style.display = 'none';

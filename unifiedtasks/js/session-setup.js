@@ -3,6 +3,21 @@
  * (split from app.js; load order is set in index.html)
  */
 
+// The age buttons stay locked, with a short message, while the pictures are being decoded.
+function onImageDecodeProgress(done, total) {
+    const status = document.getElementById('loadStatus');
+    if (status) status.textContent = `Loading animations... ${Math.round((100 * done) / total)}%`;
+}
+
+function setAgeButtonsEnabled(enabled) {
+    ['infantBtn', 'childBtn', 'adultBtn'].forEach(id => {
+        const button = document.getElementById(id);
+        if (button) button.disabled = !enabled;
+    });
+    const status = document.getElementById('loadStatus');
+    if (status) status.textContent = enabled ? '' : 'Loading animations...';
+}
+
 function updateCbButtons() {
     if (elements.cbLeftBtn) elements.cbLeftBtn.classList.toggle('selected', appState.counterbalance === 'left');
     if (elements.cbRightBtn) elements.cbRightBtn.classList.toggle('selected', appState.counterbalance === 'right');

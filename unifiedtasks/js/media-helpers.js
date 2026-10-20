@@ -31,14 +31,6 @@ function startSpriteLoop(imgEl, prefix, frameCount, fps = 8) {
     return () => clearInterval(timer);
 }
 
-function preloadSpriteFrames(prefix, frameCount) {
-    for (let i = 1; i <= frameCount; i++) {
-        const img = new Image();
-        img.src = getSpriteFrameSrc(prefix, i);
-        _animPreloadCache.push(img);
-    }
-}
-
 function playOneShotAudio(fileOrPath, volume = 1) {
     const src = getAudioSrc(fileOrPath);
 

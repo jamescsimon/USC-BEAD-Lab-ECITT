@@ -371,6 +371,10 @@ a.download-button {
     font-weight: bold;
 }
 
+.age-button:disabled {
+    opacity: 0.5;
+}
+
 /* Choice screen (practice gate, block end) */
 .choice-buttons {
     display: flex;

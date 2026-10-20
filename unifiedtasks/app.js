@@ -123,7 +123,9 @@ document.addEventListener('DOMContentLoaded', () => {
     appState.currentScreenName = 'ageSelectionScreen';
     updateBackupRecoveryButton();
     
-    preloadAnimationFrames();
+    // Decode every animation frame before the task can start (see decodeImage in reward-animation.js)
+    setAgeButtonsEnabled(false);
+    preloadAnimationFrames().then(() => setAgeButtonsEnabled(true));
     console.log('[APP] Initialization complete');
 });
 

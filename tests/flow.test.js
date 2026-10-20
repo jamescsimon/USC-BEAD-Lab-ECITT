@@ -82,7 +82,7 @@ const ctx = {
     requestAnimationFrame: fn => ctx.setTimeout(fn, 16), cancelAnimationFrame: noop,
     Audio: function () { return { play: () => Promise.resolve(), pause: noop, load: noop, addEventListener: noop }; },
     Blob: class { constructor(parts) { this.parts = parts; } }, URL: { createObjectURL: () => 'blob:test', revokeObjectURL() {} },
-    Image: function () { return {}; }, performance: { now: () => clock }, Date: FakeDate, Math, JSON, Object, Array, Promise, Map, Set, String, Number, Error, RegExp, parseInt, parseFloat, isNaN
+    Image: function () { this.decode = () => { ctx._decoded = (ctx._decoded || 0) + 1; return Promise.resolve(); }; }, performance: { now: () => clock }, Date: FakeDate, Math, JSON, Object, Array, Promise, Map, Set, String, Number, Error, RegExp, parseInt, parseFloat, isNaN
 };
 ctx.window.document = ctx.document;
 vm.createContext(ctx);
@@ -95,7 +95,7 @@ const get = expr => vm.runInContext(expr, ctx);
 ctx._domReady();
 
 // recording / download side effects are not under test
-ctx.__anim = []; vm.runInContext('globalThis.__realButterfly = showButterflyTask; globalThis.__realCalibration = showVideoCalibrationTask; startRecording = () => {}; stopRecording = () => {};  playRewardAnimation = (el, opts) => { __anim.push(opts || {}); }; stopRewardAnimation = () => {}; showButterflyTask = cb => cb();', ctx);
+ctx.__anim = []; ctx.__animEl = []; vm.runInContext('globalThis.__realButterfly = showButterflyTask; globalThis.__realCalibration = showVideoCalibrationTask; startRecording = () => {}; stopRecording = () => {};  playRewardAnimation = (el, opts) => { __anim.push(opts || {}); __animEl.push(el && el.style ? el.style.display : 0); }; stopRewardAnimation = () => {}; showButterflyTask = cb => cb();', ctx);
 
 function playTrial(wrongFirst) {
     // Trial 1 of a task waits for the dot; trials 2+ start by themselves after jitter
@@ -225,6 +225,9 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
         // Infant and Child: a reward animation after each correct trial, and nothing extra at the block end
         assert.strictEqual(ctx.__anim.length, 31, tag + ' reward animation after each of the 31 remaining correct trials, got ' + ctx.__anim.length);
         assert.ok(ctx.__anim.every(o => o.durationMs === undefined), tag + ' no block-end animation');
+        // the animation is placed at the tapped button, so that button must still be on screen when it is asked for
+        // its position (a hidden button reports 0,0 and the animation lands in the top-left corner)
+        assert.ok(ctx.__animEl.slice(-31).every(d => d !== 'none'), tag + ' tapped button still displayed when the animation is positioned');
     }
     assert.deepStrictEqual(choice(), ['Resume', 'Break', 'End']);
     assert.strictEqual(get('appState.inhibitoryCompleted'), 8, tag + ' inhibitory completed after block 1');
@@ -394,4 +397,18 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     assert.ok(!links[0].textContent, 'video link has no visible text');
     console.log('ok DNF screen');
 }
-console.log('flow: all tests passed');
+// ---- every picture is decoded when the app opens, and the age buttons wait for it ----
+(async () => {
+    ctx._decoded = 0;
+    const expected = get('allVisualAssetUrls()').length;
+    assert.ok(expected >= 140, 'all reward frames, sprites and button pictures are listed: ' + expected);
+    ['infantBtn', 'childBtn', 'adultBtn'].forEach(id => { getEl(id).disabled = false; });
+    get('setAgeButtonsEnabled')(false);
+    assert.ok(['infantBtn', 'childBtn', 'adultBtn'].every(id => getEl(id).disabled === true), 'age buttons locked while loading');
+    await get('preloadAnimationFrames')();
+    assert.strictEqual(ctx._decoded, expected, 'decode() was called for every picture: ' + ctx._decoded + ' of ' + expected);
+    get('setAgeButtonsEnabled')(true);
+    assert.ok(['infantBtn', 'childBtn', 'adultBtn'].every(id => getEl(id).disabled === false), 'age buttons unlocked afterwards');
+    console.log('ok image decoding (' + expected + ' pictures)');
+    console.log('flow: all tests passed');
+})();

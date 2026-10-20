@@ -140,22 +140,65 @@ function preloadAudioFile(fileOrPath) {
     _audioCache[src] = audio;
 }
 
-function preloadAnimationFrames() {
-    if (hasDevFlag('nopreload')) {
-        console.warn('[APP] Preloading skipped (nopreload developer flag)');
-        return;
-    }
+// Every picture the task shows, as URLs relative to the page (the same strings the CSS/img code uses,
+// so the browser serves the already-decoded copy).
+function allVisualAssetUrls() {
+    const urls = [];
+
     Object.entries(FRAME_ANIMATIONS).forEach(([name, count]) => {
         for (let i = 1; i <= count; i++) {
-            const img = new Image();
-            img.src = `../graphics/frames/${name}-${String(i).padStart(2, '0')}.png`;
-            _animPreloadCache.push(img);
+            urls.push(`../graphics/frames/${name}-${String(i).padStart(2, '0')}.png`);
         }
     });
 
-    // Preload pre-task sprite animations.
-    preloadSpriteFrames(CALIBRATION_SPRITE_PREFIX, CALIBRATION_SPRITE_FRAMES);
-    preloadSpriteFrames(BUTTERFLY_SPRITE_PREFIX, BUTTERFLY_SPRITE_FRAMES);
+    for (let i = 1; i <= CALIBRATION_SPRITE_FRAMES; i++) {
+        urls.push(getSpriteFrameSrc(CALIBRATION_SPRITE_PREFIX, i));
+    }
+    for (let i = 1; i <= BUTTERFLY_SPRITE_FRAMES; i++) {
+        urls.push(getSpriteFrameSrc(BUTTERFLY_SPRITE_PREFIX, i));
+    }
+
+    ['left', 'mdl', 'right'].forEach(pos => {
+        urls.push(`../graphics/buttons/button_${pos}.png`);
+        urls.push(`../graphics/buttons/button_${pos}_happy.png`);
+    });
+    urls.push('../graphics/buttons/button_dot.png');
+
+    return urls;
+}
+
+// Downloads AND decodes one picture. Preloading alone only fetches the file; iOS Safari then
+// decodes it the first time it is drawn, which shows up as a flicker in the first play of each
+// animation. The Image object is kept in _animPreloadCache so the decoded picture stays attached to it.
+function decodeImage(src) {
+    return new Promise(resolve => {
+        const img = new Image();
+        _animPreloadCache.push(img);
+        img.src = src;
+
+        if (typeof img.decode === 'function') {
+            // decode() rejects for a broken file: carry on rather than blocking the app
+            img.decode().then(resolve, resolve);
+        } else {
+            // very old browsers: at least wait for the download
+            img.onload = resolve;
+            img.onerror = resolve;
+            if (img.complete) resolve();
+        }
+    });
+}
+
+const IMAGE_DECODE_TIMEOUT_MS = 20000; // never keep the first screen locked for longer than this
+
+/**
+ * Starts loading sounds and decoding every picture. Returns a promise that resolves when all pictures
+ * are decoded (or after IMAGE_DECODE_TIMEOUT_MS, so a broken file cannot lock the app).
+ */
+function preloadAnimationFrames() {
+    if (hasDevFlag('nopreload')) {
+        console.warn('[APP] Preloading skipped (nopreload developer flag)');
+        return Promise.resolve();
+    }
 
     [
         ...Object.values(ANIMATION_SOUNDS_INFANT_TODDLER),
@@ -164,6 +207,16 @@ function preloadAnimationFrames() {
         CALIBRATION_SOUND,
         BUTTERFLY_SOUND
     ].forEach(preloadAudioFile);
+
+    const urls = allVisualAssetUrls();
+    let finished = 0;
+    const decodeAll = Promise.all(urls.map(url => decodeImage(url).then(() => {
+        finished++;
+        if (typeof onImageDecodeProgress === 'function') onImageDecodeProgress(finished, urls.length);
+    })));
+    const timeout = new Promise(resolve => setTimeout(resolve, IMAGE_DECODE_TIMEOUT_MS));
+
+    return Promise.race([decodeAll, timeout]);
 }
 
 /**
