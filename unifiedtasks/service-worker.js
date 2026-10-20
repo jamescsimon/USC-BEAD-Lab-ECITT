@@ -3,7 +3,7 @@
  * Enables offline functionality and caching
  */
 
-const CACHE_NAME = 'ecitt-adult-tasks-v6';
+const CACHE_NAME = 'ecitt-adult-tasks-v7';
 
 // Static assets that are safe to cache-first (images rarely change)
 const STATIC_ASSETS = [
@@ -26,6 +26,7 @@ const APP_FILES = [
     './styles.css',
     './app.js',
     './data.js',
+    './js/dev-flags.js',
     './js/task-configs.js',
     './js/task-sequences.js',
     './js/trial-sequence.js',

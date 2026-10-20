@@ -141,6 +141,10 @@ function preloadAudioFile(fileOrPath) {
 }
 
 function preloadAnimationFrames() {
+    if (hasDevFlag('nopreload')) {
+        console.warn('[APP] Preloading skipped (nopreload developer flag)');
+        return;
+    }
     Object.entries(FRAME_ANIMATIONS).forEach(([name, count]) => {
         for (let i = 1; i <= count; i++) {
             const img = new Image();

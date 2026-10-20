@@ -12,6 +12,10 @@ let recordedMimeType = '';
 let recordingFinalizing = false;
 
 function startRecording() {
+    if (hasDevFlag('norec')) {
+        console.warn('[REC] Recording skipped (norec developer flag)');
+        return;
+    }
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         console.warn('[REC] getUserMedia not supported on this device/context');
         return;

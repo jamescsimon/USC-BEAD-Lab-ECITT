@@ -1,6 +1,6 @@
 /**
- * Optional on-screen performance monitor. Only active when the page URL has ?debug
- * (e.g. .../unifiedtasks/?debug). Does nothing otherwise.
+ * Optional on-screen performance monitor. Only active with the `debug` developer flag
+ * (?debug in the URL, or set it from the first screen; see dev-flags.js). Does nothing otherwise.
  *
  * Use it on the iPad to see WHY taps or the photocell seem to stall:
  *   frame gap  - longest time between two screen frames in the last 5 s. Big numbers (hundreds
@@ -11,7 +11,7 @@
  *   flash      - whether the photocell gate is closed and how many flashes were refused.
  */
 (function () {
-    if (typeof location === 'undefined' || !/[?&]debug\b/.test(location.search)) return;
+    if (typeof hasDevFlag !== 'function' || !hasDevFlag('debug')) return;
 
     const box = document.createElement('div');
     box.style.cssText =
