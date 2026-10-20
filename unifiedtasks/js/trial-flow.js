@@ -171,6 +171,7 @@ function showPromptScreen() {
 }
 
 function handleButtonPress(button, event) {
+    debugStep('call'); // debug panel: the tap code was entered, whatever happens next
     if (event) {
         event.preventDefault();
         event.stopPropagation();

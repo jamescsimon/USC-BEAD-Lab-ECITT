@@ -429,6 +429,7 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     // straight away (synchronous steps)
     for (const id of ['reset', 'lock', 'trialLogged', 'animation', 'advance', 'timerSet']) assert.ok(seen.includes(id), 'step reported at once: ' + id + ' in ' + seen);
     assert.ok(seen.some(id => /^tap:accepted/.test(id)), 'the tap is reported as accepted');
+    assert.ok(seen.includes('call'), 'entering the tap code is reported even before any guard');
     // a second tap while locked is reported with its reason
     get('handleButtonPress')(rewarded === 'left' ? 'right' : 'left');
     assert.ok(seen.some(id => /^tap:ignored - taps are locked/.test(id)), 'ignored tap says why: ' + seen.filter(id => id.startsWith('tap:')));

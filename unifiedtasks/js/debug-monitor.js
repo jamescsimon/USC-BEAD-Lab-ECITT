@@ -105,10 +105,40 @@
     const tapLine = document.createElement('div');
     tapLine.style.color = '#ff0';
     tapLine.textContent = 'last tap: none yet';
+    const touchLine = document.createElement('div');
+    touchLine.style.color = '#f9f';
+    const hitLine = document.createElement('div');
+    hitLine.style.color = '#f9f';
     const stateLine = document.createElement('div');
     stateLine.style.color = '#0ff';
     panel.appendChild(tapLine);
+    panel.appendChild(touchLine);
+    panel.appendChild(hitLine);
     panel.appendChild(stateLine);
+
+    // What the browser does with touches, independent of the task code:
+    //   touches   every finger-down the page received
+    //   on blue   how many of those landed on a blue button
+    //   calls     how many times the blue-button tap code was actually entered
+    //   cancelled touches iOS took back (it decided the touch was a gesture, not a tap)
+    // and what element the latest touch landed on (an invisible layer over the buttons would show up here).
+    let touches = 0, blueTouches = 0, handlerCalls = 0, cancelled = 0;
+    let lastHit = 'nothing yet';
+    let acceptedTaps = 0;
+    let lastTapText = 'none yet';
+    let lastTapAt = 0;
+    const describe = el => {
+        if (!el) return 'nothing';
+        const cls = typeof el.className === 'string' && el.className ? '.' + el.className.split(' ')[0] : '';
+        return `${String(el.tagName || '?').toLowerCase()}${el.id ? '#' + el.id : ''}${cls}`;
+    };
+    document.addEventListener('pointerdown', event => {
+        touches++;
+        const id = event && event.target && event.target.id;
+        if (id === 'leftButton' || id === 'mdlButton' || id === 'rightButton') blueTouches++;
+        lastHit = describe(event && event.target);
+    }, true);
+    document.addEventListener('pointercancel', () => { cancelled++; }, true);
 
     const rows = SLOTS.map(() => {
         const row = document.createElement('div');
@@ -126,8 +156,9 @@
     };
 
     window.__debugStepSink = id => {
-        if (id === 'reset') return reset();
-        if (id.startsWith('tap:')) { tapLine.textContent = 'last tap: ' + id.slice(4); return; }
+        if (id === 'call') { handlerCalls++; return; }
+        if (id === 'reset') { acceptedTaps++; return reset(); }
+        if (id.startsWith('tap:')) { lastTapText = id.slice(4); lastTapAt = performance.now(); return; }
 
         SLOTS.forEach((slot, index) => {
             if (slot.labels[id]) {
@@ -140,7 +171,14 @@
     document.addEventListener('DOMContentLoaded', () => document.body.appendChild(panel));
 
     setInterval(() => {
+        const ago = lastTapAt ? ((performance.now() - lastTapAt) / 1000).toFixed(1) + ' s ago' : '';
+        tapLine.textContent = `tap #${acceptedTaps} (steps below are from it): ${lastTapText}  ${ago}`;
+        touchLine.textContent = `touches ${touches} | on blue ${blueTouches} | calls ${handlerCalls} | cancelled ${cancelled}`;
+        hitLine.textContent = `last touch landed on: ${lastHit}`;
+
+        const display = id => (appState.currentScreenName === 'promptScreen' && elements[id] ? elements[id].style.display || 'default' : '-');
         stateLine.textContent =
-            `screen: ${appState.currentScreenName}  transitioning: ${appState.isTransitioning}  taps locked: ${appState.trialResponded}`;
-    }, 250);
+            `screen: ${appState.currentScreenName}  transitioning: ${appState.isTransitioning}  taps locked: ${appState.trialResponded}\n` +
+            `trial ${appState.currentTrial}/${appState.currentTask ? appState.currentTask.trials : '?'}  buttons: left ${display('leftButton')} mdl ${display('mdlButton')} right ${display('rightButton')}`;
+    }, 200);
 })();
