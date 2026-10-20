@@ -557,10 +557,19 @@ function handleDNF() {
     const avgRT = appState.totalTrials > 0 ? Math.round(appState.totalReactionTime / appState.totalTrials) : 0;
     const accuracy = appState.totalTrials > 0 ? ((appState.totalCorrect / appState.totalTrials) * 100).toFixed(1) : 0;
     
+    // Progress toward the inhibitory minimum, same chick as the block-end screen, with the count beside it
+    const dnfChickFrame = chickFrameFor(appState.inhibitoryCompleted, INHIBITORY_TARGET, FRAME_ANIMATIONS.chick);
+    const dnfProgressHtml = `
+        <div class="progress-row">
+            <img class="progress-chick" alt="" src="../graphics/frames/chick-${String(dnfChickFrame).padStart(2, '0')}.png">
+            <p><strong>${appState.inhibitoryCompleted} of ${INHIBITORY_TARGET}</strong><br>inhibitory trials done<br>(minimum required)</p>
+        </div>`;
+
     // Display stats
     elements.dnfStats.innerHTML = `
         ${photocellCheckHtml()}
         <p>Session Did Not Finish</p>
+        ${dnfProgressHtml}
         <p>Completed Trials: ${appState.totalTrials} / ${totalExpected}</p>
         <p>Correct: ${appState.totalCorrect}</p>
         <p>Accuracy: ${accuracy}%</p>
@@ -571,7 +580,8 @@ function handleDNF() {
     // Show CSV links immediately on DNF.
     showCsvDownloadLinks();
     
-    stopAndAutoDownload();
+    // Stop the camera but do not auto-download: the green Download Video button on this screen does it.
+    stopRecording();
 }
 
 // Top-left tiny hidden button:

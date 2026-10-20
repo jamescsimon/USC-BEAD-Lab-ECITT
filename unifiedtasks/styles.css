@@ -386,3 +386,13 @@ a.download-button {
     opacity: 0.6;
     cursor: default;
 }
+
+.progress-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+.progress-row p {
+    text-align: left;
+}

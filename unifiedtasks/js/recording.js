@@ -156,18 +156,9 @@ function downloadVideoOnly() {
 
     link.href = url;
     link.download = filename;
-    link.textContent = 'Download video file';
-    link.style.position = 'fixed';
-    link.style.left = '50%';
-    link.style.bottom = '20px';
-    link.style.transform = 'translateX(-50%)';
-    link.style.zIndex = '1000002';
-    link.style.fontSize = '22px';
-    link.style.padding = '14px 20px';
-    link.style.backgroundColor = 'white';
-    link.style.color = 'black';
-    link.style.border = '3px solid black';
-    link.style.borderRadius = '10px';
+    // The green Download Video button is the only visible control. This link is invisible; it is only
+    // clicked from that tap so the browser saves the file (no extra popup on screen).
+    link.style.display = 'none';
 
     document.body.appendChild(link);
 
@@ -182,22 +173,6 @@ function downloadVideoOnly() {
     }, 30000);
 
     console.log('[REC] Video download prepared:', filename);
-}
-
-// Stops the recorder and auto-downloads both files (used on DNF)
-function stopAndAutoDownload() {
-    dataManager.saveToLocalStorage();
-
-    if (!mediaRecorder || mediaRecorder.state === 'inactive') {
-        downloadVideoOnly();
-        return;
-    }
-    mediaRecorder.addEventListener('stop', () => {
-        if (mediaStream) { mediaStream.getTracks().forEach(t => t.stop()); mediaStream = null; }
-        mediaRecorder = null;
-        downloadVideoOnly();
-    }, { once: true });
-    mediaRecorder.stop();
 }
 
 // Stops the recorder without downloading (used on normal end — user presses buttons)

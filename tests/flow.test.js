@@ -60,7 +60,7 @@ const ctx = {
     document: {
         getElementById: getEl,
         createElement: tag => {
-            const e = new FakeEl(null); e.tag = tag;
+            const e = new FakeEl(null); e.tag = tag; (ctx._created = ctx._created || []).push(e);
             e.remove = function () {
                 if (this.id === 'photocellSyncOverlay') {
                     ctx._syncCount = (ctx._syncCount || 0) + 1;
@@ -95,7 +95,7 @@ const get = expr => vm.runInContext(expr, ctx);
 ctx._domReady();
 
 // recording / download side effects are not under test
-ctx.__anim = []; vm.runInContext('startRecording = () => {}; stopRecording = () => {};  stopAndAutoDownload = () => {}; playRewardAnimation = (el, opts) => { __anim.push(opts || {}); }; stopRewardAnimation = () => {}; showButterflyTask = cb => cb();', ctx);
+ctx.__anim = []; vm.runInContext('startRecording = () => {}; stopRecording = () => {};  playRewardAnimation = (el, opts) => { __anim.push(opts || {}); }; stopRewardAnimation = () => {}; showButterflyTask = cb => cb();', ctx);
 
 function playTrial(wrongFirst) {
     // Trial 1 of a task waits for the dot; trials 2+ start by themselves after jitter
@@ -338,5 +338,27 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     for (let i = 0; i < 350; i++) { clock += 100; log(); drainFor(100); }
     assert.ok(ctx._saves >= 2 && ctx._saves <= 4, 'capped save during long activity, got ' + ctx._saves);
     console.log('ok autosave debounce');
+}
+// ---- session incomplete (DNF) screen: chick + count, and no extra white video popup ----
+{
+    get('restart')();
+    els.participantIdInput.value = 'DNF1'; get('selectInfant')(); get('setCounterbalance')('left'); get('startTest')();
+    clock += 5000; drain();
+    get('loadTask')(get('activeTaskSequence')[0]); drain();
+    get('appState').inhibitoryCompleted = 16;
+    get('handleDNF')(); drain();
+    assert.strictEqual(get('appState.currentScreenName'), 'dnfScreen');
+    const dnf = els.dnfStats.innerHTML;
+    assert.ok(/chick-05\.png/.test(dnf), 'DNF screen shows the chick frame for 16/32');
+    assert.ok(/16 of 32/.test(dnf), 'DNF screen says how many of the minimum were done');
+    // downloading the video must not put a visible link on screen
+    vm.runInContext("recordedChunks = [{ size: 1 }]; recordedMimeType = 'video/webm'; mediaRecorder = null;", ctx);
+    ctx._created.length = 0;
+    get('downloadVideoOnly')();
+    const links = ctx._created.filter(e => e.tag === 'a');
+    assert.strictEqual(links.length, 1);
+    assert.strictEqual(links[0].style.display, 'none', 'video link is invisible');
+    assert.ok(!links[0].textContent, 'video link has no visible text');
+    console.log('ok DNF screen');
 }
 console.log('flow: all tests passed');
