@@ -43,6 +43,8 @@ const APP_FILES = [
     './js/trial-flow.js',
     './js/nirs-baseline.js',
     './js/block-flow.js',
+    './js/keep-awake.js',
+    './js/break.js',
     './js/calibration.js',
     './js/photocell.js',
     './js/recording.js',

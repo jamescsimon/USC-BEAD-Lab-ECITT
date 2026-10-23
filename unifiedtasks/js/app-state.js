@@ -30,6 +30,7 @@ const appState = {
     experimentFirstCorrect: 0,
     trialTaps: [],
     trialResponded: false,
+    trialRestartedAfterBreak: false,
     isTransitioning: false,
     waitTimer: null,
     nextTrialTimer: null,

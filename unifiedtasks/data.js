@@ -210,6 +210,7 @@ class DataManager {
                 ParticipantName: this.participantId,
                 TestName: eventData.testName || this.testName,
                 TrialName: eventData.trialName || this.currentTrialName || '',
+                TrialNumber: eventData.trialNumber !== undefined ? eventData.trialNumber : '',
                 SectionStarted: sectionStarted,
                 Stimuli: eventData.stimuli || '',
                 InvokedBy: eventData.invokedBy || '',
@@ -343,6 +344,7 @@ class DataManager {
             'ParticipantName',
             'TestName',
             'TrialName',
+            'TrialNumber',
             'SectionStarted',
             'Stimuli',
             'InvokedBy',
@@ -452,9 +454,11 @@ class DataManager {
             ['Counterbalance', 'counterbalance'],
 
             ['Phase', 'phase'],
+            ['ExperimentBlock', 'experimentBlock'],
             ['BlockNumber', 'blockNumber'],
             ['TaskID', 'taskId'],
             ['TrialNumber', 'trialNumber'],
+            ['StartTimestamp', 'startTimestamp'],
             ['TrialType', 'trialType'],
             ['Direction', 'direction'],
             ['DirectionReversed', 'directionReversed'],
@@ -474,7 +478,8 @@ class DataManager {
             ['PressSequence', 'pressSequence'],
 
             ['InhibitoryCompletedSoFar', 'inhibitoryCompletedSoFar'],
-            ['LowEngagement', 'lowEngagement']
+            ['LowEngagement', 'lowEngagement'],
+            ['RestartedAfterBreak', 'restartedAfterBreak']
         ];
 
         const escape = value => {

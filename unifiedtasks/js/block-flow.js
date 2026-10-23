@@ -80,6 +80,13 @@ function showBlockEndAfterAnimation() {
     setTimeout(showBlockEnd, BLOCK_END_ANIMATION_MS + 300);
 }
 
+// The hatching chick for the current progress toward INHIBITORY_TARGET. It only fully hatches when the first-tap
+// accuracy is also at least 60% (see chickFrameFor).
+function progressChickHtml() {
+    const frame = chickFrameFor(appState.inhibitoryCompleted, INHIBITORY_TARGET, FRAME_ANIMATIONS.chick, firstTapAccuracyOk());
+    return `<img class="progress-chick" alt="" src="../graphics/frames/chick-${String(frame).padStart(2, '0')}.png">`;
+}
+
 function showBlockEnd() {
     const proto = BRACKET_PROTOCOL[appState.ageGroup];
     let html = '';
@@ -90,25 +97,25 @@ function showBlockEnd() {
             : 0;
         html += `
             <p>Average Response Time: ${avgRT} ms</p>
-            <p>Please respond faster in the next block.</p>
-            <p>But also remember to respond as accurately as possible.</p>
-            <hr>`;
+            ${proto.speedMessage.map(line => `<p>${line}</p>`).join('')}`;
     }
 
-    // Progress cue: one static chick-hatching frame, no number or bar. Hatched = target reached.
-    const chickFrames = FRAME_ANIMATIONS.chick;
-    const frame = chickFrameFor(appState.inhibitoryCompleted, INHIBITORY_TARGET, chickFrames);
     if (isLowEngagement(appState.experimentTrialsDone, appState.experimentFirstCorrect)) {
         const pct = Math.round(100 * appState.experimentFirstCorrect / appState.experimentTrialsDone);
         html += `<p class="engagement-note">Low accuracy so far (${pct}% first-tap correct). Participant may not be engaging.</p>`;
     }
 
+    // Progress cue: the chick, with the count beside it as bare numbers (done:target, no label)
     html += `
-        <img class="progress-chick" alt="" src="../graphics/frames/chick-${String(frame).padStart(2, '0')}.png">`;
+        <div class="progress-row">
+            ${progressChickHtml()}
+            <p class="progress-count">${appState.inhibitoryCompleted}:${INHIBITORY_TARGET}</p>
+        </div>`;
 
     showChoiceScreen('Block Complete', html, [
         { label: 'Resume', onClick: startNextExperimentBlock },
-        { label: 'Break', onClick: () => showButterflyTask(showBlockEnd) },
+        // Adult and Child: the plain break screen (screen kept awake). Infant/toddler: the butterfly.
+        { label: 'Break', onClick: () => (appState.ageGroup === 'Infant' ? showButterflyTask(showBlockEnd) : startBreak(showBlockEnd)) },
         { label: 'End', onClick: endSession, confirm: true }
     ]);
 }

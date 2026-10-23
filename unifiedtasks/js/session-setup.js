@@ -86,6 +86,10 @@ function startTest() {
     appState.experimentFirstCorrect = 0;
     appState.directionReversed = false;
     appState.syncTrainDone = {};
+
+    // this tap starts the session: Adult and Child keep the screen from locking until it is cleared
+    // (see keep-awake.js). Infant/toddler sessions are touched constantly and use the butterfly break.
+    if (appState.ageGroup !== 'Infant') KeepAwake.start();
     if (elements.recordingReminderContinueBtn) {
         elements.recordingReminderContinueBtn.disabled = false;
     }
@@ -121,6 +125,7 @@ function restart() {
     
     dataManager.clearSession();
     cleanupRecording();
+    KeepAwake.stop();
 
     elements.participantIdInput.value = '';
     // Re-enable start button and reminder button

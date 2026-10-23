@@ -149,35 +149,50 @@ On the Participant screen, below the Start button:
 
 ## Data Output
 
-### CSV Format
+A session produces two CSV files (and a third, only for debugging). They are offered as one-tap links on the Task Complete / Session Incomplete screens, with the video:
 
-The app generates CSV files with the ECITT SoleScreen timestamp format:
+| File | One row per | Used for |
+|---|---|---|
+| `ECITT_<id>_<date-time>_events.csv` | screen change or tap (stimulus onset, each response, each wrong tap, wait screens, sync flashes, task end) | aligning with the EEG: the MATLAB step in `shifts/10-13/delivery/` reads it. Keep the column names `TrialName`, `SectionStarted`, `StartTimestamp` and the `YYYY-MM-DD@Hhh:Mmm:Sss.mmm` timestamp format. |
+| `ECITT_<id>_<date-time>_trials.csv` | trial | analysis: accuracy, reaction time, jitter, progress. Not read by MATLAB. |
+| `ECITT_<id>_<date-time>_debug.csv` | touch, tap, step, error... | only with the `debuglog` flag (see Debug overlay) |
 
-```
-ParticipantName,TestName,TrialName,SectionStarted,Stimuli,InvokedBy,Accuracy,TrialsRemaining,StartTimestamp,Duration
-PC001,Adult,adt_tpl,LeftTrialScreen,left,Responder_left,1,31,2026-03-04@H14:M32:S15.234,0M:00S:612MS
-```
+On the lab server keep them in separate `events/` and `trials/` folders inside the participant folder.
 
-### Fields
+### Joining the two files
 
-- **ParticipantName**: Participant ID entered on the setup screen
-- **TestName**: Age-group label (Adult / Child / Toddler / Infant)
-- **TrialName**: Task ID (e.g., `adt_tpl`, `inf_tpll`)
-- **SectionStarted**: Screen type — `TaskStart`, `ReadyScreen`, `WaitScreen`, `PromptScreen`, `LeftTrialScreen`, `RightTrialScreen`, `ControlTrialScreen`, `LeftTrialResponse`, `RightTrialResponse`, `ControlTrialResponse`, `PromptResponse`, `TaskEnd`, `DNF`, `FlashConflict`
-- **Stimuli**: Button position or event descriptor
-- **InvokedBy**: Action source (e.g., `Responder_left`, `System`)
-- **Accuracy**: `1` = correct, `0` = incorrect, `n/a` = non-trial event
-- **TrialsRemaining**: Trials left in current task block
-- **StartTimestamp**: Event timestamp (`YYYY-MM-DD@Hhh:Mmm:Sss.mmm`)
-- **Duration**: Time until next event (`0M:00S:612MS` format); last row gets `0M:00S:001MS`
+`TrialName` + `TrialNumber` in the events file is the same trial as `TaskID` + `TrialNumber` in the trials file (for example `cha_exp2_left`, trial 7). `StartTimestamp` in the trials file is when that trial's buttons appeared, in the same format as the events file. `tools/check_session_csv.py <trials.csv> <events.csv>` checks the join and the design (see below).
 
-### Filename Convention
+### Trials CSV columns
 
-```
-ECITT_{ParticipantID}_{Timestamp}.csv
-```
+| Column | Meaning |
+|---|---|
+| `ParticipantID`, `AgeGroup`, `Counterbalance` | who, bracket (Infant = infant/toddler), the side assigned at the start |
+| `Phase` | `demo`, `practice`, `experiment` (or `butterfly` for a butterfly touch) |
+| `ExperimentBlock` | 1, 2, 3... counting only experiment blocks; blank for demo and practice |
+| `BlockNumber` | position of the task in the session, counting demo and practice too |
+| `TaskID`, `TrialNumber` | the task (`cha_exp2_left` = experiment block 2) and the trial within it |
+| `StartTimestamp` | when the buttons appeared. A repeated practice trial has the same `TaskID`, so tell the attempts apart by this |
+| `TrialType` | `Prepotent`, `Inhibitory` or `Control` (demo / practice) |
+| `Direction`, `DirectionReversed` | the prepotent side actually in use, and 1 once an infant's first tap swapped the sides. `TaskID` keeps the assigned side in its name; `Direction` is the truth |
+| `RewardedSide`, `HappyFaceSide`, `ButtonPressed` | the correct side, where the happy face was, and the button that ended the trial |
+| `FirstResponseCorrect` | 1 if the very first tap was right: the participant's accuracy |
+| `IncorrectTaps` | wrong taps before the trial ended (Infant waits for the correct button, so it can be more than 0) |
+| `ReactionTime` | ms from the buttons appearing to the tap that ended the trial |
+| `Jitter1`, `Jitter2` | random wait before the buttons, and the pause after the response (ms) |
+| `FirstIncorrectRT`, `PressSequence` | time of the first wrong tap, and every tap as `button@ms` |
+| `InhibitoryCompletedSoFar` | the count behind the chick (see the minimum-trials section) |
+| `LowEngagement` | 1 once first-tap accuracy is below 60% (from 10 trials) |
+| `RestartedAfterBreak` | 1 if a Break interrupted this trial: the buttons were shown again afterwards, so `StartTimestamp` and `ReactionTime` count from the second showing |
 
-Example: `ECITT_PC001_2026-03-04_14-32-15-123.csv`
+### Events CSV: what the extra columns are
+
+`TrialNumber` (which trial a row belongs to), `ButtonPressed`, and `PhotocellFlash` (1 when the row was locked to a photocell flash, 0 when not; see the photocell section of the notes). `SectionStarted` values: `TaskStart`, `ReadyScreen`, `WaitScreen`, `LeftTrialScreen` / `RightTrialScreen` / `ControlTrialScreen` (stimulus onset), `LeftTrialResponse` / `RightTrialResponse` / `ControlTrialResponse` (the response), `IncorrectResponse` (a wrong tap), `SyncTrainFlash`, `Butterfly*`, `TaskEnd`, `DNF`, `FlashConflict`. `StartTimestamp` format: `YYYY-MM-DD@Hhh:Mmm:Sss.mmm`.
+
+### Checking a session
+
+`python tools/check_session_csv.py <file.csv> [more files]` prints "ok" / "CHECK" lines for 32-trial blocks, the 75% / 25% split, the 3 opening prepotent trials, the run limits, direction changes, jitter range, reaction times, photocell coverage and the events-to-trials join. It also reads the old (summer) formats.
+
 
 ## Changing Task Setup and Timing
 
@@ -291,6 +306,30 @@ unifiedtasks/
 └── README.md               # This file
 ```
 
+## Breaks and keeping the screen awake
+
+- **Take a break at any moment:** hold the hidden square in the **top-right** corner for 3 seconds (it used to start the NIRS baseline video). The Block Complete screen's **Break** button does the same.
+  - **Adult and Child:** a plain dark "Break" screen with a **Resume** button. The trial is paused wherever it was, and Resume carries on from there (a trial that had not been answered starts again from its random wait). The screen is kept awake so it does not lock while the person is away. Nothing is written to the events CSV.
+  - **Infant/toddler:** the butterfly break instead (its Continue button ends it).
+- **Screen timeout (`js/keep-awake.js`):** Adult and Child sessions ask for the Screen Wake Lock (iOS 16.4+) and play a tiny muted looping video (`public/video/keepawake.mp4`) to stop Auto-Lock on older iOS. This cannot be tested without the iPad, so the dependable fix is on the iPad itself: **Settings > Display & Brightness > Auto-Lock > Never** (and Guided Access if the iPad is handed around).
+
+## Minimum trials and the chick (where the thresholds are, and what was decided)
+
+| What | Where | Value | Why |
+|---|---|---|---|
+| **Inhibitory-trial minimum (the chick's "full")** | `INHIBITORY_TARGET` in `js/protocol-config.js` | **32** | 30 are needed for the EEG analysis, plus 2 spare. One value for every bracket. |
+| What counts toward it | `inhibitoryCompleted` in `js/trial-flow.js` | an **inhibitory** trial in an **experiment** block whose **first tap was correct** | Practice and demo trials never count. A trial answered wrongly first and then corrected does not count. |
+| **Accuracy needed for the full chick** | `ENGAGEMENT_MIN_ACCURACY` (**60%**) and `firstTapAccuracyOk()` in `js/protocol-config.js` | first-tap accuracy over **all** experiment trials so far | The chick only fully hatches when BOTH hold: 32 inhibitory trials AND at least 60% accuracy. Below 60% it stops one frame short (frame 8 of 9), even at 32. |
+| Chick picture | `chickFrameFor()` in `js/protocol-config.js` | frame 1 (egg) at 0 up to frame 9 (hatched) | One static frame, no animation. |
+| Low-engagement note | `ENGAGEMENT_MIN_ACCURACY` and `ENGAGEMENT_MIN_TRIALS` in `js/protocol-config.js` | below **60%** first-tap accuracy, checked from **10** trials | A note on the Block Complete screen; it never stops or changes the task. |
+
+The target is only a display: nothing ends the session or locks Resume when it is reached; the experimenter reads the chick. The app cannot know which trials are valid (the EEG decides that afterwards), so the count is a proxy and the 2 spare trials are the only buffer. To change the minimum, change `INHIBITORY_TARGET` (one place); to change the accuracy needed, change `ENGAGEMENT_MIN_ACCURACY`.
+
+**What each screen shows of this**
+- **Block Complete (experimenter's Resume / Break / End screen):** the chick, with the count beside it as bare numbers, `done:target`, for example `16:32`. It is deliberately not labelled.
+- **Task Complete and Session Incomplete:** only the chick. No numbers and no performance stats (those are in the CSV files).
+
+
 ## Animations (sprite sheets)
 
 Each animation is ONE wide picture in `graphics/sheets/<name>.png` with its frames side by side, built from the numbered frames in `graphics/frames/` and `graphics/sprites/`. The app downloads and decodes every sheet when it opens (the age buttons stay locked until that finishes), then plays an animation by moving a window along the sheet (`js/sprite-sheet.js`). Nothing is fetched or decoded during play, which is what stops the first play of each animation from flickering.
@@ -299,8 +338,10 @@ Each animation is ONE wide picture in `graphics/sheets/<name>.png` with its fram
 
 ## Debug overlay
 
-Turn on the `debug` flag to show a small black box in the top-right corner. In a browser add `?debug` to the address (e.g. `.../unifiedtasks/?debug`). On a home-screen app, which ignores the address, tap the "ECITT Task" title on the first screen 5 times quickly, type `debug`, press OK, and the app reloads. The box shows: longest screen-frame gap, tap-handler time, touches vs. accepted taps, and photocell gate state. Use it to see whether the page is busy when taps or the photocell seem to stall. For a freeze, use the `debuglog` flag instead (or as well): it draws nothing on screen and records a log of every touch, tap, step, screen change, error and stall. It adds a "Debug Log CSV" download next to Events CSV and Trials CSV on the end / incomplete screen. After a freeze, reach that screen with the hidden quit button (hold the top-left corner for 3 seconds) or "Recover CSV Backup" on the first screen. The log is kept out of the events CSV on purpose, because the MATLAB alignment expects a photocell flash for every events row.
-
+Turn on the `debug` flag to show a small black box in the top-right corner. In a browser add `?debug` to the address (e.g. `.../unifiedtasks/?debug`). On a home-screen app, which ignores the address, tap the "ECITT Task" title on the first screen 5 times quickly, type `debug`, press OK, and the app reloads. The box shows: longest screen-frame gap, tap-handler time, touches vs. accepted taps, and photocell gate state. Use it to see whether the page is busy when taps or the photocell seem to stall. For a freeze, use the `debuglog` flag instead (or as well): it draws nothing on screen and records a log of every touch, tap, step, screen change, error and stall. It adds a "Debug Log CSV" download next to Events CSV and Trials CSV on the end / incomplete screen. After a freeze, reach that screen with the hidden quit button (hold the top-left corner for 3 seconds) or "Recover CSV Backup" on the first screen. The log is kept out of the events CSV on purpose, because the MATLAB alignment expects a photocell flash for every events row.
+
+
+
 Other flags for finding slowdowns: `norec` (no camera/video recording) and `nopreload` (no animation preloading); combine with spaces, e.g. `debug norec`. Clear them by opening the same prompt and leaving it empty. With no flags the app is normal.
 
 ## Experimenter procedure notes
@@ -425,7 +466,3 @@ Age Selection → Participant ID → Recording Reminder → [Task Loop] → End/
 - CSV export functionality
 - DNF handling
 - Offline support via service worker
-
-## License
-
-ECITT © 2026 BEAD Lab. All rights reserved.

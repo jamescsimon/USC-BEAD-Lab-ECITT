@@ -62,7 +62,9 @@ const ctx = {
         getElementById: getEl,
         createElement: tag => {
             const e = new FakeEl(null); e.tag = tag; e.tagName = String(tag).toUpperCase(); (ctx._created = ctx._created || []).push(e);
+            if (tag === 'video') e.play = () => { ctx._videoPlays = (ctx._videoPlays || 0) + 1; return Promise.resolve(); };
             e.remove = function () {
+                this.removed = true;
                 if (this.id === 'photocellSyncOverlay') {
                     ctx._syncCount = (ctx._syncCount || 0) + 1;
                 ctx._atReveal = { screen: get('appState.currentScreenName'), block: get('appState.currentTask.isExperimentBlock') };
@@ -70,13 +72,17 @@ const ctx = {
             };
             return e;
         },
-        addEventListener: (e, f) => { ctx._domReady = f; },
+        addEventListener: (e, f) => { (ctx._docL = ctx._docL || {})[e] = (ctx._docL[e] || []).concat(f); if (e === 'DOMContentLoaded') ctx._domReady = f; },
+        visibilityState: 'visible',
         body: new FakeEl('body'), documentElement: new FakeEl('html'),
         querySelectorAll: () => [], querySelector: () => null
     },
     window: { matchMedia: () => ({ matches: false, addEventListener: noop }), addEventListener: noop, localStorage: null },
     localStorage: { getItem: k => (k === 'ecittDevFlags' ? (process.env.ECITT_FLAGS || null) : null), setItem: k => { if (!/_debuglog$/.test(k)) ctx._saves = (ctx._saves || 0) + 1; }, removeItem: noop },
-    navigator: { mediaDevices: undefined }, alert: noop,
+    navigator: {
+        mediaDevices: undefined,
+        wakeLock: { request: async () => { ctx._wakeRequests = (ctx._wakeRequests || 0) + 1; return { release() { ctx._wakeReleases = (ctx._wakeReleases || 0) + 1; }, addEventListener() {} }; } }
+    }, alert: noop,
     setTimeout: (fn, ms) => { const id = ++timerSeq; timers.push({ at: clock + (ms || 0), seq: id, fn, id }); return id; },
     clearTimeout: id => { const i = timers.findIndex(t => t.id === id); if (i >= 0) timers.splice(i, 1); },
     setInterval: () => 0, clearInterval: noop,
@@ -136,6 +142,9 @@ const press = label => els.choiceButtons.children.find(b => b.textContent === la
 
 const chick = get('chickFrameFor');
 assert.deepStrictEqual([chick(0, 32, 9), chick(16, 32, 9), chick(31, 32, 9), chick(32, 32, 9), chick(40, 32, 9)], [1, 5, 8, 9, 9]);
+// below 60% accuracy the chick never fully hatches, even at (or past) 32; earlier frames are unaffected
+assert.deepStrictEqual([chick(0, 32, 9, false), chick(16, 32, 9, false), chick(31, 32, 9, false), chick(32, 32, 9, false), chick(40, 32, 9, false)], [1, 5, 8, 8, 8]);
+assert.strictEqual(chick(32, 32, 9, true), 9, 'with enough accuracy it still hatches');
 
 for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child', 'left'], ['Adult', 'right']]) {
     const tag = `${bracket}/${side}`;
@@ -235,6 +244,10 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     const rt = /Average Response Time/.test(els.choiceStats.innerHTML);
     assert.strictEqual(rt, bracket !== 'Infant', tag + ' RT feedback only for child/adult');
     assert.ok(/chick-03\.png/.test(els.choiceStats.innerHTML), tag + ' 8/32 -> frame 3');
+    assert.ok(/progress-count">8:32</.test(els.choiceStats.innerHTML), tag + ' the count is shown as bare #:## next to the chick');
+    assert.ok(!/inhibitory/i.test(els.choiceStats.innerHTML), tag + ' the count is not named');
+    if (bracket === 'Adult') assert.ok(/Go a little faster/.test(els.choiceStats.innerHTML) && !/Please respond faster/.test(els.choiceStats.innerHTML), 'adult report does not keep saying go faster');
+    if (bracket === 'Child') assert.ok(/Please respond faster in the next block/.test(els.choiceStats.innerHTML), 'child report keeps the papers wording');
 
     // Resume x3 -> 32 inhibitory
     for (let b = 2; b <= 4; b++) {
@@ -247,7 +260,18 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     }
     assert.strictEqual(get('appState.inhibitoryCompleted'), 32);
     assert.ok(/chick-09\.png/.test(els.choiceStats.innerHTML), tag + ' 32/32 -> hatched');
-    assert.ok(!/\d+ \/ 32/.test(els.choiceStats.innerHTML), 'no number shown');
+    assert.ok(/progress-count">32:32</.test(els.choiceStats.innerHTML), tag + ' 32:32 at the target');
+    {   // same 32 inhibitory trials, but mostly wrong first taps: not fully hatched. Exactly 60% is enough.
+        const saved = [get('appState.experimentTrialsDone'), get('appState.experimentFirstCorrect')];
+        get('appState').experimentTrialsDone = 100; get('appState').experimentFirstCorrect = 59;
+        get('showBlockEnd')();
+        assert.ok(/chick-08\.png/.test(els.choiceStats.innerHTML) && /progress-count">32:32</.test(els.choiceStats.innerHTML), tag + ' 59% accuracy: 32:32 but the chick stops at frame 8');
+        get('appState').experimentFirstCorrect = 60;
+        get('showBlockEnd')();
+        assert.ok(/chick-09\.png/.test(els.choiceStats.innerHTML), tag + ' exactly 60% accuracy: fully hatched');
+        get('appState').experimentTrialsDone = saved[0]; get('appState').experimentFirstCorrect = saved[1];
+        get('showBlockEnd')();
+    }
 
     // End needs a second tap
     // trials CSV: one row per experiment trial, one accuracy column, phases labelled
@@ -261,6 +285,24 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
         assert.strictEqual(rows.filter(r => r[ph] === 'experiment').length, 128, tag + ' 4 blocks x 32 experiment trials');
         assert.ok(rows.filter(r => r[ph] === 'practice').length >= 2, tag + ' practice trials labelled');
         assert.strictEqual(rows[rows.length - 1][th.indexOf('InhibitoryCompletedSoFar')], '32');
+        // ExperimentBlock numbers only the experiment blocks; StartTimestamp lines a row up with the events file
+        const eb = th.indexOf('ExperimentBlock'), st = th.indexOf('StartTimestamp');
+        assert.ok(eb >= 0 && st >= 0 && th.includes('RestartedAfterBreak'), 'new trial columns are present');
+        const expRows = rows.filter(r => r[ph] === 'experiment');
+        assert.deepStrictEqual(Array.from(new Set(expRows.map(r => r[eb]))), ['1', '2', '3', '4'], tag + ' ExperimentBlock is 1..4');
+        assert.ok(rows.filter(r => r[ph] !== 'experiment').every(r => r[eb] === ''), tag + ' demo and practice rows have no ExperimentBlock');
+        assert.ok(rows.every(r => /^\d{4}-\d{2}-\d{2}@H\d+:M\d+:S[\d.]+$/.test(r[st])), tag + ' StartTimestamp is in the events format');
+        assert.ok(expRows.every(r => r[th.indexOf('RestartedAfterBreak')] === '0'), tag + ' no trial was restarted after a break');
+        // each experiment trial can be found in the events file by (TrialName, TrialNumber)
+        const NLs = String.fromCharCode(10);
+        const evTable = String(get('dataManager.generateCSV()')).split(NLs).map(csvLine);
+        const eh = evTable[0], eTN = eh.indexOf('TrialName'), eNo = eh.indexOf('TrialNumber'), eSec = eh.indexOf('SectionStarted');
+        assert.ok(eNo >= 0, 'events file has TrialNumber');
+        const responses = new Set(evTable.filter(r => /TrialResponse$/.test(r[eSec])).map(r => r[eTN] + '#' + r[eNo]));
+        const unmatched = expRows.filter(r => !responses.has(r[th.indexOf('TaskID')] + '#' + r[th.indexOf('TrialNumber')]));
+        assert.strictEqual(unmatched.length, 0, tag + ' every trials row has a response row in the events file: ' + unmatched.length + ' do not');
+        const stimuli = new Set(evTable.filter(r => /TrialScreen$/.test(r[eSec])).map(r => r[eTN] + '#' + r[eNo]));
+        assert.ok(expRows.every(r => stimuli.has(r[th.indexOf('TaskID')] + '#' + r[th.indexOf('TrialNumber')])), tag + ' every trial has its stimulus row too');
         // Jitter 1 on EVERY experiment trial, inside this bracket's pool range, and actually random
         const poolName = { Infant: 'JITTER_DURATIONS_TODDLER_INFANT', Child: 'JITTER_DURATIONS_CHILD', Adult: 'JITTER_DURATIONS_ADULT' }[bracket];
         const pool = Array.from(get(poolName));
@@ -276,6 +318,12 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     els.choiceButtons.children[2].click(); drain();   // label now reads 'Tap again to confirm'
     assert.strictEqual(get('appState.currentScreenName'), 'endScreen', tag + ' ended');
     assert.strictEqual(get('appState.isComplete'), true);
+    if (process.env.ECITT_DUMP_DIR) {   // optional: write this session's CSVs out, e.g. to try tools/check_session_csv.py on them
+        fs.mkdirSync(process.env.ECITT_DUMP_DIR, { recursive: true });
+        const stem = path.join(process.env.ECITT_DUMP_DIR, tag.replace('/', '_'));
+        fs.writeFileSync(stem + '_trials.csv', String(get('dataManager.generateTrialCSV()')));
+        fs.writeFileSync(stem + '_events.csv', String(get('dataManager.generateCSV()')));
+    }
     assert.strictEqual(ctx._syncCount, 1, tag + ' sync train runs once per session');
     // every flash-required row got a flash at normal pacing, and the screen says so
     const fc = get('dataManager.getFlashCheck()');
@@ -287,7 +335,9 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     assert.strictEqual(fc.missing, 0, tag + ' no row without a flash');
     assert.strictEqual(fc.conflicts, 0, tag + ' no flash conflicts at normal pacing');
     assert.ok(fc.requiredRows > 128, tag + ' flash rows counted');
-    assert.ok(/Photocell check: OK/.test(els.endStats.innerHTML), tag + ' end screen reports the check');
+    assert.ok(!/Photocell/.test(els.endStats.innerHTML), tag + ' end screen says nothing about the photocell when all is well');
+    assert.ok(/chick-09\.png/.test(els.endStats.innerHTML), tag + ' end screen shows only the (hatched) chick');
+    assert.ok(!/\d/.test(els.endStats.innerHTML.replace(/chick-\d+\.png/, '')), tag + ' end screen has no numbers or stats');
     const links = els.endCsvDownloads.children.map(a => a.textContent);
     const debugOn = get('DebugLog.enabled');   // run with ECITT_FLAGS=debuglog to test the flag on
     assert.strictEqual(links.join('|'), 'Events CSV|Trials CSV' + (debugOn ? '|Debug Log CSV' : ''), tag + ' end screen has one link per CSV (+ the debug log only with its flag)');
@@ -373,7 +423,14 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     const start = ctx._created.find(e => e.tag === 'button' && /Tap to start/.test(e.textContent));
     assert.ok(start, 'calibration start button built');
     fire(start, 'pointerdown'); drain();
-    assert.strictEqual(ctx.__sounds.filter(f => f === 'frog-sound').length, 1, 'frog sound plays once, not on each of the 4 moves: ' + ctx.__sounds);
+    assert.strictEqual(ctx.__sounds.filter(f => f === 'frog-sound').length, 1, 'frog sound plays once for Child/Adult, not on each of the 4 moves: ' + ctx.__sounds);
+    // Infant/toddler: the frog sound at every position
+    get('appState').ageGroup = 'Infant';
+    ctx.__sounds.length = 0; ctx._created.length = 0;
+    ctx.__realCalibration(() => {});
+    fire(ctx._created.find(e => e.tag === 'button' && /Tap to start/.test(e.textContent)), 'pointerdown'); drain();
+    assert.strictEqual(ctx.__sounds.filter(f => f === 'frog-sound').length, 4, 'infant frog sound at all 4 positions: ' + ctx.__sounds);
+    get('appState').ageGroup = 'Adult';
     console.log('ok break/calibration sounds');
 }
 
@@ -468,6 +525,130 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     console.log('ok debug step tracker');
 }
 
+// ---- Break: Adult/Child plain break (screen kept awake), Infant butterfly; pause anywhere, resume where it was ----
+{
+    const hasOverlay = () => ctx._created.some(e => e.id === 'breakOverlay' && !e.removed);
+    const startSession = bracket => {
+        get('restart')(); els.participantIdInput.value = 'BRK'; get('select' + bracket)(); get('setCounterbalance')('left');
+        ctx._wakeRequests = 0; ctx._wakeReleases = 0; ctx._videoPlays = 0;
+        get('startTest')();
+        clock += 5000; drain();
+    };
+    const loadBlock = bracket => {
+        const id = get(`makeExperimentBlockTask('${bracket}','left',1)`);
+        get('appState').experimentBlockCount = 1;
+        get('activeTaskSequence').push(id); get('appState').currentTaskIndex = get('activeTaskSequence').length - 1;
+        get('loadTask')(id); drain();
+        clock += 400; get('handleDotPress')(); drain(); clock += 400;        // first trial's buttons are up
+    };
+
+    // keep-awake: Adult and Child hold the screen awake for the whole session (wake lock + looping video); Infant does not
+    startSession('Child');
+    assert.strictEqual(ctx._wakeRequests, 1, 'child: a wake lock is requested when the session starts');
+    assert.ok(ctx._videoPlays >= 1, 'child: the keep-awake video is playing');
+    ctx._docL.visibilitychange.forEach(f => f());            // the page came back to the foreground
+    assert.ok(ctx._wakeRequests >= 2, 'the wake lock is asked for again when the page is visible again');
+
+    // 1) break in the middle of a trial that has not been answered
+    loadBlock('Child');
+    assert.strictEqual(get('appState.currentScreenName'), 'promptScreen');
+    const poolBefore = get('appState.jitterPool.length'), trialBefore = get('appState.currentTrial');
+    get('startBreak')();
+    assert.ok(hasOverlay(), 'the break screen is up');
+    drain();                                              // lots of time passes
+    assert.strictEqual(get('appState.currentScreenName'), 'promptScreen', 'nothing moved on during the break');
+    assert.strictEqual(get('appState.currentTrial'), trialBefore);
+    get('endBreak')(); drain();
+    assert.ok(!hasOverlay(), 'the break screen is gone after Resume');
+    assert.strictEqual(get('appState.currentScreenName'), 'promptScreen', 'the same trial is shown again');
+    assert.strictEqual(get('appState.currentTrial'), trialBefore, 'same trial number');
+    assert.strictEqual(get('appState.jitterPool.length'), poolBefore, 'the random wait it used was handed back');
+    clock += 600; get('handleButtonPress')(get('appState.currentRewarded')); drain();
+    assert.strictEqual(get('appState.currentTrial'), trialBefore + 1, 'the trial can be answered after the break');
+    {
+        const NLb = String.fromCharCode(10);
+        const lastTrialRow = () => { const t = String(get('dataManager.generateTrialCSV()')).split(NLb); const h = csvLine(t[0]); const r = csvLine(t[t.length - 1]); return r[h.indexOf('RestartedAfterBreak')]; };
+        assert.strictEqual(lastTrialRow(), '1', 'the trial interrupted by a break is marked RestartedAfterBreak');
+        ctx._lastTrialRow = lastTrialRow;
+    }
+
+    // 2) break right after an answer: the next trial waits for Resume
+    clock += 600; get('handleButtonPress')(get('appState.currentRewarded'));     // answer the next trial ...
+    assert.strictEqual(ctx._lastTrialRow(), '0', 'the next trial is not marked: the flag does not carry over');
+    get('startBreak')();                                                           // ... and pause before the one after starts
+    const trialAtBreak = get('appState.currentTrial');
+    drain();
+    assert.notStrictEqual(get('appState.currentScreenName'), 'waitScreen', 'the next trial did not start during the break');
+    assert.strictEqual(get('appState.currentTrial'), trialAtBreak);
+    get('endBreak')(); drain();
+    assert.strictEqual(get('appState.currentScreenName'), 'promptScreen', 'after Resume the next trial starts');
+    assert.strictEqual(get('appState.trialResponded'), false);
+
+    // 3) break after the LAST trial of a task: the task still finishes after Resume
+    get('activeTaskSequence').push(get("makePracticeTask('Child','left')")); get('appState').currentTaskIndex = get('activeTaskSequence').length - 1;
+    get('loadTask')(get('activeTaskSequence')[get('appState').currentTaskIndex]); drain();
+    clock += 400; get('handleDotPress')(); drain(); clock += 400;
+    get('handleButtonPress')(get('appState.currentRewarded'));
+    get('startBreak')(); drain();
+    assert.notStrictEqual(get('appState.currentScreenName'), 'choiceScreen', 'practice gate waits for the end of the break');
+    get('endBreak')(); drain();
+    assert.strictEqual(els.choiceTitle.textContent, 'Practice Complete', 'the task finishes after Resume');
+
+    // 4) holding the hidden top-right square for 3 seconds starts a break
+    const hidden = ctx.document.body.children.find(e => e.id === 'hiddenBreakButton');
+    assert.ok(hidden, 'the top-right square is now the break button');
+    get('startAnotherPractice')(); drain();
+    clock += 400; get('handleDotPress')(); drain(); clock += 400;
+    hidden.listeners.pointerdown.forEach(f => f({ type: 'pointerdown', preventDefault() {}, stopPropagation() {} }));
+    drainFor(3100);
+    assert.ok(hasOverlay(), 'a 3 s hold on the top-right square starts a break');
+    get('endBreak')(); drain();
+
+    // 5) Child and Adult: Break on the block-end screen is the plain break screen, and the screen comes back usable
+    for (const bracket of ['Child', 'Adult']) {
+        startSession(bracket);
+        get('appState').inhibitoryCompleted = 8;
+        get('showBlockEnd')();
+        els.choiceButtons.children.find(b => b.textContent === 'Break').click();
+        assert.ok(hasOverlay(), bracket + ': Break shows the plain break screen');
+        assert.strictEqual(ctx._wakeRequests, 2, bracket + ': the screen is held awake (session start + break)');
+        get('endBreak')(); drain();
+        assert.strictEqual(els.choiceTitle.textContent, 'Block Complete');
+        assert.ok(els.choiceButtons.children.every(b => !b.disabled), bracket + ': Resume / Break / End work again after the break');
+    }
+
+    // 6) Infant/toddler: the butterfly break, no plain break screen, no keep-awake
+    startSession('Infant');
+    assert.strictEqual(ctx._wakeRequests, 0, 'infant: the screen is not held awake');
+    vm.runInContext('showButterflyTask = cb => { globalThis.__butterflyEnds = cb; };', ctx);
+    get('appState').inhibitoryCompleted = 8;
+    get('showBlockEnd')();
+    els.choiceButtons.children.find(b => b.textContent === 'Break').click();
+    assert.ok(typeof ctx.__butterflyEnds === 'function' && !hasOverlay(), 'infant: Break from the block-end screen is the butterfly');
+    ctx.__butterflyEnds = null;
+    loadBlock('Infant');
+    hidden.listeners.pointerdown.forEach(f => f({ type: 'pointerdown', preventDefault() {}, stopPropagation() {} }));
+    drainFor(3100);
+    assert.ok(typeof ctx.__butterflyEnds === 'function' && !hasOverlay(), 'infant: the top-right hold starts the butterfly break');
+    const infantTrial = get('appState.currentTrial');
+    drain();
+    assert.strictEqual(get('appState.currentTrial'), infantTrial, 'the trial is paused during the butterfly');
+    ctx.__butterflyEnds();                                // the researcher presses Continue on the butterfly
+    drain();
+    assert.strictEqual(get('appState.currentScreenName'), 'promptScreen', 'the trial comes back after the butterfly');
+    vm.runInContext('showButterflyTask = cb => cb();', ctx);
+
+    // leaving the session lets go of the screen
+    startSession('Adult');
+    get('restart')();
+    // the lock arrives a moment after it was requested: it must be let go of, not kept, once the session is cleared
+    Promise.resolve().then(() => Promise.resolve()).then(() => {
+        assert.ok(ctx._wakeReleases >= 1, 'the wake lock is released when the session is cleared');
+        console.log('ok wake lock is let go of after the session is cleared');
+    }).catch(err => { console.error(err); process.exit(1); });
+    console.log('ok break and keep-awake');
+}
+
 // ---- session incomplete (DNF) screen: chick + count, and no extra white video popup ----
 {
     get('restart')();
@@ -479,7 +660,7 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     assert.strictEqual(get('appState.currentScreenName'), 'dnfScreen');
     const dnf = els.dnfStats.innerHTML;
     assert.ok(/chick-05\.png/.test(dnf), 'DNF screen shows the chick frame for 16/32');
-    assert.ok(/16 of 32/.test(dnf), 'DNF screen says how many of the minimum were done');
+    assert.ok(!/\d/.test(dnf.replace(/chick-\d+\.png/, '')), 'DNF screen shows the chick only: no counts or stats');
     // downloading the video must not put a visible link on screen
     vm.runInContext("recordedChunks = [{ size: 1 }]; recordedMimeType = 'video/webm'; mediaRecorder = null;", ctx);
     ctx._created.length = 0;
@@ -488,6 +669,11 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
     assert.strictEqual(links.length, 1);
     assert.strictEqual(links[0].style.display, 'none', 'video link is invisible');
     assert.ok(!links[0].textContent, 'video link has no visible text');
+    assert.ok(!/Photocell/.test(dnf), 'incomplete screen says nothing about the photocell when all is well');
+    // a row that should have had a flash but did not: now it is reported
+    get('dataManager').logEvent({ section: 'ReadyScreen', stimuli: 'x', invokedBy: 'test', accuracy: 'n/a', testName: 'Infant', trialsRemaining: 1, trialName: 'x' });
+    const problem = get('photocellCheckHtml')();
+    assert.ok(/check-problem/.test(problem) && /Photocell check: 1 of \d+ rows had no flash/.test(problem), 'a problem is shown: ' + problem);
     console.log('ok DNF screen');
 }
 // ---- every picture is decoded when the app opens, and the age buttons wait for it ----

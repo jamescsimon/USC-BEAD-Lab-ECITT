@@ -74,7 +74,8 @@ function flashButtonIndicator(pendingEvent) {
             accuracy: 'n/a',
             testName: pendingEvent ? pendingEvent.testName : '',
             trialsRemaining: pendingEvent ? pendingEvent.trialsRemaining : 'n/a',
-            trialName: pendingEvent ? pendingEvent.trialName : ''
+            trialName: pendingEvent ? pendingEvent.trialName : '',
+            trialNumber: pendingEvent ? pendingEvent.trialNumber : undefined
         });
 
         if (pendingEvent) {

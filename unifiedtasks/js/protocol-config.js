@@ -24,6 +24,13 @@ function isLowEngagement(trialsDone, firstResponsesCorrect) {
         firstResponsesCorrect / trialsDone < ENGAGEMENT_MIN_ACCURACY;
 }
 
+// Overall first-tap accuracy across every experiment trial so far. The chick can only fully hatch while
+// this is at least ENGAGEMENT_MIN_ACCURACY (60%); with no trials yet there is nothing to fail.
+function firstTapAccuracyOk() {
+    return appState.experimentTrialsDone === 0 ||
+        appState.experimentFirstCorrect / appState.experimentTrialsDone >= ENGAGEMENT_MIN_ACCURACY;
+}
+
 // Existing per-direction configs in TASK_CONFIGS are reused as templates so the on-screen
 // messages and button layouts stay exactly as they were.
 const BRACKET_PROTOCOL = {
@@ -47,7 +54,9 @@ const BRACKET_PROTOCOL = {
         waitForCorrectResponse: false,
         // Reward animation after every correct trial (lab decision 2026-10-20)
         rewardAfterCorrect: true,
-        showResponseTimeFeedback: true
+        showResponseTimeFeedback: true,
+        // as in the papers
+        speedMessage: ['Please respond faster in the next block.', 'But also remember to respond as accurately as possible.']
     },
     Adult: {
         prefix: 'adt',
@@ -57,17 +66,19 @@ const BRACKET_PROTOCOL = {
         waitForCorrectResponse: false,
         // No animation after responses; one short silent animation when a block ends
         showResponseTimeFeedback: true,
+        speedMessage: ['Go a little faster in the next block,', 'as fast as you can while staying accurate.'],
         blockEndAnimation: true
     }
 };
 
 /**
  * Which chick-hatching frame (1..frameCount) to show for progress toward the inhibitory target.
- * Frame 1 = egg at 0; the last frame (hatched) appears only once the target is reached.
+ * Frame 1 = egg at 0. The last frame (hatched) appears only when the target is reached AND the overall
+ * accuracy is high enough (accuracyOk); below 60% accuracy the chick stops one frame short, even at 32.
  */
-function chickFrameFor(count, target, frameCount) {
+function chickFrameFor(count, target, frameCount, accuracyOk = true) {
     const fraction = Math.max(0, Math.min(1, count / target));
-    if (fraction >= 1) return frameCount;
+    if (fraction >= 1) return accuracyOk ? frameCount : frameCount - 1;
     return 1 + Math.floor(fraction * (frameCount - 1));
 }
 

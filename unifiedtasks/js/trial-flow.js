@@ -39,7 +39,8 @@ function showReadyScreen(options) {
         accuracy: 'n/a',
         testName: appState.ageGroup,
         trialsRemaining: appState.currentTask.trials - appState.currentTrial,
-        trialName: appState.currentTask.id || 'adt_ppl'
+        trialName: appState.currentTask.id || 'adt_ppl',
+        trialNumber: appState.currentTrial + 1
     });
 
     if (options && options.deferFlash) return fireFlash;
@@ -165,7 +166,8 @@ function showPromptScreen() {
         accuracy: 'n/a',
         testName: appState.ageGroup,
         trialsRemaining: appState.currentTask.trials - appState.currentTrial,
-        trialName: appState.currentTask.id || 'adt_ppl'
+        trialName: appState.currentTask.id || 'adt_ppl',
+        trialNumber: appState.currentTrial + 1
     });
     debugStep('promptRendered');
 }
@@ -245,6 +247,7 @@ function handleButtonPress(button, event) {
             testName: appState.ageGroup,
             trialsRemaining: appState.currentTask.trials - appState.currentTrial,
             trialName: appState.currentTask.id,
+            trialNumber: appState.currentTrial + 1,
             RT: reactionTime,
             trialType: trialTypeLabel,
             buttonPressed: button,
@@ -375,9 +378,13 @@ function handleButtonPress(button, event) {
         ageGroup: appState.ageGroup,
         counterbalance: appState.counterbalance,
     
+        // ExperimentBlock counts only experiment blocks (1, 2, ...); BlockNumber also counts demo and practice tasks
+        experimentBlock: isExperiment ? appState.experimentBlockCount : '',
         blockNumber: completedBlock,
         taskId: appState.currentTask.id,
         trialNumber: completedIndex + 1,
+        // when the buttons appeared (same format as the events file), to line this row up with it and the EEG
+        startTimestamp: dataManager.formatSoleScreenTimestamp(new Date(appState.trialStartTime)),
         trialType: trialTypeLabel,
     
         rewardedSide: appState.currentRewarded,
@@ -401,8 +408,12 @@ function handleButtonPress(button, event) {
         inhibitoryCompletedSoFar: appState.inhibitoryCompleted,
         lowEngagement: isExperiment
             ? (isLowEngagement(appState.experimentTrialsDone, appState.experimentFirstCorrect) ? 1 : 0)
-            : ''
+            : '',
+        // 1 if a Break interrupted this trial: its buttons were shown again after the break, so
+        // StartTimestamp and ReactionTime count from the second showing
+        restartedAfterBreak: appState.trialRestartedAfterBreak ? 1 : 0
     });
+    appState.trialRestartedAfterBreak = false;
 
     debugStep('trialLogged');
     console.log(`[APP] Trial ${completedIndex + 1}: button=${button}, rewarded=${appState.currentRewarded}, accuracy=${accuracy}, RT=${reactionTime}ms`);
@@ -543,11 +554,13 @@ function finishTask() {
     }
 }
 
+// Shown on the end / incomplete screens ONLY when something is wrong (rows that did not get a photocell
+// flash). When every row was flashed, nothing is shown.
 function photocellCheckHtml() {
     const c = dataManager.getFlashCheck();
     return c.missing === 0
-        ? `<p>Photocell check: OK (${c.flashedRows} flashes for ${c.requiredRows} rows)</p>`
-        : `<p><strong>Photocell check: ${c.missing} of ${c.requiredRows} rows had no flash (${c.conflicts} flash conflicts).</strong></p>`;
+        ? ''
+        : `<p class="check-line check-problem">Photocell check: ${c.missing} of ${c.requiredRows} rows had no flash (${c.conflicts} flash conflicts)</p>`;
 }
 
 function finishTest() {
@@ -555,19 +568,11 @@ function finishTest() {
     appState.isComplete = true;
 
     // No session end event
-    
-    // Calculate final stats
-    const avgRT = appState.totalTrials > 0 ? Math.round(appState.totalReactionTime / appState.totalTrials) : 0;
-    const accuracy = appState.totalTrials > 0 ? ((appState.totalCorrect / appState.totalTrials) * 100).toFixed(1) : 0;
-    
-    // Display stats
+
+    // Only the chick: no numbers and no performance stats on this screen (they are in the CSV files)
     elements.endStats.innerHTML = `
+        ${progressChickHtml()}
         ${photocellCheckHtml()}
-        <p>Test Battery Complete!</p>
-        <p>Total Trials: ${appState.totalTrials}</p>
-        <p>Correct: ${appState.totalCorrect}</p>
-        <p>Accuracy: ${accuracy}%</p>
-        <p>Average Reaction Time: ${avgRT} ms</p>
     `;
 
     stopRecording();
@@ -590,29 +595,12 @@ function handleDNF() {
     // Mark as DNF
     dataManager.markDNF(appState.totalTrials + 1, totalExpected);
     
-    // Calculate stats for completed trials
-    const avgRT = appState.totalTrials > 0 ? Math.round(appState.totalReactionTime / appState.totalTrials) : 0;
-    const accuracy = appState.totalTrials > 0 ? ((appState.totalCorrect / appState.totalTrials) * 100).toFixed(1) : 0;
-    
-    // Progress toward the inhibitory minimum, same chick as the block-end screen, with the count beside it
-    const dnfChickFrame = chickFrameFor(appState.inhibitoryCompleted, INHIBITORY_TARGET, FRAME_ANIMATIONS.chick);
-    const dnfProgressHtml = `
-        <div class="progress-row">
-            <img class="progress-chick" alt="" src="../graphics/frames/chick-${String(dnfChickFrame).padStart(2, '0')}.png">
-            <p><strong>${appState.inhibitoryCompleted} of ${INHIBITORY_TARGET}</strong><br>inhibitory trials done<br>(minimum required)</p>
-        </div>`;
-
-    // Display stats
+    // Only the chick: no numbers and no performance stats on this screen (they are in the CSV files)
     elements.dnfStats.innerHTML = `
+        ${progressChickHtml()}
         ${photocellCheckHtml()}
-        <p>Session Did Not Finish</p>
-        ${dnfProgressHtml}
-        <p>Completed Trials: ${appState.totalTrials} / ${totalExpected}</p>
-        <p>Correct: ${appState.totalCorrect}</p>
-        <p>Accuracy: ${accuracy}%</p>
-        <p>Average Reaction Time: ${avgRT} ms</p>
     `;
-    
+
     showScreen('dnfScreen');
     debugStep('hold:DNF screen shown');
     // Show CSV links immediately on DNF.

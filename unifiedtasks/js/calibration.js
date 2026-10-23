@@ -146,8 +146,9 @@ function showVideoCalibrationTask(onComplete) {
 
         positionCalibrationSprite(frog, pos);
 
-        // The sound plays once, when calibration starts (the first tap). Later frog moves are silent.
-        if (stepIndex === 0) {
+        // Infant/toddler: the sound plays at every frog position, to keep their attention on the frog.
+        // Child and Adult: once, when calibration starts (the first tap); later moves are silent.
+        if (stepIndex === 0 || appState.ageGroup === 'Infant') {
             playCalibrationAudio();
         }
 
@@ -454,6 +455,7 @@ function showButterflyTask(onComplete) {
             ageGroup: appState.ageGroup,
             counterbalance: appState.counterbalance,
 
+            phase: 'butterfly',
             blockNumber: 0,
             taskId: 'butterfly',
             trialNumber: touchCount,

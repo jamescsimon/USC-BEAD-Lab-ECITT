@@ -81,10 +81,12 @@
     <div id="endScreen" class="screen">
         <div class="centered-content">
             <h2 class="end-title">Task Complete!</h2>
-            <div id="endStats" class="end-message"></div>
             <p class="end-message">Thank you for participating.</p>
-            <div id="endCsvDownloads" class="csv-downloads"></div>
-            <button id="downloadVideoBtn" class="download-button">Download Video</button>
+            <div id="endStats" class="end-message"></div>
+            <div class="download-row">
+                <div id="endCsvDownloads" class="csv-downloads"></div>
+                <button id="downloadVideoBtn" class="download-button">Download Video</button>
+            </div>
             <button id="restartBtn" class="restart-button">Start New Session</button>
         </div>
     </div>
@@ -104,8 +106,10 @@
             <h2 class="end-title">Session Incomplete</h2>
             <p class="end-message">The session was not completed.</p>
             <div id="dnfStats" class="end-message"></div>
-            <div id="dnfCsvDownloads" class="csv-downloads"></div>
-            <button id="dnfDownloadVideoBtn" class="download-button">Download Video</button>
+            <div class="download-row">
+                <div id="dnfCsvDownloads" class="csv-downloads"></div>
+                <button id="dnfDownloadVideoBtn" class="download-button">Download Video</button>
+            </div>
             <button id="dnfRestartBtn" class="restart-button">Start New Session</button>
         </div>
     </div>
@@ -134,6 +138,8 @@
     <script src="js/trial-flow.js"></script>
     <script src="js/nirs-baseline.js"></script>
     <script src="js/block-flow.js"></script>
+    <script src="js/keep-awake.js"></script>
+    <script src="js/break.js"></script>
     <script src="js/calibration.js"></script>
     <script src="js/photocell.js"></script>
     <script src="js/recording.js"></script>

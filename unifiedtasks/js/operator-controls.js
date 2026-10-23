@@ -10,9 +10,9 @@ function createHiddenOperatorButtons() {
     quitBtn.title = 'Hold 3 seconds to quit early';
 
     const baselineBtn = document.createElement('button');
-    baselineBtn.id = 'hiddenBaselineButton';
-    baselineBtn.setAttribute('aria-label', 'Hold for NIRS baseline');
-    baselineBtn.title = 'Hold 3 seconds for NIRS baseline';
+    baselineBtn.id = 'hiddenBreakButton';
+    baselineBtn.setAttribute('aria-label', 'Hold to take a break');
+    baselineBtn.title = 'Hold 3 seconds to take a break';
 
     styleHiddenOperatorButton(quitBtn, 'left');
     styleHiddenOperatorButton(baselineBtn, 'right');
@@ -28,8 +28,8 @@ function createHiddenOperatorButtons() {
     setupHoldToActivate(
         baselineBtn,
         () => {
-            console.log('[APP] Hidden baseline button held — starting NIRS baseline');
-            startNirsBaselineFromHiddenButton();
+            console.log('[APP] Hidden top-right button held — starting a break');
+            startBreak();
         }
     );
 
