@@ -181,6 +181,8 @@ On the lab server keep them in separate `events/` and `trials/` folders inside t
 | `ReactionTime` | ms from the buttons appearing to the tap that ended the trial |
 | `Jitter1`, `Jitter2` | random wait before the buttons, and the pause after the response (ms) |
 | `FirstIncorrectRT`, `PressSequence` | time of the first wrong tap, and every tap as `button@ms` |
+
+**Events file and corrected trials:** every wrong tap is its own row (`IncorrectResponse`, `Accuracy` 0), and the trial's final response row has `Accuracy` 0 too if any earlier tap was wrong, matching `FirstResponseCorrect`. The tap history columns (`FirstCorrectRT`, `FirstIncorrectRT`, `PressSequence`, ...) are left blank in the events file; use the trials file for them.
 | `InhibitoryCompletedSoFar` | the count behind the chick (see the minimum-trials section) |
 | `LowEngagement` | 1 once first-tap accuracy is below 60% (from 10 trials) |
 | `RestartedAfterBreak` | 1 if a Break interrupted this trial: the buttons were shown again afterwards, so `StartTimestamp` and `ReactionTime` count from the second showing |

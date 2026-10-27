@@ -351,9 +351,11 @@ function handleButtonPress(button, event) {
         jitter1: appState.jitterDuration,
         jitter2: j2Delay,
     
-        accuracy: accuracy,
+        // Accuracy is the FIRST tap's (0 if any earlier tap this trial was wrong, even though the trial
+        // ended on the correct one), the same as FirstResponseCorrect in the trials CSV
+        accuracy: appState.trialTaps[0] && appState.trialTaps[0].correct ? 1 : 0,
         RT: reactionTime,
-    
+
         trialsRemaining: appState.currentTask.trials - (completedIndex + 1),
     });
     // Per-trial summary from every tap of this trial (wrong taps included)

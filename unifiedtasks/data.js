@@ -239,58 +239,8 @@ class DataManager {
                 
                 PressSequence: ''
             };
-            // ====================================
-            // COPY TRIAL DATA INTO RESPONSE ROWS
-            // ====================================
-
-            if (
-                sectionStarted === 'LeftTrialResponse' ||
-                sectionStarted === 'RightTrialResponse' ||
-                sectionStarted === 'ControlTrialResponse'
-            ) {
-
-                if (this.currentTrial) {
-
-                    const eventRT =
-                        eventData.RT !== undefined
-                            ? Math.round(Number(eventData.RT))
-                            : '';
-                
-                    const eventButton =
-                        eventData.buttonPressed || '';
-                
-                    const isCorrectResponse =
-                        Number(eventData.accuracy) === 1;
-                
-                    record.FirstCorrectRT =
-                        this.currentTrial.firstCorrectRT ||
-                        (isCorrectResponse ? eventRT : '');
-                
-                    record.FirstIncorrectRT =
-                        this.currentTrial.firstIncorrectRT ||
-                        (!isCorrectResponse ? eventRT : '');
-                
-                    record.FirstCorrectButtonPressed =
-                        this.currentTrial.firstCorrectButtonPressed ||
-                        (isCorrectResponse ? eventButton : '');
-                
-                    record.FirstIncorrectButtonPressed =
-                        this.currentTrial.firstIncorrectButtonPressed ||
-                        (!isCorrectResponse ? eventButton : '');
-                
-                    record.FirstCorrectResponseType =
-                        this.currentTrial.firstCorrectResponseType ||
-                        (isCorrectResponse ? 'ParticipantResponse' : '');
-                
-                    record.FirstIncorrectResponseType =
-                        this.currentTrial.firstIncorrectResponseType ||
-                        (!isCorrectResponse ? 'ParticipantResponse' : '');
-                
-                    record.PressSequence =
-                        this.currentTrial.pressSequence.join('|') ||
-                        (eventButton && eventRT !== '' ? `${eventButton}@${eventRT}` : '');
-                }
-            }
+            // The per-trial history (first correct/incorrect RT, press sequence) lives in the trials CSV; the
+            // events rows stay one tap or one screen each, so those columns are left blank here.
             this.sessionData.push(record);
             if (/TrialResponse$/.test(sectionStarted) && typeof debugStep === 'function') debugStep('rowLogged');
             this.scheduleSave();

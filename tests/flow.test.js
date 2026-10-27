@@ -214,6 +214,12 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
                 tag + ' a response row with Accuracy 0 exists');
         }
         assert.strictEqual(get('appState.currentTrial'), 1);
+        {   // the trial's final response row says Accuracy 0 (first tap was wrong, even if corrected) and keeps no tap history
+            const rows = events().map(csvLine).filter(c => /^(Left|Right|Control)TrialResponse$/.test(c[col('SectionStarted')]));
+            const row = rows[rows.length - 1];
+            assert.strictEqual(row[col('Accuracy')], '0', tag + ' final response row Accuracy follows the first tap');
+            assert.strictEqual(row[col('PressSequence')] + row[col('FirstIncorrectRT')] + row[col('FirstCorrectRT')], '', tag + ' tap history is only in the trials CSV');
+        }
         // trials CSV: first response wrong; infant had 1 incorrect tap
         const t = String(get('dataManager.generateTrialCSV()')).split('\n');
         const th = csvLine(t[0]);
