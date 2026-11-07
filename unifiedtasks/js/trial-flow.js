@@ -439,16 +439,14 @@ function handleButtonPress(button, event) {
     // When a reward animation follows, the animation hides the buttons itself. It must NOT be hidden
     // here first: the animation is placed at the tapped button's position, and a hidden button
     // reports position 0,0, which put the animation in the top-left corner.
-    // Adults keep the red dot visible so they can re-centre their finger.
+    // Adults do NOT get the red dot back here: the prompt-screen dot is not tappable, and it sat on
+    // screen for the whole Jitter 2 gap, so people tapped it repeatedly until the real (ready-screen)
+    // dot appeared. The dot now comes back only on the ready screen, where a tap works.
     const rewardFollows = accuracy === 1 && BRACKET_PROTOCOL[appState.ageGroup].rewardAfterCorrect;
     if ((appState.ageGroup === 'Child' || appState.ageGroup === 'Adult') && !rewardFollows) {
         if (elements.leftButton) elements.leftButton.style.display = 'none';
         if (elements.mdlButton) elements.mdlButton.style.display = 'none';
         if (elements.rightButton) elements.rightButton.style.display = 'none';
-
-        if (appState.ageGroup === 'Adult' && elements.promptDot) {
-            elements.promptDot.style.display = 'inline-block';
-        }
     }
 
     // Reward animation after correct responses (Infant and Child, see rewardAfterCorrect in protocol-config.js).
