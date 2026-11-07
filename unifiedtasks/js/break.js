@@ -46,7 +46,11 @@ function startBreak(afterResume) {
         breakResumeAction = null;                                  // nothing was pending
     } else if (appState.trialResponded) {
         const task = appState.currentTask;
-        breakResumeAction = () => (appState.currentTrial < task.trials ? showWaitScreen('System') : finishTask());
+        breakResumeAction = () => {
+            if (appState.currentTrial >= task.trials) return finishTask();
+            // next trial starts from the red dot where the bracket requires it, else straight to the jitter wait
+            return SKIP_READY_SCREEN[appState.ageGroup] === true ? showWaitScreen('System') : showReadyScreen();
+        };
     } else {
         const usedJitter = appState.jitterDuration;
         breakResumeAction = () => {

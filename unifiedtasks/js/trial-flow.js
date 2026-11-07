@@ -61,14 +61,14 @@ function handleDotPress(event) {
     showWaitScreen('ParticipantRedDot');
 }
 
-// During the jitter wait the buttons are hidden. Adults keep seeing the red dot (it is always
-// on screen for them); the other brackets see a blank screen.
+// During the jitter wait the buttons are hidden. Adults see a blank prompt screen (the red dot is
+// hidden once pressed and only comes back after the trial ends); the other brackets see the wait screen.
 function showJitterScreen() {
     if (appState.ageGroup === 'Adult') {
         [elements.leftButton, elements.mdlButton, elements.rightButton].forEach(button => {
             if (button) button.style.display = 'none';
         });
-        if (elements.promptDot) elements.promptDot.style.display = 'inline-block';
+        if (elements.promptDot) elements.promptDot.style.display = 'none';
         showScreen('promptScreen');
     } else {
         showScreen('waitScreen');
@@ -82,7 +82,7 @@ function showJitterScreen() {
 function showWaitScreen(invokedBy) {
     const duration = appState.jitterPool.shift();
     appState.jitterDuration = duration;
-    dataManager.logEvent({
+    const waitEvent = {
         section: 'WaitScreen',
         stimuli: `jitter_${duration}ms`,
         invokedBy: invokedBy || 'System',
@@ -91,8 +91,20 @@ function showWaitScreen(invokedBy) {
         trialsRemaining: appState.currentTask.trials - appState.currentTrial,
         trialName: appState.currentTask.id || 'adt_ppl',
         trialNumber: appState.currentTrial + 1
-    });
+    };
     showJitterScreen();
+    if (invokedBy === 'ParticipantRedDot' && appState.ageGroup === 'Adult') {
+        // Adult red-dot tap: ONE row, locked to a photocell flash. The flash fires on the frame where
+        // the dot disappears (showJitterScreen above). The jitter length rides in Stimuli, so no
+        // separate unflashed WaitScreen row follows it (a second flash within ~50 ms would be refused).
+        flashButtonIndicator({
+            ...waitEvent,
+            section: 'DotPress',
+            stimuli: `red dot|jitter_${duration}ms`
+        });
+    } else {
+        dataManager.logEvent(waitEvent);
+    }
     debugStep('waitShown');
     clearTimeout(appState.waitTimer);
 
@@ -118,14 +130,9 @@ function showPromptScreen() {
     if (elements.mdlButton) elements.mdlButton.style.display = 'none';
     if (elements.rightButton) elements.rightButton.style.display = 'none';
     
-    // Adult ECITT-A: red dot remains visible at the center at all times.
-    // Child/infant/toddler keep the dot hidden during prompt as before.
-    if (elements.promptDot) {
-        elements.promptDot.style.display =
-            appState.ageGroup === 'Adult'
-                ? 'inline-block'
-                : 'none';
-    }
+    // The red dot is hidden while the buttons are up (all brackets). Adults get it back
+    // when the trial ends (see handleButtonPress) and on the next ready screen.
+    if (elements.promptDot) elements.promptDot.style.display = 'none';
     
     // Show and configure buttons based on layout
     const showButton = (pos, buttonEl) => {

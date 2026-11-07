@@ -5,7 +5,7 @@
 
 // ===== FLOW CONTROL FLAGS =====
 const SKIP_READY_SCREEN = {
-    Adult: true,
+    Adult: false, // adults must tap the red dot before every trial
     Infant: true,
     Child: true
 };
