@@ -55,6 +55,13 @@ function handleDotPress(event) {
 
     if (appState.isTransitioning) return;
 
+    // One tap = one trial start. Ignore a second finger / palm (non-primary pointer) and any
+    // pointerdown that arrives after the first already left the ready screen. Without this a
+    // double-fire logged two ParticipantRedDot rows, drew a second jitter from the pool and
+    // restarted the wait timer.
+    if (event && event.isPrimary === false) return;
+    if (appState.currentScreenName !== 'readyScreen') return;
+
     appState.dotPressTime = Date.now();
 
     // Every trial, every bracket: random Jitter 1 before the buttons appear.

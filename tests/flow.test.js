@@ -316,8 +316,9 @@ for (const [bracket, side] of [['Infant', 'left'], ['Infant', 'right'], ['Child'
         const j1 = rows.filter(r => r[ph] === 'experiment').map(r => Number(r[th.indexOf('Jitter1')]));
         assert.ok(j1.every(v => v >= lo && v <= hi), tag + ' every Jitter1 within ' + lo + '-' + hi);
         assert.ok(new Set(j1).size >= 3, tag + ' Jitter1 varies from trial to trial');
-        const waitRows = String(get('dataManager.generateCSV()')).split('\n').filter(r => /WaitScreen/.test(r)).length;
-        assert.ok(waitRows >= 128, tag + ' a jitter wait before every trial (' + waitRows + ' wait rows)');
+        const waitRows = String(get('dataManager.generateCSV()')).split('\n').filter(r => /WaitScreen|DotPress/.test(r)).length;   // Adult dot taps log as DotPress
+        const secCounts = {}; evTable.forEach(r => { secCounts[r[eSec]] = (secCounts[r[eSec]] || 0) + 1; });
+        assert.ok(waitRows >= 128, tag + ' a jitter wait before every trial (' + waitRows + ' wait rows) ' + JSON.stringify(secCounts));
     }
     press('End');
     assert.strictEqual(get('appState.currentScreenName'), 'choiceScreen', tag + ' End first tap only arms');
